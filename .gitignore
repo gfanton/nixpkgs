@@ -1,0 +1,5 @@
+bin
+private.nix
+result
+.backup
+.DS_Store
