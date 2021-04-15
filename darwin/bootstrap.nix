@@ -22,7 +22,10 @@
 
   # Enable experimental version of nix with flakes support
   nix.package = pkgs.nixFlakes;
-  nix.extraOptions = "experimental-features = nix-command flakes";
+  nix.extraOptions = ''
+  experimental-features = nix-command flakes
+  extra-platforms = x86_64-darwin aarch64-darwin
+  '';
 
   # Auto upgrade nix package and the daemon service.
   services.nix-daemon.enable = true;
