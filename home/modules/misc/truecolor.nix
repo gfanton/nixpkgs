@@ -37,8 +37,8 @@ in
     in mkIf config.programs.truecolor.enable {
         home.packages = [
           (pkgs.runCommandLocal "terminfo" {
-            buildInputs = [ pkgs.tree pkgs.kitty ];
-            nativeBuildInputs = [  pkgs.ncurses ];
+            buildInputs = [ pkgs.kitty ];
+            nativeBuildInputs = [ pkgs.ncurses ];
           } ''
             mkdir -p $out/share/terminfo
             export TERMINFO=${cfg.terminfo}

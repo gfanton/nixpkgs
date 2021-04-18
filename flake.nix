@@ -13,7 +13,7 @@
     flake-utils = { url = "github:numtide/flake-utils"; };
     flake-compat = { url = "github:edolstra/flake-compat"; flake = false; };
 
-    darwin = { url = "github:hardselius/nix-darwin"; inputs.nixpkgs.follows = "nixpkgs"; };
+    darwin = { url = "github:LnL7/nix-darwin"; inputs.nixpkgs.follows = "nixpkgs"; };
     home-manager = { url = "github:nix-community/home-manager"; inputs.nixpkgs.follows = "nixpkgs"; };
 
     # Other sources
@@ -142,6 +142,6 @@
       # Other overlays that don't depend on flake inputs.
     ] ++ map import ((import ./lsnix.nix) ./overlays);
   } // flake-utils.lib.eachDefaultSystem (system: {
-      legacyPackages = import nixpkgs { inherit system; inherit (nixpkgsConfig { mysystem = system; }) config overlays; };
-  });
+     legacyPackages = import nixpkgs { inherit system; inherit (nixpkgsConfig { mysystem = system; }) config overlays; };
+ });
 }
