@@ -214,9 +214,9 @@ It should only modify the values of Spacemacs settings."
    ;; with `:variables' keyword (similar to layers). Check the editing styles
    ;; section of the documentation for details on available variables.
    ;; (default 'vim)
-   dotspacemacs-editing-style 'hybrid
+   dotspacemacs-editing-style 'vim
 
-   ;; Specify the startup banner. Default value is `official', it displays
+   ;; Specify the startup banner. Dfault value is `official', it displays
    ;; the official spacemacs logo. An integer value is the index of text
    ;; banner, `random' chooses a random text banner in `core/banners'
    ;; directory. A string value must be a path to an image format supported
@@ -538,6 +538,10 @@ configuration.
 Put your configuration code here, except for variables that should be set
 before packages are loaded."
 
+  ;; @FIXME: manually set nix home
+  (setenv "PATH" (concat ":~/.nix-profile/bin" (getenv "PATH") ))
+  (setq exec-path (append exec-path '("~/.nix-profile/bin")))
+
   ;; lsp
   (require 'lsp)
   (require 'lsp-mode)
@@ -562,8 +566,13 @@ before packages are loaded."
      ))
 
   ;; use ripgrep as default helm ag search
-  (setq helm-ag-base-command "rg --vimgrep --no-heading --smart-case")
+  (setq
+   helm-ag-base-command "rg --vimgrep --no-heading --smart-case"
+   helm-ag-success-exit-status '(0 2))
 
+  ;; use aspell istead of ispell
+  ;; @FIXME: dont use nixprofile path
+  (setq ispell-program-name "aspell")
 
   ;; force custom variables
   (custom-set-variables
@@ -731,14 +740,14 @@ before packages are loaded."
   ;; (org-agenda nil "a")
   ;; Adding this to ~/.emacs.d/init.el gave me a transparent emacs:
 
-  ;; themes
-  ;; force load theme
-  ;; (require 'doom-themes)
-  ;; (themes-megapack/init-doom-themes)
-  ;; (load-theme 'doom-rouge t)
-
-  ;; doom-treemacs
-  (doom-themes-treemacs-config)
+  ;; fix main theme with daemon
+  (if (daemonp)
+      (cl-labels ((load-material (frame)
+                             (with-selected-frame frame
+                               (load-theme 'material t))
+                             (remove-hook 'after-make-frame-functions #'load-material)))
+        (add-hook 'after-make-frame-functions #'load-material))
+    (load-theme 'material t))
 
   ;; end
   )

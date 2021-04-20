@@ -1,12 +1,12 @@
 { pkgs, lib, ... }: 
 
 let
- xterm-emacsclient = pkgs.writeShellScriptBin "xemacs" ''
+  xterm-emacsclient = pkgs.writeShellScriptBin "xemacs" ''
     export TERM=xterm-emacs
     ${pkgs.emacs}/bin/emacsclient $@
   '';
 
- stdin-emacsclient = pkgs.writeShellScriptBin "semacs" ''
+  stdin-emacsclient = pkgs.writeShellScriptBin "semacs" ''
     TMP="$(mktemp /tmp/stdin-XXX)"
     cat >$TMP
     ${xterm-emacsclient}/bin/xemacs --nw $TMP

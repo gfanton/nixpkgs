@@ -36,12 +36,12 @@ in
     '';
     in mkIf config.programs.truecolor.enable {
         home.packages = [
-          (pkgs.runCommandLocal "terminfo" {
-            buildInputs = [ pkgs.kitty ];
+          (pkgs.runCommandLocal "xterm-emacs" {
+            output = [ "terminfo" ];
             nativeBuildInputs = [ pkgs.ncurses ];
           } ''
             mkdir -p $out/share/terminfo
-            export TERMINFO=${cfg.terminfo}
+            export TERMINFO_DIRS=${cfg.terminfo}
             tic -x -o $out/share/terminfo ${sourceFile}
           '')
         ];

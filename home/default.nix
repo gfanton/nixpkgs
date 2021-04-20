@@ -1,7 +1,9 @@
 { config, pkgs, lib, ... }:
 
  let
-  spacemacsd = "${lib.cleanSource ../config/spacemacs}";
+   home_dir = "${config.home.homeDirectory}";
+   profile_dir = "${config.home.profileDirectory}";
+   spacemacsd = "${lib.cleanSource ../config/spacemacs}";
 in
 {
   # Import config broken out into files
@@ -10,6 +12,13 @@ in
     ./kitty.nix
     ./shells.nix
   ];
+
+  xdg = {
+    enable = true;
+    configHome = "${home_dir}/.config";
+    cacheHome = "${home_dir}/.cache";
+    dataHome = "${home_dir}/.local/share";
+  };
 
   home.packages = with pkgs; [
     # Some basics
@@ -82,24 +91,21 @@ in
     jazzy
   ];
 
-
   # Additional Path
   home.sessionPath = [
-    "$HOME/.local/bin"
+    "${home_dir}/.local/bin"
   ];
 
   # Additional env
   home.sessionVariables = {
     # path
-    LIBRARY_PATH="$HOME/.nix-profile/lib";
-    LD_LIBRARY_PATH="$HOME/.nix-profile/lib";
-    CPATH="$HOME/.nix-profile/include";
-    PKG_CONFIG_PATH = "$HOME/.nix-profile/lib/pkgconfig";
+    PKG_CONFIG_PATH = "${profile_dir}/lib/pkgconfig";
+    TERMINFO_DIRS = "${profile_dir}/share/terminfo";
 
     # flags
-    # LDFLAGS="-L$HOME/.nix-profile/lib";
-    CFLAGS="-I$HOME/.nix-profile/include";
-    CPPFLAGS="-I$HOME/.nix-profile/include";
+    # LDFLAGS="-L${profile_dir}/lib";
+    CFLAGS="-I${profile_dir}/include";
+    CPPFLAGS="-I${profile_dir}/include";
   };
 
   # lang
@@ -193,7 +199,7 @@ in
   programs.go = {
     enable = true;
     goPath = "go";
-    goBin = ".local/bin";
+    goBin = "${home_dir}/.local/bin";
     package = (pkgs.buildEnv {
       name = "golang";
       paths = with pkgs; [

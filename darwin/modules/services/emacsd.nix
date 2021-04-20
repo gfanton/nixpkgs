@@ -3,9 +3,7 @@
 with lib;
 
 let
-
   cfg = config.services.emacsd;
-
 in {
   options = {
     services.emacsd = {
@@ -46,21 +44,22 @@ in {
     };
   };
 
-  config = mkIf cfg.enable {
-    launchd.user.agents.emacsd = {
-      path = cfg.additionalPath ++ [ config.environment.systemPath ];
-      serviceConfig = {
-        ProgramArguments = [
-          "${pkgs.zsh}/bin/zsh" "-c"
-          ''
-            source ${config.system.build.setEnvironment} && TERM=xterm-emacs ${cfg.package}/bin/${cfg.exec} --fg-daemon
-          ''
-        ];
-        RunAtLoad = true;
-        KeepAlive = true;
-        StandardErrorPath = "/tmp/emacs.log";
-        StandardOutPath = "/tmp/emacs.log";
+  config = let
+    emacsd = pkgs.writeShellScriptBin "emacsd" ''
+      export TERMINFO_DIRS="${config.system.path}/share/terminfo";
+      export TERM=xterm-emacs
+      ${cfg.package}/bin/${cfg.exec} --fg-daemon
+    '';
+  in mkIf cfg.enable {
+      launchd.user.agents.emacsd = {
+        path = cfg.additionalPath ++ [ config.environment.systemPath ];
+        serviceConfig = {
+          ProgramArguments = ["${pkgs.bash}/bin/bash" "${emacsd}/bin/emacsd"];
+          RunAtLoad = true;
+          KeepAlive = true;
+          StandardErrorPath = "/tmp/emacsd.log";
+          StandardOutPath = "/tmp/emacsd.log";
+        };
       };
     };
-  };
 }
