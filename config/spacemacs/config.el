@@ -507,7 +507,9 @@ This function defines the environment variables for your Emacs session. By
 default it calls `spacemacs/load-spacemacs-env' which loads the environment
 variables declared in `~/.spacemacs.env' or `~/.spacemacs.d/.spacemacs.env'.
 See the header of this file for more information."
-  (spacemacs/load-spacemacs-env))
+  (spacemacs/load-spacemacs-env t)
+  (setenv "LANG" "en_US.UTF-8") ;; force lang to en_US.UTF-8
+  )
 
 (defun dotspacemacs/user-init ()
   "Initialization for user code:
@@ -537,11 +539,6 @@ This function is called at the very end of Spacemacs startup, after layer
 configuration.
 Put your configuration code here, except for variables that should be set
 before packages are loaded."
-
-  ;; @FIXME: manually set nix home
-  (setenv "PATH" (concat ":~/.nix-profile/bin" (getenv "PATH") ))
-  (setq exec-path (append exec-path '("~/.nix-profile/bin")))
-
   ;; lsp
   (require 'lsp)
   (require 'lsp-mode)

@@ -199,7 +199,7 @@ in
   programs.go = {
     enable = true;
     goPath = "go";
-    goBin = "${home_dir}/.local/bin";
+    goBin = ".local/bin";
     package = (pkgs.buildEnv {
       name = "golang";
       paths = with pkgs; [
