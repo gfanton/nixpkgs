@@ -139,12 +139,12 @@ in
       "cmd+f" = "launch --stdin-source=@screen_scrollback --stdin-add-formatting ${stdin-emacsclient}/bin/semacs";
 
       # hints
-      # "cmd+g" = "kitten hints --type=linenum --linenum-action=self ${xterm-emacsclient}/bin/xemacs -nw +{line} {path}";
+      "cmd+g" = "kitten hints --type=linenum --linenum-action=self ${xterm-emacsclient}/bin/xemacs -t +{line} {path}";
 
       # editor
-      "kitty_mod+o" = "launch --cwd=current --type=overlay ${xterm-emacsclient}/bin/xemacs -nw .";
-      "kitty_mod+e" = "launch --cwd=current --location=vsplit ${xterm-emacsclient}/bin/xemacs -nw .";
-      "kitty_mod+d" = "launch --cwd=current --location=hsplit ${xterm-emacsclient}/bin/xemacs -nw .";
+      "kitty_mod+o" = "launch --cwd=current --type=overlay ${xterm-emacsclient}/bin/xemacs -t .";
+      "kitty_mod+e" = "launch --cwd=current --location=vsplit ${xterm-emacsclient}/bin/xemacs -t .";
+      "kitty_mod+d" = "launch --cwd=current --location=hsplit ${xterm-emacsclient}/bin/xemacs -t .";
     };
   };
 

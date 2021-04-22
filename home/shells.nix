@@ -109,10 +109,11 @@ in
 
       # core alias
       ".." = "cd ..";
-      cat = "${bat}/bin/bat";
+      cat = "${silicon.bat}/bin/bat";
       du = "${du-dust}/bin/dust";
-      g = "${gitAndTools.git}/bin/git";
+      g = "${silicon.gitAndTools.git}/bin/git";
       ls = "${exa}/bin/exa";
+      rg = "${silicon.ripgrep }/bin/rg --column --line-number --no-heading --color=always --ignore-case";
       l = "ls -l --icons";
       la = "l -a --icons";
       ll = "ls -lhmbgUFH --git --icons";
