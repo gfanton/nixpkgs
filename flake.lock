@@ -213,8 +213,7 @@
         "nixpkgs-silicon-darwin": "nixpkgs-silicon-darwin",
         "nixpkgs-stable-darwin": "nixpkgs-stable-darwin",
         "powerlevel10k": "powerlevel10k",
-        "spacemacs": "spacemacs",
-        "zsh-completions": "zsh-completions"
+        "spacemacs": "spacemacs"
       }
     },
     "spacemacs": {
@@ -231,22 +230,6 @@
         "owner": "syl20bnr",
         "ref": "develop",
         "repo": "spacemacs",
-        "type": "github"
-      }
-    },
-    "zsh-completions": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1618966293,
-        "narHash": "sha256-4mWoxzsELkYxZlOWOJNjhn2nZsQgKalrslewLf33Xzg=",
-        "owner": "zsh-users",
-        "repo": "zsh-completions",
-        "rev": "d7959bb7167f3f19a14ea8cac8773b771b1561b9",
-        "type": "github"
-      },
-      "original": {
-        "owner": "zsh-users",
-        "repo": "zsh-completions",
         "type": "github"
       }
     }

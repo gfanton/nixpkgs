@@ -89,9 +89,6 @@ in
 
     ## fzf tab
 
-    # zoxide
-    zstyle ':completion:z:*' command 'zq -ls'
-
     # cat
     zstyle ':fzf-tab:complete:(cat|bat):*' fzf-preview '\
            ([ -f $realpath ] && ${pkgs.bat}/bin/bat --color=always --style=header,grid --line-range :500 $realpath) \
