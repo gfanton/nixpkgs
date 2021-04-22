@@ -1,9 +1,7 @@
 { config, pkgs, lib, ... }:
 
 let
-  zshPlugins = "${config.programs.zsh.dotDir}/zsh-plugins.sh";
-  zshPluginsSource = "${lib.cleanSource ../config/zsh/zsh-plugins.txt}";
-
+  # zshPluginsSource = "${lib.cleanSource ../config/zsh/zsh-plugins.txt}";
   xterm-emacsclient = pkgs.writeShellScriptBin "xemacsclient" ''
     export TERM=xterm-emacs
     ${pkgs.emacs}/bin/emacsclient $@
@@ -15,10 +13,6 @@ let
   '';
 in
 {
-  home.activation.generateAntibodyPlugins = config.lib.dag.entryAfter [ "writeBoundary" ] ''
-    ${pkgs.silicon.antibody}/bin/antibody bundle < "${zshPluginsSource}" > "${zshPlugins}";
-  '';
-
   programs.tmux.enable = true;
 
   # fzf - a command-line fuzzy finder.
@@ -31,6 +25,22 @@ in
   # ZSH
   programs.zsh = {
     enable = true;
+    # plugins
+    antibody = {
+      enable = true;
+      package = pkgs.silicon.antibody;
+      plugins = [
+        # zsh completions
+        "Aloxaf/fzf-tab"
+        # themes
+        # powerline10k
+        "zdharma/fast-syntax-highlighting"
+        "romkatv/powerlevel10k"
+      ];
+      configPlugins = ''
+        fast-theme -q default
+      '';
+    };
 
     # zsh config location
     dotDir = ".config/zsh";
@@ -65,18 +75,11 @@ in
     '';
 
     initExtra = ''
-    # source antibody plugins
-    if [ -f "${config.home.homeDirectory}/${zshPlugins}" ]; then
-      source "${config.home.homeDirectory}/${zshPlugins}"
-    fi
-
     # bindkey
     bindkey "\e[1;3D" backward-word # left word
     bindkey "\e[1;3C" forward-word # right word
 
     ## extra z config
-    # fsh
-    fast-theme -q default
 
     # Do menu-driven completion.
     zstyle ":completion:*:git-checkout:*" sort false
