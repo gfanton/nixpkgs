@@ -31,11 +31,12 @@ in
       package = pkgs.silicon.antibody;
       plugins = [
         # zsh completions
-        "Aloxaf/fzf-tab"
+        "${pkgs.zsh-plugins.fzf-tab}"
+
         # themes
         # powerline10k
-        "zdharma/fast-syntax-highlighting"
-        "romkatv/powerlevel10k"
+        "${pkgs.zsh-plugins.powerlevel10k}"
+        "${pkgs.zsh-plugins.fast-syntax-highlighting}"
       ];
       configPlugins = ''
         fast-theme -q default

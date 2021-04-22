@@ -20,6 +20,22 @@
         "type": "github"
       }
     },
+    "fast-syntax-highlighting": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1611248254,
+        "narHash": "sha256-4xJXH9Wn18/+Vfib/ZrhCRp/yB1PppsbZCx1/WafmU8=",
+        "owner": "zdharma",
+        "repo": "fast-syntax-highlighting",
+        "rev": "a62d721affc771de2c78201d868d80668a84c1e1",
+        "type": "github"
+      },
+      "original": {
+        "owner": "zdharma",
+        "repo": "fast-syntax-highlighting",
+        "type": "github"
+      }
+    },
     "flake-compat": {
       "flake": false,
       "locked": {
@@ -48,6 +64,22 @@
       "original": {
         "owner": "numtide",
         "repo": "flake-utils",
+        "type": "github"
+      }
+    },
+    "fzf-tab": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1618844495,
+        "narHash": "sha256-CfMk/NeL4SplbeUEUaaMKsVUDWyD10hwApu4NKbn6GU=",
+        "owner": "Aloxaf",
+        "repo": "fzf-tab",
+        "rev": "b5e836f1d271507db40e23deadde75d8c9fef078",
+        "type": "github"
+      },
+      "original": {
+        "owner": "Aloxaf",
+        "repo": "fzf-tab",
         "type": "github"
       }
     },
@@ -151,18 +183,38 @@
         "type": "github"
       }
     },
+    "powerlevel10k": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1618949991,
+        "narHash": "sha256-2VraGd9q+aJxCCHRifQbCGMHludgUkP72HymRUlroC4=",
+        "owner": "romkatv",
+        "repo": "powerlevel10k",
+        "rev": "8d1daa4e6340b1689bf951730489bc64c52220c7",
+        "type": "github"
+      },
+      "original": {
+        "owner": "romkatv",
+        "repo": "powerlevel10k",
+        "type": "github"
+      }
+    },
     "root": {
       "inputs": {
         "darwin": "darwin",
+        "fast-syntax-highlighting": "fast-syntax-highlighting",
         "flake-compat": "flake-compat",
         "flake-utils": "flake-utils",
+        "fzf-tab": "fzf-tab",
         "home-manager": "home-manager",
         "nixos-stable": "nixos-stable",
         "nixpkgs": "nixpkgs",
         "nixpkgs-master": "nixpkgs-master",
         "nixpkgs-silicon-darwin": "nixpkgs-silicon-darwin",
         "nixpkgs-stable-darwin": "nixpkgs-stable-darwin",
-        "spacemacs": "spacemacs"
+        "powerlevel10k": "powerlevel10k",
+        "spacemacs": "spacemacs",
+        "zsh-completions": "zsh-completions"
       }
     },
     "spacemacs": {
@@ -179,6 +231,22 @@
         "owner": "syl20bnr",
         "ref": "develop",
         "repo": "spacemacs",
+        "type": "github"
+      }
+    },
+    "zsh-completions": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1618966293,
+        "narHash": "sha256-4mWoxzsELkYxZlOWOJNjhn2nZsQgKalrslewLf33Xzg=",
+        "owner": "zsh-users",
+        "repo": "zsh-completions",
+        "rev": "d7959bb7167f3f19a14ea8cac8773b771b1561b9",
+        "type": "github"
+      },
+      "original": {
+        "owner": "zsh-users",
+        "repo": "zsh-completions",
         "type": "github"
       }
     }

@@ -16,8 +16,13 @@
     darwin = { url = "github:LnL7/nix-darwin"; inputs.nixpkgs.follows = "nixpkgs"; };
     home-manager = { url = "github:nix-community/home-manager"; inputs.nixpkgs.follows = "nixpkgs"; };
 
-    # Other sources
+    # emacs
     spacemacs = { url = "github:syl20bnr/spacemacs/develop"; flake = false; };
+
+    # zsh_plugins
+    fast-syntax-highlighting = { url = "github:zdharma/fast-syntax-highlighting"; flake = false; };
+    fzf-tab = { url = "github:Aloxaf/fzf-tab"; flake = false; };
+    powerlevel10k = { url = "github:romkatv/powerlevel10k"; flake = false; };
   };
 
   outputs = { self, nixpkgs, darwin, home-manager, flake-utils, ... }@inputs:
@@ -136,9 +141,13 @@
       overlays = with inputs; [
       (
         final: prev: {
-          # Some packages
           # comma = import comma { inherit (prev) pkgs; };
           spacemacs = inputs.spacemacs;
+
+          # zsh plugins
+          zsh-plugins.fast-syntax-highlighting = inputs.fast-syntax-highlighting;
+          zsh-plugins.fzf-tab = inputs.fzf-tab;
+          zsh-plugins.powerlevel10k = inputs.powerlevel10k;
         }
       )
       # Other overlays that don't depend on flake inputs.
