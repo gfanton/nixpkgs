@@ -26,7 +26,7 @@ in
 
   config =
     let
-      sourceFile = pkgs.writeText "xterm.terminfo" ''
+      xterm-source = pkgs.writeText "xterm.terminfo" ''
         xterm-emacs|xterm with 24-bit direct color mode for Emacs,
           use=${cfg.useterm},
           setb24=\E[48\:2\:\:%p1%{65536}%/%d\:%p1%{256}%/%{255}%&\
@@ -34,16 +34,18 @@ in
           setf24=\E[38\:2\:\:%p1%{65536}%/%d\:%p1%{256}%/%{255}%&\
              %d\:%p1%{255}%&%dm,
     '';
-    in mkIf config.programs.truecolor.enable {
-        home.packages = [
-          (pkgs.runCommandLocal "xterm-emacs" {
+
+      xterm-emacs = pkgs.runCommandLocal "xterm-emacs" {
             output = [ "terminfo" ];
             nativeBuildInputs = [ pkgs.ncurses ];
           } ''
             mkdir -p $out/share/terminfo
             export TERMINFO_DIRS=${cfg.terminfo}
-            tic -x -o $out/share/terminfo ${sourceFile}
-          '')
-        ];
+            tic -x -o $out/share/terminfo ${xterm-source}
+          '';
+
+    in mkIf config.programs.truecolor.enable {
+        home.packages = [ xterm-emacs ];
+        home.file.".terminfo".source = "${xterm-emacs}/share/terminfo";
       };
 }
