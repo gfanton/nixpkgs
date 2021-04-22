@@ -33,7 +33,7 @@
                 # system = prev.stdenv.system ;
                 system = if mysystem == "aarch64-darwin" then "x86_64-darwin" else mysystem;
                 nixpkgs-stable = if system == "x86_64-darwin" then nixpkgs-stable-darwin else nixos-stable;
-                nixpkgs-silicon = if system == "x86_64-darwin" then nixpkgs-silicon-darwin else nixos-stable;
+                nixpkgs-silicon = if system == "x86_64-darwin" then nixpkgs-silicon-darwin else nixpkgs-master;
               in
               {
                 master = nixpkgs-master.legacyPackages.${system};
@@ -50,6 +50,7 @@
             misc.truecolor
             programs.mykitty
             programs.kitty.extras
+            programs.zsh.antibody
           ];
       };
 
@@ -129,6 +130,7 @@
         misc.truecolor = import ./home/modules/misc/truecolor.nix;
         programs.kitty.extras = import ./home/modules/programs/kitty/extras.nix;
         programs.mykitty = import ./home/modules/programs/kitty;
+        programs.zsh.antibody = import ./home/modules/programs/antibody.nix;
       };
 
       overlays = with inputs; [
