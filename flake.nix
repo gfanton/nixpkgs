@@ -81,7 +81,6 @@
     in
     {
       darwinConfigurations = {
-
         # Minimal configuration to bootstrap systems
         bootstrap = darwin.lib.darwinSystem {
           modules = [ ./darwin/bootstrap.nix {

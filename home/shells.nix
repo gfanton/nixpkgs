@@ -111,6 +111,9 @@ in
       lla = "ll -a";
       ps = "${stable.procs}/bin/procs";
 
+      # nix
+      config = "make -C ${config.home.homeDirectory}/nixpkgs";
+
       # emacs
       emacs = "${xterm-emacs}/bin/xemacs";
       emacsclient = "${xterm-emacsclient}/bin/xemacsclient";
