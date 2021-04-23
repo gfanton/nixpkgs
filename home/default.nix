@@ -8,7 +8,6 @@ in
 {
   # Import config broken out into files
   imports = [
-    ./git.nix
     ./kitty.nix
     ./shells.nix
   ];
@@ -28,6 +27,7 @@ in
     htop # fancy version of `top`
     unrar # extract RAR archives
     exa # fancy version of `ls`
+    docker-compose
 
     # pkgs silicon
     silicon.tmate # instant terminal sharing
@@ -86,11 +86,14 @@ in
     lorri # improve `nix-shell` experience in combination with `direnv`
     niv # easy dependency management for nix projects
 
+    # Platform specific tools
   ] ++ lib.optionals stdenv.isDarwin [
     libffi
     libffi.dev
     cocoapods
     jazzy
+  ] ++ lib.optionals stdenv.isLinux [
+    docker
   ];
 
   # Additional Path
