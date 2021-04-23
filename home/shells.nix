@@ -25,6 +25,8 @@ in
   # ZSH
   programs.zsh = {
     enable = true;
+    dotDir = ".config/zsh";
+
     # plugins
     antibody = {
       enable = true;
@@ -43,13 +45,8 @@ in
       '';
     };
 
-    # zsh config location
-    dotDir = ".config/zsh";
-
     # enable completion
     enableCompletion = true;
-
-    # enable completion
     enableAutosuggestions = true;
 
     plugins = [
@@ -59,13 +56,6 @@ in
         src = lib.cleanSource ../config/zsh/p10k;
         file = "config.zsh";
       }
-
-      # {
-      #   # fzf custom config
-      #   name = "fzf-config";
-      #   src = lib.cleanSource ../config/zsh/fzf;
-      #   file = "config.zsh";
-      # }
     ];
 
     initExtraFirst = ''

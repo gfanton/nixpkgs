@@ -20,6 +20,8 @@ in
     dataHome = "${home_dir}/.local/share";
   };
 
+  programs.home-manager.enable = true;
+
   home.packages = with pkgs; [
     # Some basics
     mosh # wrapper for `ssh` that better and not dropping connections
@@ -216,6 +218,41 @@ in
         }))
       ];
     });
+  };
+
+  # Git
+  # https://rycee.gitlab.io/home-manager/options.html#opt-programs.git.enable
+  # Aliases config imported in flake.
+  programs.git ={
+    enable = true;
+    userEmail = "8671905+gfanton@users.noreply.github.com";
+    userName = "gfanton";
+    aliases = {
+      d = "diff";
+      lg = "log --graph --abbrev-commit --decorate --format=format:'%C(blue)%h%C(reset) - %C(green)(%ar)%C(reset) %s %C(italic)- %an%C(reset)%C(magenta bold)%d%C(reset)' --all";
+      co = "checkout";
+    };
+    package = pkgs.buildEnv {
+      name = "myGitEnv";
+      paths = with pkgs.silicon.gitAndTools; [git gh tig];
+    };
+    delta.enable = true;
+    lfs.enable = true;
+    ignores = [
+      "*~"
+      "*.swp"
+      "*#"
+      ".#*"
+      ".DS_Store"
+    ];
+    extraConfig = {
+      core = {
+        whitespace = "trailing-space,space-before-tab";
+        editor = "em";
+      };
+      pull.rebase = true;
+      url."git@github.com:".insteadOf = "https://github.com/";
+    };
   };
 
   # This value determines the Home Manager release that your configuration is compatible with. This
