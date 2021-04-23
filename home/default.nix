@@ -189,6 +189,10 @@ in
     package = pkgs.emacs;
   };
 
+  services.emacs = lib.mkIf pkgs.stdenv.isLinux {
+    enable = true;
+  };
+
   # link aspell config
   home.file.".aspell.config" = with pkgs; {
     source = writeText "aspell.conf" ''
