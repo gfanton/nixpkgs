@@ -18,12 +18,18 @@ in
     enable = true;
     package = pkgs.kitty;
     settings = with pkgs.lib.colors.material-colors; {
+      font_family = "PragmataPro Mono Liga";
+      # font_features = "RecMono-Duotone +dlig +ss10";
+      font_size = "16.0";
+      adjust_line_height = "140%";
+      disable_ligatures = "cursor"; # disable ligatures when cursor is on them
 
       # colors
       background = "#${dark1}";
       foreground = "#${dark0}";
 
       # Cursor
+      cursor_shape = "beam";
       cursor = "#${dark0}";
       cursor_text_color = "#${dark1}";
 
@@ -69,13 +75,6 @@ in
       url_color = "#${blue0}";
 
       # config
-
-      font_family = "Iosevka Nerd Font";
-      # font_features = "RecMono-Duotone +dlig +ss10";
-      font_size = "16.0";
-      adjust_line_height = "140%";
-      disable_ligatures = "cursor"; # disable ligatures when cursor is on them
-
       # Window layout
       # hide_window_decorations = "titlebar-only";
       window_padding_width = "10";
@@ -148,5 +147,5 @@ in
     };
   };
 
-  programs.mykitty.extras.useSymbolsFromNerdFont = "Iosevka Nerd Font";
+  # programs.mykitty.extras.useSymbolsFromNerdFont = "Iosevka Nerd Font";
 }
