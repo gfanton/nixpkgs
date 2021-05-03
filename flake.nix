@@ -59,6 +59,14 @@
           ];
       };
 
+      linuxCommonConfig = {
+          imports = [
+            homeManagerConfig
+            ./linux
+          ];
+	        nixpkgs = nixpkgsConfig { mysystem = "x86_64-linux"; };
+      };
+
       nixDarwinCommonModules = { system, user }: [
         # Include extra `nix-darwin`
         self.darwinModules.services.emacsd
@@ -119,10 +127,7 @@
 	      system = "x86_64-linux";
 	      homeDirectory = "/home/gfanton";
 	      username = "gfanton";
-	      configuration = {
-	        imports = [ homeManagerConfig ];
-	        nixpkgs = nixpkgsConfig { mysystem = "x86_64-linux"; };
-	      };
+	      configuration = linuxCommonConfig;
       };
 
       darwinModules = {
