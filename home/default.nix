@@ -6,6 +6,7 @@
    spacemacsd = "${lib.cleanSource ../config/spacemacs}";
 in
 {
+
   # Import config broken out into files
   imports = [
     ./kitty.nix
@@ -143,7 +144,7 @@ in
   # https://rycee.gitlab.io/home-manager/options.html#opt-programs.bat.enable
   programs.bat = {
     enable = true;
-    config= {
+    config = {
       style = "plain";
     };
   };
@@ -190,10 +191,6 @@ in
     enable = true;
     # package = pkgs.silicon.emacs;
     package = pkgs.emacs;
-  };
-
-  services.emacs = lib.mkIf pkgs.stdenv.isLinux {
-    enable = true;
   };
 
   # link aspell config
