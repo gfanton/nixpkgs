@@ -50,7 +50,7 @@
   # Left prompt segments.
   typeset -g POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(
       ## LINE 1 ##
-      time dir asdf vcs context
+      time dir vcs context
 
       ## LINE 2 ##
       newline time dir prompt_char
@@ -58,7 +58,7 @@
 
   # Right prompt segments.
   typeset -g POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=(
-      command_execution_time
+      command_execution_time go_version
   )
 
   # other
@@ -103,11 +103,30 @@
   typeset -g POWERLEVEL9K_DIR_FOREGROUND=$blue
 
   # Context format when root: user@host. The first part white, the rest grey.
-  typeset -g POWERLEVEL9K_CONTEXT_ROOT_TEMPLATE="%F{$white}%n%f%F{$grey}@%m%f"
-  # Context format when not root: user@host. The whole thing grey.
-  typeset -g POWERLEVEL9K_CONTEXT_TEMPLATE="%F{$grey}%n@%m%f"
-  # Don't show context unless root or in SSH.
-  typeset -g POWERLEVEL9K_CONTEXT_{DEFAULT,SUDO}_CONTENT_EXPANSION=
+  # typeset -g POWERLEVEL9K_CONTEXT_ROOT_TEMPLATE="%F{$white}%n%f%F{$grey}@%m%f"
+  # # Context format when not root: user@host. The whole thing grey.
+  # typeset -g POWERLEVEL9K_CONTEXT_TEMPLATE="%F{$grey}%n@%m%f"
+  # # Don't show context unless root or in SSH.
+  # typeset -g POWERLEVEL9K_CONTEXT_{DEFAULT,SUDO}_CONTENT_EXPANSION=
+
+  # Context color when running with privileges.
+  typeset -g POWERLEVEL9K_CONTEXT_ROOT_FOREGROUND=red
+  # Context color in SSH without privileges.
+  typeset -g POWERLEVEL9K_CONTEXT_{REMOTE,REMOTE_SUDO}_FOREGROUND=magenta
+  # Default context color (no privileges, no SSH).
+  typeset -g POWERLEVEL9K_CONTEXT_FOREGROUND=white
+
+  # Context format when running with privileges: user@hostname.
+  typeset -g POWERLEVEL9K_CONTEXT_ROOT_TEMPLATE='%n@%m'
+  # Context format when in SSH without privileges: user@hostname.
+  typeset -g POWERLEVEL9K_CONTEXT_{REMOTE,REMOTE_SUDO}_TEMPLATE='%n@%m'
+  # Default context format (no privileges, no SSH): user@hostname.
+  typeset -g POWERLEVEL9K_CONTEXT_TEMPLATE='%n@%m'
+
+  # Don't show context unless running with privileges or in SSH.
+  # Tip: Remove the next line to always show context.
+  typeset -g POWERLEVEL9K_CONTEXT_{DEFAULT,SUDO}_{CONTENT,VISUAL_IDENTIFIER}_EXPANSION=
+
 
   # Show previous command duration only if it's >= 5s.
   typeset -g POWERLEVEL9K_COMMAND_EXECUTION_TIME_THRESHOLD=5
