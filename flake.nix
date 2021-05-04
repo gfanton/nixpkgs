@@ -60,11 +60,10 @@
       };
 
       linuxCommonConfig = {
-          imports = [
-            homeManagerConfig
-            ./linux
-          ];
-	        nixpkgs = nixpkgsConfig { mysystem = "x86_64-linux"; };
+        imports = [
+          homeManagerConfig
+          ./linux
+        ];
       };
 
       nixDarwinCommonModules = { system, user }: [
@@ -127,8 +126,11 @@
 	      system = "x86_64-linux";
 	      homeDirectory = "/home/gfanton";
 	      username = "gfanton";
-	      configuration = linuxCommonConfig;
-      };
+	      configuration = {
+	        imports = [ linuxCommonConfig ];
+	        nixpkgs = nixpkgsConfig { mysystem = "x86_64-linux"; };
+	      };
+       };
 
       darwinModules = {
         security.pam = import ./darwin/modules/security/pam.nix;

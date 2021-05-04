@@ -6,7 +6,6 @@
    spacemacsd = "${lib.cleanSource ../config/spacemacs}";
 in
 {
-
   # Import config broken out into files
   imports = [
     ./kitty.nix
