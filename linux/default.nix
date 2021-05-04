@@ -17,4 +17,10 @@ in
 
   # install emacs service
   services.emacs.enable = true;
+
+  # setup ssh agent
+  services.gpg-agent = {
+    enable = true;
+    enableSshSupport = true;
+  };
 }

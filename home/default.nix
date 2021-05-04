@@ -1,6 +1,6 @@
 { config, pkgs, lib, ... }:
 
- let
+let
    home_dir = "${config.home.homeDirectory}";
    profile_dir = "${config.home.profileDirectory}";
    spacemacsd = "${lib.cleanSource ../config/spacemacs}";
@@ -103,6 +103,8 @@ in
 
   # Additional env
   home.sessionVariables = {
+    EDITOR = "${pkgs.emacs}/bin/emacsclient -nw";
+
     # path
     PKG_CONFIG_PATH = "${profile_dir}/lib/pkgconfig";
     TERMINFO_DIRS = "${profile_dir}/share/terminfo";
@@ -190,6 +192,17 @@ in
     enable = true;
     # package = pkgs.silicon.emacs;
     package = pkgs.emacs;
+  };
+
+  # ssh
+  programs.ssh = {
+    enable = true;
+    controlMaster = "auto";
+    controlPath = "${config.xdg.cacheHome}/ssh-%u-%r@%h:%p";
+    controlPersist = "1800";
+    forwardAgent = true;
+    serverAliveInterval = 60;
+    hashKnownHosts = true;
   };
 
   # link aspell config
