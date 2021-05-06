@@ -9,8 +9,12 @@ let
   stdin-emacsclient = pkgs.writeShellScriptBin "semacs" ''
     TMP="$(mktemp /tmp/stdin-XXX)"
     cat >$TMP
-    ${xterm-emacsclient}/bin/xemacs --nw $TMP
+    ${xterm-emacsclient}/bin/xemacs -t $TMP
     rm $TMP
+  '';
+
+  magit-emacsclient = pkgs.writeShellScriptBin "magit" ''
+    ${xterm-emacsclient}/bin/xemacs -t -e '(magit-status) (delete-other-windows)'
   '';
 in
 {
@@ -134,16 +138,16 @@ in
       "kitty_mod+minus" = "change_font_size all -1.0";
       "kitty_mod+0" = "change_font_size all 0";
 
-      # screen rollback
-      "cmd+f" = "launch --stdin-source=@screen_scrollback --stdin-add-formatting ${stdin-emacsclient}/bin/semacs";
-
       # hints
       "cmd+g" = "kitten hints --type=linenum --linenum-action=self ${xterm-emacsclient}/bin/xemacs -t +{line} {path}";
-
+      # screen rollback
+      "cmd+f" = "launch --stdin-source=@screen_scrollback --stdin-add-formatting ${stdin-emacsclient}/bin/semacs";
       # editor
+      "kitty_mod+g" = "launch --cwd=current --location=vsplit ${magit-emacsclient}/bin/magit";
       "kitty_mod+o" = "launch --cwd=current --type=overlay ${xterm-emacsclient}/bin/xemacs -t .";
       "kitty_mod+e" = "launch --cwd=current --location=vsplit ${xterm-emacsclient}/bin/xemacs -t .";
       "kitty_mod+d" = "launch --cwd=current --location=hsplit ${xterm-emacsclient}/bin/xemacs -t .";
+
     };
   };
 
