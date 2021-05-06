@@ -28,6 +28,8 @@ in
     unrar # extract RAR archives
     exa # fancy version of `ls`
     docker-compose
+    ttygif
+    ttyrec
 
     # pkgs silicon
     silicon.tmate # instant terminal sharing
