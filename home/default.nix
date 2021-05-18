@@ -105,7 +105,7 @@ in
 
   # Additional env
   home.sessionVariables = {
-    EDITOR = "${pkgs.emacs}/bin/emacsclient -nw";
+    EDITOR = "${pkgs.emacsGcc}/bin/emacsclient -nw";
 
     # path
     PKG_CONFIG_PATH = "${profile_dir}/lib/pkgconfig";
@@ -193,7 +193,7 @@ in
   programs.emacs = {
     enable = true;
     # package = pkgs.silicon.emacs;
-    package = pkgs.emacs;
+    package = pkgs.emacsGcc;
   };
 
   # ssh

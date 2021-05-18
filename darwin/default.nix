@@ -50,5 +50,8 @@
   services.lorri.enable = true;
 
   # emacs daemon
-  services.emacsd.enable = true;
+  services.emacsd = {
+    package = pkgs.emacsGcc;
+    enable = true;
+  };
 }

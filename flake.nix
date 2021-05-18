@@ -18,6 +18,7 @@
 
     # emacs
     spacemacs = { url = "github:syl20bnr/spacemacs/develop"; flake = false; };
+    emacs-overlay =  { url = "github:nix-community/emacs-overlay"; };
 
     # zsh_plugins
     fast-syntax-highlighting = { url = "github:zdharma/fast-syntax-highlighting"; flake = false; };
@@ -25,7 +26,7 @@
     powerlevel10k = { url = "github:romkatv/powerlevel10k"; flake = false; };
   };
 
-  outputs = { self, nixpkgs, darwin, home-manager, flake-utils, ... }@inputs:
+  outputs = { self, nixpkgs, darwin, home-manager, flake-utils, emacs-overlay, ... }@inputs:
     let
       nixpkgsConfig = { mysystem }: with inputs; {
         config = {
@@ -149,6 +150,7 @@
         final: prev: {
           # comma = import comma { inherit (prev) pkgs; };
           spacemacs = inputs.spacemacs;
+          emacsGcc = (import emacs-overlay final prev).emacsGcc;
 
           # zsh plugins
           zsh-plugins.fast-syntax-highlighting = inputs.fast-syntax-highlighting;

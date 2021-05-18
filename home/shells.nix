@@ -4,12 +4,12 @@ let
   # zshPluginsSource = "${lib.cleanSource ../config/zsh/zsh-plugins.txt}";
   xterm-emacsclient = pkgs.writeShellScriptBin "xemacsclient" ''
     export TERM=xterm-emacs
-    ${pkgs.emacs}/bin/emacsclient $@
+    ${pkgs.emacsGcc}/bin/emacsclient $@
   '';
 
   xterm-emacs = pkgs.writeShellScriptBin "xemacs" ''
     export TERM=xterm-emacs
-    ${pkgs.emacs}/bin/emacs $@
+    ${pkgs.emacsGcc}/bin/emacs $@
   '';
 in
 {

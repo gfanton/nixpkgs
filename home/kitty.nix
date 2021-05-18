@@ -3,7 +3,7 @@
 let
   xterm-emacsclient = pkgs.writeShellScriptBin "xemacs" ''
     export TERM=xterm-emacs
-    ${pkgs.emacs}/bin/emacsclient $@
+    ${pkgs.emacsGcc}/bin/emacsclient $@
   '';
 
   stdin-emacsclient = pkgs.writeShellScriptBin "semacs" ''

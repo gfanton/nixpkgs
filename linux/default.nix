@@ -16,7 +16,10 @@ in
   };
 
   # install emacs service
-  services.emacs.enable = true;
+  services.emacs = {
+    package = pkgs.emacsGcc;
+    enable = true;
+  }
 
   # setup ssh agent
   services.gpg-agent = {
