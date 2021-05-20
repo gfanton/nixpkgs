@@ -105,11 +105,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1621135068,
-        "narHash": "sha256-aPJlgosfLp3QtPDFLf/N7qNpIo5Q45MpYyzlaACL2G4=",
+        "lastModified": 1621417094,
+        "narHash": "sha256-Csk4p8jFUma7FtMnjEJGTPGxCOnTbb30xr8AXwrUTMM=",
         "owner": "nix-community",
         "repo": "home-manager",
-        "rev": "77188bcd6e2c6c7a99253b36f08ed7b65f2901d2",
+        "rev": "3d18912f5ae7c98bd5249411d98cdf3b28fe1f09",
         "type": "github"
       },
       "original": {
@@ -168,16 +168,16 @@
     },
     "nixpkgs-silicon-darwin": {
       "locked": {
-        "lastModified": 1617967845,
-        "narHash": "sha256-D4kmtXAsgoldMcdN3dl5wZdhEPQRvKiXdDYPSKkJLPw=",
-        "owner": "thefloweringash",
+        "lastModified": 1621452833,
+        "narHash": "sha256-Fcc8K+tH+DVrN1ZIxV/RBMiV26c8bYvuCJky13/DJ7I=",
+        "owner": "nixos",
         "repo": "nixpkgs",
-        "rev": "d84d7f43d09567b35c28e1f59d8f679956fb7305",
+        "rev": "2987d66d0f92f58b79db4dc687d3a56f71f0f157",
         "type": "github"
       },
       "original": {
-        "owner": "thefloweringash",
-        "ref": "apple-silicon",
+        "owner": "nixos",
+        "ref": "staging-next",
         "repo": "nixpkgs",
         "type": "github"
       }

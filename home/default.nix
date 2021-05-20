@@ -30,11 +30,12 @@ in
     docker-compose
     ttygif
     ttyrec
+    # stable.bandwhich # display current network utilization by process
+
 
     # pkgs silicon
     silicon.tmate # instant terminal sharing
     silicon.fd # fancy version of `find`
-    silicon.bandwhich # display current network utilization by process
     silicon.most
     silicon.parallel # runs commands in parallel
     silicon.socat
@@ -162,17 +163,7 @@ in
 
   # Htop
   # https://rycee.gitlab.io/home-manager/options.html#opt-programs.htop.enable
-  programs.htop = {
-    enable = true;
-    hideKernelThreads = true;
-    hideThreads = true;
-    hideUserlandThreads = true;
-    treeView = true;
-    meters = {
-      left = ["LeftCPUs2" "Memory" "Swap" "Load" "Clock"];
-      right = ["RightCPUs2" "Tasks" "LoadAverage" "Uptime"];
-    };
-  };
+  programs.htop.enable = true;
 
   # Zoxide, a faster way to navigate the filesystem
   # https://github.com/ajeetdsouza/zoxide

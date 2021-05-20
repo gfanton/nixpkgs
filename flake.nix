@@ -6,7 +6,7 @@
     nixpkgs = { url = "github:nixos/nixpkgs/nixos-unstable"; };
     nixpkgs-master = { url = "github:nixos/nixpkgs/master"; };
     nixpkgs-stable-darwin = { url = "github:nixos/nixpkgs/nixpkgs-20.09-darwin"; };
-    nixpkgs-silicon-darwin = { url = "github:thefloweringash/nixpkgs/apple-silicon"; };
+    nixpkgs-silicon-darwin = { url = "github:nixos/nixpkgs/staging-next"; };
     nixos-stable = { url = "github:nixos/nixpkgs/nixos-20.09"; };
 
     # flake
