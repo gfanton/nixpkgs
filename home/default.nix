@@ -65,7 +65,7 @@ in
     silicon.antibody
 
     # ruby
-    (ruby_2_7.withPackages (ps: [
+    (silicon.ruby_2_7.withPackages (ps: [
       ps.ffi-compiler
     ]))
 
@@ -74,7 +74,7 @@ in
     silicon.yarn
 
     # python
-    (python3.withPackages (p: with p; [
+    (silicon.python3.withPackages (p: with p; [
       virtualenv
       pip
       mypy
@@ -90,11 +90,11 @@ in
     niv # easy dependency management for nix projects
 
     # Platform specific tools
-  ] ++ lib.optionals stdenv.isDarwin [
-    libffi
-    libffi.dev
-    cocoapods
-    jazzy
+ ] ++ lib.optionals stdenv.isDarwin [
+    silicon.libffi
+    silicon.libffi.dev
+    silicon.cocoapods
+    silicon.jazzy
   ] ++ lib.optionals stdenv.isLinux [
     docker
   ];
