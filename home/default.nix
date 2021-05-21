@@ -24,16 +24,13 @@ in
   home.packages = with pkgs; [
     # Some basics
     mosh # wrapper for `ssh` that better and not dropping connections
+    exa # fancy version of `ls`
     htop # fancy version of `top`
     unrar # extract RAR archives
-    exa # fancy version of `ls`
-    docker-compose
-    ttygif
-    ttyrec
     # stable.bandwhich # display current network utilization by process
 
-
     # pkgs silicon
+    silicon.asciinema # Terminal session recorder
     silicon.tmate # instant terminal sharing
     silicon.fd # fancy version of `find`
     silicon.most
@@ -47,6 +44,7 @@ in
     silicon.ripgrep # better version of grep
     silicon.curl # transfer a URL
     silicon.wget # The non-interactive network downloader.
+    silicon.docker-compose
 
     # stable
     stable.procs # fancy version of `ps`

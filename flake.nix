@@ -42,15 +42,16 @@
                 nixpkgs-silicon = if system == "x86_64-darwin" then nixpkgs-silicon-darwin else nixpkgs-master;
               in
               {
-                master = nixpkgs-silicon.legacyPackages.${mysystem};
-                stable = nixpkgs-stable.legacyPackages.${system};
-                silicon = nixpkgs-silicon.legacyPackages.${mysystem};
-
                 # override default package with silicon
                 zsh = nixpkgs-silicon.legacyPackages.${mysystem}.zsh;
+                # emacs = nixpkgs-silicon.legacyPackages.${mysystem}.emacs
                 kitty = nixpkgs-silicon.legacyPackages.${mysystem}.kitty.overrideDerivation (oldAttrs: {
                   CFLAGS = "-Wno-deprecated-declarations -arch arm64 -target arm64-apple-macos11";
                 });
+
+                master = nixpkgs-silicon.legacyPackages.${system};
+                stable = nixpkgs-stable.legacyPackages.${system};
+                silicon = nixpkgs-silicon.legacyPackages.${mysystem};
               }
           )
         ];
