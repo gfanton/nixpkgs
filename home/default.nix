@@ -44,12 +44,9 @@ in
     silicon.ripgrep # better version of grep
     silicon.curl # transfer a URL
     silicon.wget # The non-interactive network downloader.
-
+    silicon.nextdns # nextdns
     # stable
     stable.procs # fancy version of `ps`
-
-    # nextdns
-    silicon.nextdns
 
     # aspell
     silicon.aspell # interactive spell checker

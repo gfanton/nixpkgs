@@ -42,13 +42,6 @@
                 nixpkgs-silicon = if system == "x86_64-darwin" then nixpkgs-silicon-darwin else nixpkgs-master;
               in
               {
-                # override default package with silicon
-                zsh = nixpkgs-silicon.legacyPackages.${mysystem}.zsh;
-                # emacs = nixpkgs-silicon.legacyPackages.${mysystem}.emacs
-                kitty = nixpkgs-silicon.legacyPackages.${mysystem}.kitty.overrideDerivation (oldAttrs: {
-                  CFLAGS = "-Wno-deprecated-declarations -arch arm64 -target arm64-apple-macos11";
-                });
-
                 master = nixpkgs-silicon.legacyPackages.${system};
                 stable = nixpkgs-stable.legacyPackages.${system};
                 silicon = nixpkgs-silicon.legacyPackages.${mysystem};
@@ -155,9 +148,14 @@
       overlays = with inputs; [
       (
         final: prev: {
-          # comma = import comma { inherit (prev) pkgs; };
           spacemacs = inputs.spacemacs;
           emacsGcc = (import emacs-overlay final prev).emacsGcc;
+          zsh = final.silicon.zsh;
+          kitty = final.silicon.kitty.overrideDerivation (oldAttrs: {
+            CFLAGS = if prev.stdenv.isDarwin
+                     then "-Wno-deprecated-declarations -arch arm64 -target arm64-apple-macos11"
+                     else oldAttrs.CFLAGS;
+          });
 
           # zsh plugins
           zsh-plugins.fast-syntax-highlighting = inputs.fast-syntax-highlighting;
