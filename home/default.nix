@@ -44,7 +44,6 @@ in
     silicon.ripgrep # better version of grep
     silicon.curl # transfer a URL
     silicon.wget # The non-interactive network downloader.
-    silicon.docker-compose
 
     # stable
     stable.procs # fancy version of `ps`
@@ -95,6 +94,7 @@ in
     silicon.jazzy
   ] ++ lib.optionals stdenv.isLinux [
     docker
+    docker-compose
   ];
 
   # Additional Path
