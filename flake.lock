@@ -1,5 +1,26 @@
 {
   "nodes": {
+    "android-nixpkgs": {
+      "inputs": {
+        "flake-utils": "flake-utils",
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1621628224,
+        "narHash": "sha256-Idt9tb70rO8fg/V1FYRuh5XZm1BNyrduUblyuJji3js=",
+        "owner": "tadfisher",
+        "repo": "android-nixpkgs",
+        "rev": "979d7d7c501c96319803ecb1415a6ef0ff4317ca",
+        "type": "github"
+      },
+      "original": {
+        "owner": "tadfisher",
+        "repo": "android-nixpkgs",
+        "type": "github"
+      }
+    },
     "darwin": {
       "inputs": {
         "nixpkgs": [
@@ -68,6 +89,21 @@
       }
     },
     "flake-utils": {
+      "locked": {
+        "lastModified": 1614513358,
+        "narHash": "sha256-LakhOx3S1dRjnh0b5Dg3mbZyH0ToC9I8Y2wKSkBaTzU=",
+        "owner": "numtide",
+        "repo": "flake-utils",
+        "rev": "5466c5bbece17adaab2d82fae80b46e807611bf3",
+        "type": "github"
+      },
+      "original": {
+        "owner": "numtide",
+        "repo": "flake-utils",
+        "type": "github"
+      }
+    },
+    "flake-utils_2": {
       "locked": {
         "lastModified": 1620759905,
         "narHash": "sha256-WiyWawrgmyN0EdmiHyG2V+fqReiVi8bM9cRdMaKQOFg=",
@@ -216,11 +252,12 @@
     },
     "root": {
       "inputs": {
+        "android-nixpkgs": "android-nixpkgs",
         "darwin": "darwin",
         "emacs-overlay": "emacs-overlay",
         "fast-syntax-highlighting": "fast-syntax-highlighting",
         "flake-compat": "flake-compat",
-        "flake-utils": "flake-utils",
+        "flake-utils": "flake-utils_2",
         "fzf-tab": "fzf-tab",
         "home-manager": "home-manager",
         "nixos-stable": "nixos-stable",

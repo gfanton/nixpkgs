@@ -1,9 +1,9 @@
 { config, pkgs, lib, ... }:
 
 let
-   home_dir = "${config.home.homeDirectory}";
-   profile_dir = "${config.home.profileDirectory}";
-   spacemacsd = "${lib.cleanSource ../config/spacemacs}";
+  home_dir = "${config.home.homeDirectory}";
+  profile_dir = "${config.home.profileDirectory}";
+  spacemacsd = "${lib.cleanSource ../config/spacemacs}";
 in
 {
   # Import config broken out into files
@@ -24,9 +24,9 @@ in
   home.packages = with pkgs; [
     # Some basics
     mosh # wrapper for `ssh` that better and not dropping connections
-    exa # fancy version of `ls`
     htop # fancy version of `top`
     unrar # extract RAR archives
+    exa # fancy version of `ls`
     # stable.bandwhich # display current network utilization by process
 
     # pkgs silicon
@@ -64,8 +64,9 @@ in
     ]))
 
     # js
-    silicon.nodejs
+    silicon.nodejs-16_x
     silicon.yarn
+    silicon.watchman
 
     # python
     (silicon.python3.withPackages (p: with p; [
@@ -78,6 +79,17 @@ in
       python-language-server
     ]))
 
+    # go tools
+    silicon.gopls
+    silicon.delve
+    silicon.golangci-lint
+    silicon.go2nix
+    silicon.vgo2nix
+    # exclude bundle
+    (silicon.gotools.overrideDerivation (oldAttrs: {
+      excludedPackages = oldAttrs.excludedPackages + "\\|\\(bundle\\)";
+    }))
+
     # Useful nix related tools
     cachix # adding/managing alternative binary caches hosted by Cachix
     lorri # improve `nix-shell` experience in combination with `direnv`
@@ -89,10 +101,38 @@ in
     silicon.libffi.dev
     silicon.cocoapods
     silicon.jazzy
+    (silicon.gomobile.override {
+      androidPkgs = pkgs.androidenv.composeAndroidPackages {
+        includeNDK = true;
+        ndkVersion = "21.3.6528147"; # WARNING: 22.0.7026061 is broken.
+      };
+      buildGoModule = silicon.buildGoModule;
+      xcodeWrapperArgs = { version = "12.5"; };
+    })
   ] ++ lib.optionals stdenv.isLinux [
     docker
     docker-compose
   ];
+
+  # Go Env
+  programs.go = {
+    enable = true;
+    goPath = "go";
+    goBin = ".local/bin";
+    package = pkgs.silicon.go_1_16;
+  };
+
+  # adnroid
+  android-sdk = {
+    enable = true;
+    packages = sdk: with sdk; [
+      build-tools-30-0-2
+      cmdline-tools-latest
+      emulator
+      platforms-android-30
+      sources-android-30
+    ];
+  };
 
   # Additional Path
   home.sessionPath = [
@@ -201,28 +241,19 @@ in
     '';
   };
 
-  # Go Env
-  programs.go = {
-    enable = true;
-    goPath = "go";
-    goBin = ".local/bin";
-    package = (pkgs.buildEnv {
-      name = "golang";
-      paths = with pkgs; [
-        # package = pkgs.go_1_15;
-        silicon.go_1_16
-        silicon.gopls
-        silicon.delve
-        silicon.golangci-lint
-        silicon.go2nix
-        silicon.vgo2nix
-        # exclude bundle
-        (silicon.gotools.overrideDerivation (oldAttrs: {
-          excludedPackages = oldAttrs.excludedPackages + "\\|\\(bundle\\)";
-        }))
-      ];
-    });
-  };
+  # android-sdk = {
+  #   enable = true;
+
+  #   # Optional; default path is "~/.local/share/android".
+  #   path = "${config.home.homeDirectory}/.local/android/sdk";
+  #   packages = sdk: with sdk; [
+  #     build-tools-30-0-2
+  #     cmdline-tools-latest
+  #     emulator
+  #     platforms-android-30
+  #     sources-android-30
+  #   ];
+  # };
 
   # Git
   # https://rycee.gitlab.io/home-manager/options.html#opt-programs.git.enable

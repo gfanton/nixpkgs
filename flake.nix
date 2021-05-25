@@ -14,7 +14,14 @@
     flake-compat = { url = "github:edolstra/flake-compat"; flake = false; };
 
     darwin = { url = "github:LnL7/nix-darwin"; inputs.nixpkgs.follows = "nixpkgs"; };
-    home-manager = { url = "github:nix-community/home-manager"; inputs.nixpkgs.follows = "nixpkgs"; };
+    home-manager = {
+      url = "github:nix-community/home-manager";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    android-nixpkgs = {
+      inputs.nixpkgs.follows = "nixpkgs";
+      url = "github:tadfisher/android-nixpkgs";
+    };
 
     # emacs
     spacemacs = { url = "github:syl20bnr/spacemacs/develop"; flake = false; };
@@ -26,21 +33,23 @@
     powerlevel10k = { url = "github:romkatv/powerlevel10k"; flake = false; };
   };
 
-  outputs = { self, nixpkgs, darwin, home-manager, flake-utils, emacs-overlay, ... }@inputs:
+  outputs = { self, nixpkgs, darwin, home-manager, flake-utils, emacs-overlay, android-nixpkgs, ... }@inputs:
     let
+      defaultSystems = flake-utils.lib.defaultSystems ++ ["aarch64-darwin"];
       nixpkgsConfig = { mysystem }: with inputs; {
         config = {
           allowUnfree = true;
+          android_sdk.accept_license = true;
         };
         overlays = self.overlays ++ [
           (
             final: prev:
-              let
-                # system = prev.stdenv.system ;
-                system = if mysystem == "aarch64-darwin" then "x86_64-darwin" else mysystem;
-                nixpkgs-stable = if system == "x86_64-darwin" then nixpkgs-stable-darwin else nixos-stable;
-                nixpkgs-silicon = if system == "x86_64-darwin" then nixpkgs-silicon-darwin else nixpkgs-master;
-              in
+            let
+              # system = prev.stdenv.system ;
+              system = if mysystem == "aarch64-darwin" then "x86_64-darwin" else mysystem;
+              nixpkgs-stable = if system == "x86_64-darwin" then nixpkgs-stable-darwin else nixos-stable;
+              nixpkgs-silicon = if system == "x86_64-darwin" then nixpkgs-silicon-darwin else nixpkgs-master;
+            in
               {
                 master = nixpkgs-silicon.legacyPackages.${system};
                 stable = nixpkgs-stable.legacyPackages.${system};
@@ -57,6 +66,7 @@
             programs.mykitty
             programs.kitty.extras
             programs.zsh.antibody
+            android-nixpkgs.hmModule
           ];
       };
 
@@ -146,26 +156,32 @@
       };
 
       overlays = with inputs; [
-      (
-        final: prev: {
-          spacemacs = inputs.spacemacs;
-          emacsGcc = (import emacs-overlay final prev).emacsGcc;
-          zsh = final.silicon.zsh;
-          kitty = final.silicon.kitty.overrideDerivation (oldAttrs: {
-            CFLAGS = if prev.stdenv.isDarwin
-                     then "-Wno-deprecated-declarations -arch arm64 -target arm64-apple-macos11"
-                     else oldAttrs.CFLAGS;
-          });
+        (android-nixpkgs.overlay)
+        (
+          final: prev: {
+            spacemacs = inputs.spacemacs;
+            emacsGcc = (import emacs-overlay final prev).emacsGcc;
+            zsh = final.silicon.zsh;
+            android-sdk = (import android-nixpkgs) { inherit pkgs; };
+            kitty = final.silicon.kitty.overrideDerivation (oldAttrs: {
+              CFLAGS = if prev.stdenv.isDarwin
+                       then "-Wno-deprecated-declarations -arch arm64 -target arm64-apple-macos11"
+                       else oldAttrs.CFLAGS;
+            });
+            # androidSdk = final.silicon.androidenv.androidPkgs_9_0.androidsdk;
 
-          # zsh plugins
-          zsh-plugins.fast-syntax-highlighting = inputs.fast-syntax-highlighting;
-          zsh-plugins.fzf-tab = inputs.fzf-tab;
-          zsh-plugins.powerlevel10k = inputs.powerlevel10k;
-        }
-      )
-      # Other overlays that don't depend on flake inputs.
-    ] ++ map import ((import ./lsnix.nix) ./overlays);
-  } // flake-utils.lib.eachDefaultSystem (system: {
-     legacyPackages = import nixpkgs { inherit system; inherit (nixpkgsConfig { mysystem = system; }) config overlays; };
- });
+            # zsh plugins
+            zsh-plugins.fast-syntax-highlighting = inputs.fast-syntax-highlighting;
+            zsh-plugins.fzf-tab = inputs.fzf-tab;
+            zsh-plugins.powerlevel10k = inputs.powerlevel10k;
+          }
+        )
+        # Other overlays that don't depend on flake inputs.
+      ] ++ map import ((import ./lsnix.nix) ./overlays);
+    } // flake-utils.lib.eachSystem defaultSystems (system: {
+      legacyPackages = import nixpkgs {
+        inherit system;
+        inherit (nixpkgsConfig { mysystem = system; }) config overlays;
+      };
+    });
 }
