@@ -653,6 +653,9 @@ before packages are loaded."
   ;;   (kill-buffer-and-window))
   ;; (define-key org-journal-mode-map (kbd "C-x C-s") 'org-journal-save-entry-and-exit)
 
+  ;; authinfo
+  (setq auth-sources '("~/.authinfo"))
+
   ;; org
 
   (setq org-folder "~/org/")

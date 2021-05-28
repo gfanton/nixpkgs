@@ -51,7 +51,7 @@
               nixpkgs-silicon = if system == "x86_64-darwin" then nixpkgs-silicon-darwin else nixpkgs-master;
             in
               {
-                master = nixpkgs-silicon.legacyPackages.${system};
+                master = nixpkgs-master.legacyPackages.${mysystem};
                 stable = nixpkgs-stable.legacyPackages.${system};
                 silicon = nixpkgs-silicon.legacyPackages.${mysystem};
               }

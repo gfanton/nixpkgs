@@ -145,8 +145,8 @@ in
       # editor
       "kitty_mod+g" = "launch --cwd=current --location=vsplit ${magit-emacsclient}/bin/magit";
       "kitty_mod+o" = "launch --cwd=current --type=overlay ${xterm-emacsclient}/bin/xemacs -t .";
-      "kitty_mod+e" = "launch --cwd=current --location=vsplit ${xterm-emacsclient}/bin/xemacs -t .";
-      "kitty_mod+d" = "launch --cwd=current --location=hsplit ${xterm-emacsclient}/bin/xemacs -t .";
+      "kitty_mod+e" = "launch --cwd=current --location=hsplit ${xterm-emacsclient}/bin/xemacs -t .";
+      "kitty_mod+d" = "launch --cwd=current --location=vsplit  ${xterm-emacsclient}/bin/xemacs -t .";
 
     };
   };

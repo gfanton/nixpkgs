@@ -204,11 +204,11 @@
     },
     "nixpkgs-silicon-darwin": {
       "locked": {
-        "lastModified": 1621452833,
-        "narHash": "sha256-Fcc8K+tH+DVrN1ZIxV/RBMiV26c8bYvuCJky13/DJ7I=",
+        "lastModified": 1621924333,
+        "narHash": "sha256-TK0KbJPMmJMUxvitchZGuseQIJVd0YN6cAEEzLJ3KYc=",
         "owner": "nixos",
         "repo": "nixpkgs",
-        "rev": "2987d66d0f92f58b79db4dc687d3a56f71f0f157",
+        "rev": "bfeeadce923a1a3c3f842c38a5351b2321e9c04e",
         "type": "github"
       },
       "original": {
@@ -272,11 +272,11 @@
     "spacemacs": {
       "flake": false,
       "locked": {
-        "lastModified": 1621110241,
-        "narHash": "sha256-7et9IDywcdTCx0+2ndM6tZzmVHjCV/j/xTRQnvu/1dw=",
+        "lastModified": 1621708921,
+        "narHash": "sha256-vaZigyUn1iNvBCvoN3OMulqZ5ZIBbH4VS3Cbc1jYoIk=",
         "owner": "syl20bnr",
         "repo": "spacemacs",
-        "rev": "fef9ba9e183083486e0098ef8511731ebae81274",
+        "rev": "5ef4960d46fcfb333f59ee32ad19471ee177d64f",
         "type": "github"
       },
       "original": {

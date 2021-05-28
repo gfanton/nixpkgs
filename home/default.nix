@@ -233,6 +233,11 @@ in
     hashKnownHosts = true;
   };
 
+  programs.gpg = {
+    homedir = "${config.xdg.dataHome}/gnupg";
+    enable = true;
+  };
+
   # link aspell config
   home.file.".aspell.config" = with pkgs; {
     source = writeText "aspell.conf" ''
@@ -281,6 +286,7 @@ in
       ".DS_Store"
     ];
     extraConfig = {
+      github.user = "gfanton";
       core = {
         whitespace = "trailing-space,space-before-tab";
         editor = "em";
