@@ -166,7 +166,7 @@
             kitty = final.silicon.kitty.overrideDerivation (oldAttrs: {
               CFLAGS = if prev.stdenv.isDarwin
                        then "-Wno-deprecated-declarations -arch arm64 -target arm64-apple-macos11"
-                       else oldAttrs.CFLAGS;
+                       else "";
             });
             # androidSdk = final.silicon.androidenv.androidPkgs_9_0.androidsdk;
 
