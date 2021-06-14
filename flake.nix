@@ -170,6 +170,9 @@
             });
             # androidSdk = final.silicon.androidenv.androidPkgs_9_0.androidsdk;
 
+            # stable release (usually package here are broken upstream)
+            cachix = final.stable.cachix;
+
             # zsh plugins
             zsh-plugins.fast-syntax-highlighting = inputs.fast-syntax-highlighting;
             zsh-plugins.fzf-tab = inputs.fzf-tab;
