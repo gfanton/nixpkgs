@@ -125,7 +125,7 @@ This function should only modify configuration layer settings."
    ;; To use a local version of a package, use the `:location' property:
    ;; '(your-package :location "~/path/to/your-package/")
    ;; Also include the dependencies as they will not be resolved automatically.
-   dotspacemacs-additional-packages '(achievements
+   dotspacemacs-additional-packages '(highlight-indent-guides
                                       org-super-agenda)
 
    ;; A list of packages that cannot be updated.
@@ -598,13 +598,24 @@ before packages are loaded."
   ;; Corrects (and improves) org-mode's native fontification.
   ;; (doom-themes-org-config)
 
+  ;; hightlight indent guide
+  (add-hook 'prog-mode-hook 'highlight-indent-guides-mode)
+  (setq highlight-indent-guides-method 'character)
+  (setq highlight-indent-guides-responsive 'top)
+  (defun my-highlighter (level responsive display)
+    (if (> 1 level)
+        nil
+      (highlight-indent-guides--highlighter-default level responsive display)))
+
+  (setq highlight-indent-guides-highlighter-function 'my-highlighter)
+  (setq highlight-indent-guides-character ?.)
+
   ;; framemove
   (require 'framemove)
   (windmove-default-keybindings)
   (setq framemove-hook-into-windmove t)
 
   ;; windmove
-
   (when (fboundp 'windmove-default-keybindings)
     (windmove-default-keybindings))
 

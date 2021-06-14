@@ -125,10 +125,12 @@ in
   # adnroid
   android-sdk = {
     enable = true;
+    path = "${home_dir}/.local/share/android_sdk";
     packages = sdk: with sdk; [
       build-tools-30-0-2
       cmdline-tools-latest
       emulator
+      ndk-bundle
       platforms-android-30
       sources-android-30
     ];
@@ -245,20 +247,6 @@ in
     extra-dicts en-computers.rws en-science.rws fr.rws
     '';
   };
-
-  # android-sdk = {
-  #   enable = true;
-
-  #   # Optional; default path is "~/.local/share/android".
-  #   path = "${config.home.homeDirectory}/.local/android/sdk";
-  #   packages = sdk: with sdk; [
-  #     build-tools-30-0-2
-  #     cmdline-tools-latest
-  #     emulator
-  #     platforms-android-30
-  #     sources-android-30
-  #   ];
-  # };
 
   # Git
   # https://rycee.gitlab.io/home-manager/options.html#opt-programs.git.enable
