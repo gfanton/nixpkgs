@@ -1,4 +1,4 @@
-{ pkgs, lib, ... }: 
+{ pkgs, lib, ... }:
 
 let
   xterm-emacsclient = pkgs.writeShellScriptBin "xemacs" ''
@@ -6,15 +6,24 @@ let
     ${pkgs.emacsGcc}/bin/emacsclient $@
   '';
 
+  eval-emacsclient = pkgs.writeShellScriptBin "eemacs" ''
+    [ -t 0 ] && sexp="($*)" || sexp="$(cat)"
+    exec ${xterm-emacsclient}/bin/xemacs -t -e "$sexp"
+  '';
+
   stdin-emacsclient = pkgs.writeShellScriptBin "semacs" ''
     TMP="$(mktemp /tmp/stdin-XXX)"
-    cat >$TMP
+    cat > $TMP
     ${xterm-emacsclient}/bin/xemacs -t $TMP
     rm $TMP
   '';
 
   magit-emacsclient = pkgs.writeShellScriptBin "magit" ''
     ${xterm-emacsclient}/bin/xemacs -t -e '(magit-status) (delete-other-windows)'
+  '';
+
+  scratch-emacsclient = pkgs.writeShellScriptBin "scratch" ''
+    ${xterm-emacsclient}/bin/xemacs -t -e '(spacemacs/switch-to-scratch-buffer) (delete-other-windows) (evil-emacs-state)'
   '';
 in
 {
@@ -141,9 +150,10 @@ in
       # hints
       "cmd+g" = "kitten hints --type=linenum --linenum-action=self ${xterm-emacsclient}/bin/xemacs -t +{line} {path}";
       # screen rollback
-      "cmd+f" = "launch --stdin-source=@screen_scrollback --stdin-add-formatting ${stdin-emacsclient}/bin/semacs";
+      "cmd+f" = "launch --cwd=current --type=overlay --stdin-source=@screen_scrollback --stdin-add-formatting ${stdin-emacsclient}/bin/semacs";
       # editor
-      "kitty_mod+g" = "launch --cwd=current --location=vsplit ${magit-emacsclient}/bin/magit";
+      "kitty_mod+s" = "launch --cwd=current --type=overlay ${scratch-emacsclient}/bin/scratch";
+      "kitty_mod+g" = "launch --cwd=current --type=overlay ${magit-emacsclient}/bin/magit";
       "kitty_mod+o" = "launch --cwd=current --type=overlay ${xterm-emacsclient}/bin/xemacs -t .";
       "kitty_mod+e" = "launch --cwd=current --location=hsplit ${xterm-emacsclient}/bin/xemacs -t .";
       "kitty_mod+d" = "launch --cwd=current --location=vsplit  ${xterm-emacsclient}/bin/xemacs -t .";
