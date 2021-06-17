@@ -94,9 +94,10 @@ in
     cachix # adding/managing alternative binary caches hosted by Cachix
     lorri # improve `nix-shell` experience in combination with `direnv`
     niv # easy dependency management for nix projects
+    nix-prefetch-git
 
     # Platform specific tools
- ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.isDarwin [
     silicon.libffi
     silicon.libffi.dev
     silicon.cocoapods
