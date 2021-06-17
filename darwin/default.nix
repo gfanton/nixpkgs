@@ -38,7 +38,8 @@
   fonts.enableFontDir = true;
   fonts.fonts = with pkgs; [
      recursive
-     (nerdfonts.override { fonts = [ "Iosevka" "JetBrainsMono" "FiraCode" ]; })
+     emacs-all-the-icons-fonts
+     (nerdfonts.override { fonts = [ "Iosevka" "JetBrainsMono" "FiraCode"]; })
   ];
 
   # Add ability to used TouchID for sudo authentication

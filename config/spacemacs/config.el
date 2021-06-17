@@ -261,8 +261,8 @@ It should only modify the values of Spacemacs settings."
    ;; refer to the DOCUMENTATION.org for more info on how to create your own
    ;; spaceline theme. Value can be a symbol or list with additional properties.
    ;; (default '(spacemacs :separator wave :separator-scale 1.5))
-   dotspacemacs-mode-line-theme '(doom
-                                  :separator-scale 1.5)
+   dotspacemacs-mode-line-theme '(all-the-icons
+                                  :separator none)
 
    ;; If non-nil the cursor color matches the state color in GUI Emacs.
    ;; (default t)
@@ -672,76 +672,74 @@ before packages are loaded."
   (setq org-folder "~/org/")
 
   (setq deft-directory (concat org-folder "notes/"))
-  (setq org-journal-dir (concat org-folder "journal/"))
-  (setq org-agenda-file-regexp "\\`\\\([^.].*\\.org\\\|\\\([0-9]-?\\\)\\\{8\\\}\\\(\\.gpg\\\)?\\\)\\'")
-  (setq org-agenda-files (list org-journal-dir
-                               org-directory
-                               deft-directory))
+  ;; (setq org-journal-dir (concat org-folder "journal/"))
+  ;; (setq org-agenda-file-regexp "\\`\\\([^.].*\\.org\\\|\\\([0-9]-?\\\)\\\{8\\\}\\\(\\.gpg\\\)?\\\)\\'")
+  ;; (setq org-agenda-files (list org-journal-dir
+  ;;                              org-directory
+  ;;                              deft-directory))
 
   ;;  set todo sequences
-  (setq org-todo-keywords
-        '((sequence "TODO(t)" "STARTED(s)" "WAITING(w)" "DONE(d)")))
+  ;; (setq org-todo-keywords
+        ;; '((sequence "TODO(t)" "STARTED(s)" "WAITING(w)" "DONE(d)")))
 
 
   ;; add project todo to agenda @NOTE(gfanton) this may be more confusing than anything
-  (with-eval-after-load 'org-agenda
-    (require 'org-projectile)
-    (mapcar '(lambda (file)
-               (when (file-exists-p file)
-                 (push file org-agenda-files)))
-            (org-projectile-todo-files))
-    (setq org-agenda-prefix-format '(
-                                     ;; (agenda  . " %i %-12:c%?-12t% s") ;; file name + org-agenda-entry-type
-                                     (agenda  . "%e • %i %-12:c%?-12t% s %-12T")
-                                     (timeline  . "  % s")
-                                     (todo  . " %i %-12:c")
-                                     (tags  . " %i %-12:c")
-                                     (search . " %i %-12:c")))
+  ;; (with-eval-after-load 'org-agenda
+  ;;   (require 'org-projectile)
+  ;;   (mapcar '(lambda (file)
+  ;;              (when (file-exists-p file)
+  ;;                (push file org-agenda-files)))
+  ;;           (org-projectile-todo-files))
+  ;;   (setq org-agenda-prefix-format '(
+  ;;                                    ;; (agenda  . " %i %-12:c%?-12t% s") ;; file name + org-agenda-entry-type
+  ;;                                    (agenda  . "%e • %i %-12:c%?-12t% s %-12T")
+  ;;                                    (timeline  . "  % s")
+  ;;                                    (todo  . " %i %-12:c")
+  ;;                                    (tags  . " %i %-12:c")
+  ;;                                    (search . " %i %-12:c")))
 
     ;; set super agenda group
-    (setq org-super-agenda-groups
-          '(
-            (:name "Projects IN-PROGRESS"  ; Optionally specify section name
-                   :time-grid t  ; Items that appear on the time grid
-                   :and (:tag "project" :todo "STARTED")
-                   :log t)
+    ;; (setq org-super-agenda-groups
+    ;;       '(
+    ;;         (:name "Projects IN-PROGRESS"  ; Optionally specify section name
+    ;;                :time-grid t  ; Items that appear on the time grid
+    ;;                :and (:tag "project" :todo "STARTED")
+    ;;                :log t)
 
-            (:name "Projects TODO"  ; Optionally specify section name
-                   :tag "project"
-                   :todo ("TODO" "DONE")
-                   :log t)
+    ;;         (:name "Projects TODO"  ; Optionally specify section name
+    ;;                :tag "project"
+    ;;                :todo ("TODO" "DONE")
+    ;;                :log t)
 
-            (:name "Projects ON-HOLD"  ; Optionally specify section name
-                   :time-grid t  ; Items that appear on the time grid
-                   :tag "project"
-                   :todo "WAITING"
-                   :log t)
+    ;;         (:name "Projects ON-HOLD"  ; Optionally specify section name
+    ;;                :time-grid t  ; Items that appear on the time grid
+    ;;                :tag "project"
+    ;;                :todo "WAITING"
+    ;;                :log t)
 
-            (:name "Life"
-                   ;; Single arguments given alone
-                   :tag "life")
-            (:auto-tags)))
+    ;;         (:name "Life"
+    ;;                ;; Single arguments given alone
+    ;;                :tag "life")
+    ;;         (:auto-tags)))
 
     ;; enable org-super-agenda
-    (org-super-agenda-mode))
+    ;; (org-super-agenda-mode))
 
-  (require 'org-expiry)
-  (add-hook 'org-after-todo-state-change-hook
-            (lambda ()
-              (when (string= org-state "STARTED")
-                (save-excursion
-                  (org-back-to-heading)
-                  (org-expiry-insert-created)))))
+  ;; (require 'org-expiry)
+  ;; (add-hook 'org-after-todo-state-change-hook
+  ;;           (lambda ()
+  ;;             (when (string= org-state "STARTED")
+  ;;               (save-excursion
+  ;;                 (org-back-to-heading)
+  ;;                 (org-expiry-insert-created)))))
 
-  (setq org-journal-carryover-items "/+TODO|+STARTED|+WAITING")
+  ;; (setq org-journal-carryover-items "/+TODO|+STARTED|+WAITING")
 
   ;; regexp
   ;; set pcre as default
   (pcre-mode)
   (custom-set-variables
    '(vr/engine (quote pcre2el)))
-
-  (achievements-mode)
 
   ;; Private File
   (if (boundp 'dotspacemacs-private-file)
@@ -750,6 +748,14 @@ before packages are loaded."
   ;; open agenda
   ;; (org-agenda nil "a")
   ;; Adding this to ~/.emacs.d/init.el gave me a transparent emacs:
+
+  ;; all the icons customize
+  (setq spaceline-all-the-icons-flycheck-alternate t)
+  (setq spaceline-all-the-icons-hide-long-buffer-path t)
+  (setq spaceline-all-the-icons-slim-render t)
+  (spaceline-toggle-all-the-icons-eyebrowse-workspace-off)
+  (spaceline-toggle-all-the-icons-window-number-off)
+
 
   ;; fix main theme with daemon
   (if (daemonp)
