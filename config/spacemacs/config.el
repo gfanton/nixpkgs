@@ -45,6 +45,7 @@ This function should only modify configuration layer settings."
      better-defaults
      helm
      spacemacs-editing
+     (ivy :variables ivy-enable-advanced-buffer-information t)
 
      ;; org
      (org :variables
@@ -125,7 +126,9 @@ This function should only modify configuration layer settings."
    ;; To use a local version of a package, use the `:location' property:
    ;; '(your-package :location "~/path/to/your-package/")
    ;; Also include the dependencies as they will not be resolved automatically.
-   dotspacemacs-additional-packages '(highlight-indent-guides
+   dotspacemacs-additional-packages '(ivy-rich-mode
+                                      all-the-icons-ivy-rich
+                                      highlight-indent-guides
                                       org-super-agenda)
 
    ;; A list of packages that cannot be updated.
@@ -332,7 +335,7 @@ It should only modify the values of Spacemacs settings."
 
    ;; Maximum number of rollback slots to keep in the cache. (default 5)
    dotspacemacs-max-rollback-slots 5
- 
+
    ;; If non-nil, the paste transient-state is enabled. While enabled, after you
    ;; paste something, pressing `C-j' and `C-k' several times cycles through the
    ;; elements in the `kill-ring'. (default nil)
@@ -563,12 +566,14 @@ before packages are loaded."
      ))
 
   ;; use ripgrep as default helm ag search
-  (setq
-   helm-ag-base-command "rg --vimgrep --no-heading --smart-case"
-   helm-ag-success-exit-status '(0 2))
+  ;; (setq
+  ;;  helm-ag-base-command "rg -i -M 120 --no-heading --line-number --color never '%s' %s"
+  ;;  helm-ag-success-exit-status '(0 2))
+
+  (define-key ivy-minibuffer-map (kbd "TAB") 'ivy-alt-done)
 
   ;; use aspell istead of ispell
-  ;; @FIXME: dont use nixprofile path
+  ;; @FIXME: dont use nixprofil path
   (setq ispell-program-name "aspell")
 
   ;; force custom variables
@@ -593,6 +598,15 @@ before packages are loaded."
          )
        )))
   (add-hook 'swift-mode-hook #'lsp)
+
+  ;; ivy
+  ;; ivy all the icons
+  (all-the-icons-ivy-rich-mode 1)
+  (ivy-rich-mode 1)
+
+  (setq all-the-icons-ivy-rich-color-icon t)
+  (setq inhibit-compacting-font-caches t)
+  (setq all-the-icons-ivy-rich-project t)
 
   ;; doom-org
   ;; Corrects (and improves) org-mode's native fontification.
