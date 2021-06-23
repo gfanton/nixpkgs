@@ -126,8 +126,7 @@ This function should only modify configuration layer settings."
    ;; To use a local version of a package, use the `:location' property:
    ;; '(your-package :location "~/path/to/your-package/")
    ;; Also include the dependencies as they will not be resolved automatically.
-   dotspacemacs-additional-packages '(ivy-rich-mode
-                                      all-the-icons-ivy-rich
+   dotspacemacs-additional-packages '(all-the-icons-ivy-rich
                                       highlight-indent-guides
                                       org-super-agenda)
 
@@ -602,7 +601,6 @@ before packages are loaded."
   ;; ivy
   ;; ivy all the icons
   (all-the-icons-ivy-rich-mode 1)
-  (ivy-rich-mode 1)
 
   (setq all-the-icons-ivy-rich-color-icon t)
   (setq inhibit-compacting-font-caches t)
