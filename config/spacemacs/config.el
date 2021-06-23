@@ -562,7 +562,7 @@ before packages are loaded."
      ("gopls.gofumpt" t t)
 
      ;; experimental
-     ("gopls.experimentalWorkspaceModule" t t)
+     ;; ("gopls.experimentalWorkspaceModule" t t)
      ))
 
   ;; use ripgrep as default helm ag search
