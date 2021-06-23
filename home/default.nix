@@ -196,7 +196,7 @@ in
   # https://rycee.gitlab.io/home-manager/options.html#opt-programs.direnv.enable
   programs.direnv = {
     enable = true;
-    enableNixDirenvIntegration = true;
+    nix-direnv.enable = true;
   };
 
   # Htop

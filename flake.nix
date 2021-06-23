@@ -6,7 +6,6 @@
     nixpkgs = { url = "github:nixos/nixpkgs/nixos-unstable"; };
     nixpkgs-master = { url = "github:nixos/nixpkgs/master"; };
     nixpkgs-stable-darwin = { url = "github:nixos/nixpkgs/nixpkgs-20.09-darwin"; };
-    nixpkgs-silicon-darwin = { url = "github:nixos/nixpkgs/staging-next"; };
     nixos-stable = { url = "github:nixos/nixpkgs/nixos-20.09"; };
 
     # flake
@@ -35,8 +34,8 @@
 
   outputs = { self, nixpkgs, darwin, home-manager, flake-utils, emacs-overlay, android-nixpkgs, ... }@inputs:
     let
-      defaultSystems = flake-utils.lib.defaultSystems ++ ["aarch64-darwin"];
-      nixpkgsConfig = { mysystem }: with inputs; {
+      defaultSystems = flake-utils.lib.defaultSystems;
+      nixpkgsConfig = { system }: with inputs; {
         config = {
           allowUnfree = true;
           android_sdk.accept_license = true;
@@ -45,15 +44,13 @@
           (
             final: prev:
             let
-              # system = prev.stdenv.system ;
-              system = if mysystem == "aarch64-darwin" then "x86_64-darwin" else mysystem;
+              x86system = if system == "aarch64-darwin" then "x86_64-darwin" else system;
               nixpkgs-stable = if system == "x86_64-darwin" then nixpkgs-stable-darwin else nixos-stable;
-              nixpkgs-silicon = if system == "x86_64-darwin" then nixpkgs-silicon-darwin else nixpkgs-master;
             in
               {
-                master = nixpkgs-master.legacyPackages.${mysystem};
-                stable = nixpkgs-stable.legacyPackages.${system};
-                silicon = nixpkgs-silicon.legacyPackages.${mysystem};
+                stable = nixpkgs-stable.legacyPackages.${x86system};
+                master = nixpkgs-master.legacyPackages.${system};
+                silicon = nixpkgs.legacyPackages.${system};
               }
           )
         ];
@@ -86,7 +83,7 @@
         # `home-manager` module
         home-manager.darwinModules.home-manager
         {
-          nixpkgs = nixpkgsConfig { mysystem = system; };
+          nixpkgs = nixpkgsConfig { system = system; };
           # Hack to support legacy worklows that use `<nixpkgs>` etc.
           nix.nixPath = { nixpkgs = "$HOME/nixpkgs/nixpkgs.nix"; };
           # `home-manager` config
@@ -102,7 +99,7 @@
         # Minimal configuration to bootstrap systems
         bootstrap = darwin.lib.darwinSystem {
           modules = [ ./darwin/bootstrap.nix {
-            nixpkgs = nixpkgsConfig { mysystem = "x86_64-darwin"; };
+            nixpkgs = nixpkgsConfig { system = "x86_64-darwin"; };
           } ];
         };
 
@@ -160,6 +157,7 @@
         (
           final: prev: {
             spacemacs = inputs.spacemacs;
+            # emacs = final.silicon.emacs;
             emacsGcc = (import emacs-overlay final prev).emacsGcc;
             zsh = final.silicon.zsh;
             android-sdk = (import android-nixpkgs) { inherit pkgs; };
@@ -184,7 +182,7 @@
     } // flake-utils.lib.eachSystem defaultSystems (system: {
       legacyPackages = import nixpkgs {
         inherit system;
-        inherit (nixpkgsConfig { mysystem = system; }) config overlays;
+        inherit (nixpkgsConfig { system = system; }) config overlays;
       };
     });
 }
