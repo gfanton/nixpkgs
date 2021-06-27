@@ -8,6 +8,7 @@
     "https://iohk.cachix.org"
     "https://hydra.iohk.io"
     "https://gfanton.cachix.org"
+    "https://moul.cachix.org"
   ];
   nix.binaryCachePublicKeys = [
     "cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY="
