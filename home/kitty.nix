@@ -1,17 +1,40 @@
 { config, lib, pkgs, ... }:
 
-{
+let
+  xterm-emacsclient = pkgs.writeShellScriptBin "xemacs" ''
+    export TERM=xterm-emacs
+    ${pkgs.emacsGcc}/bin/emacsclient $@
+  '';
+
+  eval-emacsclient = pkgs.writeShellScriptBin "eemacs" ''
+    [ -t 0 ] && sexp="($*)" || sexp="$(cat)"
+    exec ${xterm-emacsclient}/bin/xemacs -t -e "$sexp"
+  '';
+
+  stdin-emacsclient = pkgs.writeShellScriptBin "semacs" ''
+    TMP="$(mktemp /tmp/stdin-XXXX)"
+    cat > $TMP.ansi
+    ${xterm-emacsclient}/bin/xemacs -t $TMP.ansi
+    rm $TMP*
+  '';
+
+  magit-emacsclient = pkgs.writeShellScriptBin "magit" ''
+    ${xterm-emacsclient}/bin/xemacs -t -e '(magit-status) (delete-other-windows)'
+  '';
+
+  scratch-emacsclient = pkgs.writeShellScriptBin "scratch" ''
+    ${xterm-emacsclient}/bin/xemacs -t -e '(spacemacs/switch-to-scratch-buffer) (delete-other-windows) (evil-emacs-state)'
+  '';
+in {
   # Kitty terminal
   # https://sw.kovidgoyal.net/kitty/conf.html
   # https://rycee.gitlab.io/home-manager/options.html#opt-programs.kitty.enable
   programs.kitty.enable = true;
 
-  # General config ----------------------------------------------------------------------------- {{{
-
   programs.kitty.settings = {
     # https://fsd.it/shop/fonts/pragmatapro/
     font_family = "PragmataPro Mono Liga";
-    font_size = "14.0";
+    font_size = "16.0";
     adjust_line_height = "140%";
     disable_ligatures = "cursor"; # disable ligatures when cursor is on them
 
@@ -19,13 +42,21 @@
     hide_window_decorations = "titlebar-only";
     window_padding_width = "10";
 
-    # Tab bar
+    scrollback_pager_history_size = 100;
+    macos_option_as_alt = "yes";
+    startup_session = "default-session.conf";
+
     tab_bar_edge = "top";
     tab_bar_style = "powerline";
-    tab_title_template = "Tab {index}: {title}";
+    tab_title_template = "{index}: {title}";
     active_tab_font_style = "bold";
     inactive_tab_font_style = "normal";
-    tab_activity_symbol = "";
+
+    enabled_layouts = "horizontal,grid,splits";
+    enable_audio_bell = "no";
+    bell_on_tab = "no";
+
+    kitty_mod = "ctrl+alt";
   };
 
   # Change the style of italic font variants
@@ -37,23 +68,75 @@
   programs.kitty.extras.useSymbolsFromNerdFont = "JetBrainsMono Nerd Font";
   # }}}
 
-  # Colors config ------------------------------------------------------------------------------ {{{
   programs.kitty.extras.colors = {
     enable = true;
 
     # Background dependent colors
-    dark = config.colors.solarized-dark.pkgThemes.kitty;
-    light = config.colors.solarized-light.pkgThemes.kitty;
+    dark = config.colors.material.pkgThemes.kitty;
+    # light = config.colors.solarized-light.pkgThemes.kitty;
   };
 
-  programs.fish.functions.set-term-colors = {
-    body = "term-background $term_background";
-    onVariable = "term_background";
+  programs.truecolor.enable = true;
+  programs.truecolor.useterm = "xterm-kitty";
+  programs.truecolor.terminfo = "${pkgs.kitty.terminfo}/share/terminfo";
+
+  programs.kitty.keybindings = {
+    # open new tab with cmd+t
+    "cmd+t" = "new_tab_with_cwd";
+
+    # open new split (window) with cmd+d retaining the cwd
+    "kitty_mod+l" = "next_layout";
+
+    "cmd+d" = "launch --cwd=current --location=vsplit";
+    "cmd+shift+d" = "launch --cwd=current --location=hsplit";
+
+    "cmd+enter" = "toggle_fullscreen";
+    "shift+cmd+up" = "move_window up";
+    "shift+cmd+left" = "move_window left";
+    "shift+cmd+right" = "move_window right";
+    "shift+cmd+down" = "move_window down";
+
+    "kitty_mod+left" = "neighboring_window left";
+    "kitty_mod+right" = "neighboring_window right";
+    "kitty_mod+up" = "neighboring_window up";
+    "kitty_mod+down" = "neighboring_window down";
+
+    # clear the terminal screen
+    "cmd+k" =
+      "combine : clear_terminal scrollback active : send_text normal,application x0c";
+
+    # Map cmd + <num> to corresponding tabs
+    "cmd+1" = "goto_tab 1";
+    "cmd+2" = "goto_tab 2";
+    "cmd+3" = "goto_tab 3";
+    "cmd+4" = "goto_tab 4";
+    "cmd+5" = "goto_tab 5";
+    "cmd+6" = "goto_tab 6";
+    "cmd+7" = "goto_tab 7";
+    "cmd+8" = "goto_tab 8";
+    "cmd+9" = "goto_tab 9";
+
+    # changing font sizes
+    "kitty_mod+equal" = "change_font_size all +1.0";
+    "kitty_mod+minus" = "change_font_size all -1.0";
+    "kitty_mod+0" = "change_font_size all 0";
+
+    # hints
+    "cmd+g" =
+      "kitten hints --type=linenum --linenum-action=self ${xterm-emacsclient}/bin/xemacs -t +{line} {path}";
+    # screen rollback
+    "cmd+f" =
+      "launch --cwd=current --type=overlay --stdin-source=@screen_scrollback --stdin-add-formatting ${stdin-emacsclient}/bin/semacs";
+    # editor
+    "kitty_mod+s" =
+      "launch --cwd=current --type=overlay ${scratch-emacsclient}/bin/scratch";
+    "kitty_mod+g" =
+      "launch --cwd=current --type=overlay ${magit-emacsclient}/bin/magit";
+    "kitty_mod+o" =
+      "launch --cwd=current --type=overlay ${xterm-emacsclient}/bin/xemacs -t .";
+    "kitty_mod+e" =
+      "launch --cwd=current --location=hsplit ${xterm-emacsclient}/bin/xemacs -t .";
+    "kitty_mod+d" =
+      "launch --cwd=current --location=vsplit  ${xterm-emacsclient}/bin/xemacs -t .";
   };
-  programs.fish.interactiveShellInit = ''
-    # Set term colors based on value of `$term_backdround` when shell starts up.
-    set-term-colors
-  '';
-  # }}}
 }
-# vim: foldmethod=marker
