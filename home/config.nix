@@ -17,8 +17,9 @@
   # link aspell config
   home.file.".aspell.config" = with pkgs; {
     source = writeText "aspell.conf" ''
+      dict-dir ""
       master en_US
-      extra-dicts en-computers.rws en-science.rws fr.rws
+      extra-dicts en en-computers.rws en-science.rws fr.rws
     '';
   };
 

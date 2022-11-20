@@ -77,11 +77,16 @@
       procs # fancy version of `ps`
 
       # aspell
-      aspell # interactive spell checker
+      (aspellWithDicts (d: [
+        d.en
+        d.fr
+        d.en-computers
+        d.en-science
+      ])) # interactive spell checker
       aspellDicts.fr
       aspellDicts.en
-      aspellDicts.en-computers
       aspellDicts.en-science
+      aspellDicts.en-computers
 
       # rustc
       rustc
