@@ -52,7 +52,7 @@ in {
     active_tab_font_style = "bold";
     inactive_tab_font_style = "normal";
 
-    enabled_layouts = "horizontal,grid,splits";
+    enabled_layouts = "horizontal,grid,splits,vertical";
     enable_audio_bell = "no";
     bell_on_tab = "no";
 
