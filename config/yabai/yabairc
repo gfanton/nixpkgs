@@ -1,0 +1,31 @@
+yabai -m config layout bsp
+
+# toggle split between vertical and horizontal
+yabai -m window --toggle split
+
+# balance all windows
+yabai -m space --balance
+
+# config: always keep windows balance
+yabai -m config auto_balance on
+
+# mouse setup
+yabai -m config mouse_modifier fn
+yabai -m config mouse_action1 resize
+yabai -m config mouse_action2 move
+
+# load yabai padding
+yabai -m config top_padding    30
+yabai -m config bottom_padding 5
+yabai -m config left_padding   5
+yabai -m config right_padding  5
+yabai -m config window_gap     10
+
+yabai -m config window_topmost on
+
+# Exclude problematic apps from being managed:
+yabai -m rule --add app="^(Calculator|Software Update|Dictionary|VLC|System Preferences|System Settings|zoom.us|Photo Booth|Archive Utility|Python|LibreOffice|App Store|Steam|Alfred|Activity Monitor)$" manage=off
+yabai -m rule --add label="Finder" app="^Finder$" title="(Co(py|nnect)|Move|Info|Pref)" manage=off
+yabai -m rule --add label="Safari" app="^Safari$" title="^(General|(Tab|Password|Website|Extension)s|AutoFill|Se(arch|curity)|Privacy|Advance)$" manage=off
+yabai -m rule --add label="About This Mac" app="System Information" title="About This Mac" manage=off
+yabai -m rule --add app="emacs" manage=on
