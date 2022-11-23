@@ -25,6 +25,8 @@ let
   scratch-emacsclient = pkgs.writeShellScriptBin "scratch" ''
     ${xterm-emacsclient}/bin/xemacs -t -e '(spacemacs/switch-to-scratch-buffer) (delete-other-windows) (evil-emacs-state)'
   '';
+
+  theme = config.colors.catppuccin-macchiato;
 in {
   # Kitty terminal
   # https://sw.kovidgoyal.net/kitty/conf.html
@@ -33,14 +35,14 @@ in {
 
   programs.kitty.settings = {
     # https://fsd.it/shop/fonts/pragmatapro/
-    font_family = "PragmataPro Mono Liga";
+    font_family = "FiraCode Nerd Font Mono";
     font_size = "16.0";
     adjust_line_height = "140%";
     disable_ligatures = "cursor"; # disable ligatures when cursor is on them
 
     # Window layout
     hide_window_decorations = "titlebar-only";
-    window_padding_width = "10";
+    window_padding_width = "5";
 
     scrollback_pager_history_size = 100;
     macos_option_as_alt = "yes";
@@ -59,20 +61,19 @@ in {
     kitty_mod = "ctrl+alt";
   };
 
-  # Change the style of italic font variants
-  programs.kitty.extraConfig = ''
-    font_features PragmataProMonoLiga-Italic +ss06
-    font_features PragmataProMonoLiga-BoldItalic +ss07
-  '';
+  # # Change the style of italic font variants
+  # programs.kitty.extraConfig = ''
+  #   font_features FiraCode Nerd Font
+  # '';
 
-  programs.kitty.extras.useSymbolsFromNerdFont = "JetBrainsMono Nerd Font";
+  programs.kitty.extras.useSymbolsFromNerdFont = "JetBrainsMono Nerd Font Mono";
   # }}}
 
   programs.kitty.extras.colors = {
     enable = true;
 
     # Background dependent colors
-    dark = config.colors.material.pkgThemes.kitty;
+    dark = theme.pkgThemes.kitty;
     # light = config.colors.solarized-light.pkgThemes.kitty;
   };
 

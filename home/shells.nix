@@ -23,6 +23,11 @@ in {
     "${homeDirectory}/.local/bin"
     # npm bin folder
     "${config.xdg.dataHome}/node_modules/bin"
+  ] ++ lib.optionals pkgs.stdenv.isDarwin [
+    (if pkgs.stdenv.hostPlatform.isAarch64 then
+      "/opt/homebrew/bin"
+    else
+      "/usr/local/bin")
   ];
 
   home.sessionVariables.LC_ALL = "en_US.UTF-8";
@@ -98,13 +103,6 @@ in {
       darwin = ''
         # -- darwin specific config
         # [ -d "$HOME/Library/Android/sdk" ] && export ANDROID_HOME=$HOME/Library/Android/sdk
-
-        # eval brew env
-        if [ "$(arch)" = "i386" ] && [ -f /usr/local/bin/brew ]; then
-           eval $(/usr/local/bin/brew shellenv)
-        elif [ -f /opt/homebrew/bin/brew ]; then # arm64 only
-           eval $(/opt/homebrew/bin/brew shellenv)
-        fi
         # -- darwin end
       '';
 
@@ -122,6 +120,9 @@ in {
 
         # asdf
         . ${pkgs.asdf-vm}/share/asdf-vm/asdf.sh
+
+        # autosuggest color
+        export ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=240'
 
         # tab-title
         export ZSH_TAB_TITLE_ONLY_FOLDER=true

@@ -16,9 +16,9 @@
   programs.nix-index.enable = true;
 
   # Fonts
-  fonts.fontDir.enable = true;
+  fonts.fontDir.enable = false;
   fonts.fonts = with pkgs; [
-    recursive
+    # recursive
     emacs-all-the-icons-fonts
     (nerdfonts.override { fonts = [ "Iosevka" "JetBrainsMono" "FiraCode" ]; })
   ];

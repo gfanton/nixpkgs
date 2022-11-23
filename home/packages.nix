@@ -24,7 +24,18 @@
   # https://github.com/sharkdp/bat
   # https://rycee.gitlab.io/home-manager/options.html#opt-programs.bat.enable
   programs.bat.enable = true;
-  programs.bat.config = { style = "plain"; };
+  programs.bat.themes = {
+    catppuccin-macchiato = builtins.readFile (pkgs.fetchFromGitHub {
+      owner = "catppuccin";
+      repo = "bat";
+      rev = "ba4d16880d63e656acced2b7d4e034e4a93f74b1";
+      sha256 = "sha256-6WVKQErGdaqb++oaXnY3i6/GuH2FhTgK0v4TN4Y0Wbw=";
+    } + "/Catppuccin-macchiato.tmTheme");
+  };
+  programs.bat.config = {
+    style = "plain";
+    theme = "catppuccin-macchiato";
+  };
 
   # Direnv, load and unload environment variables depending on the current directory.
   # https://direnv.net
