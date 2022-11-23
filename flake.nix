@@ -68,6 +68,11 @@
       flake = false;
     };
 
+    # yabai = {
+    #   url = "github.com:koekeishiya/yabai";
+    #   flake = false;
+    # }
+
     forgit.url = "github:wfxr/forgit";
     forgit.flake = false;
 
@@ -227,7 +232,7 @@
           chemacs2 = inputs.chemacs2;
           emacsGcc =
             (import inputs.emacs-overlay final prev).emacsPgtkNativeComp;
-          # emacsGcc = (import inputs.emacs-overlay final prev).emacsNativeComp;
+          # yabaisrc = inputs.yabai
           asdf-plugins = inputs.asdf-plugins;
           zsh-plugins.fast-syntax-highlighting =
             inputs.fast-syntax-highlighting;
@@ -272,7 +277,8 @@
         my-bootstrap = import ./darwin/bootstrap.nix;
         my-defaults = import ./darwin/defaults.nix;
         my-env = import ./darwin/env.nix;
-        # g-homebrew = import ./darwin/homebrew.nix;
+        my-homebrew = import ./darwin/homebrew.nix;
+        my-config = import ./darwin/config.nix;
 
         # local modules
         security-pam = import ./modules/darwin/security/pam.nix;

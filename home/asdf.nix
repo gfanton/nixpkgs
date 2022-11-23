@@ -42,7 +42,10 @@
 
       # plugins
       { name = "yarn"; }
-      { name = "jq"; }
+      {
+        name = "jq";
+        version = "1.6";
+      }
 
     ];
   };
