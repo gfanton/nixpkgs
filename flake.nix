@@ -1,6 +1,4 @@
 {
-  description = "Malo’s Nix system configs, and some other useful stuff.";
-
   inputs = {
     # Package sets
     nixpkgs-master.url = "github:NixOS/nixpkgs/master";

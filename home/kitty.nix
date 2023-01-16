@@ -6,11 +6,6 @@ let
     ${pkgs.emacsGcc}/bin/emacsclient $@
   '';
 
-  eval-emacsclient = pkgs.writeShellScriptBin "eemacs" ''
-    [ -t 0 ] && sexp="($*)" || sexp="$(cat)"
-    exec ${xterm-emacsclient}/bin/xemacs -t -e "$sexp"
-  '';
-
   stdin-emacsclient = pkgs.writeShellScriptBin "semacs" ''
     TMP="$(mktemp /tmp/stdin-XXXX)"
     cat > $TMP.ansi
@@ -58,6 +53,8 @@ in {
     enable_audio_bell = "no";
     bell_on_tab = "no";
 
+    background_opacity = "0.85";
+
     kitty_mod = "ctrl+alt";
   };
 
@@ -91,7 +88,7 @@ in {
     "cmd+d" = "launch --cwd=current --location=vsplit";
     "cmd+shift+d" = "launch --cwd=current --location=hsplit";
 
-    "cmd+enter" = "toggle_fullscreen";
+    "cmd+enter" = "new_os_window_with_cwd";
     "shift+cmd+up" = "move_window up";
     "shift+cmd+left" = "move_window left";
     "shift+cmd+right" = "move_window right";
@@ -131,13 +128,11 @@ in {
     # editor
     "kitty_mod+s" =
       "launch --cwd=current --type=overlay ${scratch-emacsclient}/bin/scratch";
-    "kitty_mod+g" =
-      "launch --cwd=current --type=overlay ${magit-emacsclient}/bin/magit";
     "kitty_mod+o" =
       "launch --cwd=current --type=overlay ${xterm-emacsclient}/bin/xemacs -t .";
-    "kitty_mod+e" =
-      "launch --cwd=current --location=hsplit ${xterm-emacsclient}/bin/xemacs -t .";
     "kitty_mod+d" =
-      "launch --cwd=current --location=vsplit  ${xterm-emacsclient}/bin/xemacs -t .";
+      "launch --cwd=current --type=overlay  ${pkgs.lazydocker}/bin/lazydocker";
+    "kitty_mod+g" =
+      "launch --cwd=current --type=overlay  ${pkgs.lazygit}/bin/lazygit";
   };
 }

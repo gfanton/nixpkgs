@@ -1,6 +1,7 @@
 { config, lib, pkgs, ... }:
 
-{
+let rust_home = "${config.xdg.dataHome}/rust";
+in {
   # ssh
   programs.ssh = {
     enable = true;
@@ -10,15 +11,32 @@
     forwardAgent = true;
     serverAliveInterval = 60;
     hashKnownHosts = true;
+    # on darwin use 1password agent
+    extraConfig = lib.mkIf pkgs.stdenv.isDarwin ''
+      IdentityAgent "~/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock"
+    '';
   };
 
   # Go Env
   programs.go = {
     enable = true;
-    goPath = ".local/share/go/18";
+    goPath = ".local/share/go/19";
     goBin = ".local/bin";
-    package = pkgs.go_1_18;
+    package = pkgs.go_1_19;
   };
+
+  # rust env
+  # setup cargo home
+  home.sessionVariables.CARGO_HOME = "${rust_home}/cargo";
+  # setup rustup
+  home.sessionVariables.RUSTUP_HOME = "${rust_home}/rustup";
+  home.activation.rustup = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
+    export CARGO_HOME="${rust_home}/cargo"
+    export RUSTUP_HOME="${rust_home}/rustup"
+    ${pkgs.rustup}/bin/rustup toolchain install stable 1>/dev/null
+  '';
+
+  home.sessionPath = [ "${rust_home}/cargo/bin" "${rust_home}/rustup/bin" ];
 
   # Bat, a substitute for cat.
   # https://github.com/sharkdp/bat
@@ -59,15 +77,14 @@
       mosh # wrapper for `ssh` that better and not dropping connections
       unrar # extract RAR archives
       exa # fancy version of `ls`
-      # stable.bandwhich # display current network utilization by process
-
-      # pkgs silicon
       btop # fancy version of `top`
       tmate # instant terminal sharing
       fd # fancy version of `find`
       most
       parallel # runs commands in parallel
       socat
+      lazydocker # The lazier way to manage everything docker
+      lazygit # The lazier way to manage everything git
       less
       tree # list contents of directories in a tree-like format.
       coreutils
@@ -99,14 +116,17 @@
       aspellDicts.en-science
       aspellDicts.en-computers
 
+      # rust
+      rustup
       # rustc
-      rustc
-      cargo
+      # cargo
 
       # ruby
       (ruby_2_7.withPackages (ps: [ ps.ffi-compiler ]))
+
       # js
       nodejs-16_x
+      nodePackages.pnpm
       yarn
 
       # python

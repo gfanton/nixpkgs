@@ -23,6 +23,10 @@
         name = "nodejs";
         version = "system";
       }
+      {
+        name = "rust";
+        version = "system";
+      }
 
       # others
       {
