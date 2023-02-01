@@ -228,8 +228,7 @@
           spacemacs = inputs.spacemacs;
           doomemacs = inputs.doomemacs;
           chemacs2 = inputs.chemacs2;
-          emacsGcc =
-            (import inputs.emacs-overlay final prev).emacsPgtkNativeComp;
+          emacsGcc = (import inputs.emacs-overlay final prev).emacsPgtk;
           # yabaisrc = inputs.yabai
           asdf-plugins = inputs.asdf-plugins;
           zsh-plugins.fast-syntax-highlighting =
@@ -243,31 +242,6 @@
 
         my-loon = import ./overlays/loon.nix;
         my-libvterm = import ./overlays/libvterm.nix;
-
-        # prefmanager = _: prev: {
-        #   prefmanager =
-        #     inputs.prefmanager.packages.${prev.stdenv.system}.default;
-        # };
-
-        # Overlay that adds various additional utility functions to `vimUtils`
-        # vimUtils = import ./overlays/vimUtils.nix;
-
-        # Overlay that adds some additional Neovim plugins
-        # vimPlugins = final: prev:
-        #   let inherit (self.overlays.vimUtils final prev) vimUtils;
-        #   in {
-        #     vimPlugins = prev.vimPlugins.extend (_: _:
-        #       vimUtils.buildVimPluginsFromFlakeInputs inputs [
-        #         # Add flake input name here
-        #       ]);
-        #   };
-
-        # Overlay to include node packages listed in `./pkgs/node-packages/package.json`
-        # Run `nix run my#nodePackages.node2nix -- -14` to update packages.
-        # nodePackages = _: prev: {
-        #   nodePackages = prev.nodePackages
-        #     // import ./pkgs/node-packages { pkgs = prev; };
-        # };
       };
 
       darwinModules = {
@@ -295,14 +269,6 @@
         my-asdf = import ./home/asdf.nix;
         my-emacs = import ./home/emacs.nix;
         my-config = import ./home/config.nix;
-
-        # config-files = import ./home/config-files.nix;
-        # fish = import ./home/fish.nix;
-        # git-aliases = import ./home/git-aliases.nix;
-        # gh-aliases = import ./home/gh-aliases.nix;
-        # neovim = import ./home/neovim.nix;
-        # starship = import ./home/starship.nix;
-        # starship-symbols = import ./home/starship-symbols.nix;
 
         # local modules
         colors = import ./modules/home/colors;

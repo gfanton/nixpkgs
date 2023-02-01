@@ -118,6 +118,7 @@ in {
 
       # rust
       rustup
+      # rls
       # rustc
       # cargo
 
