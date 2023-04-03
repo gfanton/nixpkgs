@@ -55,7 +55,22 @@
   }
 
   function prompt_my_arch() {
-      p10k segment -f "$lightYellow" -t "$(arch)"
+      carch="$(arch)"
+
+      case $carch in
+        arm*)
+          p10k segment -f "$lightYellow" -t "$carch 🔮"
+          ;;
+        x86*)
+          p10k segment -f "$lightYellow" -t "$carch 🦴"
+          ;;
+        i*)
+          p10k segment -f "$lightYellow" -t "$carch 🦴"
+          ;;
+        *)
+          p10k segment -f "$lightYellow" -t "$carch 👽"
+          ;;
+      esac
   }
 
   function p10k-on-pre-prompt() {

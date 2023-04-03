@@ -13,8 +13,8 @@ EMACS_CHANNELS := emacs-overlay
 SPACEMACS_CHANNELS := spacemacs
 DOOM_CHANNELS := doomemacs
 ZSH_CHANNELS := fast-syntax-highlighting fzf-tab powerlevel10k
+ASDF_CHANNELS := asdf-plugins
 MISC_CHANNELS := android-nixpkgs flake-utils flake-compat
-
 
 ifeq ($(UNAME), Darwin) # darwin rules
 all:
@@ -54,11 +54,10 @@ fclean:
 	sudo ./result/sw/bin/nix-env -p /nix/var/nix/profiles/system --delete-generations old
 	./result/sw/bin/nix-collect-garbage -d
 # Remove entries from /boot/loader/entries:
-	sudo bash -c "cd /boot/loader/entries; ls | grep -v <current-generation-name> | xargs rm"
 
 
 fast-update: update.nix update.zsh update.misc # fast update ignore emacs update
-update: update.nix update.emacs update.spacemacs update.zsh update.misc
+update: update.nix update.emacs update.spacemacs update.zsh update.asdf update.misc
 update.nix:; nix flake lock $(addprefix --update-input , $(NIX_CHANNELS))
 update.emacs:; nix flake lock $(addprefix --update-input , $(EMACS_CHANNELS))
 update.spacemacs:; nix flake lock $(addprefix --update-input , $(SPACEMACS_CHANNELS))
@@ -66,3 +65,5 @@ update.doom:; nix flake lock $(addprefix --update-input , $(DOOM_CHANNELS))
 update.zsh:; nix flake lock $(addprefix --update-input ,$(ZSH_CHANNELS))
 update.misc:; nix flake lock $(addprefix --update-input ,$(MISC_CHANNELS))
 update.home:; nix flake lock $(addprefix --update-input , $(NIX_CHANNELS))
+update.asdf:; nix flake lock $(addprefix --update-input , $(ASDF_CHANNELS))
+

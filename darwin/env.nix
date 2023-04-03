@@ -2,7 +2,7 @@
 
 {
   # Networking
-  networking.dns = [ "1.1.1.1" "8.8.8.8" ];
+  # networking.dns = [ ];
 
   # Apps
   # `home-manager` currently has issues adding them to `~/Applications`

@@ -3,11 +3,11 @@
     "asdf-plugins": {
       "flake": false,
       "locked": {
-        "lastModified": 1663152136,
-        "narHash": "sha256-yNz5bF4HHhsF8j0BSdOUC20SSq1X84yispYVDRWC4d0=",
+        "lastModified": 1679039564,
+        "narHash": "sha256-FX5cXNhCOZEjWE0oLcIBRz0xcZk09L2k655ZC+2/saQ=",
         "owner": "asdf-vm",
         "repo": "asdf-plugins",
-        "rev": "0a03801224742f2b22fba7b622a6e28cd896dc79",
+        "rev": "113f1af7f21e21161e28886a009865845bb77a77",
         "type": "github"
       },
       "original": {
@@ -56,11 +56,11 @@
     "doomemacs": {
       "flake": false,
       "locked": {
-        "lastModified": 1672628113,
-        "narHash": "sha256-C+mQGq/HBDgRkqdwYE/LB3wQd3oIbTQfzldtuhmKVeU=",
+        "lastModified": 1679027612,
+        "narHash": "sha256-lqwXHPbI7qh9psjyTqRHraM7XAIodeFHtxVfEabA720=",
         "owner": "doomemacs",
         "repo": "doomemacs",
-        "rev": "e96624926d724aff98e862221422cd7124a99c19",
+        "rev": "b66ad7703134d8a91e8ae1fab84af3bb90fcca03",
         "type": "github"
       },
       "original": {
@@ -76,11 +76,11 @@
         "nixpkgs": "nixpkgs"
       },
       "locked": {
-        "lastModified": 1675246293,
-        "narHash": "sha256-mpLe6T7CAZJ1OwJWu1yk8r5ThMuAyswQGDxx6+l1ZUY=",
+        "lastModified": 1679307033,
+        "narHash": "sha256-D8SzlqiLApDCPDPDkRETRfqfB6pzSeRsckBOTIyn4EE=",
         "owner": "nix-community",
         "repo": "emacs-overlay",
-        "rev": "dde3396d92ad61a8c73c6a3b6c1bbb14a70c5e5e",
+        "rev": "e016fab49d5bb9f4db4e0dfdf925395750d6b8bc",
         "type": "github"
       },
       "original": {
@@ -92,11 +92,11 @@
     "fast-syntax-highlighting": {
       "flake": false,
       "locked": {
-        "lastModified": 1668912623,
-        "narHash": "sha256-wLpgkX53wzomHMEpymvWE86EJfxlIb3S8TPy74WOBD4=",
+        "lastModified": 1678486473,
+        "narHash": "sha256-hMzeCRJD7njkUiSf3xT/vQ0wEkmgV53yDJTV/QZtJU4=",
         "owner": "zdharma-continuum",
         "repo": "fast-syntax-highlighting",
-        "rev": "7c390ee3bfa8069b8519582399e0a67444e6ea61",
+        "rev": "5521b083f8979ad40be2137d7a46bfa51c8d666a",
         "type": "github"
       },
       "original": {
@@ -138,11 +138,11 @@
     },
     "flake-utils_2": {
       "locked": {
-        "lastModified": 1667395993,
-        "narHash": "sha256-nuEHfE/LcWyuSWnS8t12N1wc105Qtau+/OdUAjtQ0rA=",
+        "lastModified": 1678901627,
+        "narHash": "sha256-U02riOqrKKzwjsxc/400XnElV+UtPUQWpANPlyazjH0=",
         "owner": "numtide",
         "repo": "flake-utils",
-        "rev": "5aed5285a952e0b949eb3ba02c12fa4fcfef535f",
+        "rev": "93a2b84fc4b70d9e089d029deacc3583435c2ed6",
         "type": "github"
       },
       "original": {
@@ -170,11 +170,11 @@
     "fzf-tab": {
       "flake": false,
       "locked": {
-        "lastModified": 1670462165,
-        "narHash": "sha256-bIlnYKjjOC6h5/Gg7xBg+i2TBk+h82wmHgAJPhzMsek=",
+        "lastModified": 1679190553,
+        "narHash": "sha256-dPe5CLCAuuuLGRdRCt/nNruxMrP9f/oddRxERkgm1FE=",
         "owner": "Aloxaf",
         "repo": "fzf-tab",
-        "rev": "ffb7b776be492333b94cf0be87456b62a1f26e2f",
+        "rev": "5a81e13792a1eed4a03d2083771ee6e5b616b9ab",
         "type": "github"
       },
       "original": {
@@ -303,11 +303,11 @@
     "powerlevel10k": {
       "flake": false,
       "locked": {
-        "lastModified": 1675106755,
-        "narHash": "sha256-jnZXLrywUrJgTX1tFpoNH94r/jcGl2P6R7DoedluHxQ=",
+        "lastModified": 1678956684,
+        "narHash": "sha256-ulZDQdHLYCsJ5dkc/RNPMQn+4yHxSND3gKsZuwnPY8I=",
         "owner": "romkatv",
         "repo": "powerlevel10k",
-        "rev": "a30145b0f82d06770e924e9eac064ed223a94e6b",
+        "rev": "cb9788b12a1fade6be631ad905928f9a5f7eb03f",
         "type": "github"
       },
       "original": {
@@ -343,11 +343,11 @@
     "spacemacs": {
       "flake": false,
       "locked": {
-        "lastModified": 1675111299,
-        "narHash": "sha256-qwD9oGP+7q9cocZinyfNsT+QkX5O8DtZkZNTs2+1K0Y=",
+        "lastModified": 1677863231,
+        "narHash": "sha256-XseGT5dR7AKPep9XUJTsSlaGK/lniqN0YJz/l+N8ook=",
         "owner": "syl20bnr",
         "repo": "spacemacs",
-        "rev": "5b8a25a6b7cb9f070852144fc71824b1e01a5711",
+        "rev": "3512e43c9e6efef78b5104785c99518eff60d668",
         "type": "github"
       },
       "original": {

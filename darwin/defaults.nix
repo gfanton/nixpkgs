@@ -46,12 +46,14 @@
 
   # Trackpad
   system.defaults.trackpad = {
-    Clicking = false;
+    Clicking = true;
     TrackpadRightClick = true;
   };
 
   # Finder
   system.defaults.finder = {
+    ShowStatusBar = true;
+    AppleShowAllFiles = true;
     FXEnableExtensionChangeWarning = true;
     AppleShowAllExtensions = true;
     QuitMenuItem = true;
