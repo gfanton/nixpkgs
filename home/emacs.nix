@@ -1,14 +1,13 @@
 { config, lib, pkgs, ... }:
-
 let
   inherit (config.home) user-info homeDirectory;
   xterm-emacsclient = pkgs.writeShellScriptBin "xemacsclient" ''
     export TERM=xterm-emacs
-    ${pkgs.emacsGcc}/bin/emacsclient $@
+    ${pkgs.emacs-gtk}/bin/emacsclient $@
   '';
   xterm-emacs = pkgs.writeShellScriptBin "xemacs" ''
     export TERM=xterm-emacs
-    ${pkgs.emacsGcc}/bin/emacs $@
+    ${pkgs.emacs-gtk}/bin/emacs $@
   '';
 in {
 
@@ -34,6 +33,9 @@ in {
     recursive = true;
   };
 
+  home.file.".emacs-profile" = with pkgs; {
+    source = writeText "emacs-profiles" "spacemacs";
+  };
   home.file.".emacs-profiles.el" = with pkgs; {
     source = writeText "emacs-profiles" ''
       (
@@ -44,10 +46,6 @@ in {
     '';
   };
 
-  home.file.".emacs-profile" = with pkgs; {
-    source = writeText "emacs-profiles" "doom";
-  };
-
   # spacemacs
   home.file.".spacemacs.d" = {
     source = "${lib.cleanSource ../config/spacemacs}";
@@ -55,7 +53,7 @@ in {
   };
 
   programs.emacs.enable = true;
-  programs.emacs.package = pkgs.emacsGcc;
+  programs.emacs.package = pkgs.emacs-gtk;
 
   # setup alias
   programs.zsh.shellAliases.emacs = "${xterm-emacs}/bin/xemacs";

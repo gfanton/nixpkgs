@@ -3,7 +3,7 @@
 let
   xterm-emacsclient = pkgs.writeShellScriptBin "xemacs" ''
     export TERM=xterm-emacs
-    ${pkgs.emacsGcc}/bin/emacsclient $@
+    ${pkgs.emacs-gtk}/bin/emacsclient $@
   '';
 
   stdin-emacsclient = pkgs.writeShellScriptBin "semacs" ''
@@ -30,7 +30,7 @@ in {
 
   programs.kitty.settings = {
     # https://fsd.it/shop/fonts/pragmatapro/
-    font_family = "FiraCode Nerd Font Mono";
+    font_family = "FiraCode Nerd Font";
     font_size = "16.0";
     adjust_line_height = "140%";
     disable_ligatures = "cursor"; # disable ligatures when cursor is on them

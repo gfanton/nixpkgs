@@ -4,11 +4,11 @@ let
   inherit (config.home) user-info homeDirectory;
   xterm-emacsclient = pkgs.writeShellScriptBin "xemacsclient" ''
     export TERM=xterm-emacs
-    ${pkgs.emacsGcc}/bin/emacsclient $@
+    ${pkgs.emacs-gtk}/bin/emacsclient $@
   '';
   xterm-emacs = pkgs.writeShellScriptBin "xemacs" ''
     export TERM=xterm-emacs
-    ${pkgs.emacsGcc}/bin/emacs $@
+    ${pkgs.emacs-gtk}/bin/emacs $@
   '';
 in {
   xdg = {

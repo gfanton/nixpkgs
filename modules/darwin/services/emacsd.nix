@@ -47,13 +47,13 @@ in {
     emacsd = pkgs.writeShellScriptBin "emacsd" ''
       export TERMINFO_DIRS="${config.system.path}/share/terminfo";
       export TERM=xterm-emacs
-      ${cfg.package}/bin/${cfg.exec} --with-profile doom --fg-daemon
+      ${cfg.package}/bin/${cfg.exec} --with-profile=spacemacs --fg-daemon
     '';
   in mkIf cfg.enable {
     launchd.user.agents.emacsd = {
       path = cfg.additionalPath ++ [ config.environment.systemPath ];
       serviceConfig = {
-        ProgramArguments = [ "${pkgs.bash}/bin/bash" "${emacsd}/bin/emacsd" ];
+        ProgramArguments = [ "${pkgs.zsh}/bin/zsh" "${emacsd}/bin/emacsd" ];
         RunAtLoad = true;
         KeepAlive = true;
         StandardErrorPath = "/tmp/emacsd.log";

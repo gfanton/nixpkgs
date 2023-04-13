@@ -228,7 +228,8 @@
           spacemacs = inputs.spacemacs;
           doomemacs = inputs.doomemacs;
           chemacs2 = inputs.chemacs2;
-          emacsGcc = (import inputs.emacs-overlay final prev).emacsPgtk;
+          # emacsGcc = (import inputs.emacs-overlay final prev).emacsPgtk;
+          # emacsGcc = final.pkgs.emacs-gtk;
           # yabaisrc = inputs.yabai
           asdf-plugins = inputs.asdf-plugins;
           zsh-plugins.fast-syntax-highlighting =
