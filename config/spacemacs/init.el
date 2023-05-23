@@ -1,3 +1,6 @@
+;; -*- mode: emacs-lisp; lexical-binding: t -*-
+;; This file is loaded by Spacemacs at startup.
+;; It must be stored in your home directory.
 (let* ((dotspacemacs-basedir (file-name-directory (or load-file-name buffer-file-name)))
 
        ;; Main file.

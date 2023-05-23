@@ -28,7 +28,7 @@ This function should only modify configuration layer settings."
 
    ;; List of additional paths where to look for configuration layers.
    ;; Paths must have a trailing slash (i.e. `~/.mycontribs/')
-   dotspacemacs-configuration-layer-path '("~/.spacemacs.d/layers/")
+   dotspacemacs-configuration-layer-path '()
 
    ;; List of configuration layers to load.
    dotspacemacs-configuration-layers
@@ -38,95 +38,82 @@ This function should only modify configuration layer settings."
      ;; Uncomment some layer names and press `SPC f e R' (Vim style) or
      ;; `M-m f e R' (Emacs style) to install them.
      ;; ----------------------------------------------------------------
+     ;; basic
+     spacemacs-defaults
      osx
-     vinegar
-
-     auto-completion
      better-defaults
-     ;; helm
-     spacemacs-editing
-     (ivy :variables ivy-enable-advanced-buffer-information t)
-
-     ;; org
-     (org :variables
-          org-journal-file-format "%Y-%m-%d"
-          org-journal-date-prefix "#+TITLE: "
-          org-journal-date-format "%A, %B %d %Y"
-          org-journal-time-prefix "* "
-          org-journal-time-format ""
-          org-projectile-file ".projectile.todos.org"
-          org-enable-github-support t
-          org-enable-org-journal-support t)
-     spacemacs-org
-
-     (shell :variables
-            shell-default-height 30
-            shell-default-position 'bottom
-            shell-default-shell 'eshell)
-
-     spell-checking
-     syntax-checking
-     (treemacs :variables
-               treemacs-use-follow-mode t
-               treemacs-use-filewatch-mode t)
-     docker
-
-     version-control
+     auto-completion
      git
-     tmux
-     nixos
+     version-control
 
-     ;; langs
+     ;; helm
+     (compleseus :variables compleseus-engine 'vertico)
+     (lsp :variables
+          lsp-lens-enable t
+          lsp-use-lsp-ui	t
+          ;; lsp-ui-remap-xref-keybindings t
+          )
+
+     ;; lang
+     emacs-lisp
      (go :variables
-         go-use-golangci-lint nil ;; disable golangci lint
          go-backend 'lsp
          go-format-before-save nil
          godoc-at-point-function 'godoc-gogetdoc)
 
+     ruby
+     python
      (java :variables java-backend 'lsp)
+     (rust :variables rust-backend 'lsp)
 
-     prettier
-     (javascript :variables
-                 javascript-backend 'lsp
-                 javascript-fmt-tool 'prettier)
+     c-c++
 
+     ;; web
+     react
+     node
+     html  
      (typescript :variables
                  typescript-linter 'eslint
                  typescript-backend 'lsp)
+     (javascript :variables
+                 javascript-backend 'lsp
+                 javascript-fmt-tool 'prettier)
+     prettier
 
-     (rust :variables
-           rust-backend 'lsp)
+     ;; ext
+     org
+     spacemacs-editing
+     spacemacs-org
+     docker
 
-     html
-     emacs-lisp
-     python
-
-     ;; common-lisp TODO: test this
-     ruby
      yaml
-     markdown
-     lsp
+     json
      protobuf
-     graphql
-     swift
+     org
+     markdown
+     nixos
+
+     ;; utils
+     multiple-cursors
+     treemacs
 
      ;; cool stuff
-     themes-megapack
-     emoji
-     deft
      colors
-     (multiple-cursors :variables multiple-cursors-backend 'evil-mc)
+     deft
      )
 
-   ;; List of additional packages that will be installed without being
-   ;; wrapped in a layer. If you need some configuration for these
-   ;; packages, then consider creating a layer. You can also put the
-   ;; configuration in `dotspacemacs/user-config'.
-   ;; To use a local version of a package, use the `:location' property:
-   ;; '(your-package :location "~/path/to/your-package/")
+
+   ;; List of additional packages that will be installed without being wrapped
+   ;; in a layer (generally the packages are installed only and should still be
+   ;; loaded using load/require/use-package in the user-config section below in
+   ;; this file). If you need some configuration for these packages, then
+   ;; consider creating a layer. You can also put the configuration in
+   ;; `dotspacemacs/user-config'. To use a local version of a package, use the
+   ;; `:location' property: '(your-package :location "~/path/to/your-package/")
    ;; Also include the dependencies as they will not be resolved automatically.
-   dotspacemacs-additional-packages '(highlight-indent-guides
-                                      org-super-agenda)
+   dotspacemacs-additional-packages '(
+                                      (catppuccin :location (recipe :fetcher github :repo "catppuccin/emacs"))
+                                      )
 
    ;; A list of packages that cannot be updated.
    dotspacemacs-frozen-packages '()
@@ -151,9 +138,13 @@ It should only modify the values of Spacemacs settings."
   ;; This setq-default sexp is an exhaustive list of all the supported
   ;; spacemacs settings.
   (setq-default
-   ;; If non-nil then enable support for the portable dumper. You'll need
-   ;; to compile Emacs 27 from source following the instructions in file
+   ;; If non-nil then enable support for the portable dumper. You'll need to
+   ;; compile Emacs 27 from source following the instructions in file
    ;; EXPERIMENTAL.org at to root of the git repository.
+   ;;
+   ;; WARNING: pdumper does not work with Native Compilation, so it's disabled
+   ;; regardless of the following setting when native compilation is in effect.
+   ;;
    ;; (default nil)
    dotspacemacs-enable-emacs-pdumper nil
 
@@ -166,9 +157,9 @@ It should only modify the values of Spacemacs settings."
    ;; portable dumper in the cache directory under dumps sub-directory.
    ;; To load it when starting Emacs add the parameter `--dump-file'
    ;; when invoking Emacs 27.1 executable on the command line, for instance:
-   ;;   ./emacs --dump-file=~/.emacs.d/.cache/dumps/spacemacs.pdmp
-   ;; (default spacemacs.pdmp)
-   dotspacemacs-emacs-dumper-dump-file "spacemacs.pdmp"
+   ;;   ./emacs --dump-file=$HOME/.emacs.d/.cache/dumps/spacemacs-27.1.pdmp
+   ;; (default (format "spacemacs-%s.pdmp" emacs-version))
+   dotspacemacs-emacs-dumper-dump-file (format "spacemacs-%s.pdmp" emacs-version)
 
    ;; If non-nil ELPA repositories are contacted via HTTPS whenever it's
    ;; possible. Set it to nil if you have no way to use HTTPS in your
@@ -188,9 +179,18 @@ It should only modify the values of Spacemacs settings."
    ;; (default '(100000000 0.1))
    dotspacemacs-gc-cons '(100000000 0.1)
 
+   ;; Set `read-process-output-max' when startup finishes.
+   ;; This defines how much data is read from a foreign process.
+   ;; Setting this >= 1 MB should increase performance for lsp servers
+   ;; in emacs 27.
+   ;; (default (* 1024 1024))
+   dotspacemacs-read-process-output-max (* 1024 1024)
+
    ;; If non-nil then Spacelpa repository is the primary source to install
    ;; a locked version of packages. If nil then Spacemacs will install the
-   ;; latest version of packages from MELPA. (default nil)
+   ;; latest version of packages from MELPA. Spacelpa is currently in
+   ;; experimental state please use only for testing purposes.
+   ;; (default nil)
    dotspacemacs-use-spacelpa nil
 
    ;; If non-nil then verify the signature for downloaded Spacelpa archives.
@@ -216,25 +216,52 @@ It should only modify the values of Spacemacs settings."
    ;; (default 'vim)
    dotspacemacs-editing-style 'vim
 
-   ;; Specify the startup banner. Dfault value is `official', it displays
+   ;; If non-nil show the version string in the Spacemacs buffer. It will
+   ;; appear as (spacemacs version)@(emacs version)
+   ;; (default t)
+   dotspacemacs-startup-buffer-show-version t
+
+   ;; Specify the startup banner. Default value is `official', it displays
    ;; the official spacemacs logo. An integer value is the index of text
    ;; banner, `random' chooses a random text banner in `core/banners'
    ;; directory. A string value must be a path to an image format supported
    ;; by your Emacs build.
    ;; If the value is nil then no banner is displayed. (default 'official)
-   dotspacemacs-startup-banner 'official
+   dotspacemacs-startup-banner nil
+
+   ;; Scale factor controls the scaling (size) of the startup banner. Default
+   ;; value is `auto' for scaling the logo automatically to fit all buffer
+   ;; contents, to a maximum of the full image height and a minimum of 3 line
+   ;; heights. If set to a number (int or float) it is used as a constant
+   ;; scaling factor for the default logo size.
+   dotspacemacs-startup-banner-scale 'auto
 
    ;; List of items to show in startup buffer or an association list of
    ;; the form `(list-type . list-size)`. If nil then it is disabled.
    ;; Possible values for list-type are:
-   ;; `recents' `bookmarks' `projects' `agenda' `todos'.
+   ;; `recents' `recents-by-project' `bookmarks' `projects' `agenda' `todos'.
    ;; List sizes may be nil, in which case
    ;; `spacemacs-buffer-startup-lists-length' takes effect.
+   ;; The exceptional case is `recents-by-project', where list-type must be a
+   ;; pair of numbers, e.g. `(recents-by-project . (7 .  5))', where the first
+   ;; number is the project limit and the second the limit on the recent files
+   ;; within a project.
    dotspacemacs-startup-lists '((recents . 5)
                                 (projects . 7))
 
    ;; True if the home buffer should respond to resize events. (default t)
    dotspacemacs-startup-buffer-responsive t
+
+   ;; Show numbers before the startup list lines. (default t)
+   dotspacemacs-show-startup-list-numbers t
+
+   ;; The minimum delay in seconds between number key presses. (default 0.4)
+   dotspacemacs-startup-buffer-multi-digit-delay 0.4
+
+   ;; If non-nil, show file icons for entries and headings on Spacemacs home buffer.
+   ;; This has no effect in terminal or if "all-the-icons" package or the font
+   ;; is not installed. (default nil)
+   dotspacemacs-startup-buffer-show-icons nil
 
    ;; Default major mode for a new empty buffer. Possible values are mode
    ;; names such as `text-mode'; and `nil' to use Fundamental mode.
@@ -244,15 +271,22 @@ It should only modify the values of Spacemacs settings."
    ;; Default major mode of the scratch buffer (default `text-mode')
    dotspacemacs-scratch-mode 'text-mode
 
+   ;; If non-nil, *scratch* buffer will be persistent. Things you write down in
+   ;; *scratch* buffer will be saved and restored automatically.
+   dotspacemacs-scratch-buffer-persistent nil
+
+   ;; If non-nil, `kill-buffer' on *scratch* buffer
+   ;; will bury it instead of killing.
+   dotspacemacs-scratch-buffer-unkillable nil
+
    ;; Initial message in the scratch buffer, such as "Welcome to Spacemacs!"
    ;; (default nil)
    dotspacemacs-initial-scratch-message nil
+
    ;; List of themes, the first of the list is loaded when spacemacs starts.
    ;; Press `SPC T n' to cycle to the next theme in the list (works great
    ;; with 2 themes variants, one dark and one light)
-
-   ;; doom
-   dotspacemacs-themes '(material)
+   dotspacemacs-themes '(catppuccin)
 
    ;; Set the theme for the Spaceline. Supported themes are `spacemacs',
    ;; `all-the-icons', `custom', `doom', `vim-powerline' and `vanilla'. The
@@ -261,16 +295,18 @@ It should only modify the values of Spacemacs settings."
    ;; refer to the DOCUMENTATION.org for more info on how to create your own
    ;; spaceline theme. Value can be a symbol or list with additional properties.
    ;; (default '(spacemacs :separator wave :separator-scale 1.5))
-   dotspacemacs-mode-line-theme '(all-the-icons
-                                  :separator none)
+   dotspacemacs-mode-line-theme '(doom)
+
 
    ;; If non-nil the cursor color matches the state color in GUI Emacs.
    ;; (default t)
    dotspacemacs-colorize-cursor-according-to-state t
-
-   ;; Default font or prioritized list of fonts.
-   dotspacemacs-default-font '("PragmataPro Mono Liga"
-                               :size 16.0
+ 
+   ;; Default font or prioritized list of fonts. The `:size' can be specified as
+   ;; a non-negative integer (pixel size), or a floating-point (point size).
+   ;; Point size is recommended, because it's device independent. (default 10.0)
+   dotspacemacs-default-font '("FiraCode Nerd Font"
+                               :size 12.0
                                :weight normal
                                :width normal)
 
@@ -293,8 +329,10 @@ It should only modify the values of Spacemacs settings."
    dotspacemacs-major-mode-leader-key ","
 
    ;; Major mode leader key accessible in `emacs state' and `insert state'.
-   ;; (default "C-M-m")
-   dotspacemacs-major-mode-emacs-leader-key "C-M-m"
+   ;; (default "C-M-m" for terminal mode, "<M-return>" for GUI mode).
+   ;; Thus M-RET should work as leader key in both GUI and terminal modes.
+   ;; C-M-m also should work in terminal mode, but not in GUI mode.
+   dotspacemacs-major-mode-emacs-leader-key (if window-system "<M-return>" "C-M-m")
 
    ;; These variables control whether separate commands are bound in the GUI to
    ;; the key pairs `C-i', `TAB' and `C-m', `RET'.
@@ -358,7 +396,7 @@ It should only modify the values of Spacemacs settings."
    ;; If non-nil a progress bar is displayed when spacemacs is loading. This
    ;; may increase the boot time on some systems and emacs builds, set it to
    ;; nil to boost the loading time. (default t)
-   dotspacemacs-loading-progress-bar t
+   dotspacemacs-loading-progress-bar nil
 
    ;; If non-nil the frame is fullscreen when Emacs starts up. (default nil)
    ;; (Emacs 24.4+ only)
@@ -370,12 +408,12 @@ It should only modify the values of Spacemacs settings."
 
    ;; If non-nil the frame is maximized when Emacs starts up.
    ;; Takes effect only if `dotspacemacs-fullscreen-at-startup' is nil.
-   ;; (default nil) (Emacs 24.4+ only)
-   dotspacemacs-maximized-at-startup nil
+   ;; (default t) (Emacs 24.4+ only)
+   dotspacemacs-maximized-at-startup t
 
    ;; If non-nil the frame is undecorated when Emacs starts up. Combine this
-   ;; variable with `dotspacemacs-maximized-at-startup' in OSX to obtain
-   ;; borderless fullscreen. (default nil)
+   ;; variable with `dotspacemacs-maximized-at-startup' to obtain fullscreen
+   ;; without external boxes. Also disables the internal border. (default nil)
    dotspacemacs-undecorated-at-startup nil
 
    ;; A value from the range (0..100), in increasing opacity, which describes
@@ -387,6 +425,11 @@ It should only modify the values of Spacemacs settings."
    ;; the transparency level of a frame when it's inactive or deselected.
    ;; Transparency can be toggled through `toggle-transparency'. (default 90)
    dotspacemacs-inactive-transparency 90
+
+   ;; A value from the range (0..100), in increasing opacity, which describes the
+   ;; transparency level of a frame background when it's active or selected. Transparency
+   ;; can be toggled through `toggle-background-transparency'. (default 90)
+   dotspacemacs-background-transparency 90
 
    ;; If non-nil show the titles of transient states. (default t)
    dotspacemacs-show-transient-state-title t
@@ -404,12 +447,16 @@ It should only modify the values of Spacemacs settings."
    ;; when it reaches the top or bottom of the screen. (default t)
    dotspacemacs-smooth-scrolling t
 
+   ;; Show the scroll bar while scrolling. The auto hide time can be configured
+   ;; by setting this variable to a number. (default t)
+   dotspacemacs-scroll-bar-while-scrolling t
+
    ;; Control line numbers activation.
    ;; If set to `t', `relative' or `visual' then line numbers are enabled in all
    ;; `prog-mode' and `text-mode' derivatives. If set to `relative', line
    ;; numbers are relative. If set to `visual', line numbers are also relative,
-   ;; but lines are only visual lines are counted. For example, folded lines
-   ;; will not be counted and wrapped lines are counted as multiple lines.
+   ;; but only visual lines are counted. For example, folded lines will not be
+   ;; counted and wrapped lines are counted as multiple lines.
    ;; This variable can also be set to a property list for finer control:
    ;; '(:relative nil
    ;;   :visual nil
@@ -424,13 +471,18 @@ It should only modify the values of Spacemacs settings."
    ;; (default nil)
    dotspacemacs-line-numbers nil
 
-   ;; Code folding method. Possible values are `evil' and `origami'.
+   ;; Code folding method. Possible values are `evil', `origami' and `vimish'.
    ;; (default 'evil)
    dotspacemacs-folding-method 'evil
 
-   ;; If non-nil `smartparens-strict-mode' will be enabled in programming modes.
+   ;; If non-nil and `dotspacemacs-activate-smartparens-mode' is also non-nil,
+   ;; `smartparens-strict-mode' will be enabled in programming modes.
    ;; (default nil)
    dotspacemacs-smartparens-strict-mode nil
+
+   ;; If non-nil smartparens-mode will be enabled in programming modes.
+   ;; (default t)
+   dotspacemacs-activate-smartparens-mode t
 
    ;; If non-nil pressing the closing parenthesis `)' key in insert mode passes
    ;; over any automatically added closing parenthesis, bracket, quote, etc...
@@ -451,7 +503,7 @@ It should only modify the values of Spacemacs settings."
    ;; like \"~/.emacs.d/server\". It has no effect if
    ;; `dotspacemacs-enable-server' is nil.
    ;; (default nil)
-   dotspacemacs-server-socket-dir "~/.emacs.d/server"
+   dotspacemacs-server-socket-dir nil
 
    ;; If non-nil, advise quit functions to keep server open when quitting.
    ;; (default nil)
@@ -460,7 +512,7 @@ It should only modify the values of Spacemacs settings."
    ;; List of search tool executable names. Spacemacs uses the first installed
    ;; tool of the list. Supported tools are `rg', `ag', `pt', `ack' and `grep'.
    ;; (default '("rg" "ag" "pt" "ack" "grep"))
-   dotspacemacs-search-tools '("rg" "grep")
+   dotspacemacs-search-tools '("rg" "ag" "pt" "ack" "grep")
 
    ;; Format specification for setting the frame title.
    ;; %a - the `abbreviated-file-name', or `buffer-name'
@@ -478,12 +530,20 @@ It should only modify the values of Spacemacs settings."
    ;; %n - Narrow if appropriate
    ;; %z - mnemonics of buffer, terminal, and keyboard coding systems
    ;; %Z - like %z, but including the end-of-line format
+   ;; If nil then Spacemacs uses default `frame-title-format' to avoid
+   ;; performance issues, instead of calculating the frame title by
+   ;; `spacemacs/title-prepare' all the time.
    ;; (default "%I@%S")
    dotspacemacs-frame-title-format "%I@%S"
 
    ;; Format specification for setting the icon title format
    ;; (default nil - same as frame-title-format)
    dotspacemacs-icon-title-format nil
+
+   ;; Color highlight trailing whitespace in all prog-mode and text-mode derived
+   ;; modes such as c++-mode, python-mode, emacs-lisp, html-mode, rst-mode etc.
+   ;; (default t)
+   dotspacemacs-show-trailing-whitespace t
 
    ;; Delete whitespace while saving buffer. Possible values are `all'
    ;; to aggressively delete empty line and long sequences of whitespace,
@@ -492,6 +552,23 @@ It should only modify the values of Spacemacs settings."
    ;; (default nil)
    dotspacemacs-whitespace-cleanup nil
 
+   ;; If non-nil activate `clean-aindent-mode' which tries to correct
+   ;; virtual indentation of simple modes. This can interfere with mode specific
+   ;; indent handling like has been reported for `go-mode'.
+   ;; If it does deactivate it here.
+   ;; (default t)
+   dotspacemacs-use-clean-aindent-mode t
+
+   ;; Accept SPC as y for prompts if non-nil. (default nil)
+   dotspacemacs-use-SPC-as-y nil
+
+   ;; If non-nil shift your number row to match the entered keyboard layout
+   ;; (only in insert state). Currently supported keyboard layouts are:
+   ;; `qwerty-us', `qwertz-de' and `querty-ca-fr'.
+   ;; New layouts can be added in `spacemacs-editing' layer.
+   ;; (default nil)
+   dotspacemacs-swap-number-row nil
+
    ;; Either nil or a number of seconds. If non-nil zone out after the specified
    ;; number of seconds. (default nil)
    dotspacemacs-zone-out-when-idle nil
@@ -499,7 +576,14 @@ It should only modify the values of Spacemacs settings."
    ;; Run `spacemacs/prettify-org-buffer' when
    ;; visiting README.org files of Spacemacs.
    ;; (default nil)
-   dotspacemacs-pretty-docs nil))
+   dotspacemacs-pretty-docs nil
+
+   ;; If nil the home buffer shows the full path of agenda items
+   ;; and todos. If non-nil only the file name is shown.
+   dotspacemacs-home-shorten-agenda-source nil
+
+   ;; If non-nil then byte-compile some of Spacemacs files.
+   dotspacemacs-byte-compile nil))
 
 (defun dotspacemacs/user-env ()
   "Environment variables setup.
@@ -507,9 +591,8 @@ This function defines the environment variables for your Emacs session. By
 default it calls `spacemacs/load-spacemacs-env' which loads the environment
 variables declared in `~/.spacemacs.env' or `~/.spacemacs.d/.spacemacs.env'.
 See the header of this file for more information."
-  (spacemacs/load-spacemacs-env t)
-  (setenv "LANG" "en_US.UTF-8") ;; force lang to en_US.UTF-8
-  )
+  (spacemacs/load-spacemacs-env)
+)
 
 (defun dotspacemacs/user-init ()
   "Initialization for user code:
@@ -517,22 +600,18 @@ This function is called immediately after `dotspacemacs/init', before layer
 configuration.
 It is mostly for variables that should be set before packages are loaded.
 If you are unsure, try setting them in `dotspacemacs/user-config' first."
+  (setq catppuccin-flavor 'macchiato) ;; or 'latte, 'macchiato, or 'mocha
+)
 
-  ;; packages
-  (push "~/.spacemacs.d/packages/pretty-magit/" load-path)
-  (push "~/.spacemacs.d/packages/capnp-mode/" load-path)
-  (push "~/.spacemacs.d/packages/ansi-mode/" load-path)
-  (push "~/.spacemacs.d/packages/framemove/" load-path)
-  )
 
 (defun dotspacemacs/user-load ()
   "Library to load while dumping.
 This function is called only while dumping Spacemacs configuration. You can
 `require' or `load' the libraries of your choice that will be included in the
 dump."
-  (require 'framemove)
-  (require 'pretty-magit)
-  )
+  
+)
+
 
 (defun dotspacemacs/user-config ()
   "Configuration for user code:
@@ -540,9 +619,12 @@ This function is called at the very end of Spacemacs startup, after layer
 configuration.
 Put your configuration code here, except for variables that should be set
 before packages are loaded."
-  ;; lsp
-  (require 'lsp)
-  (require 'lsp-mode)
+  (spacemacs/load-spacemacs-env) 
+
+  (setq auto-save-file-name-transforms
+        `((".*" "/tmp/.emacs-saves/" t)))
+
+  ;; go
 
   ;; Set up before-save hooks to format buffer and add/delete imports.
   ;; Make sure you don't have other gofmt/goimports hooks enabled.
@@ -551,74 +633,22 @@ before packages are loaded."
     (add-hook 'before-save-hook #'lsp-organize-imports t t))
   (add-hook 'go-mode-hook #'lsp-go-install-save-hooks)
 
-  ;; experimental settings
-  (lsp-register-custom-settings
-   '(
-     ;; common
-     ("gopls.completeUnimported" t t)
-     ("gopls.staticcheck" t t)
-     ("gopls.gofumpt" t t)
-
-     ;; experimental
-     ;; ("gopls.experimentalWorkspaceModule" t t)
-     ))
-
-  ;; use ripgrep as default helm ag search
-  ;; (setq
-  ;;  helm-ag-base-command "rg -i -M 120 --no-heading --line-number --color never '%s' %s"
-  ;;  helm-ag-success-exit-status '(0 2))
-
-  (define-key ivy-minibuffer-map (kbd "TAB") 'ivy-alt-done)
+  ;; (lsp-register-custom-settings
+  ;;  '(
+  ;;    ;; common
+  ;;    ("gopls.completeUnimported" t t)
+  ;;    ("gopls.staticcheck" t t)
+  ;;    ("gopls.gofumpt" t t)
+  ;;    ))
 
   ;; use aspell istead of ispell
   ;; @FIXME: dont use nixprofil path
   (setq ispell-program-name "aspell")
 
-  ;; force custom variables
-  (custom-set-variables
-   '(lsp-enable-file-watchers nil)) ;; set file-watchers to nil improve emacs performance
-
-  ;; lsp swift
-  (async-start
-   ;; check if sourcekit exist
-   (lambda ()
-     (shell-command-to-string "xcrun --find sourcekit-lsp 2>/dev/null"))
-
-   ;; register swift lsp client
-   (lambda (lsp-sourcekit-executable)
-     (if (= (length lsp-sourcekit-executable) 0)
-         (message "no sourcekit-lsp detected for swift: skipping ")
-       (progn
-         (lsp-register-client
-          (make-lsp-client :new-connection (lsp-stdio-connection '("xcrun" "sourcekit-lsp"))
-                           :major-modes '(swift-mode)
-                           :server-id 'sourcekit-lsp))
-         )
-       )))
-  (add-hook 'swift-mode-hook #'lsp)
-
-  ;; ivy
-
-  ;; doom-org
-  ;; Corrects (and improves) org-mode's native fontification.
-  ;; (doom-themes-org-config)
-
-  ;; hightlight indent guide
-  (add-hook 'prog-mode-hook 'highlight-indent-guides-mode)
-  (setq highlight-indent-guides-method 'character)
-  (setq highlight-indent-guides-responsive 'top)
-  (defun my-highlighter (level responsive display)
-    (if (> 1 level)
-        nil
-      (highlight-indent-guides--highlighter-default level responsive display)))
-
-  (setq highlight-indent-guides-highlighter-function 'my-highlighter)
-  (setq highlight-indent-guides-character ?.)
-
   ;; framemove
-  (require 'framemove)
-  (windmove-default-keybindings)
-  (setq framemove-hook-into-windmove t)
+  ;; (require 'framemove)
+  ;; (windmove-default-keybindings)
+  ;; (setq framemove-hook-into-windmove t)
 
   ;; windmove
   (when (fboundp 'windmove-default-keybindings)
@@ -628,25 +658,6 @@ before packages are loaded."
   (add-hook 'org-shiftleft-final-hook 'windmove-left)
   (add-hook 'org-shiftdown-final-hook 'windmove-down)
   (add-hook 'org-shiftright-final-hook 'windmove-right)
-
-  ;; disable xterm mouse mode
-  (xterm-mouse-mode -1)
-
-  ;; imenu
-  (setq imenu-list-focus-after-activation nil)
-
-  ;; alist mode
-
-  ;; objc
-  (add-to-list 'auto-mode-alist '("\\.m$" . objc-mode))
-
-  ;; tsx
-  (add-to-list 'auto-mode-alist '("\\.tsx$" . typescript-tsx-mode))
-  (add-to-list 'auto-mode-alist '("\\.ts$" . typescript-mode))
-
-  ;; capn
-  (require 'capnp-mode)
-  (add-to-list 'auto-mode-alist '("\\.capnp\\'" . capnp-mode))
 
   ;; ansi-mode
   (require 'ansi-color)
@@ -671,98 +682,47 @@ before packages are loaded."
         (end-of-buffer))))
   (add-to-list 'auto-mode-alist '("\\.ansi\\'" . ansi-color-mode))
 
-
-  ;; Projectile
-
   ;; Once you have selected your project, the top-level directory
   ;; of the project is immediately opened for you in a dired buffer.
 
   (setq projectile-switch-project-action 'projectile-dired)
 
-  ;; keybindings
+  ;; vertico + embark-live
+  ;; Automatically shrink Vertico for embark-live
+  (global-set-key (kbd "C-c C-l") 'embark-live)
+  (defun +embark-live-vertico ()
+    "Shrink Vertico minibuffer when `embark-live' is active."
+    (when-let (win (and (string-prefix-p "*Embark Live" (buffer-name))
+                        (active-minibuffer-window)))
+      (with-selected-window win
+        (when (and (bound-and-true-p vertico--input)
+                   (fboundp 'vertico-multiform-unobtrusive))
+          (vertico-multiform-unobtrusive)))))
+  (add-hook 'embark-collect-mode-hook #'+embark-live-vertico)
+
+  ;; Prefix current candidate with arrow
+  (defvar +vertico-current-arrow t)
+  (cl-defmethod vertico--format-candidate :around
+    (cand prefix suffix index start &context ((and +vertico-current-arrow
+                                                   (not (bound-and-true-p vertico-flat-mode)))
+                                              (eql t)))
+    (setq cand (cl-call-next-method cand prefix suffix index start))
+    (if (bound-and-true-p vertico-grid-mode)
+        (if (= vertico--index index)
+            (concat #("▶" 0 1 (face vertico-current)) cand)
+          (concat #("_" 0 1 (display " ")) cand))
+      (if (= vertico--index index)
+          (concat
+           #(" " 0 1 (display (left-fringe right-triangle vertico-current)))
+           cand)
+        cand)))
+  ;;END Vertico
+
 
   (global-set-key (kbd "C-x k") 'spacemacs/kill-this-buffer)
 
-  ;; @TODO: move this elsewhere
-  ;; (defun org-journal-save-entry-and-exit()
-  ;;   "Simple convenience function.
-  ;; Saves the buffer of the current day's entry and kills the window
-  ;; Similar to org-capture like behavior"
-  ;;   (interactive)
-  ;;   (save-buffer)
-  ;;   (kill-buffer-and-window))
-  ;; (define-key org-journal-mode-map (kbd "C-x C-s") 'org-journal-save-entry-and-exit)
-
-  ;; authinfo
-  (setq auth-sources '("~/.authinfo"))
-
-  ;; org
-
   (setq org-folder "~/org/")
-
   (setq deft-directory (concat org-folder "notes/"))
-  ;; (setq org-journal-dir (concat org-folder "journal/"))
-  ;; (setq org-agenda-file-regexp "\\`\\\([^.].*\\.org\\\|\\\([0-9]-?\\\)\\\{8\\\}\\\(\\.gpg\\\)?\\\)\\'")
-  ;; (setq org-agenda-files (list org-journal-dir
-  ;;                              org-directory
-  ;;                              deft-directory))
-
-  ;;  set todo sequences
-  ;; (setq org-todo-keywords
-        ;; '((sequence "TODO(t)" "STARTED(s)" "WAITING(w)" "DONE(d)")))
-
-
-  ;; add project todo to agenda @NOTE(gfanton) this may be more confusing than anything
-  ;; (with-eval-after-load 'org-agenda
-  ;;   (require 'org-projectile)
-  ;;   (mapcar '(lambda (file)
-  ;;              (when (file-exists-p file)
-  ;;                (push file org-agenda-files)))
-  ;;           (org-projectile-todo-files))
-  ;;   (setq org-agenda-prefix-format '(
-  ;;                                    ;; (agenda  . " %i %-12:c%?-12t% s") ;; file name + org-agenda-entry-type
-  ;;                                    (agenda  . "%e • %i %-12:c%?-12t% s %-12T")
-  ;;                                    (timeline  . "  % s")
-  ;;                                    (todo  . " %i %-12:c")
-  ;;                                    (tags  . " %i %-12:c")
-  ;;                                    (search . " %i %-12:c")))
-
-    ;; set super agenda group
-    ;; (setq org-super-agenda-groups
-    ;;       '(
-    ;;         (:name "Projects IN-PROGRESS"  ; Optionally specify section name
-    ;;                :time-grid t  ; Items that appear on the time grid
-    ;;                :and (:tag "project" :todo "STARTED")
-    ;;                :log t)
-
-    ;;         (:name "Projects TODO"  ; Optionally specify section name
-    ;;                :tag "project"
-    ;;                :todo ("TODO" "DONE")
-    ;;                :log t)
-
-    ;;         (:name "Projects ON-HOLD"  ; Optionally specify section name
-    ;;                :time-grid t  ; Items that appear on the time grid
-    ;;                :tag "project"
-    ;;                :todo "WAITING"
-    ;;                :log t)
-
-    ;;         (:name "Life"
-    ;;                ;; Single arguments given alone
-    ;;                :tag "life")
-    ;;         (:auto-tags)))
-
-    ;; enable org-super-agenda
-    ;; (org-super-agenda-mode))
-
-  ;; (require 'org-expiry)
-  ;; (add-hook 'org-after-todo-state-change-hook
-  ;;           (lambda ()
-  ;;             (when (string= org-state "STARTED")
-  ;;               (save-excursion
-  ;;                 (org-back-to-heading)
-  ;;                 (org-expiry-insert-created)))))
-
-  ;; (setq org-journal-carryover-items "/+TODO|+STARTED|+WAITING")
 
   ;; regexp
   ;; set pcre as default
@@ -773,30 +733,4 @@ before packages are loaded."
   ;; Private File
   (if (boundp 'dotspacemacs-private-file)
       (load-file dotspacemacs-private-file))
-
-  ;; open agenda
-  ;; (org-agenda nil "a")
-  ;; Adding this to ~/.emacs.d/init.el gave me a transparent emacs:
-
-  ;; all the icons customize
-  (setq spaceline-all-the-icons-flycheck-alternate t)
-  (setq spaceline-all-the-icons-hide-long-buffer-path t)
-  (setq spaceline-all-the-icons-slim-render t)
-  (spaceline-toggle-all-the-icons-eyebrowse-workspace-off)
-  (spaceline-toggle-all-the-icons-window-number-off)
-
-
-  ;; fix main theme with daemon
-  (if (daemonp)
-      (cl-labels ((load-material (frame)
-                             (with-selected-frame frame
-                               (load-theme 'material t))
-                             (remove-hook 'after-make-frame-functions #'load-material)))
-        (add-hook 'after-make-frame-functions #'load-material))
-    (load-theme 'material t))
-
-  ;; end
-  )
-
-;; Do not write anything past this comment. This is where Emacs will
-;; auto-generate custom variable definitions.
+)
