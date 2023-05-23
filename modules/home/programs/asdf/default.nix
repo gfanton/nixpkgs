@@ -162,7 +162,8 @@ in {
       ASDF_DIR = "${cfg.package}/share/asdf-vm";
     };
 
-    home.activation.reshimsASDF = hm.dag.entryAfter [ "linkGeneration" ] ''
+    home.activation.reshimsASDF = hm.dag.entryAfter [ "installpackages" ] ''
+      export PATH=${pkgs.gawk}/bin:${pkgs.gitAndTools.git}/bin:${pkgs.curl}/bin:$PATH
       export ASDF_CONFIG_FILE="${config.xdg.configHome}/asdf/asdfrc"
       export ASDF_DATA_DIR="${cfg.asdfdir}"
       export ASDF_DIR="${cfg.package}/share/asdf-vm"

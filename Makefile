@@ -7,14 +7,16 @@ BOOTSTRAP := bootstrap-x86
 endif
 
 # Channels
-NIX_CHANNELS := nixpkgs nixos-stable nixpkgs-stable-darwin
+NIX_CHANNELS := nixpkgs-master nixpkgs-stable nixpkgs-unstable nixos-stable
 HOME_CHANNELS := home-manager darwin
-EMACS_CHANNELS := emacs-overlay
+EMACS_CHANNELS := emacs-overlay chemacs2
 SPACEMACS_CHANNELS := spacemacs
 DOOM_CHANNELS := doomemacs
-ZSH_CHANNELS := fast-syntax-highlighting fzf-tab powerlevel10k
+ZSH_CHANNELS := fast-syntax-highlighting fzf-tab powerlevel10k zi zsh-colored-man-pages
 ASDF_CHANNELS := asdf-plugins
-MISC_CHANNELS := android-nixpkgs flake-utils flake-compat
+MISC_CHANNELS := flake-utils flake-compat
+
+NIX_FILES := $(shell find . -type f -name '*.nix')
 
 ifeq ($(UNAME), Darwin) # darwin rules
 all:
@@ -45,6 +47,9 @@ switch.cloud:
 	./result/activate switch --verbose; ./result/activate
 
 endif # end linux
+
+fmt:
+	nix-shell -p nixfmt --command "nixfmt  $(NIX_FILES)"
 
 clean:
 	./result/sw/bin/nix-collect-garbage

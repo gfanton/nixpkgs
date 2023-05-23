@@ -11,6 +11,8 @@ in {
     eval "$(${config.homebrew.brewPrefix}/brew shellenv)"
   '';
 
+  documentation.enable = false;
+
   homebrew.enable = true;
   homebrew.onActivation.cleanup = "zap";
   homebrew.global.brewfile = true;

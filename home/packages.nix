@@ -17,6 +17,11 @@ in {
     '';
   };
 
+  # disable manual
+  # Some weird bug
+  # https://github.com/NixOS/nixpkgs/issues/196651
+  manual.html.enable = false;
+
   # Go Env
   programs.go = {
     enable = true;
@@ -127,7 +132,7 @@ in {
       ruby_3_1
 
       # js
-      nodejs-16_x
+      nodejs-18_x
       nodePackages.pnpm
       yarn
 
@@ -141,9 +146,10 @@ in {
       gopls # see overlay
       delve
       # exclude bundle
-      (gotools.overrideDerivation (oldAttrs: {
-        excludedPackages = oldAttrs.excludedPackages ++ [ "bundle" ];
-      }))
+      (gotools.overrideDerivation
+        (oldAttrs: { excludedPackages = [ "bundle" ]; }))
+
+      # gotools
 
       # Useful nix related tools
       cachix # adding/managing alternative binary caches hosted by Cachix
