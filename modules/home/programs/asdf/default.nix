@@ -67,6 +67,9 @@ in {
   };
 
   config = let
+    asdf-activiation-inputs = lib.concatStringsSep ":" (map (t: "${t}/bin")
+      [ pkgs.curl pkgs.gawk pkgs.gnutar pkgs.gitAndTools.git pkgs.gzip pkgs.zip pkgs.unzip ]);
+
     asdf-config = pkgs.writeText "asdfrc" ''
       # See the docs for explanations: https://asdf-vm.com/manage/configuration.html
 
@@ -85,63 +88,10 @@ in {
           cfg.tools))}
     '';
 
-    # asdf-install = map (tool:
-    #   pkgs.runCommandLocal "${tool.name}-${tool.version}" {
-    #     name = "${tool.name}";
-    #     buildInputs = with pkgs;
-    #       [ cfg.package curl gitAndTools.git ]
-    #       ++ lib.optionals stdenv.isDarwin [
-    #         darwin.DarwinTools
-    #         darwin.bootstrap_cmds
-    #       ] ++ tool.inputs;
-    #   } ''
-
-    #     set -x
-
-    #     export GIT_SSL_CAINFO=/etc/ssl/certs/ca-certificates.crt
-    #     export SSL_CERT_FILE=/etc/ssl/certs/ca-certificates.crt
-
-    #     export ASDF_DIR="${cfg.package}/share/asdf-vm"
-    #     export ASDF_CONFIG_FILE=${asdf-config}
-    #     export ASDF_DATA_DIR=$out/share/${tool.name}
-
-    #     mkdir -p $ASDF_DATA_DIR/installs/${tool.name}
-    #     touch $ASDF_DATA_DIR/installs/${tool.name}/.keep
-
-    #     [ -z "${cfg.pluginsRepository}" ] || ln -s ${cfg.pluginsRepository} $ASDF_DATA_DIR/repository
-
-    #     asdf plugin add ${tool.name}
-    #     if [ ! -z "${tool.version}" ] && [ "${tool.version}" != "system" ]; then
-    #        ${tool.preInstall}
-    #        asdf install ${tool.name} ${tool.version}
-    #        asdf reshim ${tool.name} ${tool.version}
-    #        ${tool.postInstall}
-    #     fi
-
-    #     cd $ASDF_DATA_DIR && rm -rf tmp downloads
-    #   '') cfg.tools;
   in mkIf config.programs.myasdf.enable {
     home.packages = [ cfg.package ];
-    # xdg.configFile."asdf/asdfrc".source = asdf-config;
 
-    # home.file = listToAttrs ((map (t: {
-    #   name = "${cfg.asdfdir}/plugins/${t.name}";
-    #   value = {
-    #     source = "${t}/share/${t.name}/plugins/${t.name}";
-    #     recursive = true;
-    #   };
-    # }) asdf-install) ++ (map (t: {
-    #   name = "${cfg.asdfdir}/installs/${t.name}";
-    #   value = {
-    #     source = "${t}/share/${t.name}/installs/${t.name}";
-    #     recursive = true;
-    #   };
-    # }) asdf-install) ++
     home.file = listToAttrs [
-      # {
-      #   name = ".tool-versions";
-      #   value.source = asdf-tools;
-      # }
       {
         name = "${cfg.asdfdir}/asdf_updates_disabled";
         value.text = "";
@@ -163,19 +113,28 @@ in {
     };
 
     home.activation.reshimsASDF = hm.dag.entryAfter [ "installpackages" ] ''
-      export PATH=${pkgs.gawk}/bin:${pkgs.gitAndTools.git}/bin:${pkgs.curl}/bin:$PATH
+      export PATH=${asdf-activiation-inputs}:$PATH
       export ASDF_CONFIG_FILE="${config.xdg.configHome}/asdf/asdfrc"
       export ASDF_DATA_DIR="${cfg.asdfdir}"
       export ASDF_DIR="${cfg.package}/share/asdf-vm"
 
+      mkdir -p $ASDF_DATA_DIR
+
+      ${cfg.package}/bin/asdf plugin update --all
       ${lib.concatStringsSep "\n" (map (t: ''
-        ${cfg.package}/bin/asdf plugin add ${t.name} || true
+         if ! ${cfg.package}/bin/asdf plugin list | grep ${t.name} 1>/dev/null; then
+            ${cfg.package}/bin/asdf plugin add ${t.name}
+         fi
+
         if [ ! -z "${t.version}" ] && [ "${t.version}" != "system" ]; then
            ${cfg.package}/bin/asdf global ${t.name} ${t.version} || true
-           ${cfg.package}/bin/asdf reshim ${t.name} ${t.version} || true
         fi
       '') cfg.tools)}
+
+      ${cfg.package}/bin/asdf install
+      ${cfg.package}/bin/asdf reshim
     '';
+
 
     programs.zsh.initExtra = ''
       if [ -f "${cfg.package}/share/asdf-vm/asdf.sh" ]; then
