@@ -28,7 +28,7 @@ in {
     "koekeishiya/formulae"
     "FelixKratz/formulae"
   ];
-
+ 
   # Prefer installing application from the Mac App Store
   #
   # Commented apps suffer continual update issue:
@@ -69,6 +69,7 @@ in {
   # limitiations, e.g., Transmit, install the Homebrew Cask.
   homebrew.casks = [
     "font-hack-nerd-font"
+    "orbstack"
     # "1password"
     # "1password-cli"
     # "amethyst"
