@@ -168,7 +168,6 @@
           system = "aarch64-darwin";
           modules = attrValues self.darwinModules ++ singleton {
             nixpkgs = nixpkgsDefaults;
-            users.primaryUser = primaryUserInfo;
             networking.computerName = "guicp";
             networking.hostName = "ghost";
             networking.knownNetworkServices = [ "Wi-Fi" "USB 10/100/1000 LAN" ];
