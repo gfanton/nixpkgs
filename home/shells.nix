@@ -171,9 +171,6 @@ in {
     in lib.concatStringsSep "\n" block;
 
     shellAliases = with pkgs; {
-      # switch on rosetta shell
-      rosetta-zsh = "${pkgs-x86.zsh}/bin/zsh";
-
       # kitty alias
       ssh = "${kitty}/bin/kitty +kitten ssh";
 
@@ -199,6 +196,9 @@ in {
       #
       # nix
       config = "make -C ${homeDirectory}/nixpkgs";
-    };
+    } // (lib.optionalAttrs (stdenv.system == "aarch64-darwin")  {
+      # switch on rosetta shell
+      rosetta-zsh = "${pkgs-x86.zsh}/bin/zsh";
+    });
   };
 }
