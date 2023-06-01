@@ -3,13 +3,12 @@ let pkgs = super.pkgs;
 in {
   my-libvterm = pkgs.stdenv.mkDerivation rec {
     pname = "libvterm";
-    version = "0.3-RC1";
+    version = "0.3.2";
 
     src = pkgs.fetchurl {
       url =
         "https://launchpad.net/libvterm/trunk/v0.3/+download/libvterm-${version}.tar.gz";
-      sha256 =
-        "441d1c372b84a0df12525100ab06c0366260fb4f6252abd1665ee4fa571b5134";
+      sha256 = "sha256-ketQiAafTm7atp4UxCEvbaAZLmVpWVbcBIAWoNq4vPY=";
     };
 
     nativeBuildInputs = with pkgs; [ libtool gnulib pkg-config ];
