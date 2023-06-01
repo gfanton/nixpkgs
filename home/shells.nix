@@ -170,35 +170,36 @@ in {
         ++ lib.optionals pkgs.stdenv.isLinux [ linux ];
     in lib.concatStringsSep "\n" block;
 
-    shellAliases = with pkgs; {
-      # switch on rosetta shell
-      rosetta-zsh = "${pkgs-x86.zsh}/bin/zsh";
+    shellAliases = with pkgs;
+      {
+        # kitty alias
+        ssh = "${kitty}/bin/kitty +kitten ssh";
 
-      # kitty alias
-      ssh = "${kitty}/bin/kitty +kitten ssh";
+        # core alias
+        ".." = "cd ..";
+        cat = "${bat}/bin/bat";
+        du = "${du-dust}/bin/dust";
+        rg =
+          "${ripgrep}/bin/rg --column --line-number --no-heading --color=always --ignore-case";
+        ps = "${procs}/bin/procs";
+        # npmadd = "${mynodejs}/bin/npm install --global";
+        htop = "${btop}/bin/btop";
 
-      # core alias
-      ".." = "cd ..";
-      cat = "${bat}/bin/bat";
-      du = "${du-dust}/bin/dust";
-      rg =
-        "${ripgrep}/bin/rg --column --line-number --no-heading --color=always --ignore-case";
-      ps = "${procs}/bin/procs";
-      # npmadd = "${mynodejs}/bin/npm install --global";
-      htop = "${btop}/bin/btop";
+        # list dir
+        ls = "${exa}/bin/exa";
+        l = "ls -l --icons";
+        la = "l -a";
+        ll = "ls -lhmbgUFH --git --icons";
+        lla = "ll -a";
 
-      # list dir
-      ls = "${exa}/bin/exa";
-      l = "ls -l --icons";
-      la = "l -a";
-      ll = "ls -lhmbgUFH --git --icons";
-      lla = "ll -a";
-
-      # brew
-      #      brew = "${brew}/bin/brew";
-      #
-      # nix
-      config = "make -C ${homeDirectory}/nixpkgs";
-    };
+        # brew
+        #      brew = "${brew}/bin/brew";
+        #
+        # nix
+        config = "make -C ${homeDirectory}/nixpkgs";
+      } // (lib.optionalAttrs (stdenv.system == "aarch64-darwin") {
+        # switch on rosetta shell
+        rosetta-zsh = "${pkgs-x86.zsh}/bin/zsh";
+      });
   };
 }

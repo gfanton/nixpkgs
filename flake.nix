@@ -92,7 +92,14 @@
         username = "gfanton";
         fullName = "";
         email = "8671905+gfanton@users.noreply.github.com";
-        nixConfigDirectory = "/Users/gfanton/nixpkgs";
+        nixConfigDirectory = "/Users/runner/work/nixpkgs/nixpkgs";
+      };
+
+      ciUserInfo = {
+        username = "runner";
+        fullName = "";
+        email = "github-actions@github.com";
+        nixConfigDirectory = "/Users/runner/work/nixpkgs/nixpkgs";
       };
     in {
 
@@ -152,53 +159,6 @@
         my-libvterm = import ./overlays/libvterm.nix;
       };
 
-      # System outputs ------------------------------------------------------------------------- {{{
-
-      # My `nix-darwin` configs
-      darwinConfigurations = rec {
-        # Mininal configurations to bootstrap systems
-        bootstrap-x86 = makeOverridable darwin.lib.darwinSystem {
-          system = "x86_64-darwin";
-          modules = [ ./darwin/bootstrap.nix { nixpkgs = nixpkgsDefaults; } ];
-        };
-        bootstrap-arm = bootstrap-x86.override { system = "aarch64-darwin"; };
-
-        # My Apple Silicon macOS laptop config
-        macbook = makeOverridable self.lib.mkDarwinSystem (primaryUserInfo // {
-          system = "aarch64-darwin";
-          modules = attrValues self.darwinModules ++ singleton {
-            nixpkgs = nixpkgsDefaults;
-            networking.computerName = "guicp";
-            networking.hostName = "ghost";
-            networking.knownNetworkServices = [ "Wi-Fi" "USB 10/100/1000 LAN" ];
-            nix.registry.my.flake = inputs.self;
-          };
-
-          inherit homeStateVersion;
-          homeModules = attrValues self.homeManagerModules;
-        });
-      };
-
-      # Config I use with Linux cloud VMs
-      # Build and activate on new system with:
-      # `nix build .#homeConfigurations.cloud.activationPackage; ./result/activate`
-      homeConfigurations.cloud = home-manager.lib.homeManagerConfiguration {
-        pkgs = import inputs.nixpkgs-unstable {
-          system = "x86_64-linux";
-          inherit (nixpkgsDefaults) config overlays;
-        };
-        modules = attrValues self.homeManagerModules ++ singleton
-          ({ config, ... }: {
-            home.username = config.home.user-info.username;
-            home.homeDirectory = "/home/${config.home.username}";
-            home.stateVersion = homeStateVersion;
-            home.user-info = primaryUserInfo // {
-              nixConfigDirectory = "${config.home.homeDirectory}/nixpkgs";
-            };
-          });
-      };
-      # }}}
-
       # Non-system outputs --------------------------------------------------------------------- {{{
 
       darwinModules = {
@@ -234,12 +194,81 @@
         programs-zi = import ./modules/home/programs/zi;
         programs-kitty-extras = import ./modules/home/programs/kitty/extras.nix;
 
-        # programs-neovim-extras =
-        #   import ./modules/home/programs/neovim/extras.nix;
         home-user-info = { lib, ... }: {
           options.home.user-info = (self.darwinModules.users-primaryUser {
             inherit lib;
           }).options.users.primaryUser;
+        };
+      };
+      # }}}
+
+      # System outputs ------------------------------------------------------------------------- {{{
+
+      # My `nix-darwin` configs
+      darwinConfigurations = rec {
+        # Mininal configurations to bootstrap systems
+        bootstrap-x86 = makeOverridable darwin.lib.darwinSystem {
+          system = "x86_64-darwin";
+          modules = [ ./darwin/bootstrap.nix { nixpkgs = nixpkgsDefaults; } ];
+        };
+        bootstrap-arm = bootstrap-x86.override { system = "aarch64-darwin"; };
+
+        # My Apple Silicon macOS laptop config
+        macbook = makeOverridable self.lib.mkDarwinSystem (primaryUserInfo // {
+          system = "aarch64-darwin";
+          modules = attrValues self.darwinModules ++ singleton {
+            nixpkgs = nixpkgsDefaults;
+            networking.computerName = "guicp";
+            networking.hostName = "ghost";
+            networking.knownNetworkServices = [ "Wi-Fi" "USB 10/100/1000 LAN" ];
+            nix.registry.my.flake = inputs.self;
+          };
+
+          inherit homeStateVersion;
+          homeModules = attrValues self.homeManagerModules;
+        });
+
+        # Config with small modifications needed/desired for CI with GitHub workflow
+        githubCI = self.darwinConfigurations.macbook.override {
+          system = "x86_64-darwin";
+          username = "runner";
+          nixConfigDirectory = "/Users/runner/work/nixpkgs/nixpkgs";
+          extraModules =
+            singleton { homebrew.enable = self.lib.mkForce false; };
+        };
+      };
+
+      # Config I use with non-NixOS Linux systems (e.g., cloud VMs etc.)
+      # Build and activate on new system with:
+      # `nix build .#homeConfigurations.cloud.activationPackage && ./result/activate`
+      homeConfigurations = {
+        cloud = home-manager.lib.homeManagerConfiguration {
+          pkgs = import inputs.nixpkgs-unstable
+            (nixpkgsDefaults // { system = "x86_64-linux"; });
+          modules = attrValues self.homeManagerModules ++ singleton
+            ({ config, ... }: {
+              home.user-info = primaryUserInfo // {
+                nixConfigDirectory = "${config.home.homeDirectory}/nixpkgs";
+              };
+              home.username = config.home.user-info.username;
+              home.homeDirectory = "/home/${config.home.username}";
+              home.stateVersion = homeStateVersion;
+            });
+        };
+
+        # specific config for github ci
+        githubCI = home-manager.lib.homeManagerConfiguration {
+          pkgs = import inputs.nixpkgs-unstable
+            (nixpkgsDefaults // { system = "x86_64-linux"; });
+          modules = attrValues self.homeManagerModules ++ singleton
+            ({ config, ... }: {
+              home.user-info = ciUserInfo // {
+                nixConfigDirectory = "${config.home.homeDirectory}/nixpkgs";
+              };
+              home.username = config.home.user-info.username;
+              home.homeDirectory = "/home/${config.home.username}";
+              home.stateVersion = homeStateVersion;
+            });
         };
       };
       # }}}
