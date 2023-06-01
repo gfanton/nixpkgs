@@ -177,7 +177,16 @@
           inherit homeStateVersion;
           homeModules = attrValues self.homeManagerModules;
         });
+
+        # Config with small modifications needed/desired for CI with GitHub workflow
+        githubCI = self.darwinConfigurations.macbook.override {
+          system = "x86_64-darwin";
+          username = "runner";
+          nixConfigDirectory = "/Users/runner/work/nixpkgs/nixpkgs";
+          extraModules = singleton { homebrew.enable = self.lib.mkForce false; };
+        };
       };
+
 
       # Config I use with Linux cloud VMs
       # Build and activate on new system with:
