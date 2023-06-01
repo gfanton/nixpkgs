@@ -92,7 +92,14 @@
         username = "gfanton";
         fullName = "";
         email = "8671905+gfanton@users.noreply.github.com";
-        nixConfigDirectory = "/Users/gfanton/nixpkgs";
+        nixConfigDirectory = "/Users/runner/work/nixpkgs/nixpkgs";
+      };
+
+      ciUserInfo = {
+        username = "runner";
+        fullName = "";
+        email = "github-actions@github.com";
+        nixConfigDirectory = "/Users/runner/work/nixpkgs/nixpkgs";
       };
     in {
 
@@ -152,6 +159,49 @@
         my-libvterm = import ./overlays/libvterm.nix;
       };
 
+      # Non-system outputs --------------------------------------------------------------------- {{{
+
+      darwinModules = {
+        # My configurations
+        my-bootstrap = import ./darwin/bootstrap.nix;
+        my-defaults = import ./darwin/defaults.nix;
+        my-env = import ./darwin/env.nix;
+        my-homebrew = import ./darwin/homebrew.nix;
+        my-config = import ./darwin/config.nix;
+
+        # local modules
+        # security-pam = import ./modules/darwin/security/pam.nix;
+        services-emacsd = import ./modules/darwin/services/emacsd.nix;
+        users-primaryUser = import ./modules/darwin/users.nix;
+        programs-nix-index = import ./modules/darwin/programs/nix-index.nix;
+      };
+
+      homeManagerModules = {
+        # My configurations
+        my-shells = import ./home/shells.nix;
+        my-colors = import ./home/colors.nix;
+        my-git = import ./home/git.nix;
+        my-kitty = import ./home/kitty.nix;
+        my-packages = import ./home/packages.nix;
+        my-asdf = import ./home/asdf.nix;
+        my-emacs = import ./home/emacs.nix;
+        my-config = import ./home/config.nix;
+
+        # local modules
+        colors = import ./modules/home/colors;
+        programs-truecolor = import ./modules/home/programs/truecolor;
+        programs-asdf = import ./modules/home/programs/asdf;
+        programs-zi = import ./modules/home/programs/zi;
+        programs-kitty-extras = import ./modules/home/programs/kitty/extras.nix;
+
+        home-user-info = { lib, ... }: {
+          options.home.user-info = (self.darwinModules.users-primaryUser {
+            inherit lib;
+          }).options.users.primaryUser;
+        };
+      };
+      # }}}
+
       # System outputs ------------------------------------------------------------------------- {{{
 
       # My `nix-darwin` configs
@@ -188,67 +238,37 @@
         };
       };
 
-      # Config I use with Linux cloud VMs
+      # Config I use with non-NixOS Linux systems (e.g., cloud VMs etc.)
       # Build and activate on new system with:
-      # `nix build .#homeConfigurations.cloud.activationPackage; ./result/activate`
-      homeConfigurations.cloud = home-manager.lib.homeManagerConfiguration {
-        pkgs = import inputs.nixpkgs-unstable {
-          system = "x86_64-linux";
-          inherit (nixpkgsDefaults) config overlays;
+      # `nix build .#homeConfigurations.cloud.activationPackage && ./result/activate`
+      homeConfigurations = {
+        cloud = home-manager.lib.homeManagerConfiguration {
+          pkgs = import inputs.nixpkgs-unstable
+            (nixpkgsDefaults // { system = "x86_64-linux"; });
+          modules = attrValues self.homeManagerModules ++ singleton
+            ({ config, ... }: {
+              home.user-info = primaryUserInfo // {
+                nixConfigDirectory = "${config.home.homeDirectory}/nixpkgs";
+              };
+              home.username = config.home.user-info.username;
+              home.homeDirectory = "/home/${config.home.username}";
+              home.stateVersion = homeStateVersion;
+            });
         };
-        modules = attrValues self.homeManagerModules ++ singleton
-          ({ config, ... }: {
-            home.username = config.home.user-info.username;
-            home.homeDirectory = "/home/${config.home.username}";
-            home.stateVersion = homeStateVersion;
-            home.user-info = primaryUserInfo // {
-              nixConfigDirectory = "${config.home.homeDirectory}/nixpkgs";
-            };
-          });
-      };
-      # }}}
 
-      # Non-system outputs --------------------------------------------------------------------- {{{
-
-      darwinModules = {
-        # My configurations
-        my-bootstrap = import ./darwin/bootstrap.nix;
-        my-defaults = import ./darwin/defaults.nix;
-        my-env = import ./darwin/env.nix;
-        my-homebrew = import ./darwin/homebrew.nix;
-        my-config = import ./darwin/config.nix;
-
-        # local modules
-        # security-pam = import ./modules/darwin/security/pam.nix;
-        services-emacsd = import ./modules/darwin/services/emacsd.nix;
-        users-primaryUser = import ./modules/darwin/users.nix;
-        programs-nix-index = import ./modules/darwin/programs/nix-index.nix;
-      };
-
-      homeManagerModules = {
-        # My configurations
-        my-shells = import ./home/shells.nix;
-        my-colors = import ./home/colors.nix;
-        my-git = import ./home/git.nix;
-        my-kitty = import ./home/kitty.nix;
-        my-packages = import ./home/packages.nix;
-        my-asdf = import ./home/asdf.nix;
-        my-emacs = import ./home/emacs.nix;
-        my-config = import ./home/config.nix;
-
-        # local modules
-        colors = import ./modules/home/colors;
-        programs-truecolor = import ./modules/home/programs/truecolor;
-        programs-asdf = import ./modules/home/programs/asdf;
-        programs-zi = import ./modules/home/programs/zi;
-        programs-kitty-extras = import ./modules/home/programs/kitty/extras.nix;
-
-        # programs-neovim-extras =
-        #   import ./modules/home/programs/neovim/extras.nix;
-        home-user-info = { lib, ... }: {
-          options.home.user-info = (self.darwinModules.users-primaryUser {
-            inherit lib;
-          }).options.users.primaryUser;
+        # specific config for github ci
+        githubCI = home-manager.lib.homeManagerConfiguration {
+          pkgs = import inputs.nixpkgs-unstable
+            (nixpkgsDefaults // { system = "x86_64-linux"; });
+          modules = attrValues self.homeManagerModules ++ singleton
+            ({ config, ... }: {
+              home.user-info = ciUserInfo // {
+                nixConfigDirectory = "${config.home.homeDirectory}/nixpkgs";
+              };
+              home.username = config.home.user-info.username;
+              home.homeDirectory = "/home/${config.home.username}";
+              home.stateVersion = homeStateVersion;
+            });
         };
       };
       # }}}

@@ -1,6 +1,7 @@
-{ pkgs, ... }:
+{ pkgs, config, ... }:
 
-{
+let inherit (config.xdg) dataHome;
+in {
   programs.myasdf = {
     enable = true;
     package = pkgs.asdf-vm;
@@ -46,11 +47,6 @@
 
       # plugins
       { name = "yarn"; }
-      {
-        name = "jq";
-        version = "1.6";
-      }
-
     ];
   };
 }

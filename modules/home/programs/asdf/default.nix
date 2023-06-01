@@ -100,6 +100,10 @@ in {
 
     home.file = listToAttrs [
       {
+        name = ".tool-versions";
+        value.source = asdf-tools;
+      }
+      {
         name = "${cfg.asdfdir}/asdf_updates_disabled";
         value.text = "";
       }
@@ -119,7 +123,7 @@ in {
       ASDF_DIR = "${cfg.package}/share/asdf-vm";
     };
 
-    home.activation.reshimsASDF = hm.dag.entryAfter [ "installpackages" ] ''
+    home.activation.reshimsASDF = hm.dag.entryAfter [ "linkGeneration" ] ''
       export PATH=${asdf-activiation-inputs}:$PATH
       export ASDF_CONFIG_FILE="${config.xdg.configHome}/asdf/asdfrc"
       export ASDF_DATA_DIR="${cfg.asdfdir}"
@@ -127,15 +131,16 @@ in {
 
       mkdir -p $ASDF_DATA_DIR
 
-      ${cfg.package}/bin/asdf plugin update --all
+      ${cfg.package}/bin/asdf plugin update --all || true
+
       ${lib.concatStringsSep "\n" (map (t: ''
          if ! ${cfg.package}/bin/asdf plugin list | grep ${t.name} 1>/dev/null; then
             ${cfg.package}/bin/asdf plugin add ${t.name}
          fi
 
-        if [ ! -z "${t.version}" ] && [ "${t.version}" != "system" ]; then
-           ${cfg.package}/bin/asdf global ${t.name} ${t.version} || true
-        fi
+         if [ ! -z "${t.version}" ] && [ "${t.version}" != "system" ]; then
+            ${cfg.package}/bin/asdf global ${t.name} ${t.version} || true
+         fi
       '') cfg.tools)}
 
       ${cfg.package}/bin/asdf install
