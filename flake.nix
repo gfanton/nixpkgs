@@ -183,10 +183,10 @@
           system = "x86_64-darwin";
           username = "runner";
           nixConfigDirectory = "/Users/runner/work/nixpkgs/nixpkgs";
-          extraModules = singleton { homebrew.enable = self.lib.mkForce false; };
+          extraModules =
+            singleton { homebrew.enable = self.lib.mkForce false; };
         };
       };
-
 
       # Config I use with Linux cloud VMs
       # Build and activate on new system with:

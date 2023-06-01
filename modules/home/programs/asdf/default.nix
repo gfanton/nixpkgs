@@ -67,8 +67,15 @@ in {
   };
 
   config = let
-    asdf-activiation-inputs = lib.concatStringsSep ":" (map (t: "${t}/bin")
-      [ pkgs.curl pkgs.gawk pkgs.gnutar pkgs.gitAndTools.git pkgs.gzip pkgs.zip pkgs.unzip ]);
+    asdf-activiation-inputs = lib.concatStringsSep ":" (map (t: "${t}/bin") [
+      pkgs.curl
+      pkgs.gawk
+      pkgs.gnutar
+      pkgs.gitAndTools.git
+      pkgs.gzip
+      pkgs.zip
+      pkgs.unzip
+    ]);
 
     asdf-config = pkgs.writeText "asdfrc" ''
       # See the docs for explanations: https://asdf-vm.com/manage/configuration.html
@@ -134,7 +141,6 @@ in {
       ${cfg.package}/bin/asdf install
       ${cfg.package}/bin/asdf reshim
     '';
-
 
     programs.zsh.initExtra = ''
       if [ -f "${cfg.package}/share/asdf-vm/asdf.sh" ]; then

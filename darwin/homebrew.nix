@@ -28,7 +28,7 @@ in {
     "koekeishiya/formulae"
     "FelixKratz/formulae"
   ];
- 
+
   # Prefer installing application from the Mac App Store
   #
   # Commented apps suffer continual update issue:
