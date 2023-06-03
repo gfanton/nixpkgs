@@ -44,27 +44,16 @@ jobs:
         nix build ".#homeConfigurations.$CONFIG_NAME.activationPackage"
         ./result/activate switch --verbose 
         nixos_old_gen=$(readlink -f $HOME/.nix-profile) || true
-        echo current generation: $nixos_old_gen"
-        
-        # ls /nix/var/nix/profiles || true
-        # ls /nix/var/nix/profiles/per-user/root || true
+        echo "current generation: $nixos_old_gen"
 
-        # readlink -f /nix/var/nix/profiles/per-user/root/home-manager || true
-        # readlink -f $HOME/.nix-profile || true
-
+        # update flake
+        nix flake update
 
         # update all inputs by recreating the flake
-        nix build --recreate-lock-file ".#homeConfigurations.$CONFIG_NAME.activationPackage"
+        nix build ".#homeConfigurations.$CONFIG_NAME.activationPackage"
         ./result/activate switch --verbose
         nixos_new_gen=$(readlink -f $HOME/.nix-profile)
         echo "new generation: $nixos_new_gen"
-
-        # ls /nix/var/nix/profiles || true
-        # ls /nix/var/nix/profiles/per-user/root || true
- 
-        # readlink -f /nix/var/nix/profiles/per-user/root/profile || true
-        # readlink -f $HOME/.nix-profile || true
-
 
         # generate diff
         nix-shell -p nvd --run "nvd diff $nixos_old_gen $nixos_new_gen"
