@@ -4,7 +4,8 @@ on:
   workflow_dispatch:
   push:
     paths:
-    - 'readme.md'
+    - '**'
+    - '!*.md'
 
 env:
   CACHIX_USER: gfanton
