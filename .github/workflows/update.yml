@@ -4,9 +4,10 @@ on:
   workflow_dispatch:
 
 env:
+  GITHUB_REVIEWER: gfanton
   CACHIX_USER: gfanton
-  REF_BRANCH: master
-  UPDATE_BRANCH: nix/flake-update-inputs
+  BASE_BRANCH: master
+  REF_BRANCH: nix/flake-update-inputs
 
 jobs:
   update-flake-inputs:
@@ -15,20 +16,10 @@ jobs:
     env:
       CONFIG_NAME: githubCI
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v3
-      with:
-        ref: ${{ env.REF_BRANCH }}
-
-    - name: restet update branch
-      run: |
-        git switch $UPDATE_BRANCH 2>/dev/null || git switch -c $UPDATE_BRANCH
-        git reset --hard $REF_BRANCH
-
     - name: Install Nix
       uses: cachix/install-nix-action@v21
       with:
-        nix_path: nixpkgs=channel:nixos-unstable
+        nix_path: nixpkgs=channel:nixos-23.05
         extra_nix_config: |
           access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}
 
@@ -38,8 +29,13 @@ jobs:
         name: ${{ env.CACHIX_USER }}
         authToken: ${{ secrets.CACHIX_AUTH_TOKEN }}
 
-    - name: Build and switch to home-manager env
-      id: flakes-update
+    - name: Checkout master 
+      uses: actions/checkout@v3
+      with:
+        ref: ${{ env.BASE_BRANCH }}
+
+    - name: Create base generation
+      id: base
       run: |
         # Prevent conflict between Cachix installed by workflow and the one installed in the config
         nix-env --set-flag priority 1 cachix
@@ -47,55 +43,71 @@ jobs:
         # Build and switch to home-manager env
         nix build ".#homeConfigurations.$CONFIG_NAME.activationPackage"
         ./result/activate switch --verbose
-        nixos_old_gen=$(readlink -f $HOME/.nix-profile) || true
-        echo "current generation: $nixos_old_gen"
+        echo "generation=$(readlink -f $HOME/.nix-profile)" >> $GITHUB_OUTPUT
 
-        # update flake
-        nix flake update
+    - name: Generate new generation from update
+      id: update
+      run: |
+        nix flake update 2>&1 | tee /tmp/lock.report.txt
 
         # update all inputs by recreating the flake
         nix build ".#homeConfigurations.$CONFIG_NAME.activationPackage"
         ./result/activate switch --verbose
+
         nixos_new_gen=$(readlink -f $HOME/.nix-profile)
+        nixos_old_gen="${{ steps.base.outputs.generation }}"
+
+        echo "old generation: $nixos_old_gen"
         echo "new generation: $nixos_new_gen"
 
-        # generate diff
+        # generate change
         touch CHANGELOG.md
-        nix-shell -p nvd --run "nvd diff $nixos_old_gen $nixos_new_gen" | tail -n +3 > /tmp/new.report.md
-        cat <<EOT >> CHANGELOG.md
+        nix-shell -p nvd --run "nvd diff $nixos_old_gen $nixos_new_gen" | tail -n +3 | tee /tmp/new.report.md
+
+        # create body report 
+        cat <<EOT >> /tmp/body.report.md
         ## Update $(date +%F)
+        \`\`\`go
         $(cat /tmp/new.report.md)
+        \`\`\`
+        ### lock change:
+        \`\`\`
+        $(cat /tmp/lock.report.txt)
+        \`\`\`
+        EOT
+
+        # update current changelog
+        cat <<EOT >> CHANGELOG.md
+        $(cat /tmp/body.report.md)
 
         $(cat CHANGELOG.md)
         EOT
 
+        # output date update
         echo "inputs-date=$(date +%F)" >> "$GITHUB_OUTPUT"
-        echo "::set-output name=inputs-change::$(cat /tmp/new.report.md)"
 
-        cat report.txt
-
-    - name: Create commits
+    - name: '[hack] config file'
       run: |
-        git config user.name 'github-action'
-        git config user.email 'github-action@users.noreply.github.com'
-        git add flake.lock
-        git add report.txt
-        git status
-
-        git commit -m "Update $(date +%F)"
-
-        # override branch
-        git push --force --set-upstream origin $UPDATE_BRANCH
+        # hack to avoid permission denied on config
+        cp -L /home/runner/.config/git/config /tmp/gitconfig
+        rm -f /home/runner/.config/git/config
+        mv /tmp/gitconfig /home/runner/.config/git/config
 
     - name: Create Pull Request
       id: cpr
       uses: peter-evans/create-pull-request@v5
       with:
-        title: "${{ steps.flakes-update.outputs.inputs-date }} inputs update"
-        body: |
-          ## Changelogs
-
-          ${{ steps.flakes-update.outputs.inputs-change }}
+        token: '${{ secrets.GH_PAT }}'
+        title: "nix: ${{ steps.update.outputs.inputs-date }} inputs update"
+        body-path: '/tmp/body.report.md'
+        assignees: '${{ env.GITHUB_REVIEWER }}'
+        reviewers: '${{ env.GITHUB_REVIEWER }}'
+        commit-message: "Update ${{ steps.update.outputs.inputs-date }}"
+        base: ${{ env.BASE_BRANCH }}
+        branch: ${{ env.REF_BRANCH }}
+        add-paths: |
+            CHANGELOG.md
+            flake.lock
 
     - name: Check outputs
       if: ${{ steps.cpr.outputs.pull-request-number }}
