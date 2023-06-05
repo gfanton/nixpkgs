@@ -1,12 +1,11 @@
 name: Build Nix envs
 
 on:
+  workflow_dispatch:
   push:
     paths:
     - '**'
-    - '!**.md'
-  schedule:
-    - cron: '0 0 * * 0' # Every Sunday at midnight UTC
+    - '!*.md'
 
 env:
   CACHIX_USER: gfanton
@@ -68,7 +67,6 @@ jobs:
     env:
       CONFIG_NAME: githubCI
     steps:
-
     - name: Checkout repository
       uses: actions/checkout@v3
 
