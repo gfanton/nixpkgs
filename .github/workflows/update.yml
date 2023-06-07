@@ -3,7 +3,8 @@ name: Update flake inputs
 on:
   workflow_dispatch:
   schedule:
-    - cron: '0 0 * * 6' # Every Sunday at midnight UTC
+    - cron: '0 3 * * 6' # Every Saturday At 03:00 UTC.
+
 env:
   GITHUB_REVIEWER: gfanton
   CACHIX_USER: gfanton
