@@ -95,6 +95,10 @@ jobs:
         rm -f /home/runner/.config/git/config
         mv /tmp/gitconfig /home/runner/.config/git/config
 
+        # set github action as the user
+        git config user.name 'github-action'
+        git config user.email 'github-action@users.noreply.github.com'
+
     - name: Create Pull Request
       id: cpr
       uses: peter-evans/create-pull-request@v5
@@ -103,7 +107,8 @@ jobs:
         title: "nix: ${{ steps.update.outputs.inputs-date }} inputs update"
         body-path: '/tmp/body.report.md'
         assignees: '${{ env.GITHUB_REVIEWER }}'
-        commit-message: "Update ${{ steps.update.outputs.inputs-date }}"
+        reviewers: '${{ env.GITHUB_REVIEWER }}' 
+        commit-message: "nix: update ${{ steps.update.outputs.inputs-date }}"
         base: ${{ env.BASE_BRANCH }}
         branch: ${{ env.REF_BRANCH }}
         add-paths: |
