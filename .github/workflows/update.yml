@@ -3,7 +3,7 @@ name: Update flake inputs
 on:
   workflow_dispatch:
   schedule:
-    - cron: '0 3 * * 6' # Every Saturday At 03:00 UTC.
+    - cron: '0 3 * * 3,6' # At 03:00 UTC on Wednesday and Saturday.
 
 env:
   GITHUB_REVIEWER: gfanton
@@ -103,7 +103,6 @@ jobs:
         title: "nix: ${{ steps.update.outputs.inputs-date }} inputs update"
         body-path: '/tmp/body.report.md'
         assignees: '${{ env.GITHUB_REVIEWER }}'
-        reviewers: '${{ env.GITHUB_REVIEWER }}'
         commit-message: "Update ${{ steps.update.outputs.inputs-date }}"
         base: ${{ env.BASE_BRANCH }}
         branch: ${{ env.REF_BRANCH }}
