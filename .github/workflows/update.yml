@@ -98,8 +98,8 @@ jobs:
         mv /tmp/gitconfig /home/runner/.config/git/config
 
         # set github action as the user
-        git config user.name 'github-action'
-        git config user.email 'github-action@users.noreply.github.com'
+        git config --global user.name 'github-action'
+        git config --global user.email 'github-action@users.noreply.github.com'
 
     - name: Create Pull Request
       id: cpr
