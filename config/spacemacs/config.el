@@ -65,7 +65,7 @@ This function should only modify configuration layer settings."
      python
      (java :variables java-backend 'lsp)
      (rust :variables rust-backend 'lsp)
-
+     swift
      c-c++
 
      ;; web
