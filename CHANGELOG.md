@@ -1,3 +1,209 @@
+## Update 2023-06-16
+```go
+Version changes:
+[C.]  #1  aspell         0.60.8 -> 0.60.8 x2
+[C.]  #2  aws-crt-cpp    0.19.8, 0.20.1 -> 0.19.8, 0.20.2
+[U.]  #3  docker-buildx  0.10.5 -> 0.11.0
+[U.]  #4  fzf            0.41.1 -> 0.42.0
+[C.]  #5  glib           2.76.2 -> 2.76.2, 2.76.2-bin
+[C.]  #6  liburcu        0.14.0 -> 0.14.0, 0.14.0-dev
+[C.]  #7  openexr        2.5.8 -> 2.5.8, 3.1.7
+[U.]  #8  parallel       20230422, 20230422-man -> 20230522, 20230522-man
+[U.]  #9  pnpm           8.6.1 -> 8.6.2
+Added packages:
+[A.]  #001  SDL                             1.2.15
+[A.]  #002  SDL2                            2.26.5
+[A.]  #003  audiofile                       0.3.6
+[A.]  #004  bluez                           5.66
+[A.]  #005  bubblewrap                      0.8.0
+[A.]  #006  cdparanoia-III                  10.2
+[A.]  #007  celt                            0.11.3
+[A.]  #008  chromaprint                     1.5.1
+[A.]  #009  dhcpcd                          9.4.1
+[A.]  #010  directfb                        1.7.7
+[A.]  #011  dnsmasq                         2.89
+[A.]  #012  duktape                         2.7.0
+[A.]  #013  ell                             0.57
+[A.]  #014  enchant                         2.5.0
+[A.]  #015  ethtool                         6.1
+[A.]  #016  faad2                           2.10.1
+[A.]  #017  fdk-aac                         2.0.2
+[A.]  #018  ffmpeg                          4.4.4-data, 4.4.4-lib
+[A.]  #019  ffmpeg-headless                 5.1.3-data, 5.1.3-lib
+[A.]  #020  file                            5.44
+[A.]  #021  flite                           2.2
+[A.]  #022  fluidsynth                      2.3.2
+[A.]  #023  freepats                        20060219
+[A.]  #024  game-music-emu                  0.6.3
+[A.]  #025  glib-networking                 2.76.0
+[A.]  #026  glu                             9.0.2
+[A.]  #027  graphene                        1.10.8
+[A.]  #028  gsm                             1.0.22
+[A.]  #029  gssdp                           1.4.1
+[A.]  #030  gst-plugins-bad                 1.22.3
+[A.]  #031  gst-plugins-base                1.22.3
+[A.]  #032  gupnp                           1.4.4
+[A.]  #033  gupnp-igd                       1.2.0
+[A.]  #034  harfbuzz-icu                    7.3.0
+[A.]  #035  hdf5                            1.14.0
+[A.]  #036  hspell                          1.1
+[A.]  #037  hunspell                        1.7.2
+[A.]  #038  hwdata                          0.370
+[A.]  #039  imath                           3.1.7
+[A.]  #040  iputils                         20221126
+[A.]  #041  ldacBT                          2.0.2.3
+[A.]  #042  libXScrnSaver                   1.2.3
+[A.]  #043  libXv                           1.0.11
+[A.]  #044  libXxf86vm                      1.1.5
+[A.]  #045  libao                           1.2.2
+[A.]  #046  libass                          0.17.1
+[A.]  #047  libavif                         0.11.1
+[A.]  #048  libbs2b                         3.1.0
+[A.]  #049  libcamera                       0.0.5, 0.0.5-dev
+[A.]  #050  libdc1394                       2.2.6
+[A.]  #051  libdecor                        0.1.1
+[A.]  #052  libdrm                          2.4.115
+[A.]  #053  libdv                           1.0.0
+[A.]  #054  libdvdcss                       1.4.3
+[A.]  #055  libdvdnav                       6.1.1
+[A.]  #056  libdvdread                      6.1.3
+[A.]  #057  libevdev                        1.13.1
+[A.]  #058  libfreeaptx                     0.1.1
+[A.]  #059  libgudev                        237
+[A.]  #060  libical                         3.0.16
+[A.]  #061  libidn                          1.41
+[A.]  #062  libjack2                        1.9.19
+[A.]  #063  libkate                         0.4.1
+[A.]  #064  liblc3                          1.0.3
+[A.]  #065  libmad                          0.15.1b
+[A.]  #066  libmanette                      0.2.6
+[A.]  #067  libmbim                         1.28.4
+[A.]  #068  libmodplug                      0.8.9.0
+[A.]  #069  libmysofa                       1.3.1
+[A.]  #070  libndp                          1.8
+[A.]  #071  libnice                         0.1.21
+[A.]  #072  libopenmpt                      0.7.1
+[A.]  #073  libpciaccess                    0.16
+[A.]  #074  libproxy                        0.4.18
+[A.]  #075  libqmi                          1.32.2
+[A.]  #076  libqrtr-glib                    1.2.2
+[A.]  #077  libraw1394                      2.1.2
+[A.]  #078  libsecret                       0.20.5
+[A.]  #079  libsrtp                         2.5.0
+[A.]  #080  libtheora                       1.1.1
+[A.]  #081  libva                           2.18.0
+[A.]  #082  libva-minimal                   2.18.0
+[A.]  #083  libvdpau                        1.5
+[A.]  #084  libvisual                       0.4.1
+[A.]  #085  libvpx                          1.13.0
+[A.]  #086  libwpe                          1.14.1
+[A.]  #087  libxslt                         1.1.37
+[A.]  #088  libyuv                          1787
+[A.]  #089  lilv                            0.24.12
+[A.]  #090  lrdf                            0.6.1
+[A.]  #091  lttng-ust                       2.13.1, 2.13.1-bin, 2.13.1-dev
+[A.]  #092  mesa                            23.1.1
+[A.]  #093  mjpegtools                      2.2.1-lib
+[A.]  #094  mobile-broadband-provider-info  20230416
+[A.]  #095  modemmanager                    1.20.6
+[A.]  #096  mpg123                          1.31.3
+[A.]  #097  neon                            0.32.5
+[A.]  #098  net-tools                       2.10
+[A.]  #099  networkmanager                  1.42.6
+[A.]  #100  newt                            0.52.23
+[A.]  #101  nftables                        1.0.7
+[A.]  #102  nuspell                         5.1.2-lib
+[A.]  #103  ocl-icd                         2.3.1
+[A.]  #104  openal-soft                     1.23.1
+[A.]  #105  openblas                        0.3.21
+[A.]  #106  openconnect                     9.12
+[A.]  #107  opencv                          4.7.0
+[A.]  #108  openfec                         1.4.2
+[A.]  #109  openh264                        2.3.1
+[A.]  #110  openresolv                      3.12.0
+[A.]  #111  opusfile                        0.12
+[A.]  #112  orc                             0.4.33
+[A.]  #113  perl5.36.0-File-BaseDir         0.08
+[A.]  #114  perl5.36.0-File-DesktopEntry    0.22
+[A.]  #115  perl5.36.0-File-MimeInfo        0.30
+[A.]  #116  perl5.36.0-IPC-System-Simple    1.30
+[A.]  #117  perl5.36.0-Net-DBus             1.2.0
+[A.]  #118  perl5.36.0-X11-Protocol         0.56
+[A.]  #119  perl5.36.0-XML-Parser           2.46
+[A.]  #120  perl5.36.0-XML-Twig             3.52
+[A.]  #121  pipewire                        0.3.71-lib
+[A.]  #122  polkit                          122
+[A.]  #123  ppp                             2.5.0
+[A.]  #124  qrencode                        4.1.1
+[A.]  #125  raptor2-unstable                2022-06-06
+[A.]  #126  roc-toolkit                     0.2.4
+[A.]  #127  rtmpdump-unstable               2021-02-19
+[A.]  #128  sbc                             2.0
+[A.]  #129  serd                            0.30.16
+[A.]  #130  sord                            0.16.14
+[A.]  #131  soundtouch                      2.3.2
+[A.]  #132  sox-unstable                    2021-05-09-lib
+[A.]  #133  spandsp                         0.0.6
+[A.]  #134  speex                           1.2.1
+[A.]  #135  sratom                          0.6.14
+[A.]  #136  srt                             1.5.1
+[A.]  #137  stoken                          0.92
+[A.]  #138  tremor-unstable                 2018-03-16
+[A.]  #139  vo-aacenc                       0.1.3
+[A.]  #140  vpnc-scripts-unstable           2023-01-03
+[A.]  #141  vulkan-loader                   1.3.249
+[A.]  #142  wavpack                         5.6.0
+[A.]  #143  webkitgtk                       2.40.2+abi=4.0
+[A.]  #144  webrtc-audio-processing         0.3.1
+[A.]  #145  wildmidi                        0.4.5
+[A.]  #146  woff2                           1.0.2-lib
+[A.]  #147  wpebackend-fdo                  1.14.2
+[A.]  #148  x264-unstable                   2021-06-13-lib
+[A.]  #149  xdg-dbus-proxy                  0.1.4
+[A.]  #150  xdg-utils-unstable              2022-11-06
+[A.]  #151  xset                            1.2.5
+[A.]  #152  xvidcore                        1.3.7
+[A.]  #153  zimg                            3.0.4
+[A.]  #154  zxing-cpp                       1.4.0
+Closure size: 518 -> 681 (194 paths added, 31 paths removed, delta +163, disk usage +604.6MiB).
+```
+### lock change:
+```
+• Updated input 'emacs-overlay':
+    'github:nix-community/emacs-overlay/bfe8be184d1ca2c3bdfdb07b13d855d2e7fde040' (2023-06-12)
+  → 'github:nix-community/emacs-overlay/f95c33d692cc174df41e40330aec4abf2a94b673' (2023-06-16)
+• Updated input 'emacs-overlay/nixpkgs':
+    'github:NixOS/nixpkgs/21951114383770f96ae528d0ae68824557768e81' (2023-06-10)
+  → 'github:NixOS/nixpkgs/0eeebd64de89e4163f4d3cf34ffe925a5cf67a05' (2023-06-12)
+• Updated input 'emacs-overlay/nixpkgs-stable':
+    'github:NixOS/nixpkgs/85bcb95aa83be667e562e781e9d186c57a07d757' (2023-06-09)
+  → 'github:NixOS/nixpkgs/ddf4688dc7aeb14e8a3c549cb6aa6337f187a884' (2023-06-14)
+• Updated input 'forgit':
+    'github:wfxr/forgit/665e3fd215fe68ad066af1ad732e8618990da5a6' (2023-05-31)
+  → 'github:wfxr/forgit/ec1bd214683d1244f2512222dee11ac467e4ed17' (2023-06-13)
+• Updated input 'home-manager':
+    'github:nix-community/home-manager/0144ac418ef633bfc9dbd89b8c199ad3a617c59f' (2023-06-10)
+  → 'github:nix-community/home-manager/4e09c83255c5b23d58714d56672d3946faf1bcef' (2023-06-15)
+• Updated input 'home-manager/nixpkgs':
+    'github:nixos/nixpkgs/7409480d5c8584a1a83c422530419efe4afb0d19' (2023-06-05)
+  → 'github:nixos/nixpkgs/75a5ebf473cd60148ba9aec0d219f72e5cf52519' (2023-06-11)
+• Updated input 'nixpkgs-master':
+    'github:NixOS/nixpkgs/76ad192fe16c879cedc161e20c1f7bccb906ea34' (2023-06-12)
+  → 'github:NixOS/nixpkgs/610f62011e631d12869784058ea95f99fdf393d2' (2023-06-16)
+• Updated input 'nixpkgs-stable':
+    'github:NixOS/nixpkgs/63e752bbac363c48481fe054339e35d636dc2694' (2023-06-12)
+  → 'github:NixOS/nixpkgs/aa4b53f79d961a7cbba0b24f791401a34c18011a' (2023-06-16)
+• Updated input 'nixpkgs-unstable':
+    'github:NixOS/nixpkgs/9401a0c780b49faf6c28adf55764f230301d0dce' (2023-06-11)
+  → 'github:NixOS/nixpkgs/683f2f5ba2ea54abb633d0b17bc9f7f6dede5799' (2023-06-15)
+• Updated input 'powerlevel10k':
+    'github:romkatv/powerlevel10k/944f52fc430259ff49f497f3516a3ddfb45a0a6b' (2023-06-11)
+  → 'github:romkatv/powerlevel10k/360dcd3907a7556a2ffa841380142e1f9dc6ec33' (2023-06-15)
+• Updated input 'spacemacs':
+    'github:syl20bnr/spacemacs/d0d0141600086f3717489a3925f85cdac927df23' (2023-06-11)
+  → 'github:syl20bnr/spacemacs/26629bf3a5b8d0228be23827bb86dbd8d8087378' (2023-06-15)
+```
+
 ## Update 2023-06-12
 ```go
 Version changes:
