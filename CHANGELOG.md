@@ -1,3 +1,34 @@
+## Update 2023-06-17
+```go
+Version changes:
+[U.]  #1  tree  2.0.4 -> 2.1.1
+Closure size: 681 -> 681 (5 paths added, 5 paths removed, delta +0, disk usage +4.8KiB).
+```
+### lock change:
+```
+• Updated input 'emacs-overlay':
+    'github:nix-community/emacs-overlay/f95c33d692cc174df41e40330aec4abf2a94b673' (2023-06-16)
+  → 'github:nix-community/emacs-overlay/1ab94d15a82c3e4bd295f3efa8f5145b18e0d6ff' (2023-06-17)
+• Updated input 'emacs-overlay/nixpkgs':
+    'github:NixOS/nixpkgs/0eeebd64de89e4163f4d3cf34ffe925a5cf67a05' (2023-06-12)
+  → 'github:NixOS/nixpkgs/7c67f006ea0e7d0265f16d7df07cc076fdffd91f' (2023-06-15)
+• Updated input 'emacs-overlay/nixpkgs-stable':
+    'github:NixOS/nixpkgs/ddf4688dc7aeb14e8a3c549cb6aa6337f187a884' (2023-06-14)
+  → 'github:NixOS/nixpkgs/c7ff1b9b95620ce8728c0d7bd501c458e6da9e04' (2023-06-16)
+• Updated input 'home-manager':
+    'github:nix-community/home-manager/4e09c83255c5b23d58714d56672d3946faf1bcef' (2023-06-15)
+  → 'github:nix-community/home-manager/9ba7b3990eb1f4782ea3f5fe7ac4f3c88dd7a32c' (2023-06-16)
+• Updated input 'nixpkgs-master':
+    'github:NixOS/nixpkgs/610f62011e631d12869784058ea95f99fdf393d2' (2023-06-16)
+  → 'github:NixOS/nixpkgs/15052a575b51ddc367a18f0a5f41d8a5d9f07226' (2023-06-17)
+• Updated input 'nixpkgs-stable':
+    'github:NixOS/nixpkgs/aa4b53f79d961a7cbba0b24f791401a34c18011a' (2023-06-16)
+  → 'github:NixOS/nixpkgs/56799517d0537a6f3e91a5171af8c4bfd82c092e' (2023-06-17)
+• Updated input 'nixpkgs-unstable':
+    'github:NixOS/nixpkgs/683f2f5ba2ea54abb633d0b17bc9f7f6dede5799' (2023-06-15)
+  → 'github:NixOS/nixpkgs/992ccdd822ecff0712ed0004f89df9e96f6a4963' (2023-06-16)
+```
+
 ## Update 2023-06-16
 ```go
 Version changes:
