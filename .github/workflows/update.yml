@@ -105,7 +105,7 @@ jobs:
       id: cpr
       uses: peter-evans/create-pull-request@v5
       with:
-        author: 'github-action <github-action@users.noreply.github.com>'
+        author: 'gfanton-bot <50772775+gfanton-bot@users.noreply.github.com>'
         token: '${{ secrets.GH_PAT }}'
         title: "nix: ${{ steps.update.outputs.inputs-date }} inputs update"
         body-path: '/tmp/body.report.md'
