@@ -25,9 +25,9 @@ in {
   # Go Env
   programs.go = {
     enable = true;
-    goPath = ".local/share/go/19";
+    goPath = ".local/share/go/20";
     goBin = ".local/bin";
-    package = pkgs.go_1_19;
+    package = pkgs.go;
   };
 
   # rust env
