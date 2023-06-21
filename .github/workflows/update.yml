@@ -8,9 +8,9 @@ on:
 env:
   GITHUB_REVIEWER: gfanton
   CACHIX_USER: gfanton
-  PR_USER_NAME: gfanton-bot
-  PR_USER_MAIL: 50772775+gfanton-bot@users.noreply.github.com
-  PR_FORK: gfanton-bot/nixpkgs
+  BOT_USER_NAME: gfanton-bot
+  BOT_USER_MAIL: 50772775+gfanton-bot@users.noreply.github.com
+  BOT_FORK: gfanton-bot/nixpkgs
   BASE_BRANCH: master
   REF_BRANCH: nix/flake-update-inputs
 
@@ -101,21 +101,19 @@ jobs:
         mv /tmp/gitconfig /home/runner/.config/git/config
 
         # set github action as the user
-        git config --global user.name '${{ env.PR_USER_NAME }}'
-        git config --global user.email '${{ env.PR_USER_MAIL }}'
+        git config --global user.name '${{ env.BOT_USER_NAME }}'
+        git config --global user.email '${{ env.BOT_USER_MAIL }}'
 
     - name: Create Pull Request
       id: cpr
       uses: peter-evans/create-pull-request@v5
       with:
-        committer: '${{ env.PR_USER_NAME }} <${{ env.PR_USER_MAIL }}>'
-        author: '${{ env.PR_USER_NAME }} <${{ env.PR_USER_MAIL }}>'
-        push-to-fork: '${{ env.PR_FORK }}'
-        token: '${{ secrets.GH_PAT }}'
+        committer: '${{ env.BOT_USER_NAME }} <${{ env.BOT_USER_MAIL }}>'
+        author: '${{ env.BOT_USER_NAME }} <${{ env.BOT_USER_MAIL }}>'
+        push-to-fork: '${{ env.BOT_FORK }}'
+        token: '${{ secrets.BOT_PAT }}'
         title: "nix: ${{ steps.update.outputs.inputs-date }} inputs update"
         body-path: '/tmp/body.report.md'
-        assignees: '${{ env.GITHUB_REVIEWER }}'
-        reviewers: '${{ env.GITHUB_REVIEWER }}' 
         commit-message: "nix: update ${{ steps.update.outputs.inputs-date }}"
         base: ${{ env.BASE_BRANCH }}
         branch: ${{ env.REF_BRANCH }}
