@@ -1,3 +1,82 @@
+## Update 2023-06-23
+```go
+Version changes:
+[U.]  #01  asdf-vm                    0.11.3 -> 0.12.0
+[U.]  #02  at-spi2-core               2.48.0 -> 2.48.3
+[U.]  #03  dbus                       1.14.6-lib -> 1.14.8-lib
+[U.]  #04  fontconfig                 2.14.0, 2.14.0-lib -> 2.14.2, 2.14.2-lib
+[U.]  #05  gawk                       5.2.1 -> 5.2.2
+[U.]  #06  gh                         2.30.0 -> 2.31.0
+[U.]  #07  git                        2.40.1, 2.40.1-doc -> 2.41.0, 2.41.0-doc
+[U.]  #08  glib                       2.76.2, 2.76.2-bin -> 2.76.3, 2.76.3-bin
+[U.]  #09  go                         1.20.4 -> 1.20.5
+[U.]  #10  gtk+3                      3.24.37 -> 3.24.38
+[U.]  #11  libopus                    1.3.1 -> 1.4
+[U.]  #12  libxcrypt                  4.4.33 -> 4.4.35
+[C.]  #13  lowdown                    1.0.1-lib x2 -> 1.0.1-lib, 1.0.2-lib
+[U.]  #14  mesa                       23.1.1 -> 23.1.2
+[U.]  #15  nettle                     3.9 -> 3.9.1
+[U.]  #16  nodejs                     18.16.0 -> 18.16.1
+[U.]  #17  nss-cacert                 3.89.1 -> 3.90
+[U.]  #18  ocl-icd                    2.3.1 -> 2.3.2
+[C.]  #19  python3                    3.10.11, 3.10.11-env, 3.9.17, 3.9.17-env -> 3.10.12, 3.10.12-env, 3.9.17, 3.9.17-env
+[U.]  #20  python3.10-filelock        3.9.0 -> 3.12.0
+[U.]  #21  python3.10-platformdirs    3.0.0 -> 3.5.1
+[U.]  #22  python3.9-filelock         3.9.0 -> 3.12.0
+[U.]  #23  python3.9-mypy             1.0.1 -> 1.3.0
+[U.]  #24  python3.9-mypy-extensions  0.4.3 -> 1.0.0
+[U.]  #25  python3.9-platformdirs     3.0.0 -> 3.5.1
+[C.]  #26  s2n-tls                    1.3.43, 1.3.44 -> 1.3.43, 1.3.45
+[U.]  #27  systemd                    253.3 -> 253.5
+[U.]  #28  systemd-minimal            253.3 -> 253.5
+Closure size: 680 -> 680 (628 paths added, 628 paths removed, delta +0, disk usage +1.4MiB).
+```
+### lock change:
+```
+• Updated input 'asdf-plugins':
+    'github:asdf-vm/asdf-plugins/88007e10ff4f67041e5000efc4373af125e83f74' (2023-06-11)
+  → 'github:asdf-vm/asdf-plugins/2e2de4258c760c894f564febc51d67a766bf6811' (2023-06-18)
+• Updated input 'darwin':
+    'github:LnL7/nix-darwin/7c16d31383a90e0e72ace0c35d2d66a18f90fb4f' (2023-06-09)
+  → 'github:LnL7/nix-darwin/6460468e7a3e1290f132fee4170ebeaa127f6f32' (2023-06-23)
+• Updated input 'emacs-overlay':
+    'github:nix-community/emacs-overlay/1ab94d15a82c3e4bd295f3efa8f5145b18e0d6ff' (2023-06-17)
+  → 'github:nix-community/emacs-overlay/29ad7704a8191bd9170ee7e50ae222f88fb675f9' (2023-06-23)
+• Updated input 'emacs-overlay/flake-utils':
+    'github:numtide/flake-utils/a1720a10a6cfe8234c0e93907ffe81be440f4cef' (2023-05-31)
+  → 'github:numtide/flake-utils/abfb11bd1aec8ced1c9bb9adfe68018230f4fb3c' (2023-06-19)
+• Updated input 'emacs-overlay/nixpkgs':
+    'github:NixOS/nixpkgs/7c67f006ea0e7d0265f16d7df07cc076fdffd91f' (2023-06-15)
+  → 'github:NixOS/nixpkgs/e603dc5f061ca1d8a19b3ede6a8cf9c9fcba6cdc' (2023-06-22)
+• Updated input 'emacs-overlay/nixpkgs-stable':
+    'github:NixOS/nixpkgs/c7ff1b9b95620ce8728c0d7bd501c458e6da9e04' (2023-06-16)
+  → 'github:NixOS/nixpkgs/ef0bc3976340dab9a4e087a0bcff661a8b2e87f3' (2023-06-21)
+• Updated input 'flake-utils':
+    'github:numtide/flake-utils/a1720a10a6cfe8234c0e93907ffe81be440f4cef' (2023-05-31)
+  → 'github:numtide/flake-utils/abfb11bd1aec8ced1c9bb9adfe68018230f4fb3c' (2023-06-19)
+• Updated input 'forgit':
+    'github:wfxr/forgit/ec1bd214683d1244f2512222dee11ac467e4ed17' (2023-06-13)
+  → 'github:wfxr/forgit/c78c10a028f664893d5def1f3c8713fa3957f6d9' (2023-06-19)
+• Updated input 'home-manager':
+    'github:nix-community/home-manager/9ba7b3990eb1f4782ea3f5fe7ac4f3c88dd7a32c' (2023-06-16)
+  → 'github:nix-community/home-manager/d2b6f2d154bf6b27a93ed895392f80c503df7cfa' (2023-06-23)
+• Updated input 'home-manager/nixpkgs':
+    'github:nixos/nixpkgs/75a5ebf473cd60148ba9aec0d219f72e5cf52519' (2023-06-11)
+  → 'github:nixos/nixpkgs/04af42f3b31dba0ef742d254456dc4c14eedac86' (2023-06-17)
+• Updated input 'nixpkgs-master':
+    'github:NixOS/nixpkgs/15052a575b51ddc367a18f0a5f41d8a5d9f07226' (2023-06-17)
+  → 'github:NixOS/nixpkgs/3d8a93602bc54ece7a4e689d9aea1a574e2bbc24' (2023-06-23)
+• Updated input 'nixpkgs-stable':
+    'github:NixOS/nixpkgs/56799517d0537a6f3e91a5171af8c4bfd82c092e' (2023-06-17)
+  → 'github:NixOS/nixpkgs/dc3189fd196645b0da76c1d6d018895c7773a7e7' (2023-06-23)
+• Updated input 'nixpkgs-unstable':
+    'github:NixOS/nixpkgs/992ccdd822ecff0712ed0004f89df9e96f6a4963' (2023-06-16)
+  → 'github:NixOS/nixpkgs/f9e94676ce6c7531c44d38da61d2669ebec0f603' (2023-06-23)
+• Updated input 'powerlevel10k':
+    'github:romkatv/powerlevel10k/360dcd3907a7556a2ffa841380142e1f9dc6ec33' (2023-06-15)
+  → 'github:romkatv/powerlevel10k/017395a266aa15011c09e64e44a1c98ed91c478c' (2023-06-23)
+```
+
 ## Update 2023-06-17
 ```go
 Version changes:
