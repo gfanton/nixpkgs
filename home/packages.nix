@@ -21,6 +21,7 @@ in {
   # Some weird bug
   # https://github.com/NixOS/nixpkgs/issues/196651
   manual.html.enable = false;
+  manual.manpages.enable = false;
 
   # Go Env
   programs.go = {
