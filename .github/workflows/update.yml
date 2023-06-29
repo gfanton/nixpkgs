@@ -1,9 +1,9 @@
 name: Update flake inputs
 
 on:
-  workflow_dispatch:
-  schedule:
-    - cron: '0 3 * * 3,6' # At 03:00 UTC on Wednesday and Saturday.
+  workflow_dispatch:  # Run manually
+  schedule:  # Run automatically
+    - cron: '0 3 * * 3,6'  # At 03:00 UTC on Wednesday and Saturday
 
 env:
   GITHUB_REVIEWER: gfanton
@@ -20,7 +20,9 @@ jobs:
     runs-on: ubuntu-latest
     env:
       CONFIG_NAME: githubCI
+
     steps:
+    # Install Nix
     - name: Install Nix
       uses: cachix/install-nix-action@v22
       with:
@@ -28,50 +30,57 @@ jobs:
         extra_nix_config: |
           access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}
 
+    # Setup Cachix
     - name: Setup Cachix
       uses: cachix/cachix-action@v12
       with:
         name: ${{ env.CACHIX_USER }}
         authToken: ${{ secrets.CACHIX_AUTH_TOKEN }}
 
-    - name: Checkout master 
+    # Checkout the base branch
+    - name: Checkout Base Branch
       uses: actions/checkout@v3
       with:
         ref: ${{ env.BASE_BRANCH }}
 
-    - name: Create base generation
+    # Create base generation
+    - name: Create Base Generation
       id: base
       run: |
         # Prevent conflict between Cachix installed by workflow and the one installed in the config
         nix-env --set-flag priority 1 cachix
-
         # Build and switch to home-manager env
         nix build ".#homeConfigurations.$CONFIG_NAME.activationPackage"
         ./result/activate switch --verbose
+        # Output the generation to be used in subsequent steps
         echo "generation=$(readlink -f $HOME/.nix-profile)" >> $GITHUB_OUTPUT
 
-    - name: Generate new generation from update
+    - name: Generate New Generation from Update
       id: update
       run: |
+        # Update the flake, ignoring warnings, and write the output to a report
         nix flake update 2>&1 | grep -v 'warning:' | tee /tmp/lock.report.txt
 
-        # update all inputs by recreating the flake
+        # Update all inputs by recreating the flake and switching to the new home-manager environment
         nix build ".#homeConfigurations.$CONFIG_NAME.activationPackage"
         ./result/activate switch --verbose
 
+        # Determine the new and old generations
         nixos_new_gen=$(readlink -f $HOME/.nix-profile)
         nixos_old_gen="${{ steps.base.outputs.generation }}"
 
+        # Log the old and new generations for debugging
         echo "old generation: $nixos_old_gen"
         echo "new generation: $nixos_new_gen"
 
-        # generate change
+        # Generate a change report, ignoring the first two lines and write to a report file
         touch CHANGELOG.md
         nix-shell -p nvd --run "nvd diff $nixos_old_gen $nixos_new_gen" | tail -n +3 | tee /tmp/new.report.md
 
+        # Get the current date
         export INPUT_DATE="$(date +%F)"
 
-        # create body report 
+        # Create a report with a list of changes and the flake lock file changes
         cat <<EOT > /tmp/body.report.md
         ## Update $INPUT_DATE
         \`\`\`go
@@ -83,14 +92,13 @@ jobs:
         \`\`\`
         EOT
 
-        # update current changelog
+        # Prepend the report to the current changelog
         cat <<EOT > CHANGELOG.md
         $(cat /tmp/body.report.md)
-
         $(cat CHANGELOG.md)
         EOT
 
-        # output date update
+        # Output the date of the inputs update to be used in subsequent steps
         echo "inputs-date=$INPUT_DATE" >> "$GITHUB_OUTPUT"
 
     - name: '[hack] config file'
