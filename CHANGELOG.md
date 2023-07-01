@@ -1,3 +1,128 @@
+## Update 2023-07-01
+```go
+Version changes:
+[U.]  #01  SDL2                                      2.26.5 -> 2.28.0
+[C.]  #02  acl                                       2.3.1 x2 -> 2.3.1
+[C.]  #03  attr                                      2.5.1 x2 -> 2.5.1
+[C.]  #04  aws-c-auth                                0.6.26 x2 -> 0.6.26
+[C.]  #05  aws-c-cal                                 0.5.21 x2 -> 0.5.21
+[C.]  #06  aws-c-common                              0.8.15 x2 -> 0.8.15
+[C.]  #07  aws-c-compression                         0.2.16 x2 -> 0.2.16
+[C.]  #08  aws-c-event-stream                        0.2.20 x2 -> 0.2.20
+[C.]  #09  aws-c-http                                0.7.6 x2 -> 0.7.6
+[C.]  #10  aws-c-io                                  0.13.19 x2 -> 0.13.19
+[C.]  #11  aws-c-mqtt                                0.8.8 x2 -> 0.8.8
+[C.]  #12  aws-c-s3                                  0.2.8 x2 -> 0.2.8
+[C.]  #13  aws-c-sdkutils                            0.1.9 x2 -> 0.1.9
+[C.]  #14  aws-checksums                             0.1.14 x2 -> 0.1.14
+[C.]  #15  aws-crt-cpp                               0.20.2 x2 -> 0.20.2
+[C.]  #16  aws-sdk-cpp                               1.11.37 x2 -> 1.11.37
+[C.]  #17  bash                                      5.2-p15 x2, 5.2-p15-man -> 5.2-p15, 5.2-p15-man
+[C.]  #18  boehm-gc                                  8.2.2 x2 -> 8.2.2
+[C.]  #19  brotli                                    1.0.9-lib x2 -> 1.0.9-lib
+[C.]  #20  busybox-static-x86_64-unknown-linux-musl  1.36.1 x2 -> 1.36.1
+[C.]  #21  bzip2                                     1.0.8 x2, 1.0.8-bin -> 1.0.8, 1.0.8-bin
+[C*]  #22  cachix                                    1.5, 1.6 -> 1.6 x2
+[U.]  #23  cmake                                     3.25.3 -> 3.26.4
+[U.]  #24  cups                                      2.4.3-lib -> 2.4.5-lib
+[C.]  #25  curl                                      8.1.1 x3, 8.1.1-bin, 8.1.1-man -> 8.1.1 x2, 8.1.1-bin, 8.1.1-man
+[U.]  #26  docker-compose                            2.18.1 -> 2.19.0
+[C.]  #27  editline                                  1.17.1 x2 -> 1.17.1
+[C.]  #28  gcc                                       12.3.0, 12.3.0-lib x3, 12.3.0-libgcc x3 -> 12.3.0, 12.3.0-lib x2, 12.3.0-libgcc x2
+[C.]  #29  glibc                                     2.37-8 x2, 2.37-8-bin, 2.37-8-dev -> 2.37-8, 2.37-8-bin, 2.37-8-dev, 2.37-8-getent
+[C.]  #30  gmp-with-cxx                              6.2.1 x3 -> 6.2.1 x2
+[U.]  #31  gopls                                     0.12.2 -> 0.12.4
+[U.]  #32  gst-plugins-bad                           1.22.3 -> 1.22.4
+[U.]  #33  gst-plugins-base                          1.22.3 -> 1.22.4
+[U.]  #34  gstreamer                                 1.22.3 -> 1.22.4
+[U.]  #35  hwdata                                    0.370 -> 0.371
+[U.]  #36  icu4c                                     73.1, 73.1-dev -> 73.2, 73.2-dev
+[U.]  #37  imath                                     3.1.7 -> 3.1.9
+[C.]  #38  keyutils                                  1.6.3-lib x2 -> 1.6.3-lib
+[U.]  #39  libX11                                    1.8.4 -> 1.8.6
+[U.]  #40  libapparmor                               3.1.4 -> 3.1.5
+[C.]  #41  libarchive                                3.6.2-lib x2 -> 3.6.2-lib
+[C.]  #42  libcpuid                                  0.6.3 x2 -> 0.6.3
+[C.]  #43  libffi                                    3.4.4 x2 -> 3.4.4
+[C.]  #44  libidn2                                   2.3.4 x2 -> 2.3.4
+[U.]  #45  libjxl                                    0.8.1 x2 -> 0.8.2 x2
+[C.]  #46  libkrb5                                   1.20.1 x2 -> 1.20.1
+[U.]  #47  libopenmpt                                0.7.1 -> 0.7.2
+[C.]  #48  libseccomp                                2.5.4-lib x2 -> 2.5.4-lib
+[C.]  #49  libsodium                                 1.0.18 x2 -> 1.0.18
+[C.]  #50  libssh2                                   1.11.0 x2 -> 1.11.0
+[C.]  #51  libunistring                              1.1 x2 -> 1.1
+[C.]  #52  libxml2                                   2.10.4 x2 -> 2.10.4
+[C.]  #53  lowdown                                   1.0.2-lib x2 -> 1.0.2-lib
+[U.]  #54  mesa                                      23.1.2 -> 23.1.3
+[C.]  #55  ncurses                                   6.4 x2, 6.4-dev, 6.4-man -> 6.4, 6.4-dev, 6.4-man
+[C.]  #56  nghttp2                                   1.51.0-lib x2 -> 1.51.0-lib
+[C.]  #57  nix                                       2.14.1 x2, 2.14.1-man x2, 2.15.1, 2.15.1-man -> 2.14.1, 2.14.1-man, 2.15.1, 2.15.1-man
+[U.]  #58  nixfmt                                    0.5.0 -> 0.5.0-bin
+[C.]  #59  nlohmann_json                             3.11.2 x2 -> 3.11.2
+[C.]  #60  openssl                                   3.0.9 x3, 3.0.9-bin, 3.0.9-dev -> 3.0.9 x2, 3.0.9-bin, 3.0.9-dev
+[U.]  #61  parallel                                  20230522, 20230522-man -> 20230622, 20230622-man
+[U.]  #62  pnpm                                      8.6.2 -> 8.6.5
+[C.]  #63  s2n-tls                                   1.3.45 x2 -> 1.3.45
+[C.]  #64  sqlite                                    3.42.0 x2 -> 3.42.0
+[U.]  #65  vulkan-loader                             1.3.249 -> 1.3.254
+[C.]  #66  xgcc                                      12.3.0-libgcc x2 -> 12.3.0-libgcc
+[C.]  #67  xz                                        5.4.3 x2, 5.4.3-bin -> 5.4.3, 5.4.3-bin
+[C.]  #68  zlib                                      1.2.13 x2, 1.2.13-dev -> 1.2.13, 1.2.13-dev
+[C.]  #69  zstd                                      1.5.5 x2, 1.5.5-bin -> 1.5.5, 1.5.5-bin
+Added packages:
+[A.]  #1  libargon2  20190702
+[A.]  #2  msgpack-c  6.0.0
+Removed packages:
+[R.]  #1  hdf5      1.14.0
+[R.]  #2  msgpack   3.3.0
+[R.]  #3  ocl-icd   2.3.2
+[R.]  #4  openblas  0.3.21
+[R.]  #5  opencv    4.7.0
+Closure size: 680 -> 628 (576 paths added, 628 paths removed, delta -52, disk usage -266.9MiB).
+```
+### lock change:
+```
+• Updated input 'asdf-plugins':
+    'github:asdf-vm/asdf-plugins/2e2de4258c760c894f564febc51d67a766bf6811' (2023-06-18)
+  → 'github:asdf-vm/asdf-plugins/11a16398cc5a3cacf9c172efce20bdf54af22a06' (2023-06-25)
+• Updated input 'darwin':
+    'github:LnL7/nix-darwin/6460468e7a3e1290f132fee4170ebeaa127f6f32' (2023-06-23)
+  → 'github:LnL7/nix-darwin/43587cdb726f73b962f12028055520dbd1d7233f' (2023-06-30)
+• Updated input 'emacs-overlay':
+    'github:nix-community/emacs-overlay/29ad7704a8191bd9170ee7e50ae222f88fb675f9' (2023-06-23)
+  → 'github:nix-community/emacs-overlay/525aaf59a6bc06b80a19c1158c307627e0eef1a7' (2023-07-01)
+• Updated input 'emacs-overlay/flake-utils':
+    'github:numtide/flake-utils/abfb11bd1aec8ced1c9bb9adfe68018230f4fb3c' (2023-06-19)
+  → 'github:numtide/flake-utils/dbabf0ca0c0c4bce6ea5eaf65af5cb694d2082c7' (2023-06-25)
+• Updated input 'emacs-overlay/nixpkgs':
+    'github:NixOS/nixpkgs/e603dc5f061ca1d8a19b3ede6a8cf9c9fcba6cdc' (2023-06-22)
+  → 'github:NixOS/nixpkgs/4bc72cae107788bf3f24f30db2e2f685c9298dc9' (2023-06-29)
+• Updated input 'emacs-overlay/nixpkgs-stable':
+    'github:NixOS/nixpkgs/ef0bc3976340dab9a4e087a0bcff661a8b2e87f3' (2023-06-21)
+  → 'github:NixOS/nixpkgs/b72aa95f7f096382bff3aea5f8fde645bca07422' (2023-06-30)
+• Updated input 'flake-utils':
+    'github:numtide/flake-utils/abfb11bd1aec8ced1c9bb9adfe68018230f4fb3c' (2023-06-19)
+  → 'github:numtide/flake-utils/dbabf0ca0c0c4bce6ea5eaf65af5cb694d2082c7' (2023-06-25)
+• Updated input 'home-manager':
+    'github:nix-community/home-manager/d2b6f2d154bf6b27a93ed895392f80c503df7cfa' (2023-06-23)
+  → 'github:nix-community/home-manager/44d1a8542ac92f0ce75d970090216245043a2709' (2023-06-30)
+• Updated input 'nixpkgs-master':
+    'github:NixOS/nixpkgs/3d8a93602bc54ece7a4e689d9aea1a574e2bbc24' (2023-06-23)
+  → 'github:NixOS/nixpkgs/1353de5923daba8462cfc3624d8c2d70cbafafcd' (2023-07-01)
+• Updated input 'nixpkgs-stable':
+    'github:NixOS/nixpkgs/dc3189fd196645b0da76c1d6d018895c7773a7e7' (2023-06-23)
+  → 'github:NixOS/nixpkgs/0de86059128947b2438995450f2c2ca08cc783d5' (2023-07-01)
+• Updated input 'nixpkgs-unstable':
+    'github:NixOS/nixpkgs/f9e94676ce6c7531c44d38da61d2669ebec0f603' (2023-06-23)
+  → 'github:NixOS/nixpkgs/60a783e00517fce85c42c8c53fe0ed05ded5b2a4' (2023-06-28)
+• Updated input 'powerlevel10k':
+    'github:romkatv/powerlevel10k/017395a266aa15011c09e64e44a1c98ed91c478c' (2023-06-23)
+  → 'github:romkatv/powerlevel10k/20323d6f8cd267805a793dafc840d22330653867' (2023-06-26)
+• Updated input 'spacemacs':
+    'github:syl20bnr/spacemacs/26629bf3a5b8d0228be23827bb86dbd8d8087378' (2023-06-15)
+  → 'github:syl20bnr/spacemacs/6fd09d315e1959055f43d1390867a61c6f9c4deb' (2023-06-25)
+```
 ## Update 2023-06-23
 ```go
 Version changes:
