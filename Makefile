@@ -32,7 +32,7 @@ switch.bot: result/sw/bin/darwin-rebuild
 	./result/sw/bin/darwin-rebuild switch --verbose --flake .#bot
 
 result/sw/bin/darwin-rebuild:
-	nix build ".#darwinConfigurations.$(BOOTSTRAP).system"
+	nix --experimental-features 'flakes nix-command' build ".#darwinConfigurations.$(BOOTSTRAP).system"
 
 endif # end osx
 

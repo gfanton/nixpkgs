@@ -49,7 +49,7 @@
   lightWhite='15'
 
   function prompt_my_nixshell() {
-      if [ "$name" = "nix-shell" ]; then
+      if [ ! -z  "$name" ]; then
           p10k segment -f red -i '🥷' -t "<${name}>"
       fi
   }

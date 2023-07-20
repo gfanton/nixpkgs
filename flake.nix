@@ -33,17 +33,7 @@
     };
     emacs-overlay = { url = "github:nix-community/emacs-overlay"; };
 
-    # asdf
-    asdf-plugins = {
-      url = "github:asdf-vm/asdf-plugins";
-      flake = false;
-    };
-
-    # zsh_plugins
-    zi = {
-      url = "github:z-shell/zi";
-      flake = false;
-    };
+    # zsh plugins
     fast-syntax-highlighting = {
       url = "github:zdharma-continuum/fast-syntax-highlighting";
       flake = false;
@@ -52,26 +42,10 @@
       url = "github:Aloxaf/fzf-tab";
       flake = false;
     };
-    zsh-abbrev-alias = {
-      url = "github:momo-lab/zsh-abbrev-alias";
-      flake = false;
-    };
-    zsh-colored-man-pages = {
-      url = "github:ael-code/zsh-colored-man-pages";
-      flake = false;
-    };
     powerlevel10k = {
       url = "github:romkatv/powerlevel10k";
       flake = false;
     };
-
-    # yabai = {
-    #   url = "github.com:koekeishiya/yabai";
-    #   flake = false;
-    # }
-
-    forgit.url = "github:wfxr/forgit";
-    forgit.flake = false;
   };
 
   outputs = { self, darwin, home-manager, flake-utils, ... }@inputs:
@@ -145,14 +119,10 @@
           spacemacs = inputs.spacemacs;
           doomemacs = inputs.doomemacs;
           chemacs2 = inputs.chemacs2;
-          asdf-plugins = inputs.asdf-plugins;
           zsh-plugins.fast-syntax-highlighting =
             inputs.fast-syntax-highlighting;
           zsh-plugins.fzf-tab = inputs.fzf-tab;
-          zsh-plugins.zsh-abbrev-alias = inputs.fzf-tab;
-          zsh-plugins.zsh-colored-man-pages = inputs.zsh-colored-man-pages;
           zsh-plugins.powerlevel10k = inputs.powerlevel10k;
-          zsh-plugins.zi = inputs.zi;
         };
 
         my-loon = import ./overlays/loon.nix;
@@ -190,9 +160,10 @@
         # local modules
         colors = import ./modules/home/colors;
         programs-truecolor = import ./modules/home/programs/truecolor;
-        programs-asdf = import ./modules/home/programs/asdf;
-        programs-zi = import ./modules/home/programs/zi;
+        # programs-asdf = import ./modules/home/programs/asdf;
         programs-kitty-extras = import ./modules/home/programs/kitty/extras.nix;
+        programs-zsh-oh-my-zsh-extra =
+          import ./modules/home/programs/zsh/oh-my-zsh/extras.nix;
 
         home-user-info = { lib, ... }: {
           options.home.user-info = (self.darwinModules.users-primaryUser {
@@ -225,7 +196,9 @@
           };
 
           inherit homeStateVersion;
-          homeModules = attrValues self.homeManagerModules;
+          homeModules = attrValues self.homeManagerModules ++ [
+
+          ];
         });
 
         # Config with small modifications needed/desired for CI with GitHub workflow
@@ -288,12 +261,20 @@
       # e.g., `nix develop my#python`.
       devShells = let pkgs = self.legacyPackages.${system};
       in {
-        python = pkgs.mkShell {
-          name = "python310";
-          inputsFrom = attrValues {
-            inherit (pkgs.pkgs-master.python310Packages) black isort;
-            inherit (pkgs) poetry python310 pyright;
-          };
+        asdf = pkgs.mkShell {
+          name = "asdf";
+          inputsFrom = attrValues { inherit (pkgs) asdf-vm; };
+          shellHook = ''
+            if [ -f "${pkgs.asdf-vm}/share/asdf-vm/asdf.sh" ]; then
+              . "${pkgs.asdf-vm}/share/asdf-vm/asdf.sh"
+            fi
+
+            fpath=(${pkgs.asdf-vm}/share/asdf-vm/completions $fpath)
+
+            if [ -f "''${ASDF_DATA_DIR}/.asdf/plugins/java/set-java-home.zsh" ]; then
+               . "''${ASDF_DATA_DIR}/.asdf/plugins/java/set-java-home.zsh"
+            fi
+          '';
         };
       };
       # }}}
