@@ -61,22 +61,6 @@ in {
     theme = "catppuccin-macchiato";
   };
 
-  # Direnv, load and unload environment variables depending on the current directory.
-  # https://direnv.net
-  # https://rycee.gitlab.io/home-manager/options.html#opt-programs.direnv.enable
-  programs.direnv.enable = true;
-  programs.direnv.nix-direnv.enable = true;
-
-  # Htop
-  # https://rycee.gitlab.io/home-manager/options.html#opt-programs.htop.enable
-  programs.htop.enable = true;
-  programs.htop.settings.show_program_path = true;
-
-  # Zoxide, a faster way to navigate the filesystem
-  # https://github.com/ajeetdsouza/zoxide
-  # https://rycee.gitlab.io/home-manager/options.html#opt-programs.zoxide.enable
-  programs.zoxide.enable = true;
-
   home.packages = with pkgs;
     [
       # Some basics
@@ -99,10 +83,10 @@ in {
       (ripgrep.override { withPCRE2 = true; }) # better version of grep
       curl # transfer a URL
       wget # The non-interactive network downloader.
-      asdf-vm
       entr
       cmake
       gnupg
+      fzf
 
       # my
       my-libvterm
