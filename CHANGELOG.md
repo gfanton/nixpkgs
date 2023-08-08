@@ -1,3 +1,102 @@
+## Update 2023-08-05
+```go
+Version changes:
+[C.]  #01  curl                8.1.1 x3, 8.1.1-bin, 8.1.1-man -> 8.1.1, 8.1.2 x2, 8.1.2-bin, 8.1.2-man
+[U.]  #02  docker              20.10.23, 20.10.23-man -> 20.10.25, 20.10.25-man
+[U.]  #03  docker-buildx       0.11.1 -> 0.11.2
+[U.]  #04  docker-compose      2.19.1 -> 2.20.2
+[U.]  #05  docker-containerd   20.10.23 -> 20.10.25
+[U.]  #06  docker-init         20.10.23 -> 20.10.25
+[U.]  #07  docker-runc         20.10.23 -> 20.10.25
+[U.]  #08  fluidsynth          2.3.2 -> 2.3.3
+[U.]  #09  gh                  2.32.0 -> 2.32.1
+[U.]  #10  git-lfs             3.3.0 -> 3.4.0
+[U.]  #11  glib                2.76.3, 2.76.3-bin -> 2.76.4, 2.76.4-bin
+[U.]  #12  glib-networking     2.76.0 -> 2.76.1
+[U.]  #13  go                  1.20.5 -> 1.20.6
+[U.]  #14  gopls               0.12.4 -> 0.13.1
+[U.]  #15  hwdata              0.371 -> 0.372
+[U.]  #16  imagemagick         7.1.1-12 -> 7.1.1-15
+[U.]  #17  iso-codes           4.11.0 -> 4.15.0
+[U.]  #18  kitty               0.29.0, 0.29.0-terminfo -> 0.29.2, 0.29.2-terminfo
+[U.]  #19  lazydocker          0.20.0 -> 0.21.0
+[U.]  #20  lazygit             0.38.2 -> 0.39.4
+[U.]  #21  libassuan           2.5.5 -> 2.5.6
+[U.]  #22  libbpf              1.2.0 -> 1.2.2
+[U.]  #23  libdc1394           2.2.6 -> 2.2.7
+[U.]  #24  libde265            1.0.11 -> 1.0.12
+[U.]  #25  libgudev            237 -> 238
+[U.]  #26  libnftnl            1.2.5 -> 1.2.6
+[U.]  #27  libqmi              1.32.2 -> 1.32.4
+[U.]  #28  librsvg             2.55.1 -> 2.56.2
+[U.]  #29  libva               2.18.0 -> 2.19.0
+[U.]  #30  libva-minimal       2.18.0 -> 2.19.0
+[U.]  #31  libxcrypt           4.4.35 -> 4.4.36
+[C.]  #32  libxml2             2.10.4 x2 -> 2.10.4, 2.11.4
+[U.]  #33  libxslt             1.1.37 -> 1.1.38
+[U.]  #34  moby                20.10.23 -> 20.10.25
+[U.]  #35  networkmanager      1.42.6 -> 1.42.8
+[U.]  #36  nftables            1.0.7 -> 1.0.8
+[U.]  #37  openldap            2.6.4 -> 2.6.5
+[U.]  #38  openresolv          3.12.0 -> 3.13.2
+[U.]  #39  openssh             9.3p1 -> 9.3p2
+[U.]  #40  p11-kit             0.24.1 -> 0.25.0
+[U.]  #41  pnpm                8.6.6 -> 8.6.11
+[U.]  #42  python3.10-certifi  2022.12.07 -> 2023.05.07
+[U.]  #43  python3.9-yapf      0.32.0 -> 0.40.1
+[U.]  #44  stoken              0.92 -> 0.93
+[U.]  #45  systemd             253.5 -> 253.6
+[U.]  #46  systemd-minimal     253.5 -> 253.6
+[U.]  #47  tracker             3.5.1 -> 3.5.3
+[U.]  #48  webkitgtk           2.40.3+abi=4.0 -> 2.40.5+abi=4.0
+[U.]  #49  xfsprogs            6.3.0, 6.3.0-bin -> 6.4.0, 6.4.0-bin
+[U.]  #50  zoxide              0.9.1 -> 0.9.2
+Added packages:
+[A.]  #1  python3.9-importlib-metadata  6.8.0
+[A.]  #2  python3.9-toml                0.10.2
+[A.]  #3  python3.9-zipp                3.15.0
+[A.]  #4  wildmidi.cfg                  <none>
+Closure size: 695 -> 699 (647 paths added, 643 paths removed, delta +4, disk usage -7.8MiB).
+```
+### lock change:
+```
+• Updated input 'darwin':
+    'github:LnL7/nix-darwin/61662a63bfe1726588c1da6b412df86d8ca94d63' (2023-07-16)
+  → 'github:LnL7/nix-darwin/d3529322dcaaddf0c50cb277c9c2a355f3a36a3b' (2023-08-02)
+• Updated input 'doomemacs':
+    'github:doomemacs/doomemacs/07fca786154551f90f36535bfb21f8ca4abd5027' (2023-05-30)
+  → 'github:doomemacs/doomemacs/90b1b221fe7c20f2edef341a780e194cd22c7daa' (2023-07-26)
+• Updated input 'emacs-overlay':
+    'github:nix-community/emacs-overlay/eba67dfe6c63f4baab70bec7dc4e9ec9a80f2c4a' (2023-07-19)
+  → 'github:nix-community/emacs-overlay/0f0e97805c949e227df8503df13335fad57f271d' (2023-08-05)
+• Updated input 'emacs-overlay/nixpkgs':
+    'github:NixOS/nixpkgs/6cee3b5893090b0f5f0a06b4cf42ca4e60e5d222' (2023-07-16)
+  → 'github:NixOS/nixpkgs/66aedfd010204949cb225cf749be08cb13ce1813' (2023-08-02)
+• Updated input 'emacs-overlay/nixpkgs-stable':
+    'github:NixOS/nixpkgs/53657afe29748b3e462f1f892287b7e254c26d77' (2023-07-17)
+  → 'github:NixOS/nixpkgs/9652a97d9738d3e65cf33c0bc24429e495a7868f' (2023-08-04)
+• Updated input 'home-manager':
+    'github:nix-community/home-manager/2f84579a70b8c74e5ebb37299a0c3ba279f09382' (2023-07-16)
+  → 'github:nix-community/home-manager/15043a65915bcc16ad207d65b202659e4988066b' (2023-08-04)
+• Updated input 'home-manager/nixpkgs':
+    'github:nixos/nixpkgs/dfdbcc428f365071f0ca3888f6ec8c25c3792885' (2023-07-14)
+  → 'github:NixOS/nixpkgs/9e1960bc196baf6881340d53dccb203a951745a2' (2023-08-01)
+• Updated input 'nixpkgs-master':
+    'github:NixOS/nixpkgs/4d477e30985117bf89e3dadb2788252b3bccc9b2' (2023-07-19)
+  → 'github:NixOS/nixpkgs/d886e44d9b086da2374f25932ac0b1f6724b7dbe' (2023-08-05)
+• Updated input 'nixpkgs-stable':
+    'github:NixOS/nixpkgs/14b0dc25f7100d819ba17860420a4cb16e70a870' (2023-07-19)
+  → 'github:NixOS/nixpkgs/a7c57ba85e9cbbe79c42c2f3e2a38411db52eff9' (2023-08-05)
+• Updated input 'nixpkgs-unstable':
+    'github:NixOS/nixpkgs/57695599bdc4f7bfe5d28cfa23f14b3d8bdf8a5f' (2023-07-17)
+  → 'github:NixOS/nixpkgs/7d050b98e51cdbdd88ad960152d398d41c7ff5b4' (2023-08-04)
+• Updated input 'powerlevel10k':
+    'github:romkatv/powerlevel10k/932954a8b1e31ae540e9df5e5e464100d46e53ec' (2023-07-12)
+  → 'github:romkatv/powerlevel10k/f851f41fc14d5bd66266b4b4af917d50c1c8b7fe' (2023-07-29)
+• Updated input 'spacemacs':
+    'github:syl20bnr/spacemacs/52c5715da076940b8c04658f4b899c2ae60a08a5' (2023-07-18)
+  → 'github:syl20bnr/spacemacs/4882f70e6541275969b09b52394bb9af563852f4' (2023-07-25)
+```
 ## Update 2023-07-19
 ```go
 Version changes:
