@@ -9,43 +9,42 @@
     darwin.url = "github:LnL7/nix-darwin/master";
     darwin.inputs.nixpkgs.follows = "nixpkgs-unstable";
 
-    home-manager.url = "github:nix-community/home-manager/master";
-
     # flake utils
     flake-compat.url = "github:edolstra/flake-compat";
     flake-compat.flake = false;
+
     flake-utils.url = "github:numtide/flake-utils";
+
+    # overlay
+    home-manager.url = "github:nix-community/home-manager/master";
+    emacs-overlay = { url = "github:nix-community/emacs-overlay"; };
 
     # Other sources
 
     # emacs
-    spacemacs = {
-      url = "github:syl20bnr/spacemacs/develop";
-      flake = false;
-    };
-    doomemacs = {
-      url = "github:doomemacs/doomemacs/master";
-      flake = false;
-    };
-    chemacs2 = {
-      url = "github:plexus/chemacs2/main";
-      flake = false;
-    };
-    emacs-overlay = { url = "github:nix-community/emacs-overlay"; };
+    spacemacs.url = "github:syl20bnr/spacemacs/develop";
+    spacemacs.flake = false;
+
+    doomemacs.url = "github:doomemacs/doomemacs/master";
+    doomemacs.flake = false;
+
+    chemacs2.url = "github:plexus/chemacs2/main";
+    chemacs2.flake = false;
+
+    # yabai
+    # yabai.url = "github:koekeishiya/yabai";
+    # yabai.flake = false;
 
     # zsh plugins
-    fast-syntax-highlighting = {
-      url = "github:zdharma-continuum/fast-syntax-highlighting";
-      flake = false;
-    };
-    fzf-tab = {
-      url = "github:Aloxaf/fzf-tab";
-      flake = false;
-    };
-    powerlevel10k = {
-      url = "github:romkatv/powerlevel10k";
-      flake = false;
-    };
+    fast-syntax-highlighting.url =
+      "github:zdharma-continuum/fast-syntax-highlighting";
+    fast-syntax-highlighting.flake = false;
+
+    fzf-tab.url = "github:Aloxaf/fzf-tab";
+    fzf-tab.flake = false;
+
+    powerlevel10k.url = "github:romkatv/powerlevel10k";
+    powerlevel10k.flake = false;
   };
 
   outputs = { self, darwin, home-manager, flake-utils, ... }@inputs:
@@ -123,6 +122,7 @@
             inputs.fast-syntax-highlighting;
           zsh-plugins.fzf-tab = inputs.fzf-tab;
           zsh-plugins.powerlevel10k = inputs.powerlevel10k;
+          # yabai = inputs.yabai;
         };
 
         my-loon = import ./overlays/loon.nix;

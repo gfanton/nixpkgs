@@ -117,16 +117,8 @@ in {
   # installed in `../home/default.nix` whenever possible.
   homebrew.brews = [
     { name = "ical-buddy"; }
-    {
-      name = "koekeishiya/formulae/yabai";
-      start_service = true;
-      restart_service = "changed";
-    }
-    {
-      name = "koekeishiya/formulae/skhd";
-      start_service = true;
-      restart_service = "changed";
-    }
+    {name = "koekeishiya/formulae/yabai";}
+    {name = "koekeishiya/formulae/skhd";}
     {
       name = "sketchybar";
       start_service = true;

@@ -77,18 +77,18 @@ in {
             name = "fzf-tab";
             source = pkgs.zsh-plugins.fzf-tab;
             config = ''
-              zstyle ':fzf-tab:complete:(cat|bat):*' fzf-preview ' \
-                ([ -f $realpath ] && ${pkgs.bat}/bin/bat --color=always --style=header,grid --line-range :500 $realpath) \
-                || ${pkgs.exa}/bin/exa --color=always --tree --level=1 $realpath'
+              # zstyle ':fzf-tab:complete:(cat|bat):*' fzf-preview ' \
+              #   ([ -f $realpath ] && ${pkgs.bat}/bin/bat --color=always --style=header,grid --line-range :500 $realpath) \
+              #   || ${pkgs.exa}/bin/exa --color=always --tree --level=1 $realpath'
 
               # ls
-              zstyle ':fzf-tab:complete:cd:*' fzf-preview '${pkgs.exa}/bin/exa --color=always --tree --level=1 $realpath'
+              # zstyle ':fzf-tab:complete:cd:*' fzf-preview '${pkgs.exa}/bin/exa --color=always --tree --level=1 $realpath'
 
               # ps/kill
               # give a preview of commandline arguments when completing `kill`
-              zstyle ':completion:*:*:*:*:processes' command "ps -u $USER -o pid,user,comm -w -w"
-              zstyle ':fzf-tab:complete:(kill|ps):argument-rest' fzf-preview '[[ $group == "[process ID]" ]] && ps --pid=$word -o cmd --no-headers -w -w'
-              zstyle ':fzf-tab:complete:(kill|ps):argument-rest' fzf-flags --preview-window=down:3:wrap
+              # zstyle ':completion:*:*:*:*:processes' command "ps -u $USER -o pid,user,comm -w -w"
+              # zstyle ':fzf-tab:complete:(kill|ps):argument-rest' fzf-preview '[[ $group == "[process ID]" ]] && ps --pid=$word -o cmd --no-headers -w -w'
+              # zstyle ':fzf-tab:complete:(kill|ps):argument-rest' fzf-flags --preview-window=down:3:wrap
             '';
           }
           {
@@ -99,7 +99,7 @@ in {
       };
       theme = "powerlevel10k/powerlevel10k";
       plugins = [ "sudo" "git" "fzf" "zoxide" "cp" ]
-        ++ [ "fzf-tab" "fast-syntax-highlighting" ] # extra plugins list
+        # ++ [ "fzf-tab" "fast-syntax-highlighting" ] # extra plugins list
         ++ lib.optionals pkgs.stdenv.isDarwin [ "brew" "macos" ]
         ++ lib.optionals pkgs.stdenv.isLinux [ ];
     };

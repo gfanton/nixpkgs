@@ -46,6 +46,8 @@ in {
     '';
   };
 
+  home.packages = [ pkgs.sqlite ]; # add sqlite packages required by magit
+
   # spacemacs
   home.file.".spacemacs.d" = {
     source = "${lib.cleanSource ../config/spacemacs}";

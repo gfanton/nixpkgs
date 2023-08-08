@@ -113,6 +113,8 @@ This function should only modify configuration layer settings."
    ;; Also include the dependencies as they will not be resolved automatically.
    dotspacemacs-additional-packages '(
                                       (catppuccin :location (recipe :fetcher github :repo "catppuccin/emacs"))
+                                      (gno-mode :location "~/.spacemacs.d/packages/gno")
+                                      sqlite3
                                       )
 
    ;; A list of packages that cannot be updated.
@@ -600,7 +602,7 @@ This function is called immediately after `dotspacemacs/init', before layer
 configuration.
 It is mostly for variables that should be set before packages are loaded.
 If you are unsure, try setting them in `dotspacemacs/user-config' first."
-  (setq catppuccin-flavor 'macchiato) ;; or 'latte, 'macchiato, or 'mocha
+  (setq catppuccin-flavor 'macchiato) ;; or 'latte, 'macchiato, or 'mocha  
 )
 
 
@@ -609,9 +611,7 @@ If you are unsure, try setting them in `dotspacemacs/user-config' first."
 This function is called only while dumping Spacemacs configuration. You can
 `require' or `load' the libraries of your choice that will be included in the
 dump."
-  
 )
-
 
 (defun dotspacemacs/user-config ()
   "Configuration for user code:
@@ -621,9 +621,14 @@ Put your configuration code here, except for variables that should be set
 before packages are loaded."
   (spacemacs/load-spacemacs-env) 
 
+  ;; load custom gno mode
+  (require 'gno-mode)
+
+  ;; @TODO: find a way to set this
+  (unless (file-exists-p "/tmp/.emacs-saves/")
+    (make-directory "/tmp/.emacs-saves/" t))
   (setq auto-save-file-name-transforms
         `((".*" "/tmp/.emacs-saves/" t)))
-
   ;; go
 
   ;; Set up before-save hooks to format buffer and add/delete imports.
@@ -723,6 +728,56 @@ before packages are loaded."
 
   (setq org-folder "~/org/")
   (setq deft-directory (concat org-folder "notes/"))
+
+  ;; (defun my-gno-gofumpt-on-save ()
+  ;;   "Run gofumpt on the current buffer and replace its contents."
+  ;;   (if (executable-find "gofumpt")
+  ;;       (let ((original-buffer (current-buffer))
+  ;;             (formatted (shell-command-to-string
+  ;;                         (format "gofumpt %s" (shell-quote-argument buffer-file-name)))))
+  ;;         (with-current-buffer original-buffer
+  ;;           (erase-buffer)
+  ;;           (insert formatted)
+  ;;           (message "Buffer formatted with gofumpt.")))
+  ;;     (message "Warning: gofumpt is not installed; not running on save.")))
+
+  ;; (defun my-gno-gofumpt ()
+  ;;   "Format the current buffer using gofumpt. this is an adapted version from go-mode gofmt"
+  ;;   (interactive)
+  ;;   (let ((tmpfile (make-nearby-temp-file "gofumpt" nil ".gno"))
+  ;;         (patchbuf (get-buffer-create "*Gofumpt patch*"))
+  ;;         (errbuf (get-buffer-create "*Gofumpt Errors*"))
+  ;;         (coding-system-for-read 'utf-8)
+  ;;         (coding-system-for-write 'utf-8))
+
+  ;;     (unwind-protect
+  ;;         (save-restriction
+  ;;           (widen)
+  ;;           (with-current-buffer errbuf
+  ;;             (setq buffer-read-only nil)
+  ;;             (erase-buffer))
+  ;;           (with-current-buffer patchbuf
+  ;;             (erase-buffer))
+
+  ;;           (write-region nil nil tmpfile)
+
+  ;;           (message "Calling gofumpt: %s" tmpfile)
+  ;;           (if (zerop (call-process "gofumpt" nil errbuf nil "-w" (file-local-name tmpfile)))
+  ;;               (progn
+  ;;                 (if (zerop (call-process-region (point-min) (point-max) "diff" nil patchbuf nil "-n" "-" tmpfile))
+  ;;                     (message "Buffer is already gofumpted")
+  ;;                   (go--apply-rcs-patch patchbuf)
+  ;;                   (message "Applied gofumpt"))
+  ;;                 (gofmt--kill-error-buffer errbuf))
+  ;;             (message "Could not apply gofumpt")
+  ;;             (gofmt--process-errors (buffer-file-name) tmpfile errbuf)))
+
+  ;;       (kill-buffer patchbuf)
+  ;;       (delete-file tmpfile))))
+
+  ;; (defun my-gno-mode-hook ()
+  ;;   "Hook for setting up gno-mode."
+  ;;   (add-hook 'before-save-hook 'my-gno-gofumpt nil t))
 
   ;; regexp
   ;; set pcre as default
