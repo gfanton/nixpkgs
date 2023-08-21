@@ -18,21 +18,21 @@ in {
   };
 
   # sketchybar
-  # home.file."/.config/sketchybar" = {
-  #   source = "${lib.cleanSource ../config/sketchybar}";
-  #   recursive = true;
-  # };
+  home.file."/.config/sketchybar" = {
+    source = "${lib.cleanSource ../config/sketchybar}";
+    recursive = true;
+  };
 
   # yabai
-  # home.file."/.config/yabai" = {
-  #   source = "${lib.cleanSource ../config/yabai}";
-  #   recursive = true;
-  # };
+  home.file."/.config/yabai" = {
+    source = "${lib.cleanSource ../config/yabai}";
+    recursive = true;
+  };
 
-  # home.file."/.config/skhd" = {
-  #   source = "${lib.cleanSource ../config/skhd}";
-  #   recursive = true;
-  # };
+  home.file."/.config/skhd" = {
+    source = "${lib.cleanSource ../config/skhd}";
+    recursive = true;
+  };
 
   # link aspell config
   home.file.".aspell.config" = with pkgs; {
