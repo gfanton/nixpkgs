@@ -1,6 +1,9 @@
 # open terminal
-cmd - return : ~/Applications/kitty.app/Contents/MacOS/kitty --single-instance -d ~
-cmd - 0x18 : /Applications/Firefox.app/Contents/MacOS/firefox # cmd + =
+cmd - return [
+    * : ~/Applications/kitty.app/Contents/MacOS/kitty --single-instance -d ~
+    "kitty" ~
+]
+# cmd - 0x33 : /Applications/Arc.app/Contents/MacOS/Arc # cmd + <-
 
 ## Window command
 
@@ -11,16 +14,16 @@ lcmd - up : yabai -m window --focus north
 lcmd - right : yabai -m window --focus east
 
 # swap
-lcmd + shift - left : yabai -m window --swap west
-lcmd + shift - down : yabai -m window --swap south
-lcmd + shift - up : yabai -m window --swap north
-lcmd + shift - right : yabai -m window --swap east
+# lcmd + shift - left : yabai -m window --swap west
+# lcmd + shift - down : yabai -m window --swap south
+# lcmd + shift - up : yabai -m window --swap north
+# lcmd + shift - right : yabai -m window --swap east
 
 # warp
-lcmd + alt - left : yabai -m window --warp west
-lcmd + alt - down : yabai -m window --warp south
-lcmd + alt - up : yabai -m window --warp north
-lcmd + alt - right : yabai -m window --warp east
+lcmd + shift - left : yabai -m window --warp west || yabai -m window --toggle split
+lcmd + shift - down : yabai -m window --warp south || yabai -m window --toggle split
+lcmd + shift - up : yabai -m window --warp north || yabai -m window --toggle split
+lcmd + shift - right : yabai -m window --warp east || yabai -m window --toggle split
 
 # fullscreen
 lcmd + shift - f : yabai -m window --toggle native-fullscreen

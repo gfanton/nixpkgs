@@ -1,31 +1,58 @@
-yabai -m config layout bsp
+source ${HOME}/.config/yabai/colors.sh
+# ----------------
 
-# toggle split between vertical and horizontal
-yabai -m window --toggle split
+yabai -m config \
+             layout bsp                                      \
+             active_window_border_color "0xdd$COLOR_YELLOW"  \
+             auto_balance on                                 \
+             external_bar all:39:0                           \
+             focus_follows_mouse off                         \
+             mouse_action1 resize                            \
+             mouse_action2 move                              \
+             mouse_drop_action swap                          \
+             mouse_follows_focus off                         \
+             mouse_modifier fn                               \
+             normal_window_border_color "0x11$COLOR_BLACK"   \
+             window_animation_duration 0.15                  \
+             window_border on                                \
+             window_border_radius 11                         \
+             window_border_width 4                           \
+             window_gap 8                                    \
+             window_placement second_child                   \
+             window_shadow float                             \
+             window_topmost off                              \
+             split_ratio 0.50                                \
+             bottom_padding 5                                \
+             top_padding 5                                   \
+             left_padding 5                                  \
+             right_padding 5
+
+# yabai -m config focus_follows_mouse autofocus
+# yabai -m config mouse_follows_focus on
+
+# setup border
+#
 
 # balance all windows
 yabai -m space --balance
 
 # config: always keep windows balance
-yabai -m config auto_balance on
-
-# mouse setup
-yabai -m config mouse_modifier fn
-yabai -m config mouse_action1 resize
-yabai -m config mouse_action2 move
 
 # load yabai padding
-yabai -m config top_padding    30
-yabai -m config bottom_padding 5
-yabai -m config left_padding   5
-yabai -m config right_padding  5
-yabai -m config window_gap     10
-
-yabai -m config window_topmost on
 
 # Exclude problematic apps from being managed:
-yabai -m rule --add app="^(Calculator|Software Update|Dictionary|VLC|System Preferences|System Settings|zoom.us|Photo Booth|Archive Utility|Python|LibreOffice|App Store|Steam|Alfred|Activity Monitor)$" manage=off
+yabai -m rule --add app="^(Terminal|Calculator|Software Update|Dictionary|VLC|System Preferences|System Settings|zoom.us|Photo Booth|Archive Utility)$" manage=off
+yabai -m rule --add app="^(Python|LibreOffice|App Store|Steam|Alfred|Activity Monitor|NVIDIA GeForce Now)$" manage=off
 yabai -m rule --add label="Finder" app="^Finder$" title="(Co(py|nnect)|Move|Info|Pref)" manage=off
 yabai -m rule --add label="Safari" app="^Safari$" title="^(General|(Tab|Password|Website|Extension)s|AutoFill|Se(arch|curity)|Privacy|Advance)$" manage=off
 yabai -m rule --add label="About This Mac" app="System Information" title="About This Mac" manage=off
-yabai -m rule --add app="emacs" manage=on
+yabai -m rule --add label="ArcUnstadard" app="^Arc$" subrole!="AXStandardWindow" border=off manage=off
+
+# force rules for thoses apps
+yabai -m rule --add app="^(emacs|Xcode)$" manage=on
+
+
+
+
+
+
