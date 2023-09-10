@@ -11,6 +11,7 @@
     NSAutomaticCapitalizationEnabled = false;
     NSAutomaticDashSubstitutionEnabled = false;
     NSAutomaticPeriodSubstitutionEnabled = false;
+    NSWindowResizeTime = 1.0e-2;
     _HIHideMenuBar = false;
   };
 
@@ -33,6 +34,11 @@
     wvous-br-corner = 1;
     wvous-tl-corner = 1;
     wvous-tr-corner = 1;
+    # disable animation
+    launchanim = false;
+    autohide-delay = 0.1;
+    autohide-time-modifier = 0.1;
+    expose-animation-duration = 0.1;
   };
 
   # Login and lock screen

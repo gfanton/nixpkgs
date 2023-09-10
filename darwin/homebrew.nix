@@ -37,10 +37,6 @@ in {
     Numbers = 409203825;
     Pages = 409201541;
     Xcode = 497799835;
-    # "1Blocker" = 1365531024;
-    # "1Password for Safari" = 1569813296;
-    # "1Password" = 1333542190;
-    # Slack = 803453959;
   };
 
   # If an app isn't available in the Mac App Store, or the version in the App Store has
@@ -57,15 +53,20 @@ in {
   ];
 
   # Configuration related to casks
-  # environment.variables.SSH_AUTH_SOCK = mkIfCaskPresent "1password-cli"
-  #   "/Users/${config.users.primaryUser.username}/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock";
+
+  # setup 1password ssh agent
+  # https://developer.1password.com/docs/ssh/get-started/#step-4-configure-your-ssh-or-git-client
+  environment.variables.SSH_AUTH_SOCK = mkIfCaskPresent "1password-cli"
+    "/Users/${config.users.primaryUser.username}/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock";
 
   # For cli packages that aren't currently available for macOS in `nixpkgs`.Packages should be
   # installed in `../home/default.nix` whenever possible.
   homebrew.brews = [{
     name = "ical-buddy";
   }
-  # { name = "koekeishiya/formulae/yabai"; }
+  # {
+  #   name = "koekeishiya/formulae/yabai";
+  # }
   # {
   #   name = "koekeishiya/formulae/skhd";
   # }

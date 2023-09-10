@@ -18,11 +18,6 @@ in {
     recursive = true;
   };
 
-  # home.file."spacemacs" = {
-  #  source = pkgs.spacemacs;
-  #  recursive = true;
-  # };
-
   # home.file."emacs/doom" = {
   #  source = pkgs.doomemacs;
   #  recursive = true;

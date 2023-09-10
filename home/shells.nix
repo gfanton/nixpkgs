@@ -15,6 +15,31 @@ let
     export TERM=xterm-emacs
     ${pkgs.emacs-gtk}/bin/emacs $@
   '';
+
+  restart-service = pkgs.writeShellScriptBin "restart-service" ''
+    set -e
+
+    plist_name="$1"
+    plist_path=$(find $HOME/Library/LaunchAgents -name "$plist_name" 2>/dev/null | head -n 1)
+
+    if [[ -z "$plist_path" ]]; then
+        echo "Unable to find $plist_name"
+        exit 1
+    fi
+
+    echo "restarting $plist_name"
+
+    major_version=$(sw_vers -productVersion | cut -d. -f2)
+
+    if [[ $major_version -ge 16 ]]; then
+        # For macOS Big Sur and later
+        launchctl bootout system "$plist_path" && launchctl bootstrap system "$plist_path"
+    else
+        # For macOS Catalina and earlier
+        launchctl unload "$plist_path" && launchctl load "$plist_path"
+    fi
+  '';
+
 in {
   xdg = {
     enable = true;
@@ -171,6 +196,12 @@ in {
       // (lib.optionalAttrs (stdenv.system == "aarch64-darwin") {
         # switch on rosetta shell
         rosetta-zsh = "${pkgs-x86.zsh}/bin/zsh";
+
+        # yabai & skhd
+        restart-yabai =
+          "${restart-service}/bin/restart-service org.nixos.yabai.plist";
+        restart-skhd =
+          "${restart-service}/bin/restart-service org.nixos.skhd.plist";
       });
   };
 }

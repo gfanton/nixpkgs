@@ -26,7 +26,7 @@ in {
   # Go Env
   programs.go = {
     enable = true;
-    goPath = ".local/share/go/20";
+    goPath = ".local/share/go";
     goBin = ".local/bin";
     package = pkgs.go;
   };

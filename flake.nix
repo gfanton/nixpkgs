@@ -70,7 +70,7 @@
         username = "gfanton";
         fullName = "";
         email = "8671905+gfanton@users.noreply.github.com";
-        nixConfigDirectory = "/Users/runner/work/nixpkgs/nixpkgs";
+        nixConfigDirectory = "/Users/gfanton/nixpkgs";
       };
 
       ciUserInfo = {
@@ -151,7 +151,6 @@
         my-skhd = import ./darwin/skhd.nix;
 
         # local modules
-        # security-pam = import ./modules/darwin/security/pam.nix;
         services-emacsd = import ./modules/darwin/services/emacsd.nix;
         users-primaryUser = import ./modules/darwin/users.nix;
         programs-nix-index = import ./modules/darwin/programs/nix-index.nix;
@@ -218,8 +217,11 @@
           system = "x86_64-darwin";
           username = "runner";
           nixConfigDirectory = "/Users/runner/work/nixpkgs/nixpkgs";
-          extraModules =
-            singleton { homebrew.enable = self.lib.mkForce false; };
+          extraModules = singleton {
+            homebrew.enable = self.lib.mkForce false;
+            services.yabai.enable = self.lib.mkForce false;
+            services.skhd.enable = self.lib.mkForce false;
+          };
         };
       };
 
@@ -230,8 +232,8 @@
         cloud = home-manager.lib.homeManagerConfiguration {
           pkgs = import inputs.nixpkgs-unstable
             (nixpkgsDefaults // { system = "x86_64-linux"; });
-          modules = attrValues self.homeManagerModules ++ singleton
-            ({ config, ... }: {
+          modules = attrValues self.homeManagerModules
+            ++ (attrValues self.commonModules) ++ singleton ({ config, ... }: {
               home.user-info = primaryUserInfo // {
                 nixConfigDirectory = "${config.home.homeDirectory}/nixpkgs";
               };
@@ -245,8 +247,8 @@
         githubCI = home-manager.lib.homeManagerConfiguration {
           pkgs = import inputs.nixpkgs-unstable
             (nixpkgsDefaults // { system = "x86_64-linux"; });
-          modules = attrValues self.homeManagerModules ++ singleton
-            ({ config, ... }: {
+          modules = attrValues self.homeManagerModules
+            ++ (attrValues self.commonModules) ++ singleton ({ config, ... }: {
               home.user-info = ciUserInfo // {
                 nixConfigDirectory = "${config.home.homeDirectory}/nixpkgs";
               };

@@ -12,15 +12,18 @@ in {
           * : ${pkgs.kitty}/bin/kitty --single-instance -d ~
           "kitty" ~
       ]
-      cmd - 0x33 : /Applications/Arc.app/Contents/MacOS/Arc # cmd + <-
+
+      # open new arc window
+      # cmd + <-
+      cmd + shift - return : osascript -e 'tell application "Arc" to make new window' -e 'tell application "Arc" to activate'
 
       ## Window command
 
       # focus
-      lcmd - left : ${yabai} -m window --focus west
-      lcmd - down : ${yabai} -m window --focus south
-      lcmd - up : ${yabai} -m window --focus north
-      lcmd - right : ${yabai} -m window --focus east
+      lcmd - left : ${yabai} -m window --focus west || yabai -m display --focus west
+      lcmd - down : ${yabai} -m window --focus south || yabai -m display --focus south
+      lcmd - up : ${yabai} -m window --focus north || yabai -m display --focus north
+      lcmd - right : ${yabai} -m window --focus east || yabai -m display --focus east
 
       # swap
       # lcmd + shift - left : ${yabai} -m window --swap west
