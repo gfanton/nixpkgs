@@ -67,7 +67,7 @@ in {
       tig
       mosh # wrapper for `ssh` that better and not dropping connections
       unrar # extract RAR archives
-      exa # fancy version of `ls`
+      eza # fancy version of `ls`
       btop # fancy version of `top`
       tmate # instant terminal sharing
       fd # fancy version of `find`

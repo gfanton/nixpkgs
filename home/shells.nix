@@ -79,10 +79,10 @@ in {
             config = ''
               # zstyle ':fzf-tab:complete:(cat|bat):*' fzf-preview ' \
               #   ([ -f $realpath ] && ${pkgs.bat}/bin/bat --color=always --style=header,grid --line-range :500 $realpath) \
-              #   || ${pkgs.exa}/bin/exa --color=always --tree --level=1 $realpath'
+              #   || ${pkgs.eza}/bin/eza --color=always --tree --level=1 $realpath'
 
               # ls
-              # zstyle ':fzf-tab:complete:cd:*' fzf-preview '${pkgs.exa}/bin/exa --color=always --tree --level=1 $realpath'
+              # zstyle ':fzf-tab:complete:cd:*' fzf-preview '${pkgs.eza}/bin/eza --color=always --tree --level=1 $realpath'
 
               # ps/kill
               # give a preview of commandline arguments when completing `kill`
@@ -98,8 +98,14 @@ in {
         ];
       };
       theme = "powerlevel10k/powerlevel10k";
-      plugins = [ "sudo" "git" "fzf" "zoxide" "cp" ]
-        # ++ [ "fzf-tab" "fast-syntax-highlighting" ] # extra plugins list
+      plugins = [
+        "sudo"
+        "git"
+        "fzf"
+        "zoxide"
+        "cp"
+      ]
+      # ++ [ "fzf-tab" "fast-syntax-highlighting" ] # extra plugins list
         ++ lib.optionals pkgs.stdenv.isDarwin [ "brew" "macos" ]
         ++ lib.optionals pkgs.stdenv.isLinux [ ];
     };
@@ -128,7 +134,16 @@ in {
     '';
 
     shellAliases = with pkgs;
-      {
+      let
+        ezaTree = lib.listToAttrs (map (i: {
+          name = "ls${toString i}";
+          value = "ls -T --level=${toString i}";
+        }) (lib.range 0 10));
+        ezaTreelist = lib.listToAttrs (map (i: {
+          name = "l${toString i}";
+          value = "ls -T --level=${toString i} -l";
+        }) (lib.range 0 10));
+      in {
         dev = "(){ nix develop $1 -c $SHELL ;}";
         mydev = "(){ nix develop my#$1 -c $SHELL ;}";
 
@@ -146,13 +161,13 @@ in {
         htop = "${btop}/bin/btop";
 
         # list dir
-        ls = "${exa}/bin/exa";
+        ls = "${eza}/bin/eza";
         l = "ls -l --icons";
         la = "l -a";
         ll = "ls -lhmbgUFH --git --icons";
         lla = "ll -a";
         config = "make -C ${homeDirectory}/nixpkgs";
-      } // (lib.optionalAttrs (stdenv.system == "aarch64-darwin") {
+      } // ezaTree // ezaTreelist  // (lib.optionalAttrs (stdenv.system == "aarch64-darwin") {
         # switch on rosetta shell
         rosetta-zsh = "${pkgs-x86.zsh}/bin/zsh";
       });

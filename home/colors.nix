@@ -34,6 +34,8 @@
       color18 = "#1e2030"; # mantle
       color19 = "#181926"; # crust
       color20 = "#494d64"; # surface
+
+      color21 = "none"; # surface
     };
 
     namedColors = {
@@ -61,25 +63,29 @@
       mantle = "color18";
       crust = "color19";
       surface = "color20";
+
+      none = "color21";
     };
 
     terminal = {
       bg = "base";
       fg = "text";
       cursorBg = "white";
-      cursorFg = "text";
-      selectionBg = "surface";
-      selectionFg = "white";
+      cursorFg = "black";
+      selectionBg = "white";
+      selectionFg = "black";
     };
 
     pkgThemes.kitty = {
       url_color = "blue";
-      tab_bar_background = "crust";
-      active_tab_background = "base";
-      active_tab_foreground = "green";
+      tab_bar_background = "none";
+      active_tab_background = "yellow";
+      active_tab_foreground = "black";
       inactive_tab_background = "crust";
-      inactive_tab_foreground = "brightGreen";
-      active_border_color = "white";
+      inactive_tab_foreground = "text";
+      active_border_color = "yellow";
+      inactive_border_color = "surface";
+      bell_border_color = "brightBlue";
     };
   };
 
@@ -142,12 +148,12 @@
     };
 
     terminal = {
-      bg = "gunmetal";
-      fg = "white";
+      bg = "base";
+      fg = "text";
       cursorBg = "white";
       cursorFg = "black";
-      selectionBg = "steelTeal";
-      selectionFg = "brightGray";
+      selectionBg = "white";
+      selectionFg = "black";
     };
 
     pkgThemes.kitty = {

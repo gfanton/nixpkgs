@@ -30,14 +30,15 @@ in {
 
   programs.kitty.settings = {
     # https://fsd.it/shop/fonts/pragmatapro/
-    font_family = "FiraCode Nerd Font";
-    font_size = "16.0";
-    adjust_line_height = "140%";
+    font_family = "FiraCode Nerd Font Mono";
+    font_size = "14.0";
+    adjust_line_height = "120%";
     disable_ligatures = "cursor"; # disable ligatures when cursor is on them
 
     # Window layout
     hide_window_decorations = "titlebar-only";
     window_padding_width = "5";
+    window_border_width = "1pt";
 
     scrollback_pager_history_size = 100;
     macos_option_as_alt = "yes";
@@ -51,11 +52,14 @@ in {
 
     enabled_layouts = "horizontal,grid,splits,vertical";
     enable_audio_bell = "no";
-    bell_on_tab = "no";
+    bell_on_tab = "yes";
 
     background_opacity = "0.85";
 
     kitty_mod = "ctrl+alt";
+
+    font_features =
+      "+cv02 +cv05 +cv09 +cv14 +ss04 +cv16 +cv31 +cv25 +cv26 +cv32 +cv28 +ss10 +zero +onum";
   };
 
   # # Change the style of italic font variants
@@ -63,7 +67,7 @@ in {
   #   font_features FiraCode Nerd Font
   # '';
 
-  programs.kitty.extras.useSymbolsFromNerdFont = "JetBrainsMono Nerd Font Mono";
+  programs.kitty.extras.useSymbolsFromNerdFont = "FiraCode Nerd Font Mono";
   # }}}
 
   programs.kitty.extras.colors = {

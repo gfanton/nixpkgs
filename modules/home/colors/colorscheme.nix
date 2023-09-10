@@ -80,7 +80,9 @@ in {
           active_tab_foreground = mkColorOption { };
           inactive_tab_foreground = mkColorOption { };
           inactive_tab_background = mkColorOption { };
+          bell_border_color = mkColorOption { };
           active_border_color = mkColorOption { default = config.terminal.bg; };
+          inactive_border_color = mkColorOption { };
         };
       };
     };
