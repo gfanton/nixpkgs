@@ -109,12 +109,8 @@ in {
 
       # rust
       rustup
-      # rls
-      # rustc
-      # cargo
 
       # ruby
-      # (ruby_2_7.withPackages (ps: [ ps.ffi-compiler ]))
       ruby_3_1
 
       # js

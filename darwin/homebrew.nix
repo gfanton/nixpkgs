@@ -36,76 +36,24 @@ in {
     DaisyDisk = 411643860;
     Numbers = 409203825;
     Pages = 409201541;
+    Xcode = 497799835;
     # "1Blocker" = 1365531024;
     # "1Password for Safari" = 1569813296;
     # "1Password" = 1333542190;
-    # "Accelerate for Safari" = 1459809092;
-    # "Apple Configurator 2" = 1037126344;
-    # "Dark Mode for Safari" = 1397180934;
-    # "Gemini 2" = 1090488118;
-    # "Pixelmator Classic" = 407963104;
-    # "Pixelmator Pro" = 1289583905;
-    # "Save to Raindrop.io" = 1549370672;
-    # "Things 3" = 904280696;
-    # "WiFi Explorer" = 494803304;
-    # "Yubico Authenticator" = 1497506650;
-    # "iMazing Profile Editor" = 1487860882;
-    # Deliveries = 290986013;
-    # Fantastical = 975937182;
-    # Keynote = 409183694;
-    # MindNode = 1289197285;
-    # Patterns = 429449079;
-    # SiteSucker = 442168834;
     # Slack = 803453959;
-    # TODO: Re-enable once macOS Ventura officially launches
-    # TripMode = 1513400665;
-    # Ulysses = 1225570693;
-    # Vimari = 1480933944;
-    # Xcode = 497799835;
   };
 
   # If an app isn't available in the Mac App Store, or the version in the App Store has
   # limitiations, e.g., Transmit, install the Homebrew Cask.
   homebrew.casks = [
-    "font-hack-nerd-font"
+    "font-fira-mono-nerd-font"
+    "font-fira-code-nerd-font"
+    "font-jetbrains-mono-nerd-font"
     "orbstack"
-    # "1password"
-    # "1password-cli"
-    # "amethyst"
-    # "anki"
-    # "arq"
-    # "balenaetcher"
-    # "cleanmymac"
-    # "element"
-    # "etrecheckpro"
-    # "discord"
-    # "firefox"
-    # "google-chrome"
-    # "google-drive"
-    # "gpg-suite"
-    # "hammerspoon"
-    # "keybase"
-    # "nvidia-geforce-now"
-    # "obsbot-me-tool"
-    # "obsbot-tinycam"
-    # "obsidian"
-    # "parallels"
-    # "postman"
-    # "protonvpn"
-    # "raindropio"
-    # "raycast"
-    # "secretive"
-    # "signal"
-    # "skype"
-    # "steam"
-    # "superhuman"
-    # "tor-browser"
-    # "transmission"
-    # "transmit"
-    # "visual-studio-code"
-    # "vlc"
-    # "yubico-yubikey-manager"
-    # "yubico-yubikey-personalization-gui"
+    "arc"
+    "raycast"
+    "1password"
+    "1password-cli"
   ];
 
   # Configuration related to casks
@@ -114,14 +62,17 @@ in {
 
   # For cli packages that aren't currently available for macOS in `nixpkgs`.Packages should be
   # installed in `../home/default.nix` whenever possible.
-  homebrew.brews = [
-    { name = "ical-buddy"; }
-    {name = "koekeishiya/formulae/yabai";}
-    {name = "koekeishiya/formulae/skhd";}
-    {
-      name = "sketchybar";
-      start_service = true;
-      restart_service = "changed";
-    }
-  ];
+  homebrew.brews = [{
+    name = "ical-buddy";
+  }
+  # { name = "koekeishiya/formulae/yabai"; }
+  # {
+  #   name = "koekeishiya/formulae/skhd";
+  # }
+  # {
+  #   name = "sketchybar";
+  #   start_service = false;
+  #   restart_service = "changed";
+  # }
+    ];
 }

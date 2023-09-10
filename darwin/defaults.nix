@@ -11,7 +11,7 @@
     NSAutomaticCapitalizationEnabled = false;
     NSAutomaticDashSubstitutionEnabled = false;
     NSAutomaticPeriodSubstitutionEnabled = false;
-    _HIHideMenuBar = true;
+    _HIHideMenuBar = false;
   };
 
   # Firewall

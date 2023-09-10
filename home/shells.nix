@@ -167,7 +167,8 @@ in {
         ll = "ls -lhmbgUFH --git --icons";
         lla = "ll -a";
         config = "make -C ${homeDirectory}/nixpkgs";
-      } // ezaTree // ezaTreelist  // (lib.optionalAttrs (stdenv.system == "aarch64-darwin") {
+      } // ezaTree // ezaTreelist
+      // (lib.optionalAttrs (stdenv.system == "aarch64-darwin") {
         # switch on rosetta shell
         rosetta-zsh = "${pkgs-x86.zsh}/bin/zsh";
       });
