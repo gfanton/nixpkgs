@@ -15,9 +15,14 @@
 
     flake-utils.url = "github:numtide/flake-utils";
 
+    # lsp
+    rnix-lsp.url = "github:nix-community/rnix-lsp";
+
     # overlay
     home-manager.url = "github:nix-community/home-manager/master";
-    emacs-overlay = { url = "github:nix-community/emacs-overlay"; };
+    emacs-overlay.url = "github:nix-community/emacs-overlay";
+
+    # rnix-lsp
 
     # Other sources
 
@@ -47,7 +52,7 @@
     powerlevel10k.flake = false;
   };
 
-  outputs = { self, darwin, home-manager, flake-utils, ... }@inputs:
+  outputs = { self, darwin, home-manager, rnix-lsp, flake-utils, ... }@inputs:
     let
       inherit (self.lib) attrValues makeOverridable optionalAttrs singleton;
 
@@ -131,13 +136,19 @@
 
       # Non-system outputs --------------------------------------------------------------------- {{{
 
+      commonModules = {
+        colors = import ./modules/home/colors;
+        my-colors = import ./home/colors.nix;
+      };
+
       darwinModules = {
         # My configurations
         my-bootstrap = import ./darwin/bootstrap.nix;
         my-defaults = import ./darwin/defaults.nix;
         my-env = import ./darwin/env.nix;
         my-homebrew = import ./darwin/homebrew.nix;
-        my-config = import ./darwin/config.nix;
+        my-yabai = import ./darwin/yabai.nix;
+        my-skhd = import ./darwin/skhd.nix;
 
         # local modules
         # security-pam = import ./modules/darwin/security/pam.nix;
@@ -149,7 +160,6 @@
       homeManagerModules = {
         # My configurations
         my-shells = import ./home/shells.nix;
-        my-colors = import ./home/colors.nix;
         my-git = import ./home/git.nix;
         my-kitty = import ./home/kitty.nix;
         my-packages = import ./home/packages.nix;
@@ -158,7 +168,6 @@
         my-config = import ./home/config.nix;
 
         # local modules
-        colors = import ./modules/home/colors;
         programs-truecolor = import ./modules/home/programs/truecolor;
         # programs-asdf = import ./modules/home/programs/asdf;
         programs-kitty-extras = import ./modules/home/programs/kitty/extras.nix;
@@ -187,18 +196,21 @@
         # My Apple Silicon macOS laptop config
         macbook = makeOverridable self.lib.mkDarwinSystem (primaryUserInfo // {
           system = "aarch64-darwin";
-          modules = attrValues self.darwinModules ++ singleton {
-            nixpkgs = nixpkgsDefaults;
-            networking.computerName = "guicp";
-            networking.hostName = "ghost";
-            networking.knownNetworkServices = [ "Wi-Fi" "USB 10/100/1000 LAN" ];
-            nix.registry.my.flake = inputs.self;
-          };
+          modules = (attrValues self.darwinModules)
+            ++ (attrValues self.commonModules) ++ singleton {
+              nixpkgs = nixpkgsDefaults;
+              networking.computerName = "guicp";
+              networking.hostName = "ghost";
+              networking.knownNetworkServices =
+                [ "Wi-Fi" "USB 10/100/1000 LAN" ];
+              nix.registry.my.flake = inputs.self;
+            };
 
           inherit homeStateVersion;
-          homeModules = attrValues self.homeManagerModules ++ [
+          homeModules = (attrValues self.homeManagerModules)
+            ++ (attrValues self.commonModules) ++ [
 
-          ];
+            ];
         });
 
         # Config with small modifications needed/desired for CI with GitHub workflow

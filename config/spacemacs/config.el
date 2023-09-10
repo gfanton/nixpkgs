@@ -91,7 +91,9 @@ This function should only modify configuration layer settings."
      protobuf
      org
      markdown
-     nixos
+     (nixos :variables
+            nixos-format-on-save t
+            nix-backend 'lsp)
 
      ;; utils
      multiple-cursors
