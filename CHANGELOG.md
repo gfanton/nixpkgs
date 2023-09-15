@@ -1,3 +1,222 @@
+## Update 2023-09-15
+```go
+Version changes:
+[U.]  #01  SDL2                         2.28.1 -> 2.28.2
+[U.]  #02  audit                        3.1.1 -> 3.1.2
+[C.]  #03  aws-c-auth                   0.6.26 x2 -> 0.6.26, 0.7.0
+[C.]  #04  aws-c-cal                    0.5.21 x2 -> 0.5.21, 0.6.0
+[C.]  #05  aws-c-common                 0.8.15 x2 -> 0.8.15, 0.8.23
+[C.]  #06  aws-c-compression            0.2.16 x2 -> 0.2.16, 0.2.17
+[C.]  #07  aws-c-event-stream           0.2.20 x2 -> 0.2.20, 0.3.1
+[C.]  #08  aws-c-http                   0.7.6 x2 -> 0.7.11, 0.7.6
+[C.]  #09  aws-c-io                     0.13.19 x2 -> 0.13.19, 0.13.29
+[C.]  #10  aws-c-mqtt                   0.8.8 x2 -> 0.8.14, 0.8.8
+[C.]  #11  aws-c-s3                     0.2.8 x2 -> 0.2.8, 0.3.13
+[C.]  #12  aws-c-sdkutils               0.1.9 x2 -> 0.1.11, 0.1.9
+[C.]  #13  aws-checksums                0.1.14 x2 -> 0.1.14, 0.1.17
+[C.]  #14  aws-crt-cpp                  0.20.2 x2 -> 0.20.2, 0.20.3
+[C.]  #15  aws-sdk-cpp                  1.11.37 x2 -> 1.11.118, 1.11.37
+[C.]  #16  curl                         8.1.1, 8.1.2 x2, 8.1.2-bin, 8.1.2-man -> 8.1.1, 8.2.1 x2, 8.2.1-bin, 8.2.1-man
+[U.]  #17  docker-compose               2.20.2 -> 2.21.0
+[U.]  #18  entr                         5.2 -> 5.4
+[U.]  #19  eza                          0.10.4, 0.10.4-man -> 0.11.1, 0.11.1-man
+[U.]  #20  file                         5.44 -> 5.45
+[U.]  #21  freetype                     2.13.0 -> 2.13.1
+[U.]  #22  fuse-overlayfs               1.12 -> 1.13
+[U.]  #23  gh                           2.32.1 -> 2.34.0
+[U.]  #24  gmp                          6.2.1 -> 6.3.0
+[C.]  #25  gmp-with-cxx                 6.2.1 x3 -> 6.2.1, 6.3.0 x2
+[U.]  #26  gnutar                       1.34 -> 1.35
+[U.]  #27  gnutls                       3.8.0 -> 3.8.1
+[U.]  #28  go                           1.20.6 -> 1.20.7
+[U.]  #29  gopls                        0.13.1 -> 0.13.2
+[U.]  #30  groff                        1.22.4 -> 1.23.0
+[U.]  #31  gst-plugins-bad              1.22.4 -> 1.22.5
+[U.]  #32  gst-plugins-base             1.22.4 -> 1.22.5
+[U.]  #33  gstreamer                    1.22.4 -> 1.22.5
+[U.]  #34  hwdata                       0.372 -> 0.373
+[U.]  #35  kbd                          2.5.1 -> 2.6.1
+[U.]  #36  lazydocker                   0.21.0 -> 0.21.1
+[U.]  #37  lazygit                      0.39.4 -> 0.40.2
+[U.]  #38  libjack2                     1.9.19 -> 1.9.22
+[U.]  #39  liblc3                       1.0.3 -> 1.0.4
+[U.]  #40  librsvg                      2.56.2 -> 2.56.3
+[U.]  #41  libsndfile                   1.2.0 -> 1.2.2
+[U.]  #42  lvm2                         2.03.21-lib -> 2.03.22-lib
+[U.]  #43  mesa                         23.1.3 -> 23.1.5
+[C.]  #44  nghttp2                      1.51.0-lib x2 -> 1.51.0-lib, 1.54.0-lib
+[C.]  #45  nix                          2.14.1 x2, 2.14.1-man x2, 2.15.1, 2.15.1-man -> 2.14.1, 2.14.1-man, 2.16.1, 2.16.1-man, 2.17.0, 2.17.0-man
+[U.]  #46  nodejs                       18.16.1 -> 18.17.1
+[U.]  #47  nss-cacert                   3.90 -> 3.92
+[C.]  #48  openexr                      2.5.8, 3.1.7 -> 2.5.8, 3.2.0
+[U.]  #49  openldap                     2.6.5 -> 2.6.6
+[U.]  #50  openssh                      9.3p2 -> 9.4p1
+[C.]  #51  openssl                      3.0.9 x3, 3.0.9-bin, 3.0.9-dev -> 3.0.10 x2, 3.0.10-bin, 3.0.10-dev, 3.0.9
+[U.]  #52  parallel                     20230622, 20230622-man -> 20230822, 20230822-man
+[C.]  #53  perl                         <none>, 5.36.0 -> <none>, 5.38.0
+[U.]  #54  pipewire                     0.3.74-lib -> 0.3.79-lib
+[U.]  #55  pnpm                         8.6.11 -> 8.6.12
+[C.]  #56  python3                      3.10.12, 3.10.12-env, 3.9.17, 3.9.17-env -> 3.10.12, 3.10.12-env, 3.9.18, 3.9.18-env
+[U.]  #57  python3.10-filelock          3.12.0 -> 3.12.2
+[U.]  #58  python3.10-pip               23.0.1 -> 23.2.1, 23.2.1-man
+[U.]  #59  python3.10-platformdirs      3.5.1 -> 3.9.1
+[U.]  #60  python3.10-setuptools        67.4.0 -> 68.0.0
+[U.]  #61  python3.10-virtualenv        20.19.0 -> 20.24.0
+[U.]  #62  python3.9-astroid            2.14.2 -> 2.15.6
+[U.]  #63  python3.9-filelock           3.12.0 -> 3.12.2
+[U.]  #64  python3.9-mypy               1.3.0 -> 1.4.1
+[U.]  #65  python3.9-pip                23.0.1 -> 23.2.1, 23.2.1-man
+[U.]  #66  python3.9-platformdirs       3.5.1 -> 3.9.1
+[U.]  #67  python3.9-pylint             2.16.2 -> 2.17.5
+[U.]  #68  python3.9-setuptools         67.4.0 -> 68.0.0
+[U.]  #69  python3.9-tomlkit            0.11.6 -> 0.12.1
+[U.]  #70  python3.9-typing-extensions  4.5.0 -> 4.7.1
+[U.]  #71  python3.9-virtualenv         20.19.0 -> 20.24.0
+[U.]  #72  python3.9-zipp               3.15.0 -> 3.16.2
+[U.]  #73  rhash                        1.4.3 -> 1.4.4
+[U.]  #74  roc-toolkit                  0.2.4 -> 0.2.5
+[C.]  #75  s2n-tls                      1.3.45, 1.3.46 -> 1.3.45, 1.3.48
+[U.]  #76  slirp4netns                  1.2.0 -> 1.2.1
+[U.]  #77  util-linux                   2.39-bin, 2.39-lib, 2.39-login, 2.39-mount, 2.39-swap -> 2.39.1-bin, 2.39.1-lib, 2.39.1-login, 2.39.1-mount, 2.39.1-swap
+[U.]  #78  util-linux-minimal           2.39-bin, 2.39-lib, 2.39-login, 2.39-mount, 2.39-swap -> 2.39.1-bin, 2.39.1-lib, 2.39.1-login, 2.39.1-mount, 2.39.1-swap
+[U.]  #79  vulkan-loader                1.3.254 -> 1.3.261
+[U.]  #80  xdg-dbus-proxy               0.1.4 -> 0.1.5
+[C.]  #81  xz                           5.4.3 x2, 5.4.3-bin -> 5.4.3, 5.4.4, 5.4.4-bin
+Added packages:
+[A.]  #01  abseil-cpp                        20210324.2
+[A.]  #02  libsamplerate                     0.1.9
+[A.]  #03  nix-zsh-completions               0.5.0
+[A.]  #04  perl5.38.0-Authen-SASL            2.16
+[A.]  #05  perl5.38.0-CGI                    4.51
+[A.]  #06  perl5.38.0-CGI-Fast               2.15
+[A.]  #07  perl5.38.0-Digest-HMAC            1.03
+[A.]  #08  perl5.38.0-Encode-Locale          1.05
+[A.]  #09  perl5.38.0-FCGI                   0.79
+[A.]  #10  perl5.38.0-FCGI-ProcManager       0.28
+[A.]  #11  perl5.38.0-File-BaseDir           0.08
+[A.]  #12  perl5.38.0-File-DesktopEntry      0.22
+[A.]  #13  perl5.38.0-File-Listing           6.14
+[A.]  #14  perl5.38.0-File-MimeInfo          0.30
+[A.]  #15  perl5.38.0-HTML-Parser            3.75
+[A.]  #16  perl5.38.0-HTML-TagCloud          0.38
+[A.]  #17  perl5.38.0-HTML-Tagset            3.20
+[A.]  #18  perl5.38.0-HTTP-Cookies           6.09
+[A.]  #19  perl5.38.0-HTTP-Daemon            6.14
+[A.]  #20  perl5.38.0-HTTP-Date              6.05
+[A.]  #21  perl5.38.0-HTTP-Message           6.26
+[A.]  #22  perl5.38.0-HTTP-Negotiate         6.01
+[A.]  #23  perl5.38.0-IO-HTML                1.004
+[A.]  #24  perl5.38.0-IO-Socket-SSL          2.068
+[A.]  #25  perl5.38.0-IPC-System-Simple      1.30
+[A.]  #26  perl5.38.0-LWP-MediaTypes         6.04
+[A.]  #27  perl5.38.0-Mozilla-CA             20200520
+[A.]  #28  perl5.38.0-Net-DBus               1.2.0
+[A.]  #29  perl5.38.0-Net-HTTP               6.19
+[A.]  #30  perl5.38.0-Net-SMTP-SSL           1.04
+[A.]  #31  perl5.38.0-Net-SSLeay             1.92
+[A.]  #32  perl5.38.0-TermReadKey            2.38
+[A.]  #33  perl5.38.0-Test-Fatal             0.016
+[A.]  #34  perl5.38.0-Test-Needs             0.002006
+[A.]  #35  perl5.38.0-Test-RequiresInternet  0.05
+[A.]  #36  perl5.38.0-TimeDate               2.33
+[A.]  #37  perl5.38.0-Try-Tiny               0.30
+[A.]  #38  perl5.38.0-URI                    5.05
+[A.]  #39  perl5.38.0-WWW-RobotRules         6.02
+[A.]  #40  perl5.38.0-X11-Protocol           0.56
+[A.]  #41  perl5.38.0-XML-Parser             2.46
+[A.]  #42  perl5.38.0-XML-Twig               3.52
+[A.]  #43  perl5.38.0-libnet                 3.12
+[A.]  #44  perl5.38.0-libwww-perl            6.67
+Removed packages:
+[R.]  #01  nix-zsh-completions-unstable      2023-01-30
+[R.]  #02  perl5.36.0-Authen-SASL            2.16
+[R.]  #03  perl5.36.0-CGI                    4.51
+[R.]  #04  perl5.36.0-CGI-Fast               2.15
+[R.]  #05  perl5.36.0-Digest-HMAC            1.03
+[R.]  #06  perl5.36.0-Encode-Locale          1.05
+[R.]  #07  perl5.36.0-FCGI                   0.79
+[R.]  #08  perl5.36.0-FCGI-ProcManager       0.28
+[R.]  #09  perl5.36.0-File-BaseDir           0.08
+[R.]  #10  perl5.36.0-File-DesktopEntry      0.22
+[R.]  #11  perl5.36.0-File-Listing           6.14
+[R.]  #12  perl5.36.0-File-MimeInfo          0.30
+[R.]  #13  perl5.36.0-HTML-Parser            3.75
+[R.]  #14  perl5.36.0-HTML-TagCloud          0.38
+[R.]  #15  perl5.36.0-HTML-Tagset            3.20
+[R.]  #16  perl5.36.0-HTTP-Cookies           6.09
+[R.]  #17  perl5.36.0-HTTP-Daemon            6.14
+[R.]  #18  perl5.36.0-HTTP-Date              6.05
+[R.]  #19  perl5.36.0-HTTP-Message           6.26
+[R.]  #20  perl5.36.0-HTTP-Negotiate         6.01
+[R.]  #21  perl5.36.0-IO-HTML                1.004
+[R.]  #22  perl5.36.0-IO-Socket-SSL          2.068
+[R.]  #23  perl5.36.0-IPC-System-Simple      1.30
+[R.]  #24  perl5.36.0-LWP-MediaTypes         6.04
+[R.]  #25  perl5.36.0-Mozilla-CA             20200520
+[R.]  #26  perl5.36.0-Net-DBus               1.2.0
+[R.]  #27  perl5.36.0-Net-HTTP               6.19
+[R.]  #28  perl5.36.0-Net-SMTP-SSL           1.04
+[R.]  #29  perl5.36.0-Net-SSLeay             1.92
+[R.]  #30  perl5.36.0-TermReadKey            2.38
+[R.]  #31  perl5.36.0-Test-Fatal             0.016
+[R.]  #32  perl5.36.0-Test-Needs             0.002006
+[R.]  #33  perl5.36.0-Test-RequiresInternet  0.05
+[R.]  #34  perl5.36.0-TimeDate               2.33
+[R.]  #35  perl5.36.0-Try-Tiny               0.30
+[R.]  #36  perl5.36.0-URI                    5.05
+[R.]  #37  perl5.36.0-WWW-RobotRules         6.02
+[R.]  #38  perl5.36.0-X11-Protocol           0.56
+[R.]  #39  perl5.36.0-XML-Parser             2.46
+[R.]  #40  perl5.36.0-XML-Twig               3.52
+[R.]  #41  perl5.36.0-libnet                 3.12
+[R.]  #42  perl5.36.0-libwww-perl            6.67
+Closure size: 702 -> 706 (654 paths added, 650 paths removed, delta +4, disk usage +38.4MiB).
+```
+### lock change:
+```
+• Updated input 'darwin':
+    'github:LnL7/nix-darwin/d3529322dcaaddf0c50cb277c9c2a355f3a36a3b' (2023-08-02)
+  → 'github:LnL7/nix-darwin/4496ab26628c5f43d2a5c577a06683c753e32fe2' (2023-09-12)
+• Updated input 'doomemacs':
+    'github:doomemacs/doomemacs/90b1b221fe7c20f2edef341a780e194cd22c7daa' (2023-07-26)
+  → 'github:doomemacs/doomemacs/e47accb77324ffff6e9a72bf820a0f73d2e804f3' (2023-09-14)
+• Updated input 'emacs-overlay':
+    'github:nix-community/emacs-overlay/0f0e97805c949e227df8503df13335fad57f271d' (2023-08-05)
+  → 'github:nix-community/emacs-overlay/da471a2c6e368f2950f1491d21dfb873b8e8474d' (2023-09-15)
+• Updated input 'emacs-overlay/flake-utils':
+    'github:numtide/flake-utils/919d646de7be200f3bf08cb76ae1f09402b6f9b4' (2023-07-11)
+  → 'github:numtide/flake-utils/ff7b65b44d01cf9ba6a71320833626af21126384' (2023-09-12)
+• Updated input 'emacs-overlay/nixpkgs':
+    'github:NixOS/nixpkgs/66aedfd010204949cb225cf749be08cb13ce1813' (2023-08-02)
+  → 'github:NixOS/nixpkgs/3a2786eea085f040a66ecde1bc3ddc7099f6dbeb' (2023-09-11)
+• Updated input 'emacs-overlay/nixpkgs-stable':
+    'github:NixOS/nixpkgs/9652a97d9738d3e65cf33c0bc24429e495a7868f' (2023-08-04)
+  → 'github:NixOS/nixpkgs/e5f018cf150e29aac26c61dac0790ea023c46b24' (2023-09-12)
+• Updated input 'flake-utils':
+    'github:numtide/flake-utils/919d646de7be200f3bf08cb76ae1f09402b6f9b4' (2023-07-11)
+  → 'github:numtide/flake-utils/ff7b65b44d01cf9ba6a71320833626af21126384' (2023-09-12)
+• Updated input 'home-manager':
+    'github:nix-community/home-manager/15043a65915bcc16ad207d65b202659e4988066b' (2023-08-04)
+  → 'github:nix-community/home-manager/d9b88b43524db1591fb3d9410a21428198d75d49' (2023-09-13)
+• Updated input 'home-manager/nixpkgs':
+    'github:NixOS/nixpkgs/9e1960bc196baf6881340d53dccb203a951745a2' (2023-08-01)
+  → 'github:NixOS/nixpkgs/3a2786eea085f040a66ecde1bc3ddc7099f6dbeb' (2023-09-11)
+• Updated input 'nixpkgs-master':
+    'github:NixOS/nixpkgs/d886e44d9b086da2374f25932ac0b1f6724b7dbe' (2023-08-05)
+  → 'github:NixOS/nixpkgs/295a5e1e2bacd6e246db8b2bb35d2a9415883224' (2023-09-15)
+• Updated input 'nixpkgs-stable':
+    'github:NixOS/nixpkgs/a7c57ba85e9cbbe79c42c2f3e2a38411db52eff9' (2023-08-05)
+  → 'github:NixOS/nixpkgs/d728a45aa5c68f8f819bf7b65633ef120baabdfa' (2023-09-15)
+• Updated input 'nixpkgs-unstable':
+    'github:NixOS/nixpkgs/7d050b98e51cdbdd88ad960152d398d41c7ff5b4' (2023-08-04)
+  → 'github:NixOS/nixpkgs/1697b7d480449b01111e352021f46e5879e47643' (2023-09-13)
+• Updated input 'powerlevel10k':
+    'github:romkatv/powerlevel10k/f851f41fc14d5bd66266b4b4af917d50c1c8b7fe' (2023-07-29)
+  → 'github:romkatv/powerlevel10k/873c4ff09c559a507d33e528df7e27a8a48705d7' (2023-09-09)
+• Updated input 'spacemacs':
+    'github:syl20bnr/spacemacs/4882f70e6541275969b09b52394bb9af563852f4' (2023-07-25)
+  → 'github:syl20bnr/spacemacs/b86a074437503677d21e2172bd175b37edbdb029' (2023-08-28)
+```
 ## Update 2023-08-05
 ```go
 Version changes:
