@@ -1,3 +1,50 @@
+## Update 2023-09-16
+```go
+Version changes:
+[U.]  #01  SDL2                2.28.2 -> 2.28.3
+[U.]  #02  eza                 0.11.1, 0.11.1-man -> 0.12.0, 0.12.0-man
+[U.]  #03  git                 2.41.0, 2.41.0-doc -> 2.42.0, 2.42.0-doc
+[U.]  #04  go                  1.20.7 -> 1.20.8
+[U.]  #05  gzip                1.12 -> 1.13
+[U.]  #06  kbd                 2.6.1 -> 2.6.2
+[C.]  #07  libxml2             2.10.4, 2.11.4 -> 2.10.4, 2.11.5
+[U.]  #08  mesa                23.1.5 -> 23.1.7
+[U.]  #09  mpfr                4.2.0 -> 4.2.1
+[U.]  #10  unbound             1.17.1-lib -> 1.18.0-lib
+[U.]  #11  util-linux          2.39.1-bin, 2.39.1-lib, 2.39.1-login, 2.39.1-mount, 2.39.1-swap -> 2.39.2-bin, 2.39.2-lib, 2.39.2-login, 2.39.2-mount, 2.39.2-swap
+[U.]  #12  util-linux-minimal  2.39.1-bin, 2.39.1-lib, 2.39.1-login, 2.39.1-mount, 2.39.1-swap -> 2.39.2-bin, 2.39.2-lib, 2.39.2-login, 2.39.2-mount, 2.39.2-swap
+[C.]  #13  zlib                1.2.13 x2, 1.2.13-dev -> 1.2.13, 1.3, 1.3-dev
+[U.]  #14  zxing-cpp           1.4.0 -> 2.1.0
+Added packages:
+[A.]  #1  svt-av1  1.6.0
+Removed packages:
+[R.]  #1  gfortran  12.3.0-lib, 12.3.0-libgcc
+Closure size: 706 -> 705 (653 paths added, 654 paths removed, delta -1, disk usage +1.2MiB).
+```
+### lock change:
+```
+• Updated input 'darwin':
+    'github:LnL7/nix-darwin/4496ab26628c5f43d2a5c577a06683c753e32fe2' (2023-09-12)
+  → 'github:LnL7/nix-darwin/80bb201f4925cdda5a7a3c7b1900fb26bb2af2e8' (2023-09-15)
+• Updated input 'doomemacs':
+    'github:doomemacs/doomemacs/e47accb77324ffff6e9a72bf820a0f73d2e804f3' (2023-09-14)
+  → 'github:doomemacs/doomemacs/aab52159517476506b82d78cd13f7930ebd59c7b' (2023-09-16)
+• Updated input 'emacs-overlay':
+    'github:nix-community/emacs-overlay/da471a2c6e368f2950f1491d21dfb873b8e8474d' (2023-09-15)
+  → 'github:nix-community/emacs-overlay/90182afcb4fdb564a653959a8a2d818714e115fb' (2023-09-15)
+• Updated input 'emacs-overlay/nixpkgs':
+    'github:NixOS/nixpkgs/3a2786eea085f040a66ecde1bc3ddc7099f6dbeb' (2023-09-11)
+  → 'github:NixOS/nixpkgs/f2ea252d23ebc9a5336bf6a61e0644921f64e67c' (2023-09-14)
+• Updated input 'nixpkgs-master':
+    'github:NixOS/nixpkgs/295a5e1e2bacd6e246db8b2bb35d2a9415883224' (2023-09-15)
+  → 'github:NixOS/nixpkgs/f773e7cf09f983fefca6733b0981e3037927c30d' (2023-09-16)
+• Updated input 'nixpkgs-stable':
+    'github:NixOS/nixpkgs/d728a45aa5c68f8f819bf7b65633ef120baabdfa' (2023-09-15)
+  → 'github:NixOS/nixpkgs/49ba2a74b5a665f8e84d106e03f85c228cb3798b' (2023-09-15)
+• Updated input 'nixpkgs-unstable':
+    'github:NixOS/nixpkgs/1697b7d480449b01111e352021f46e5879e47643' (2023-09-13)
+  → 'github:NixOS/nixpkgs/46688f8eb5cd6f1298d873d4d2b9cf245e09e88e' (2023-09-15)
+```
 ## Update 2023-09-15
 ```go
 Version changes:
