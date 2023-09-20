@@ -87,6 +87,7 @@ in {
       cmake
       gnupg
       fzf
+      tmux
 
       # my
       my-libvterm
