@@ -31,9 +31,10 @@
 (define-derived-mode gno-mode go-mode "GNO"
   "Major mode for GNO files, an alias for go-mode."
   (setq-local tab-width gno-tab-width) ;; Use the custom gno-tab-width variable
-  (flycheck-mode)
-  (when (fboundp 'lsp-disconnect) ;; Check if the lsp-disconnect function is available
-    (lsp-disconnect)) ;; lsp doesn't work with gno yet
+  ;; (flycheck-mode)
+  ;; If LSP is available, configure and start it.
+  (when (fboundp 'lsp)
+    (lsp))
   (gno-mode-setup))
 
 ;;;###autoload
@@ -82,14 +83,15 @@
   ((error line-start (file-name) ":" line ": " (message) " (code=" (id (one-or-more digit)) ")." line-end))
   :modes gno-mode)
 
-;;;###autoload
-(add-to-list 'flycheck-checkers 'gno-lint)
-;;;###autoload
-(add-hook 'gno-mode-hook
-          (lambda ()
-            (when (fboundp 'lsp-ui-mode)
-              (lsp-ui-mode t))
-            (flycheck-select-checker 'gno-lint)))
+;; ;;;###autoload
+;; ;; (add-to-list 'flycheck-checkers 'gno-lit)
+
+;; ;;;###autoload
+;; (add-hook 'gno-mode-hook
+;;           (lambda ()
+;;             (when (fboundp 'lsp-ui-mode)
+;;               (lsp-ui-mode t))
+;;             (flycheck-select-checker 'gno-lint)))
 
 ;;;###autoload
 (define-derived-mode gno-dot-mod-mode go-dot-mod-mode "GNO Mod"

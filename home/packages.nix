@@ -92,6 +92,7 @@ in {
       # my
       my-libvterm
       my-loon
+      my-gnopls
 
       # stable
       procs # fancy version of `ps`

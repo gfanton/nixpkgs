@@ -132,6 +132,7 @@
 
         my-loon = import ./overlays/loon.nix;
         my-libvterm = import ./overlays/libvterm.nix;
+        my-gnopls = import ./overlays/gnopls.nix;
       };
 
       # Non-system outputs --------------------------------------------------------------------- {{{
