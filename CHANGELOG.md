@@ -1,3 +1,57 @@
+## Update 2023-09-30
+```go
+Version changes:
+[U.]  #01  abseil-cpp   20210324.2 -> 20230125.3
+[C*]  #02  cachix       1.6, 1.6.1 -> 1.6.1
+[U.]  #03  eza          0.12.0, 0.12.0-man -> 0.13.1, 0.13.1-man
+[U.]  #04  gh           2.34.0 -> 2.35.0
+[U.]  #05  imagemagick  7.1.1-15 -> 7.1.1-18
+[U.]  #06  kitty        0.29.2, 0.29.2-terminfo -> 0.30.0, 0.30.0-terminfo
+[U.]  #07  less         633 -> 643, 643-man
+[U.]  #08  nuspell      5.1.2-lib -> 5.1.3-lib
+[U.]  #09  pnpm         8.6.12 -> 8.7.6
+[U.]  #10  protobuf     3.21.12 -> 3.24.2
+[U.]  #11  svt-av1      1.6.0 -> 1.7.0
+Added packages:
+[A.]  #1  gtest   1.12.1, 1.12.1-dev
+[A.]  #2  xxHash  0.8.2
+Removed packages:
+[R.]  #1  librsync  2.3.4
+Closure size: 658 -> 660 (49 paths added, 47 paths removed, delta +2, disk usage -12.2MiB).
+```
+### lock change:
+```
+• Updated input 'darwin':
+    'github:LnL7/nix-darwin/80bb201f4925cdda5a7a3c7b1900fb26bb2af2e8' (2023-09-15)
+  → 'github:LnL7/nix-darwin/792c2e01347cb1b2e7ec84a1ef73453ca86537d8' (2023-09-30)
+• Updated input 'doomemacs':
+    'github:doomemacs/doomemacs/aab52159517476506b82d78cd13f7930ebd59c7b' (2023-09-16)
+  → 'github:doomemacs/doomemacs/844a82c4a0cacbb5a1aa558c88675ba1a9ee80a3' (2023-09-22)
+• Updated input 'emacs-overlay':
+    'github:nix-community/emacs-overlay/90182afcb4fdb564a653959a8a2d818714e115fb' (2023-09-15)
+  → 'github:nix-community/emacs-overlay/db6c96d74eb0e60e7e344e81a56b33390e33474d' (2023-09-30)
+• Updated input 'emacs-overlay/nixpkgs':
+    'github:NixOS/nixpkgs/f2ea252d23ebc9a5336bf6a61e0644921f64e67c' (2023-09-14)
+  → 'github:NixOS/nixpkgs/8a86b98f0ba1c405358f1b71ff8b5e1d317f5db2' (2023-09-27)
+• Updated input 'emacs-overlay/nixpkgs-stable':
+    'github:NixOS/nixpkgs/e5f018cf150e29aac26c61dac0790ea023c46b24' (2023-09-12)
+  → 'github:NixOS/nixpkgs/5cfafa12d57374f48bcc36fda3274ada276cf69e' (2023-09-27)
+• Updated input 'home-manager':
+    'github:nix-community/home-manager/d9b88b43524db1591fb3d9410a21428198d75d49' (2023-09-13)
+  → 'github:nix-community/home-manager/4f02e35f9d150573e1a710afa338846c2f6d850c' (2023-09-29)
+• Updated input 'home-manager/nixpkgs':
+    'github:NixOS/nixpkgs/3a2786eea085f040a66ecde1bc3ddc7099f6dbeb' (2023-09-11)
+  → 'github:NixOS/nixpkgs/e35dcc04a3853da485a396bdd332217d0ac9054f' (2023-09-22)
+• Updated input 'nixpkgs-master':
+    'github:NixOS/nixpkgs/f773e7cf09f983fefca6733b0981e3037927c30d' (2023-09-16)
+  → 'github:NixOS/nixpkgs/59c816e3dec384d3e3c3016e9d062a26f073302d' (2023-09-30)
+• Updated input 'nixpkgs-stable':
+    'github:NixOS/nixpkgs/49ba2a74b5a665f8e84d106e03f85c228cb3798b' (2023-09-15)
+  → 'github:NixOS/nixpkgs/32dcb45f66c0487e92db8303a798ebc548cadedc' (2023-09-30)
+• Updated input 'nixpkgs-unstable':
+    'github:NixOS/nixpkgs/46688f8eb5cd6f1298d873d4d2b9cf245e09e88e' (2023-09-15)
+  → 'github:NixOS/nixpkgs/f3dab3509afca932f3f4fd0908957709bb1c1f57' (2023-09-27)
+```
 ## Update 2023-09-16
 ```go
 Version changes:
