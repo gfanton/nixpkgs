@@ -1,5 +1,8 @@
+IMPURE ?= false
+
 UNAME := $(shell uname)
 UNAME_P := $(shell uname -p)
+
 ifeq ($(UNAME_P),arm)
 BOOTSTRAP := bootstrap-arm
 else
@@ -18,6 +21,7 @@ MISC_CHANNELS := flake-utils flake-compat
 
 NIX_FILES := $(shell find . -type f -name '*.nix')
 
+impure := $(if $(filter $(IMPURE),true),--impure,)
 ifeq ($(UNAME), Darwin) # darwin rules
 all:
 	@echo "switch.osx_bootstrap"
@@ -25,11 +29,11 @@ all:
 	@echo "switch.bot"
 
 switch.bootstrap: result/sw/bin/darwin-rebuild
-	./result/sw/bin/darwin-rebuild switch  --verbose --flake ".#$(BOOTSTRAP)"
+	./result/sw/bin/darwin-rebuild switch ${impure} --verbose --flake ".#$(BOOTSTRAP)"
 switch.macbook: result/sw/bin/darwin-rebuild
-	TERM=xterm ./result/sw/bin/darwin-rebuild switch --verbose --flake .#macbook
+	TERM=xterm ./result/sw/bin/darwin-rebuild switch ${impure} --verbose --flake .#macbook
 switch.bot: result/sw/bin/darwin-rebuild
-	./result/sw/bin/darwin-rebuild switch --verbose --flake .#bot
+	./result/sw/bin/darwin-rebuild switch ${impure} --verbose --flake .#bot
 
 result/sw/bin/darwin-rebuild:
 	nix --experimental-features 'flakes nix-command' build ".#darwinConfigurations.$(BOOTSTRAP).system"
@@ -44,7 +48,7 @@ all:
 
 switch.cloud:
 	nix build .#homeConfigurations.cloud.activationPackage
-	./result/activate switch --verbose; ./result/activate
+	./result/activate switch ${impure} --verbose; ./result/activate
 
 endif # end linux
 
