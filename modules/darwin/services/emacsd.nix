@@ -58,6 +58,7 @@ in {
         KeepAlive = true;
         StandardErrorPath = "/tmp/emacsd.log";
         StandardOutPath = "/tmp/emacsd.log";
+
       };
     };
   };
