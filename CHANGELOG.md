@@ -1,3 +1,95 @@
+## Update 2023-10-28
+```go
+Version changes:
+[C.]  #01  aws-c-sdkutils          0.1.11 x2 -> 0.1.11, 0.1.12
+[U.]  #02  cups                    2.4.6-lib -> 2.4.7-lib
+[C.]  #03  curl                    8.2.1, 8.3.0 x2, 8.3.0-bin, 8.3.0-man -> 8.2.1, 8.4.0 x2, 8.4.0-bin, 8.4.0-man
+[U.]  #04  dbus                    1.14.8-lib -> 1.14.10-lib
+[U.]  #05  ffmpeg-headless         5.1.3-data, 5.1.3-lib -> 6.0-data, 6.0-lib
+[U.]  #06  freetype                2.13.1 -> 2.13.2
+[U.]  #07  getent-glibc            2.37-8 -> 2.38-23
+[U.]  #08  gh                      2.36.0 -> 2.37.0
+[C.]  #09  glibc                   2.37-8 x2, 2.37-8-bin, 2.37-8-dev, 2.37-8-getent -> 2.37-8, 2.38-23, 2.38-23-bin, 2.38-23-dev, 2.38-23-getent
+[U.]  #10  glibc-locales           2.37-8 -> 2.38-23
+[U.]  #11  go                      1.20.8 -> 1.21.3
+[U.]  #12  gst-plugins-bad         1.22.5 -> 1.22.6
+[U.]  #13  gst-plugins-base        1.22.5 -> 1.22.6
+[U.]  #14  gstreamer               1.22.5 -> 1.22.6
+[U.]  #15  imagemagick             7.1.1-19 -> 7.1.1-21
+[U.]  #16  iproute2                6.4.0 -> 6.5.0
+[U.]  #17  kbd                     2.6.2 -> 2.6.3
+[U.]  #18  libX11                  1.8.6 -> 1.8.7
+[U.]  #19  libXpm                  3.5.16 -> 3.5.17
+[C.]  #20  libarchive              3.6.2-lib x2 -> 3.6.2-lib, 3.7.2-lib
+[U.]  #21  libdrm                  2.4.115 -> 2.4.116
+[C.]  #22  libkrb5                 1.20.1 x2 -> 1.20.1, 1.20.2
+[U.]  #23  libvpx                  1.13.0 -> 1.13.1
+[U.]  #24  libxcb                  1.15 -> 1.16
+[U.]  #25  mesa                    23.1.7 -> 23.1.9
+[U.]  #26  networkmanager          1.42.8 -> 1.44.0
+[U.]  #27  nftables                1.0.8 -> 1.0.9
+[C.]  #28  nghttp2                 1.54.0-lib x2 -> 1.54.0-lib, 1.57.0-lib
+[U.]  #29  nodejs                  18.18.0 -> 18.18.2
+[C.]  #30  openssl                 3.0.10 x3, 3.0.10-bin, 3.0.10-dev -> 3.0.10, 3.0.11 x2, 3.0.11-bin, 3.0.11-dev
+[C.]  #31  python3                 3.10.12, 3.10.12-env, 3.9.18, 3.9.18-env -> 3.11.5, 3.11.5-env, 3.9.18, 3.9.18-env
+[U.]  #32  python3.9-dill          0.3.6 -> 0.3.7
+[U.]  #33  python3.9-distlib       0.3.6 -> 0.3.7
+[U.]  #34  python3.9-filelock      3.12.2 -> 3.12.4
+[U.]  #35  python3.9-mypy          1.4.1 -> 1.5.1
+[U.]  #36  python3.9-platformdirs  3.9.1 -> 3.10.0
+[U.]  #37  python3.9-setuptools    68.0.0 -> 68.2.2
+[U.]  #38  python3.9-virtualenv    20.24.0 -> 20.24.5
+[U.]  #39  utf8proc                2.8.0 -> 2.9.0
+Added packages:
+[A.]  #1  python3.11-certifi           2023.07.22
+[A.]  #2  python3.11-distlib           0.3.7
+[A.]  #3  python3.11-filelock          3.12.4
+[A.]  #4  python3.11-pip               23.2.1, 23.2.1-man
+[A.]  #5  python3.11-platformdirs      3.10.0
+[A.]  #6  python3.11-setuptools        68.2.2
+[A.]  #7  python3.11-virtualenv        20.24.5
+[A.]  #8  python3.11-virtualenv-clone  0.5.7
+Removed packages:
+[R.]  #1  python3.10-certifi           2023.05.07
+[R.]  #2  python3.10-distlib           0.3.6
+[R.]  #3  python3.10-filelock          3.12.2
+[R.]  #4  python3.10-pip               23.2.1, 23.2.1-man
+[R.]  #5  python3.10-platformdirs      3.9.1
+[R.]  #6  python3.10-setuptools        68.0.0
+[R.]  #7  python3.10-virtualenv        20.24.0
+[R.]  #8  python3.10-virtualenv-clone  0.5.7
+Closure size: 719 -> 719 (667 paths added, 667 paths removed, delta +0, disk usage +29.3MiB).
+```
+### lock change:
+```
+• Updated input 'darwin':
+    'github:LnL7/nix-darwin/19f75c2b45fbfc307ecfeb9dadc41a4c1e4fb980' (2023-10-19)
+  → 'github:LnL7/nix-darwin/afe83cbc2e673b1f08d32dd0f70df599678ff1e7' (2023-10-27)
+• Updated input 'emacs-overlay':
+    'github:nix-community/emacs-overlay/2731e6914d19927bb0767f5b7ea89a01f1b1968d' (2023-10-25)
+  → 'github:nix-community/emacs-overlay/75c826ceb5898607333b7030b41060b2030e3e75' (2023-10-28)
+• Updated input 'emacs-overlay/nixpkgs':
+    'github:NixOS/nixpkgs/7c9cc5a6e5d38010801741ac830a3f8fd667a7a0' (2023-10-19)
+  → 'github:NixOS/nixpkgs/63678e9f3d3afecfeafa0acead6239cdb447574c' (2023-10-26)
+• Updated input 'emacs-overlay/nixpkgs-stable':
+    'github:NixOS/nixpkgs/5550a85a087c04ddcace7f892b0bdc9d8bb080c8' (2023-10-21)
+  → 'github:NixOS/nixpkgs/60b9db998f71ea49e1a9c41824d09aa274be1344' (2023-10-26)
+• Updated input 'home-manager':
+    'github:nix-community/home-manager/14b54157201fd574b0fa1b3ce7394c9d3a87fbc1' (2023-10-24)
+  → 'github:nix-community/home-manager/1369d2cefb6f128c30e42fabcdebbacc07e18b3f' (2023-10-27)
+• Updated input 'nixpkgs-master':
+    'github:NixOS/nixpkgs/8fa4bf50c1695b18e9f02a0030e00a5d58f3ef6c' (2023-10-24)
+  → 'github:NixOS/nixpkgs/57da103e788e3590b40cec186c45ca082a6cf62c' (2023-10-28)
+• Updated input 'nixpkgs-stable':
+    'github:NixOS/nixpkgs/98e7aaa5cfad782b8effe134bff3717280ec41ca' (2023-10-24)
+  → 'github:NixOS/nixpkgs/187ac4d3f3a63ac088a02a2b156e41f7bbe28480' (2023-10-27)
+• Updated input 'nixpkgs-unstable':
+    'github:NixOS/nixpkgs/51d906d2341c9e866e48c2efcaac0f2d70bfd43e' (2023-10-21)
+  → 'github:NixOS/nixpkgs/808c0d8c53c7ae50f82aca8e7df263225cf235bf' (2023-10-26)
+• Updated input 'spacemacs':
+    'github:syl20bnr/spacemacs/b86a074437503677d21e2172bd175b37edbdb029' (2023-08-28)
+  → 'github:syl20bnr/spacemacs/a1680f27783b42e14d0c1a7e61fe787500a2db4e' (2023-10-27)
+```
 ## Update 2023-10-25
 ```go
 Version changes:
