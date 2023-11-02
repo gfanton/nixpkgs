@@ -1,6 +1,5 @@
 IMPURE ?= false
-FALLBACK ?= false
-
+FALLBACK ?= true
 
 UNAME := $(shell uname)
 UNAME_P := $(shell uname -p)
