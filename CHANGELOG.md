@@ -1,3 +1,61 @@
+## Update 2023-11-18
+```go
+Version changes:
+[U.]  #01  docker             20.10.26, 20.10.26-man -> 24.0.5
+[U.]  #02  docker-compose     2.21.0 -> 2.23.0
+[U.]  #03  docker-containerd  20.10.26 -> 24.0.5
+[U.]  #04  docker-init        20.10.26 -> 24.0.5
+[U.]  #05  docker-runc        20.10.26 -> 24.0.5
+[U.]  #06  enchant            2.6.1 -> 2.6.2
+[U.]  #07  eza                0.15.0, 0.15.0-man -> 0.15.3, 0.15.3-man
+[U.]  #08  fzf                0.43.0, 0.43.0-man -> 0.44.0, 0.44.0-man
+[U.]  #09  gh                 2.37.0 -> 2.39.1
+[U.]  #10  gopls              0.13.2 -> 0.14.0
+[U.]  #11  kitty              0.30.1, 0.30.1-terminfo -> 0.31.0, 0.31.0-terminfo
+[C.]  #12  libcpuid           0.6.3 x2 -> 0.6.3, 0.6.4
+[U.]  #13  moby               20.10.26 -> 24.0.5
+[C.]  #14  nix                2.16.1, 2.16.1-man, 2.16.2, 2.16.2-man, 2.17.1, 2.17.1-man -> 2.16.1, 2.16.1-man, 2.16.2, 2.16.2-man, 2.18.1, 2.18.1-man
+[U.]  #15  pnpm               8.8.0 -> 8.10.2
+[U.]  #16  procs              0.14.0 -> 0.14.3
+[U.]  #17  socat              1.7.4.4 -> 1.8.0.0
+[U.]  #18  webkitgtk          2.42.1+abi=4.0 -> 2.42.2+abi=4.0
+Added packages:
+[A.]  #1  ldns  1.8.3
+Closure size: 719 -> 719 (47 paths added, 47 paths removed, delta +0, disk usage +314.5KiB).
+```
+### lock change:
+```
+• Updated input 'darwin':
+    'github:LnL7/nix-darwin/afe83cbc2e673b1f08d32dd0f70df599678ff1e7' (2023-10-27)
+  → 'github:LnL7/nix-darwin/e67f2bf515343da378c3f82f098df8ca01bccc5f' (2023-11-13)
+• Updated input 'emacs-overlay':
+    'github:nix-community/emacs-overlay/75c826ceb5898607333b7030b41060b2030e3e75' (2023-10-28)
+  → 'github:nix-community/emacs-overlay/afe0c2530f88b7a42f6a02fa5ac511892dab13b3' (2023-11-18)
+• Updated input 'emacs-overlay/nixpkgs':
+    'github:NixOS/nixpkgs/63678e9f3d3afecfeafa0acead6239cdb447574c' (2023-10-26)
+  → 'github:NixOS/nixpkgs/bf744fe90419885eefced41b3e5ae442d732712d' (2023-11-14)
+• Updated input 'emacs-overlay/nixpkgs-stable':
+    'github:NixOS/nixpkgs/60b9db998f71ea49e1a9c41824d09aa274be1344' (2023-10-26)
+  → 'github:NixOS/nixpkgs/9fb122519e9cd465d532f736a98c1e1eb541ef6f' (2023-11-16)
+• Updated input 'home-manager':
+    'github:nix-community/home-manager/1369d2cefb6f128c30e42fabcdebbacc07e18b3f' (2023-10-27)
+  → 'github:nix-community/home-manager/3feeb7715584fd45ed1389cec8fb15f6930e8dab' (2023-11-17)
+• Updated input 'nixpkgs-master':
+    'github:NixOS/nixpkgs/57da103e788e3590b40cec186c45ca082a6cf62c' (2023-10-28)
+  → 'github:NixOS/nixpkgs/adce9e85936e0d289361589f4388757b93061d6c' (2023-11-18)
+• Updated input 'nixpkgs-stable':
+    'github:NixOS/nixpkgs/187ac4d3f3a63ac088a02a2b156e41f7bbe28480' (2023-10-27)
+  → 'github:NixOS/nixpkgs/8e5e424b1c059e9ccf5db6a652458e30de05fa3a' (2023-11-18)
+• Updated input 'nixpkgs-unstable':
+    'github:NixOS/nixpkgs/808c0d8c53c7ae50f82aca8e7df263225cf235bf' (2023-10-26)
+  → 'github:NixOS/nixpkgs/7414e9ee0b3e9903c24d3379f577a417f0aae5f1' (2023-11-16)
+• Updated input 'powerlevel10k':
+    'github:romkatv/powerlevel10k/430616734aa06ff3def48cb511fb43db7466a64e' (2023-10-23)
+  → 'github:romkatv/powerlevel10k/174ce9bf0166c657404a21f4dc9608da935f7325' (2023-11-01)
+• Updated input 'spacemacs':
+    'github:syl20bnr/spacemacs/a1680f27783b42e14d0c1a7e61fe787500a2db4e' (2023-10-27)
+  → 'github:syl20bnr/spacemacs/1d10d3e44dfecb9da4e3c5cb5e56dd90e4b90786' (2023-11-17)
+```
 ## Update 2023-10-28
 ```go
 Version changes:
