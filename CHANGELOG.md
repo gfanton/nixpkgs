@@ -1,3 +1,141 @@
+## Update 2023-11-29
+```go
+Version changes:
+[U.]  #01  SDL2                       2.28.3 -> 2.28.4
+[U.]  #02  alsa-ucm-conf              1.2.9 -> 1.2.10
+[U.]  #03  at-spi2-core               2.48.3 -> 2.50.0
+[U.]  #04  bluez                      5.66 -> 5.70
+[U.]  #05  cairo                      1.16.0 -> 1.18.0
+[U.]  #06  cmake                      3.26.4 -> 3.27.7
+[U.]  #07  docker-buildx              0.11.2 -> 0.12.0
+[U.]  #08  docker-compose             2.23.0 -> 2.23.1
+[U.]  #09  elfutils                   0.189 -> 0.190
+[U.]  #10  ell                        0.58 -> 0.59
+[U.]  #11  entr                       5.4 -> 5.5
+[U.]  #12  eza                        0.15.3, 0.15.3-man -> 0.16.1, 0.16.1-man
+[U.]  #13  fluidsynth                 2.3.3 -> 2.3.4
+[U.]  #14  fuse                       3.11.0 -> 3.16.2
+[U.]  #15  fzf                        0.44.0, 0.44.0-man -> 0.44.1, 0.44.1-man
+[U.]  #16  getent-glibc               2.38-23 -> 2.38-27
+[U.]  #17  glib                       2.76.4, 2.76.4-bin -> 2.78.1, 2.78.1-bin
+[U.]  #18  glib-networking            2.76.1 -> 2.78.0
+[C.]  #19  glibc                      2.37-8, 2.38-23, 2.38-23-bin, 2.38-23-dev, 2.38-23-getent -> 2.37-8, 2.38-27, 2.38-27-bin, 2.38-27-dev, 2.38-27-getent
+[U.]  #20  glibc-locales              2.38-23 -> 2.38-27
+[U.]  #21  go                         1.21.3 -> 1.21.4
+[U.]  #22  gobject-introspection      1.76.1 -> 1.78.1
+[U.]  #23  gopls                      0.14.0 -> 0.14.2
+[U.]  #24  gsettings-desktop-schemas  44.0 -> 45.0
+[C.]  #25  gtest                      1.12.1, 1.12.1-dev -> 1.12.1
+[U.]  #26  hwdata                     0.374 -> 0.376
+[U.]  #27  iptables                   1.8.9 -> 1.8.10
+[U.]  #28  json-glib                  1.6.6 -> 1.8.0
+[U.]  #29  kmod                       30, 30-lib -> 31, 31-lib
+[U.]  #30  libGL                      1.6.0 -> 1.7.0
+[U.]  #31  libXrandr                  1.5.3 -> 1.5.4
+[U.]  #32  libaom                     3.6.1 -> 3.7.0
+[C.]  #33  libcamera                  0.0.5, 0.0.5-dev -> 0.0.5
+[U.]  #34  libdeflate                 1.18 -> 1.19
+[U.]  #35  libdrm                     2.4.116 -> 2.4.117
+[U.]  #36  libglvnd                   1.6.0 -> 1.7.0
+[U.]  #37  libical                    3.0.16 -> 3.0.17
+[U.]  #38  libmpg123                  1.31.3 -> 1.32.3
+[U.]  #39  libmysofa                  1.3.1 -> 1.3.2
+[U.]  #40  libopenmpt                 0.7.2 -> 0.7.3
+[U.]  #41  librsvg                    2.56.3 -> 2.57.0
+[U.]  #42  libsecret                  0.20.5 -> 0.21.1
+[U.]  #43  libsigc++                  2.10.8 -> 2.12.1
+[C.]  #44  libsoup                    2.74.3, 3.4.2 -> 2.74.3, 3.4.4
+[U.]  #45  libtiff                    4.5.1 -> 4.6.0
+[C.]  #46  liburcu                    0.14.0, 0.14.0-dev -> 0.14.0
+[U.]  #47  libva                      2.19.0 -> 2.20.0
+[U.]  #48  libva-minimal              2.19.0 -> 2.20.0
+[U.]  #49  lilv                       0.24.12 -> 0.24.20
+[C.]  #50  lowdown                    1.0.2-lib x2 -> 1.0.2-lib, 1.1.0-lib
+[U.]  #51  lttng-ust                  2.13.1, 2.13.1-bin, 2.13.1-dev -> 2.13.6
+[U.]  #52  mpg123                     1.31.3 -> 1.32.3
+[U.]  #53  networkmanager             1.44.0 -> 1.44.2
+[U.]  #54  nixfmt                     0.5.0-bin -> 0.6.0-bin
+[C.]  #55  nlohmann_json              3.11.2 x2 -> 3.11.2
+[U.]  #56  oniguruma                  6.9.8-lib -> 6.9.9-lib
+[C.]  #57  openexr                    2.5.8, 3.2.0 -> 2.5.8, 3.2.1
+[U.]  #58  openfec                    1.4.2 -> 1.4.2.9
+[C.]  #59  openssl                    3.0.10, 3.0.11 x2, 3.0.11-bin, 3.0.11-dev -> 3.0.10, 3.0.12 x2, 3.0.12-bin, 3.0.12-dev
+[U.]  #60  pango                      1.50.14 -> 1.51.0
+[U.]  #61  parallel                   20230922, 20230922-man -> 20231022, 20231022-man
+[U.]  #62  perl5.38.0-Authen-SASL     2.16 -> 2.1700
+[U.]  #63  perl5.38.0-CGI             4.51 -> 4.59
+[U.]  #64  perl5.38.0-CGI-Fast        2.15 -> 2.16
+[U.]  #65  perl5.38.0-Digest-HMAC     1.03 -> 1.04
+[U.]  #66  perl5.38.0-FCGI            0.79 -> 0.82
+[U.]  #67  perl5.38.0-File-Listing    6.14 -> 6.16
+[U.]  #68  perl5.38.0-File-MimeInfo   0.30 -> 0.33
+[U.]  #69  perl5.38.0-HTML-Parser     3.75 -> 3.81
+[U.]  #70  perl5.38.0-HTTP-Cookies    6.09 -> 6.10
+[U.]  #71  perl5.38.0-HTTP-Daemon     6.14 -> 6.16
+[U.]  #72  perl5.38.0-HTTP-Date       6.05 -> 6.06
+[U.]  #73  perl5.38.0-HTTP-Message    6.26 -> 6.45
+[U.]  #74  perl5.38.0-IO-Socket-SSL   2.068 -> 2.083
+[U.]  #75  perl5.38.0-Mozilla-CA      20200520 -> 20230821
+[U.]  #76  perl5.38.0-Net-HTTP        6.19 -> 6.23
+[U.]  #77  perl5.38.0-Test-Fatal      0.016 -> 0.017
+[U.]  #78  perl5.38.0-Test-Needs      0.002006 -> 0.002010
+[U.]  #79  perl5.38.0-Try-Tiny        0.30 -> 0.31
+[U.]  #80  perl5.38.0-URI             5.05 -> 5.21
+[U.]  #81  perl5.38.0-libnet          3.12 -> 3.15
+[U.]  #82  perl5.38.0-libwww-perl     6.67 -> 6.72
+[U.]  #83  pipewire                   0.3.80-lib -> 0.3.84
+[U.]  #84  pnpm                       8.10.2 -> 8.10.5
+[U.]  #85  protobuf                   3.24.3 -> 24.4
+[C.]  #86  python3                    3.11.5, 3.11.5-env, 3.9.18, 3.9.18-env -> 3.11.6, 3.11.6-env, 3.9.18, 3.9.18-env
+[C.]  #87  s2n-tls                    1.3.48, 1.3.50 -> 1.3.48, 1.3.56
+[U.]  #88  shadow                     4.14.0 -> 4.14.1
+[U.]  #89  shared-mime-info           2.2 -> 2.3
+[C.]  #90  sqlite                     3.42.0, 3.43.1, 3.43.1-bin -> 3.42.0, 3.43.2, 3.43.2-bin
+[U.]  #91  tracker                    3.5.3 -> 3.6.0
+[U.]  #92  vulkan-loader              1.3.261 -> 1.3.268.0
+[U.]  #93  xkeyboard-config           2.39 -> 2.40
+Added packages:
+[A.]  #1  perl5.38.0-Clone           0.46
+[A.]  #2  perl5.38.0-HTTP-CookieJar  0.014
+[A.]  #3  systemd-minimal-libs       254.3
+Closure size: 719 -> 716 (664 paths added, 667 paths removed, delta -3, disk usage -3.1MiB).
+```
+### lock change:
+```
+• Updated input 'darwin':
+    'github:LnL7/nix-darwin/e67f2bf515343da378c3f82f098df8ca01bccc5f' (2023-11-13)
+  → 'github:LnL7/nix-darwin/4b9b83d5a92e8c1fbfd8eb27eda375908c11ec4d' (2023-11-24)
+• Updated input 'doomemacs':
+    'github:doomemacs/doomemacs/986398504d09e585c7d1a8d73a6394024fe6f164' (2023-10-07)
+  → 'github:doomemacs/doomemacs/c2818bcfaa5dc1a0139d1deff7d77bf42a08eede' (2023-11-28)
+• Updated input 'emacs-overlay':
+    'github:nix-community/emacs-overlay/afe0c2530f88b7a42f6a02fa5ac511892dab13b3' (2023-11-18)
+  → 'github:nix-community/emacs-overlay/e81dd4bf787abe60101b867f84abb414599afa37' (2023-11-29)
+• Updated input 'emacs-overlay/nixpkgs':
+    'github:NixOS/nixpkgs/bf744fe90419885eefced41b3e5ae442d732712d' (2023-11-14)
+  → 'github:NixOS/nixpkgs/5a09cb4b393d58f9ed0d9ca1555016a8543c2ac8' (2023-11-24)
+• Updated input 'emacs-overlay/nixpkgs-stable':
+    'github:NixOS/nixpkgs/9fb122519e9cd465d532f736a98c1e1eb541ef6f' (2023-11-16)
+  → 'github:NixOS/nixpkgs/5b528f99f73c4fad127118a8c1126b5e003b01a9' (2023-11-27)
+• Updated input 'home-manager':
+    'github:nix-community/home-manager/3feeb7715584fd45ed1389cec8fb15f6930e8dab' (2023-11-17)
+  → 'github:nix-community/home-manager/db1878f013b52ba5e4034db7c1b63e8d04173a86' (2023-11-27)
+• Updated input 'home-manager/nixpkgs':
+    'github:NixOS/nixpkgs/ca012a02bf8327be9e488546faecae5e05d7d749' (2023-10-16)
+  → 'github:NixOS/nixpkgs/5a09cb4b393d58f9ed0d9ca1555016a8543c2ac8' (2023-11-24)
+• Updated input 'nixpkgs-master':
+    'github:NixOS/nixpkgs/adce9e85936e0d289361589f4388757b93061d6c' (2023-11-18)
+  → 'github:NixOS/nixpkgs/bdc2514668ab078014006ab6aa490dd43184aa5b' (2023-11-29)
+• Updated input 'nixpkgs-stable':
+    'github:NixOS/nixpkgs/8e5e424b1c059e9ccf5db6a652458e30de05fa3a' (2023-11-18)
+  → 'github:NixOS/nixpkgs/e922e146779e250fae512da343cfb798c758509d' (2023-11-28)
+• Updated input 'nixpkgs-unstable':
+    'github:NixOS/nixpkgs/7414e9ee0b3e9903c24d3379f577a417f0aae5f1' (2023-11-16)
+  → 'github:NixOS/nixpkgs/45827faa2132b8eade424f6bdd48d8828754341a' (2023-11-26)
+• Updated input 'spacemacs':
+    'github:syl20bnr/spacemacs/1d10d3e44dfecb9da4e3c5cb5e56dd90e4b90786' (2023-11-17)
+  → 'github:syl20bnr/spacemacs/8f7019340ec38c2cd70df37739a0adf77ff1e788' (2023-11-26)
+```
 ## Update 2023-11-18
 ```go
 Version changes:
