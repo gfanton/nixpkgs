@@ -1,3 +1,59 @@
+## Update 2023-12-12
+```go
+Version changes:
+[U.]  #1  delve           1.21.0 -> 1.21.2
+[U.]  #2  direnv          2.32.3 -> 2.33.0
+[U.]  #3  docker-compose  2.23.1 -> 2.23.3
+[U.]  #4  eza             0.16.1, 0.16.1-man -> 0.16.3, 0.16.3-man
+[U.]  #5  gh              2.39.1 -> 2.40.0
+[U.]  #6  parallel        20231022, 20231022-man -> 20231122, 20231122-man
+[U.]  #7  procs           0.14.3 -> 0.14.4
+[U.]  #8  ripgrep         13.0.0 -> 14.0.3
+[U.]  #9  webkitgtk       2.42.2+abi=4.0 -> 2.42.3+abi=4.0
+Closure size: 716 -> 716 (32 paths added, 32 paths removed, delta +0, disk usage +1.7MiB).
+```
+### lock change:
+```
+• Updated input 'doomemacs':
+    'github:doomemacs/doomemacs/c2818bcfaa5dc1a0139d1deff7d77bf42a08eede' (2023-11-28)
+  → 'github:doomemacs/doomemacs/03d692f129633e3bf0bd100d91b3ebf3f77db6d1' (2023-12-08)
+• Updated input 'emacs-overlay':
+    'github:nix-community/emacs-overlay/e81dd4bf787abe60101b867f84abb414599afa37' (2023-11-29)
+  → 'github:nix-community/emacs-overlay/456374df242902ba4a749260f218d0e4fa646bc7' (2023-12-12)
+• Updated input 'emacs-overlay/flake-utils':
+    'github:numtide/flake-utils/ff7b65b44d01cf9ba6a71320833626af21126384' (2023-09-12)
+  → 'github:numtide/flake-utils/4022d587cbbfd70fe950c1e2083a02621806a725' (2023-12-04)
+• Updated input 'emacs-overlay/nixpkgs':
+    'github:NixOS/nixpkgs/5a09cb4b393d58f9ed0d9ca1555016a8543c2ac8' (2023-11-24)
+  → 'github:NixOS/nixpkgs/666fc80e7b2afb570462423cb0e1cf1a3a34fedd' (2023-12-09)
+• Updated input 'emacs-overlay/nixpkgs-stable':
+    'github:NixOS/nixpkgs/5b528f99f73c4fad127118a8c1126b5e003b01a9' (2023-11-27)
+  → 'github:NixOS/nixpkgs/c2786e7084cbad90b4f9472d5b5e35ecb57958af' (2023-12-10)
+• Updated input 'flake-utils':
+    'github:numtide/flake-utils/ff7b65b44d01cf9ba6a71320833626af21126384' (2023-09-12)
+  → 'github:numtide/flake-utils/4022d587cbbfd70fe950c1e2083a02621806a725' (2023-12-04)
+• Updated input 'home-manager':
+    'github:nix-community/home-manager/db1878f013b52ba5e4034db7c1b63e8d04173a86' (2023-11-27)
+  → 'github:nix-community/home-manager/defbb9c5857e157703e8fc7cf3c2ceb01cb95883' (2023-12-10)
+• Updated input 'home-manager/nixpkgs':
+    'github:NixOS/nixpkgs/5a09cb4b393d58f9ed0d9ca1555016a8543c2ac8' (2023-11-24)
+  → 'github:NixOS/nixpkgs/2c7f3c0fb7c08a0814627611d9d7d45ab6d75335' (2023-12-04)
+• Updated input 'nixpkgs-master':
+    'github:NixOS/nixpkgs/bdc2514668ab078014006ab6aa490dd43184aa5b' (2023-11-29)
+  → 'github:NixOS/nixpkgs/d92daec27ee4662c8a4a10206d9bfc3d7e557f90' (2023-12-12)
+• Updated input 'nixpkgs-stable':
+    'github:NixOS/nixpkgs/e922e146779e250fae512da343cfb798c758509d' (2023-11-28)
+  → 'github:NixOS/nixpkgs/9463103069725474698139ab10f17a9d125da859' (2023-12-12)
+• Updated input 'nixpkgs-unstable':
+    'github:NixOS/nixpkgs/45827faa2132b8eade424f6bdd48d8828754341a' (2023-11-26)
+  → 'github:NixOS/nixpkgs/e97b3e4186bcadf0ef1b6be22b8558eab1cdeb5d' (2023-12-11)
+• Updated input 'powerlevel10k':
+    'github:romkatv/powerlevel10k/174ce9bf0166c657404a21f4dc9608da935f7325' (2023-11-01)
+  → 'github:romkatv/powerlevel10k/d70eedb345a9cc54b4f3e9ae09b0dbbb4edc9a39' (2023-12-10)
+• Updated input 'spacemacs':
+    'github:syl20bnr/spacemacs/8f7019340ec38c2cd70df37739a0adf77ff1e788' (2023-11-26)
+  → 'github:syl20bnr/spacemacs/c46a22da1dfb2cc2d0c7929dae971354a6eefa57' (2023-12-11)
+```
 ## Update 2023-11-29
 ```go
 Version changes:
