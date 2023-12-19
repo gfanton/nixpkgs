@@ -4,7 +4,7 @@ in {
   my-loon = pkgs.buildGo121Module rec {
     pname = "loon";
     version = "1.5.0";
-    vendorSha256 = "sha256-GyBD1Wl7HFP1jwjUPh7mC8e6SS2ppSpAyZvo4XRjn/U=";
+    vendorHash = "sha256-GyBD1Wl7HFP1jwjUPh7mC8e6SS2ppSpAyZvo4XRjn/U=";
     src = pkgs.fetchurl {
       url =
         "https://github.com/gfanton/loon/archive/refs/tags/v${version}.tar.gz";
