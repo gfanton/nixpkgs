@@ -1,3 +1,172 @@
+## Update 2023-12-16
+```go
+Version changes:
+[U.]  #01  SDL2                      2.28.4 -> 2.28.5
+[C.]  #02  bash                      5.2-p15 x2, 5.2-p15-man -> 5.2-p15, 5.2-p21, 5.2-p21-man
+[U.]  #03  bash-interactive          5.2-p15 -> 5.2-p21
+[U.]  #04  cmake                     3.27.7 -> 3.27.8
+[U.]  #05  coreutils                 9.3 -> 9.4
+[U.]  #06  dns-root-data             2019-01-11 -> 2023-11-27
+[U.]  #07  ell                       0.59 -> 0.61
+[U.]  #08  emacs-gtk3                28.2 -> 29.1
+[U.]  #09  emacs-gtk3-with-packages  28.2 -> 29.1
+[U.]  #10  eza                       0.16.3, 0.16.3-man -> 0.17.0, 0.17.0-man
+[U.]  #11  faad2                     2.10.1 -> 2.11.1
+[U.]  #12  gnutls                    3.8.1 -> 3.8.2
+[U.]  #13  go                        1.21.4 -> 1.21.5
+[U.]  #14  gst-plugins-bad           1.22.6 -> 1.22.7
+[U.]  #15  gst-plugins-base          1.22.6 -> 1.22.7
+[U.]  #16  gstreamer                 1.22.6 -> 1.22.7
+[U.]  #17  imagemagick               7.1.1-21 -> 7.1.1-23
+[U.]  #18  libaom                    3.7.0 -> 3.7.1
+[U.]  #19  libavif                   1.0.1 -> 1.0.2
+[U.]  #20  libde265                  1.0.12 -> 1.0.14
+[U.]  #21  libdrm                    2.4.117 -> 2.4.118
+[U.]  #22  libfido2                  1.13.0 -> 1.14.0
+[U.]  #23  libgcrypt                 1.10.2 -> 1.10.3
+[C.]  #24  libkrb5                   1.20.1, 1.20.2 -> 1.20.1, 1.21.2
+[U.]  #25  libksba                   1.6.4 -> 1.6.5
+[C.]  #26  libsodium                 1.0.18 x2 -> 1.0.18, 1.0.19
+[U.]  #27  libuv                     1.46.0, 1.46.0-dev -> 1.47.0, 1.47.0-dev
+[U.]  #28  libxslt                   1.1.38 -> 1.1.39
+[U.]  #29  lilv                      0.24.20 -> 0.24.22
+[U.]  #30  linux-headers             6.5 -> 6.6
+[U.]  #31  m17n-db                   1.8.2 -> 1.8.5
+[U.]  #32  man-db                    2.11.2 -> 2.12.0
+[U.]  #33  newt                      0.52.23 -> 0.52.24
+[U.]  #34  nodejs                    18.18.2 -> 18.19.0, 20.10.0
+[U.]  #35  nss-cacert                3.92 -> 3.95
+[U.]  #36  nuspell                   5.1.3-lib -> 5.1.4-lib
+[U.]  #37  openh264                  2.3.1 -> 2.4.0
+[U.]  #38  p11-kit                   0.25.0 -> 0.25.3
+[C.]  #39  perl                      <none>, 5.38.0 -> <none>, 5.38.2
+[U.]  #40  pipewire                  0.3.84 -> 1.0.0
+[U.]  #41  readline                  8.2p1 -> 8.2p7
+[U.]  #42  roc-toolkit               0.2.5 -> 0.3.0
+[U.]  #43  shadow                    4.14.1 -> 4.14.2
+[U.]  #44  shared-mime-info          2.3 -> 2.4
+[U.]  #45  sord                      0.16.14 -> 0.16.16
+[U.]  #46  sratom                    0.6.14 -> 0.6.16
+[U.]  #47  systemd                   254.3 -> 254.6
+[U.]  #48  systemd-minimal           254.3 -> 254.6
+[U.]  #49  systemd-minimal-libs      254.3 -> 254.6
+[U.]  #50  unbound                   1.18.0-lib -> 1.19.0-lib
+[C.]  #51  xz                        5.4.4 x2, 5.4.4-bin -> 5.4.4, 5.4.5, 5.4.5-bin
+Added packages:
+[A.]  #01  perl5.38.2-Authen-SASL            2.1700
+[A.]  #02  perl5.38.2-CGI                    4.59
+[A.]  #03  perl5.38.2-CGI-Fast               2.16
+[A.]  #04  perl5.38.2-Clone                  0.46
+[A.]  #05  perl5.38.2-Digest-HMAC            1.04
+[A.]  #06  perl5.38.2-Encode-Locale          1.05
+[A.]  #07  perl5.38.2-FCGI                   0.82
+[A.]  #08  perl5.38.2-FCGI-ProcManager       0.28
+[A.]  #09  perl5.38.2-File-BaseDir           0.09
+[A.]  #10  perl5.38.2-File-DesktopEntry      0.22
+[A.]  #11  perl5.38.2-File-Listing           6.16
+[A.]  #12  perl5.38.2-File-MimeInfo          0.33
+[A.]  #13  perl5.38.2-HTML-Parser            3.81
+[A.]  #14  perl5.38.2-HTML-TagCloud          0.38
+[A.]  #15  perl5.38.2-HTML-Tagset            3.20
+[A.]  #16  perl5.38.2-HTTP-CookieJar         0.014
+[A.]  #17  perl5.38.2-HTTP-Cookies           6.10
+[A.]  #18  perl5.38.2-HTTP-Daemon            6.16
+[A.]  #19  perl5.38.2-HTTP-Date              6.06
+[A.]  #20  perl5.38.2-HTTP-Message           6.45
+[A.]  #21  perl5.38.2-HTTP-Negotiate         6.01
+[A.]  #22  perl5.38.2-IO-HTML                1.004
+[A.]  #23  perl5.38.2-IO-Socket-SSL          2.083
+[A.]  #24  perl5.38.2-IPC-System-Simple      1.30
+[A.]  #25  perl5.38.2-LWP-MediaTypes         6.04
+[A.]  #26  perl5.38.2-Mozilla-CA             20230821
+[A.]  #27  perl5.38.2-Net-DBus               1.2.0
+[A.]  #28  perl5.38.2-Net-HTTP               6.23
+[A.]  #29  perl5.38.2-Net-SMTP-SSL           1.04
+[A.]  #30  perl5.38.2-Net-SSLeay             1.92
+[A.]  #31  perl5.38.2-TermReadKey            2.38
+[A.]  #32  perl5.38.2-Test-Fatal             0.017
+[A.]  #33  perl5.38.2-Test-Needs             0.002010
+[A.]  #34  perl5.38.2-Test-RequiresInternet  0.05
+[A.]  #35  perl5.38.2-TimeDate               2.33
+[A.]  #36  perl5.38.2-Try-Tiny               0.31
+[A.]  #37  perl5.38.2-URI                    5.21
+[A.]  #38  perl5.38.2-WWW-RobotRules         6.02
+[A.]  #39  perl5.38.2-X11-Protocol           0.56
+[A.]  #40  perl5.38.2-XML-Parser             2.46
+[A.]  #41  perl5.38.2-XML-Twig               3.52
+[A.]  #42  perl5.38.2-libnet                 3.15
+[A.]  #43  perl5.38.2-libwww-perl            6.72
+[A.]  #44  tree-sitter                       0.20.8
+[A.]  #45  zix                               0.4.2
+[A.]  #46  zoxide-unstable                   2023-11-20
+Removed packages:
+[R.]  #01  perl5.38.0-Authen-SASL            2.1700
+[R.]  #02  perl5.38.0-CGI                    4.59
+[R.]  #03  perl5.38.0-CGI-Fast               2.16
+[R.]  #04  perl5.38.0-Clone                  0.46
+[R.]  #05  perl5.38.0-Digest-HMAC            1.04
+[R.]  #06  perl5.38.0-Encode-Locale          1.05
+[R.]  #07  perl5.38.0-FCGI                   0.82
+[R.]  #08  perl5.38.0-FCGI-ProcManager       0.28
+[R.]  #09  perl5.38.0-File-BaseDir           0.09
+[R.]  #10  perl5.38.0-File-DesktopEntry      0.22
+[R.]  #11  perl5.38.0-File-Listing           6.16
+[R.]  #12  perl5.38.0-File-MimeInfo          0.33
+[R.]  #13  perl5.38.0-HTML-Parser            3.81
+[R.]  #14  perl5.38.0-HTML-TagCloud          0.38
+[R.]  #15  perl5.38.0-HTML-Tagset            3.20
+[R.]  #16  perl5.38.0-HTTP-CookieJar         0.014
+[R.]  #17  perl5.38.0-HTTP-Cookies           6.10
+[R.]  #18  perl5.38.0-HTTP-Daemon            6.16
+[R.]  #19  perl5.38.0-HTTP-Date              6.06
+[R.]  #20  perl5.38.0-HTTP-Message           6.45
+[R.]  #21  perl5.38.0-HTTP-Negotiate         6.01
+[R.]  #22  perl5.38.0-IO-HTML                1.004
+[R.]  #23  perl5.38.0-IO-Socket-SSL          2.083
+[R.]  #24  perl5.38.0-IPC-System-Simple      1.30
+[R.]  #25  perl5.38.0-LWP-MediaTypes         6.04
+[R.]  #26  perl5.38.0-Mozilla-CA             20230821
+[R.]  #27  perl5.38.0-Net-DBus               1.2.0
+[R.]  #28  perl5.38.0-Net-HTTP               6.23
+[R.]  #29  perl5.38.0-Net-SMTP-SSL           1.04
+[R.]  #30  perl5.38.0-Net-SSLeay             1.92
+[R.]  #31  perl5.38.0-TermReadKey            2.38
+[R.]  #32  perl5.38.0-Test-Fatal             0.017
+[R.]  #33  perl5.38.0-Test-Needs             0.002010
+[R.]  #34  perl5.38.0-Test-RequiresInternet  0.05
+[R.]  #35  perl5.38.0-TimeDate               2.33
+[R.]  #36  perl5.38.0-Try-Tiny               0.31
+[R.]  #37  perl5.38.0-URI                    5.21
+[R.]  #38  perl5.38.0-WWW-RobotRules         6.02
+[R.]  #39  perl5.38.0-X11-Protocol           0.56
+[R.]  #40  perl5.38.0-XML-Parser             2.46
+[R.]  #41  perl5.38.0-XML-Twig               3.52
+[R.]  #42  perl5.38.0-libnet                 3.15
+[R.]  #43  perl5.38.0-libwww-perl            6.72
+[R.]  #44  zoxide                            0.9.2
+Closure size: 716 -> 719 (667 paths added, 664 paths removed, delta +3, disk usage +104.0MiB).
+```
+### lock change:
+```
+• Updated input 'emacs-overlay':
+    'github:nix-community/emacs-overlay/456374df242902ba4a749260f218d0e4fa646bc7' (2023-12-12)
+  → 'github:nix-community/emacs-overlay/47798c4ab07d5f055bb2625010cf6d8e3f384923' (2023-12-12)
+• Updated input 'home-manager':
+    'github:nix-community/home-manager/defbb9c5857e157703e8fc7cf3c2ceb01cb95883' (2023-12-10)
+  → 'github:nix-community/home-manager/abdc82d930521448e47574b8ca1a0a450e861cca' (2023-12-15)
+• Updated input 'home-manager/nixpkgs':
+    'github:NixOS/nixpkgs/2c7f3c0fb7c08a0814627611d9d7d45ab6d75335' (2023-12-04)
+  → 'github:NixOS/nixpkgs/a9bf124c46ef298113270b1f84a164865987a91c' (2023-12-11)
+• Updated input 'nixpkgs-master':
+    'github:NixOS/nixpkgs/d92daec27ee4662c8a4a10206d9bfc3d7e557f90' (2023-12-12)
+  → 'github:NixOS/nixpkgs/a99aefc19fa588cab04ca08b582d6f4739bae605' (2023-12-16)
+• Updated input 'nixpkgs-stable':
+    'github:NixOS/nixpkgs/9463103069725474698139ab10f17a9d125da859' (2023-12-12)
+  → 'github:NixOS/nixpkgs/7731b6ad96d589e8033066f924ad9940008a3676' (2023-12-15)
+• Updated input 'nixpkgs-unstable':
+    'github:NixOS/nixpkgs/e97b3e4186bcadf0ef1b6be22b8558eab1cdeb5d' (2023-12-11)
+  → 'github:NixOS/nixpkgs/aa9d4729cbc99dabacb50e3994dcefb3ea0f7447' (2023-12-14)
+```
 ## Update 2023-12-12
 ```go
 Version changes:
