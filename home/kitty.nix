@@ -50,7 +50,7 @@ in {
     active_tab_font_style = "bold";
     inactive_tab_font_style = "normal";
 
-    enabled_layouts = "horizontal,grid,splits,vertical";
+    enabled_layouts = "vertical,grid,horizontal,splits";
     enable_audio_bell = "no";
     bell_on_tab = "yes";
 

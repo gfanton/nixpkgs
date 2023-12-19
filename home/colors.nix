@@ -4,8 +4,8 @@
   colors.catppuccin-macchiato = {
     colors = {
       # black
-      color0 = "#181926"; # Default Black / mantle
-      color8 = "#1e2030"; # Bright Black / crust
+      color0 = "#494d64"; # Default Black / surface1
+      color8 = "#5b6078"; # Bright Black / surface2
       # red
       color1 = "#ed8796"; # Default Red / Red
       color9 = "#ee99a0"; # Bright Red / Maroon
