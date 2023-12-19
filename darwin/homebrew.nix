@@ -50,6 +50,7 @@ in {
     "raycast"
     "1password"
     "1password-cli"
+    "whisky"
   ];
 
   # Configuration related to casks
