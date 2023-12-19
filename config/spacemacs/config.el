@@ -649,6 +649,11 @@ before packages are loaded."
   ;;    ("gopls.gofumpt" t t)
   ;;    ))
 
+  ;; magit
+  (define-key magit-hunk-section-map (kbd "RET") 'magit-diff-visit-file-other-window)
+  (define-key magit-file-section-map (kbd "RET") 'magit-diff-visit-file-other-window)
+
+
   ;; use aspell istead of ispell
   ;; @FIXME: dont use nixprofil path
   (setq ispell-program-name "aspell")
@@ -659,6 +664,7 @@ before packages are loaded."
   ;; (setq framemove-hook-into-windmove t)
 
   ;; windmove
+  (require 'windmove)
   (when (fboundp 'windmove-default-keybindings)
     (windmove-default-keybindings))
 
