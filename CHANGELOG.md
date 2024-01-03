@@ -1,3 +1,53 @@
+## Update 2024-01-03
+```go
+Version changes:
+[U.]  #1  fd           8.7.1 -> 9.0.0
+[U.]  #2  gh           2.40.0 -> 2.40.1
+[U.]  #3  git-lfs      3.4.0 -> 3.4.1
+[U.]  #4  gofumpt      0.3.1 -> 0.5.0
+[U.]  #5  gotools      0.7.0 -> 0.16.1
+[U.]  #6  imagemagick  7.1.1-23 -> 7.1.1-24
+[U.]  #7  oh-my-zsh    2023-06-26 -> 2023-11-29
+[U.]  #8  openssh      9.5p1 -> 9.6p1
+[U.]  #9  webkitgtk    2.42.3+abi=4.0 -> 2.42.4+abi=4.0
+Closure size: 719 -> 719 (39 paths added, 39 paths removed, delta +0, disk usage +35.0MiB).
+```
+### lock change:
+```
+• Updated input 'darwin':
+    'github:LnL7/nix-darwin/4b9b83d5a92e8c1fbfd8eb27eda375908c11ec4d' (2023-11-24)
+  → 'github:LnL7/nix-darwin/1a41453cba42a3a1af2fff003be455ddbd75386c' (2023-12-31)
+• Updated input 'emacs-overlay':
+    'github:nix-community/emacs-overlay/47798c4ab07d5f055bb2625010cf6d8e3f384923' (2023-12-12)
+  → 'github:nix-community/emacs-overlay/ac761af646d27dade521104de298dd4a7032c508' (2024-01-03)
+• Updated input 'emacs-overlay/nixpkgs':
+    'github:NixOS/nixpkgs/666fc80e7b2afb570462423cb0e1cf1a3a34fedd' (2023-12-09)
+  → 'github:NixOS/nixpkgs/b0d36bd0a420ecee3bc916c91886caca87c894e9' (2023-12-30)
+• Updated input 'emacs-overlay/nixpkgs-stable':
+    'github:NixOS/nixpkgs/c2786e7084cbad90b4f9472d5b5e35ecb57958af' (2023-12-10)
+  → 'github:NixOS/nixpkgs/32f63574c85fbc80e4ba1fbb932cde9619bad25e' (2023-12-31)
+• Updated input 'home-manager':
+    'github:nix-community/home-manager/abdc82d930521448e47574b8ca1a0a450e861cca' (2023-12-15)
+  → 'github:nix-community/home-manager/6e91c5df192395753d8e6d55a0352109cb559790' (2024-01-01)
+• Updated input 'home-manager/nixpkgs':
+    'github:NixOS/nixpkgs/a9bf124c46ef298113270b1f84a164865987a91c' (2023-12-11)
+  → 'github:NixOS/nixpkgs/cfc3698c31b1fb9cdcf10f36c9643460264d0ca8' (2023-12-27)
+• Updated input 'nixpkgs-master':
+    'github:NixOS/nixpkgs/a99aefc19fa588cab04ca08b582d6f4739bae605' (2023-12-16)
+  → 'github:NixOS/nixpkgs/68a2ddf1149639af1c36bc34973ce027104a60a1' (2024-01-03)
+• Updated input 'nixpkgs-stable':
+    'github:NixOS/nixpkgs/7731b6ad96d589e8033066f924ad9940008a3676' (2023-12-15)
+  → 'github:NixOS/nixpkgs/2c9c58e98243930f8cb70387934daa4bc8b00373' (2023-12-31)
+• Updated input 'nixpkgs-unstable':
+    'github:NixOS/nixpkgs/aa9d4729cbc99dabacb50e3994dcefb3ea0f7447' (2023-12-14)
+  → 'github:NixOS/nixpkgs/d44d59d2b5bd694cd9d996fd8c51d03e3e9ba7f7' (2023-12-31)
+• Updated input 'powerlevel10k':
+    'github:romkatv/powerlevel10k/d70eedb345a9cc54b4f3e9ae09b0dbbb4edc9a39' (2023-12-10)
+  → 'github:romkatv/powerlevel10k/cc6ed4be416b70fe4e3f97d17061c751abaca04f' (2023-12-16)
+• Updated input 'spacemacs':
+    'github:syl20bnr/spacemacs/c46a22da1dfb2cc2d0c7929dae971354a6eefa57' (2023-12-11)
+  → 'github:syl20bnr/spacemacs/014bbcc74928b8dcaf694b9d8b21f513723e7d58' (2024-01-01)
+```
 ## Update 2023-12-16
 ```go
 Version changes:
