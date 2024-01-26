@@ -650,6 +650,7 @@ before packages are loaded."
   ;;    ))
 
   ;; magit
+  (require 'magit-diff)  
   (define-key magit-hunk-section-map (kbd "RET") 'magit-diff-visit-file-other-window)
   (define-key magit-file-section-map (kbd "RET") 'magit-diff-visit-file-other-window)
 
