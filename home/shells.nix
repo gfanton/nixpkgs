@@ -172,8 +172,8 @@ in {
         dev = "(){ nix develop $1 -c $SHELL ;}";
         mydev = "(){ nix develop my#$1 -c $SHELL ;}";
 
-        # kitty alias
-        ssh = "${kitty}/bin/kitty +kitten ssh";
+        # # kitty alias
+        ssh = "${kitty}/bin/kitten ssh";
 
         # core alias
         ".." = "cd ..";
