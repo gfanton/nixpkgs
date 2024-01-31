@@ -1,3 +1,93 @@
+## Update 2024-01-31
+```go
+Version changes:
+[U.]  #01  asdf-vm               0.13.1 -> 0.14.0
+[C.]  #02  aws-c-auth            0.7.0, 0.7.7 -> 0.7.0, 0.7.10
+[U.]  #03  bluez                 5.70 -> 5.71
+[C.]  #04  cracklib              2.9.11 -> 2.9.11 x2
+[C.]  #05  curl                  8.4.0 x3, 8.4.0-bin x2, 8.4.0-dev, 8.4.0-man x2 -> 8.4.0, 8.4.0-bin, 8.4.0-dev, 8.4.0-man, 8.5.0 x2, 8.5.0-bin, 8.5.0-man
+[U.]  #06  docker-compose        2.24.0 -> 2.24.3
+[U.]  #07  eza                   0.17.2, 0.17.2-man -> 0.17.3, 0.17.3-man
+[U.]  #08  fontconfig            2.14.2, 2.14.2-lib -> 2.15.0, 2.15.0-lib
+[U.]  #09  fzf                   0.45.0, 0.45.0-man -> 0.46.0, 0.46.0-man
+[U.]  #10  gnupg                 2.4.1 x2 -> 2.4.3 x2
+[U.]  #11  gnutls                3.8.2 -> 3.8.3
+[U.]  #12  go                    1.21.5 -> 1.21.6
+[U.]  #13  hwdata                0.377-2 -> 0.378
+[U.]  #14  iana-etc              20230316 -> 20231227
+[U.]  #15  imagemagick           7.1.1-25 -> 7.1.1-27
+[U.]  #16  kitty                 0.32.0, 0.32.0-terminfo -> 0.32.1, 0.32.1-terminfo
+[U.]  #17  libcamera             0.0.5 -> 0.1.0
+[C.]  #18  libcap-ng             0.8.3 x2, 0.8.3-dev -> 0.8.3, 0.8.3-dev, 0.8.4
+[U.]  #19  libdrm                2.4.119 -> 2.4.120
+[U.]  #20  libmbim               1.28.4 -> 1.30.0
+[U.]  #21  libmpg123             1.32.3 -> 1.32.4
+[U.]  #22  libqmi                1.32.4 -> 1.34.0
+[U.]  #23  libraw                0.21.1-lib -> 0.21.2-lib
+[U.]  #24  libunwind             1.6.2 -> 1.7.2
+[C.]  #25  linux-pam             1.5.2 x2 -> 1.5.2, 1.5.3
+[U.]  #26  lttng-ust             2.13.6 -> 2.13.7
+[U.]  #27  lvm2                  2.03.22-lib -> 2.03.23-lib
+[U.]  #28  m17n-lib              1.8.2 -> 1.8.4
+[U.]  #29  modemmanager          1.20.6 -> 1.22.0
+[U.]  #30  most                  5.1.0 -> 5.2.0
+[U.]  #31  mpg123                1.32.3 -> 1.32.4
+[C.]  #32  nodejs                18.19.0, 20.10.0 -> 18.19.0, 20.11.0
+[C.]  #33  openexr               2.5.8, 3.2.1 -> 2.5.10, 3.2.1
+[C.]  #34  parallel              20231222, 20231222-man, 3.2.2.0, 3.2.2.0-doc -> 20240122, 20240122-man, 3.2.2.0, 3.2.2.0-doc
+[U.]  #35  pipewire              1.0.0 -> 1.0.1
+[U.]  #36  pixman                0.42.2 -> 0.43.0
+[U.]  #37  pnpm                  8.10.5 -> 8.14.0
+[U.]  #38  rav1e                 0.6.6 -> 0.7.1
+[C.]  #39  readline              8.2p7 x2, 8.2p7-dev -> 8.2p10, 8.2p7, 8.2p7-dev
+[U.]  #40  srt                   1.5.2 -> 1.5.3
+[C.]  #41  systemd               2.3.0, 2.3.0-doc, 254.6 -> 2.3.0, 2.3.0-doc, 255.2
+[U.]  #42  systemd-minimal       254.6 -> 255.2
+[U.]  #43  systemd-minimal-libs  254.6 -> 255.2
+[U.]  #44  vulkan-loader         1.3.268.0 -> 1.3.275.0
+[U.]  #45  zxing-cpp             2.1.0 -> 2.2.1
+Added packages:
+[A.]  #1  libpwquality  1.4.5-lib
+Removed packages:
+[R.]  #1  ilmbase  2.5.8
+Closure size: 1331 -> 1332 (664 paths added, 663 paths removed, delta +1, disk usage +12.9MiB).
+```
+### lock change:
+```
+• Updated input 'darwin':
+    'github:LnL7/nix-darwin/1e706ef323de76236eb183d7784f3bd57255ec0b' (2024-01-22)
+  → 'github:LnL7/nix-darwin/91b9daf672c957ef95a05491a75f62e6a01d5aaf' (2024-01-30)
+• Updated input 'doomemacs':
+    'github:doomemacs/doomemacs/03d692f129633e3bf0bd100d91b3ebf3f77db6d1' (2023-12-08)
+  → 'github:doomemacs/doomemacs/ff33ec8f7a89d168ca533612e2562883c89e029f' (2024-01-28)
+• Updated input 'emacs-overlay':
+    'github:nix-community/emacs-overlay/24b4024af8327b64067d97dd9d98e635ffd9beca' (2024-01-24)
+  → 'github:nix-community/emacs-overlay/6ed1948db6bf8b21ba2d25b3e2d9a45c0176b166' (2024-01-31)
+• Updated input 'emacs-overlay/nixpkgs':
+    'github:NixOS/nixpkgs/612f97239e2cc474c13c9dafa0df378058c5ad8d' (2024-01-21)
+  → 'github:NixOS/nixpkgs/c002c6aa977ad22c60398daaa9be52f2203d0006' (2024-01-27)
+• Updated input 'emacs-overlay/nixpkgs-stable':
+    'github:NixOS/nixpkgs/d7f206b723e42edb09d9d753020a84b3061a79d8' (2024-01-22)
+  → 'github:NixOS/nixpkgs/f4a8d6d5324c327dcc2d863eb7f3cc06ad630df4' (2024-01-29)
+• Updated input 'home-manager':
+    'github:nix-community/home-manager/3df2a80f3f85f91ea06e5e91071fa74ba92e5084' (2024-01-23)
+  → 'github:nix-community/home-manager/d634c3abafa454551f2083b054cd95c3f287be61' (2024-01-28)
+• Updated input 'home-manager/nixpkgs':
+    'github:NixOS/nixpkgs/bbe7d8f876fbbe7c959c90ba2ae2852220573261' (2024-01-19)
+  → 'github:NixOS/nixpkgs/ae5c332cbb5827f6b1f02572496b141021de335f' (2024-01-25)
+• Updated input 'nixpkgs-master':
+    'github:NixOS/nixpkgs/a7fd93a95f55d640d714a81ebb661799c0db7dd4' (2024-01-24)
+  → 'github:NixOS/nixpkgs/6cc3c7127fda73fe4b6b1358f0aa645e546e78ef' (2024-01-31)
+• Updated input 'nixpkgs-unstable':
+    'github:NixOS/nixpkgs/5f5210aa20e343b7e35f40c033000db0ef80d7b9' (2024-01-22)
+  → 'github:NixOS/nixpkgs/222c1940fafeda4dea161858ffe6ebfc853d3db5' (2024-01-30)
+• Updated input 'powerlevel10k':
+    'github:romkatv/powerlevel10k/bd0fa8a08f62a6e49f8a2ef47f5103fa840d2198' (2024-01-23)
+  → 'github:romkatv/powerlevel10k/307bce24d19fa09d971a0d33c39f3c9fda82924e' (2024-01-26)
+• Updated input 'spacemacs':
+    'github:syl20bnr/spacemacs/36cba17ebcbc9a57d265f4e59ea1da151e82d6f3' (2024-01-22)
+  → 'github:syl20bnr/spacemacs/74969c89aafb8d016ab9438f4965cb91f6f98286' (2024-01-24)
+```
 ## Update 2024-01-24
 ```go
 Version changes:
