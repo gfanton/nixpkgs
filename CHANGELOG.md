@@ -1,3 +1,36 @@
+## Update 2024-02-10
+```go
+Version changes:
+[U.]  #1  eza          0.18.0, 0.18.0-man -> 0.18.1, 0.18.1-man
+[U.]  #2  pnpm         8.14.0 -> 8.15.1
+[U.]  #3  slirp4netns  1.2.2 -> 1.2.3
+[U.]  #4  webkitgtk    2.42.4+abi=4.0 -> 2.42.5+abi=4.0
+Closure size: 1332 -> 1332 (13 paths added, 13 paths removed, delta +0, disk usage -630.6KiB).
+```
+### lock change:
+```
+• Updated input 'doomemacs':
+    'github:doomemacs/doomemacs/fe18640376b1bbbb4e084305abbeee41f137eaa7' (2024-02-06)
+  → 'github:doomemacs/doomemacs/b655f6aa1f55c385f8821ffc29d950ec2b68a9b1' (2024-02-09)
+• Updated input 'emacs-overlay':
+    'github:nix-community/emacs-overlay/552a5b1fbcde5557b2a011956fa36fdef056fdb7' (2024-02-07)
+  → 'github:nix-community/emacs-overlay/95acf3297bda934c1ec5260e18ffea39f05bbf3a' (2024-02-10)
+• Updated input 'emacs-overlay/nixpkgs':
+    'github:NixOS/nixpkgs/faf912b086576fd1a15fca610166c98d47bc667e' (2024-02-05)
+  → 'github:NixOS/nixpkgs/f8e2ebd66d097614d51a56a755450d4ae1632df1' (2024-02-07)
+• Updated input 'emacs-overlay/nixpkgs-stable':
+    'github:NixOS/nixpkgs/9f2ee8c91ac42da3ae6c6a1d21555f283458247e' (2024-02-05)
+  → 'github:NixOS/nixpkgs/6832d0d99649db3d65a0e15fa51471537b2c56a6' (2024-02-07)
+• Updated input 'home-manager':
+    'github:nix-community/home-manager/f99eace7c167b8a6a0871849493b1c613d0f1b80' (2024-02-05)
+  → 'github:nix-community/home-manager/5b9156fa9a8b8beba917b8f9adbfd27bf63e16af' (2024-02-09)
+• Updated input 'nixpkgs-master':
+    'github:NixOS/nixpkgs/f8e2ebd66d097614d51a56a755450d4ae1632df1' (2024-02-07)
+  → 'github:NixOS/nixpkgs/47423f1598d682c26043781cdde3fb6e1d36b63c' (2024-02-10)
+• Updated input 'nixpkgs-unstable':
+    'github:NixOS/nixpkgs/8cc79aa39bbc6eaedaf286ae655b224c71e02907' (2024-02-06)
+  → 'github:NixOS/nixpkgs/442d407992384ed9c0e6d352de75b69079904e4e' (2024-02-09)
+```
 ## Update 2024-02-07
 ```go
 Version changes:
