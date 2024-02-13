@@ -1,5 +1,19 @@
 ## Update 2024-02-10
 ```go
+No version or selection state changes.
+Closure size: 1332 -> 1332 (0 paths added, 0 paths removed, delta +0, disk usage +0B).
+```
+### lock change:
+```
+• Updated input 'emacs-overlay':
+    'github:nix-community/emacs-overlay/95acf3297bda934c1ec5260e18ffea39f05bbf3a' (2024-02-10)
+  → 'github:nix-community/emacs-overlay/22cce99b0abb79c5d00583f6f82e823b2bdb131b' (2024-02-10)
+• Updated input 'nixpkgs-master':
+    'github:NixOS/nixpkgs/47423f1598d682c26043781cdde3fb6e1d36b63c' (2024-02-10)
+  → 'github:NixOS/nixpkgs/ef6206934d5726ed9315ac78879f5ba2a6b55785' (2024-02-10)
+```
+## Update 2024-02-10
+```go
 Version changes:
 [U.]  #1  eza          0.18.0, 0.18.0-man -> 0.18.1, 0.18.1-man
 [U.]  #2  pnpm         8.14.0 -> 8.15.1
