@@ -28,7 +28,7 @@ in {
     enable = true;
     goPath = ".local/share/go";
     goBin = ".local/bin";
-    package = pkgs.go;
+    package = pkgs.pkgs-master.go_1_22;
   };
 
   # rust env
@@ -49,12 +49,15 @@ in {
   # https://rycee.gitlab.io/home-manager/options.html#opt-programs.bat.enable
   programs.bat.enable = true;
   programs.bat.themes = {
-    catppuccin-macchiato = builtins.readFile (pkgs.fetchFromGitHub {
-      owner = "catppuccin";
-      repo = "bat";
-      rev = "ba4d16880d63e656acced2b7d4e034e4a93f74b1";
-      sha256 = "sha256-6WVKQErGdaqb++oaXnY3i6/GuH2FhTgK0v4TN4Y0Wbw=";
-    } + "/Catppuccin-macchiato.tmTheme");
+    catppuccin-macchiato = {
+      src = pkgs.fetchFromGitHub {
+        owner = "catppuccin";
+        repo = "bat";
+        rev = "ba4d16880d63e656acced2b7d4e034e4a93f74b1";
+        sha256 = "sha256-6WVKQErGdaqb++oaXnY3i6/GuH2FhTgK0v4TN4Y0Wbw=";
+      };
+      file = "/Catppuccin-macchiato.tmTheme";
+    };
   };
   programs.bat.config = {
     style = "plain";
@@ -113,24 +116,24 @@ in {
       rustup
 
       # ruby
-      ruby_3_1
+      pkgs-stable.ruby_3_1
 
-      # js
-      nodejs-18_x
-      nodePackages.pnpm
-      yarn
+      # js (stable)
+      pkgs-stable.nodejs-18_x
+      pkgs-stable.nodePackages.pnpm
+      pkgs-stable.yarn
 
-      # python
-      (python39.withPackages
+      # python (stable)
+      (pkgs-stable.python39.withPackages
         (p: with p; [ virtualenv pip mypy pylint yapf setuptools ]))
-      pipenv
+      pkgs-stable.pipenv
 
       # go tools
-      gofumpt
-      gopls # see overlay
+      pkgs-master.gofumpt
+      pkgs-master.gopls
       delve
       # exclude bundle
-      (gotools.overrideDerivation
+      (pkgs-master.gotools.overrideDerivation
         (oldAttrs: { excludedPackages = [ "bundle" ]; }))
 
       # gotools
