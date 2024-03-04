@@ -51,7 +51,8 @@ jobs:
         nix-env --set-flag priority 1 cachix
         # Build and switch to home-manager env
         nix build ".#homeConfigurations.$CONFIG_NAME.activationPackage"
-        ./result/activate switch --verbose
+        ./result/activate switch --verbose --fallback
+
         # Output the generation to be used in subsequent steps
         echo "generation=$(readlink -f $HOME/.nix-profile)" >> $GITHUB_OUTPUT
 
@@ -63,7 +64,7 @@ jobs:
 
         # Update all inputs by recreating the flake and switching to the new home-manager environment
         nix build ".#homeConfigurations.$CONFIG_NAME.activationPackage"
-        ./result/activate switch --verbose
+        ./result/activate switch --verbose --fallback
 
         # Determine the new and old generations
         nixos_new_gen=$(readlink -f $HOME/.nix-profile)
