@@ -20,7 +20,7 @@ env:
 jobs:
   build-macos-env:
     name: Build/cache macOS Nix env
-    runs-on: macos-latest
+    runs-on: macos-14
     env:
       CONFIG_NAME: githubCI
 
@@ -29,7 +29,7 @@ jobs:
       uses: actions/checkout@v3
 
     - name: Install Nix
-      uses: cachix/install-nix-action@v22
+      uses: cachix/install-nix-action@v26
       with:
         extra_nix_config: |
           access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}
@@ -49,14 +49,14 @@ jobs:
         nix-env --set-flag priority 1 cachix
 
         # Build to bootstrap config
-        nix build .#darwinConfigurations.bootstrap-x86.system
+        nix build .#darwinConfigurations.bootstrap-arm.system
 
         # [hack] remove conflicting files
         sudo rm -f /etc/nix/nix.conf
         sudo rm -f /etc/shells
 
         # Switch to bootstrap config
-        ./result/sw/bin/darwin-rebuild switch --flake .#bootstrap-x86
+        ./result/sw/bin/darwin-rebuild switch --flake .#bootstrap-arm
 
         # Build and switch to full config
         /run/current-system/sw/bin/zsh -c "darwin-rebuild switch --flake .#$CONFIG_NAME"
@@ -71,7 +71,7 @@ jobs:
       uses: actions/checkout@v3
 
     - name: Install Nix
-      uses: cachix/install-nix-action@v21
+      uses: cachix/install-nix-action@v26
       with:
         extra_nix_config: |
           access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}
