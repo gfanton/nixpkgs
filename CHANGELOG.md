@@ -1,3 +1,192 @@
+## Update 2024-03-06
+```go
+Version changes:
+[U.]  #001  SDL2                      2.28.5 -> 2.30.0
+[U.]  #002  abseil-cpp                20230125.3 -> 20240116.0
+[C.]  #003  acl                       2.3.1 x3 -> 2.3.1 x2, 2.3.2
+[U.]  #004  alsa-lib                  1.2.9 -> 1.2.11
+[U.]  #005  alsa-ucm-conf             1.2.10 -> 1.2.11
+[C.]  #006  attr                      2.5.1 x3 -> 2.5.1 x2, 2.5.2
+[C.]  #007  aws-c-cal                 0.6.0, 0.6.9 -> 0.6.0, 0.6.10
+[C.]  #008  aws-c-compression         0.2.17 x2 -> 0.2.17, 0.2.18
+[C.]  #009  aws-checksums             0.1.17 x2 -> 0.1.17, 0.1.18
+[C.]  #010  bash                      5.2-p15, 5.2-p21 x2, 5.2-p21-man, 5.2p26 -> 5.2-p15, 5.2-p21, 5.2p26, 5.2p26-man
+[U.]  #011  bash-interactive          5.2-p21 -> 5.2p26
+[U.]  #012  bluez                     5.71 -> 5.72
+[C.]  #013  boehm-gc                  8.2.2 x2 -> 8.2.2, 8.2.4
+[U.]  #014  btop                      1.3.0 -> 1.3.2
+[U.]  #015  cmake                     3.27.8 -> 3.28.2
+[U.]  #016  cryptsetup                2.6.1 -> 2.7.0
+[C.]  #017  curl                      8.4.0, 8.5.0 x2, 8.5.0-bin, 8.5.0-man -> 8.4.0, 8.6.0 x2, 8.6.0-bin, 8.6.0-man
+[U.]  #018  dav1d                     1.2.1 -> 1.3.0
+[C.]  #019  dbus                      1.14.10-lib -> 1.14.10, 1.14.10-lib
+[U.]  #020  delve                     1.22.0 -> 1.22.1
+[U.]  #021  dhcpcd                    10.0.3 -> 10.0.6
+[U.]  #022  direnv                    2.33.0 -> 2.34.0
+[U.]  #023  dnsmasq                   2.89 -> 2.90
+[U.]  #024  docker-compose            2.24.5 -> 2.24.6
+[U.]  #025  ell                       0.61 -> 0.62
+[U.]  #026  emacs-gtk3                29.1 -> 29.2
+[U.]  #027  emacs-gtk3-with-packages  29.1 -> 29.2
+[U.]  #028  enchant                   2.6.3 -> 2.6.7
+[C.]  #029  expat                     2.5.0 x2 -> 2.5.0, 2.6.0
+[U.]  #030  eza                       0.18.1, 0.18.1-man -> 0.18.5, 0.18.5-man
+[U.]  #031  fdk-aac                   2.0.2 -> 2.0.3
+[U.]  #032  ffado                     2.4.7 -> 2.4.8
+[U.]  #033  ffmpeg                    4.4.4-data, 4.4.4-lib -> 6.1-data, 6.1-lib
+[U.]  #034  getent-glibc              2.38-27 -> 2.38-44
+[U.]  #035  gh                        2.43.1 -> 2.44.1
+[U.]  #036  git                       2.43.0, 2.43.0-doc -> 2.43.1, 2.43.1-doc
+[U.]  #037  git-lfs                   3.4.1 -> 3.5.0
+[U.]  #038  glib                      2.78.3, 2.78.3-bin -> 2.78.4, 2.78.4-bin
+[C.]  #039  glibc                     2.38-27 x3, 2.38-27-bin, 2.38-27-dev, 2.38-27-getent, 2.38-44 -> 2.38-27, 2.38-44 x2, 2.38-44-bin, 2.38-44-dev, 2.38-44-getent
+[U.]  #040  glibc-locales             2.38-27 -> 2.38-44
+[U.]  #041  gnupg                     2.4.3 x2 -> 2.4.4 x2
+[U.]  #042  gopls                     0.14.2 -> 0.15.1
+[U.]  #043  gotools                   0.16.1 -> 0.18.0
+[U.]  #044  gperftools                2.10 -> 2.15
+[U.]  #045  gst-plugins-bad           1.22.8 -> 1.22.9
+[U.]  #046  gst-plugins-base          1.22.8 -> 1.22.9
+[U.]  #047  gstreamer                 1.22.8 -> 1.22.9
+[U.]  #048  gtest                     1.12.1 -> 1.14.0
+[U.]  #049  gtk+3                     3.24.39 -> 3.24.41
+[U.]  #050  harfbuzz                  7.3.0 -> 8.3.0
+[U.]  #051  harfbuzz-icu              7.3.0 -> 8.3.0
+[U.]  #052  hspell                    1.1 -> 1.4
+[U.]  #053  hwdata                    0.378 -> 0.379
+[C.]  #054  iana-etc                  20231227 x2 -> 20231227
+[U.]  #055  imagemagick               7.1.1-27 -> 7.1.1-29
+[U.]  #056  imath                     3.1.9 -> 3.1.10
+[U.]  #057  inih                      57 -> 58
+[U.]  #058  iproute2                  6.6.0 -> 6.7.0
+[U.]  #059  iputils                   20231222 -> 20240117
+[U.]  #060  iso-codes                 4.15.0 -> 4.16.0
+[U.]  #061  kbd                       2.6.3 -> 2.6.4
+[U.]  #062  kitty                     0.32.1, 0.32.1-terminfo -> 0.32.2, 0.32.2-terminfo
+[U.]  #063  libXext                   1.3.5 -> 1.3.6
+[U.]  #064  libaom                    3.8.0 -> 3.8.1
+[U.]  #065  libapparmor               3.1.6 -> 3.1.7
+[U.]  #066  libavif                   1.0.3 -> 1.0.4
+[U.]  #067  libcamera                 0.1.0 -> 0.2.0
+[U.]  #068  libdecor                  0.1.1 -> 0.2.2
+[U.]  #069  libedit                   20221030-3.1 -> 20230828-3.1
+[U.]  #070  libidn                    1.41 -> 1.42
+[C.]  #071  libidn2                   2.3.4 x3, 2.3.7 -> 2.3.4 x2, 2.3.7
+[U.]  #072  libjpeg-turbo             2.1.5.1 -> 3.0.2
+[U.]  #073  libjxl                    0.8.2 x2 -> 0.9.1
+[U.]  #074  libmanette                0.2.6 -> 0.2.7
+[U.]  #075  libpciaccess              0.17 -> 0.18
+[U.]  #076  libpsl                    0.21.2 -> 0.21.5
+[U.]  #077  libsecret                 0.21.2 -> 0.21.3
+[U.]  #078  libselinux                3.3 -> 3.6
+[C.]  #079  libunistring              1.1 x4 -> 1.1 x3
+[U.]  #080  libunwind                 1.7.2 -> 1.8.0
+[U.]  #081  libusb                    1.0.26 -> 1.0.27
+[U.]  #082  libuv                     1.46.0, 1.46.0-dev, 1.47.0 -> 1.48.0 x2, 1.48.0-dev
+[U.]  #083  libvpx                    1.13.1 -> 1.14.0
+[U.]  #084  libwpe                    1.14.1 -> 1.14.2
+[C.]  #085  libxml2                   2.11.5, 2.12.3-unstable-2023-12-14 -> 2.11.5, 2.12.5
+[U.]  #086  lilv                      0.24.22 -> 0.24.24
+[U.]  #087  linux-headers             6.6 -> 6.7
+[U.]  #088  linux-pam                 1.5.3 -> 1.6.0
+[C.]  #089  mailcap                   2.1.53 x3 -> 2.1.53 x2
+[U.]  #090  mesa                      23.3.3 -> 24.0.1
+[C.]  #091  nghttp2                   1.57.0-lib x2 -> 1.57.0-lib, 1.59.0-lib
+[U.]  #092  nodejs                    18.18.2 -> 18.19.1
+[U.]  #093  nss-cacert                3.95 -> 3.98
+[U.]  #094  numactl                   2.0.16 -> 2.0.18
+[C.]  #095  openexr                   2.5.10, 3.2.1 -> 2.5.10, 3.2.2
+[U.]  #096  openh264                  2.4.0 -> 2.4.1
+[U.]  #097  openldap                  2.6.6 -> 2.6.7
+[C.]  #098  openssl                   3.0.12 x5, 3.0.12-bin, 3.0.12-dev -> 3.0.12, 3.0.13 x3, 3.0.13-bin, 3.0.13-dev
+[U.]  #099  orc                       0.4.34 -> 0.4.36
+[U.]  #100  parallel                  20240122, 20240122-man -> 20240222, 20240222-man
+[U.]  #101  pcsclite                  2.0.1 -> 2.0.1-lib
+[U.]  #102  pipewire                  1.0.1 -> 1.0.3
+[U.]  #103  pixman                    0.43.0 -> 0.43.2
+[C.]  #104  python3                   3.11.6, 3.11.6-env, 3.11.7, 3.9.18, 3.9.18-env -> 3.11.8 x2, 3.11.8-env, 3.9.18, 3.9.18-env
+[U.]  #105  rootlesskit               1.1.1 -> 2.0.1
+[C.]  #106  s2n-tls                   1.3.56, 1.4.1 -> 1.3.56, 1.4.3
+[U.]  #107  shadow                    4.14.2 -> 4.14.3
+[C.]  #108  sqlite                    3.43.2 x2, 3.44.2, 3.44.2-bin -> 3.43.2 x2, 3.45.1, 3.45.1-bin
+[U.]  #109  tmux                      3.3a, 3.3a-man -> 3.4, 3.4-man
+[U.]  #110  tree-sitter               0.20.8 -> 0.20.9
+[C.]  #111  tzdata                    2023c, 2023d, 2024a -> 2024a x2
+[U.]  #112  unbound                   1.19.0-lib -> 1.19.1-lib
+[C.]  #113  xgcc                      12.3.0-libgcc x2, 13.2.0-libgcc x2 -> 12.3.0-libgcc x2, 13.2.0-libgcc
+[U.]  #114  xkeyboard-config          2.40 -> 2.41
+[C.]  #115  xz                        5.4.4, 5.4.5 x2, 5.4.5-bin -> 5.4.4, 5.4.5, 5.4.6, 5.4.6-bin
+[C.]  #116  zlib                      1.3 x3, 1.3-dev -> 1.3 x2, 1.3-dev, 1.3.1
+Added packages:
+[A.]  #1  libbsd             0.11.8
+[A.]  #2  libcbor            0.10.2
+[A.]  #3  mpdecimal          4.0.0
+[A.]  #4  procmail           3.24
+[A.]  #5  publicsuffix-list  0-unstable-2024-01-07
+[A.]  #6  xdg-user-dirs      0.18
+[A.]  #7  xdg-utils          1.2.1
+[A.]  #8  zoxide             0.9.4
+Removed packages:
+[R.]  #01  libbsd-unstable               2023-04-29
+[R.]  #02  libcbor-unstable              2023-01-29
+[R.]  #03  perl5.38.2-File-BaseDir       0.09
+[R.]  #04  perl5.38.2-File-DesktopEntry  0.22
+[R.]  #05  perl5.38.2-File-MimeInfo      0.33
+[R.]  #06  perl5.38.2-IPC-System-Simple  1.30
+[R.]  #07  publicsuffix-list-unstable    2023-02-16
+[R.]  #08  xdg-utils-unstable            2022-11-06
+[R.]  #09  xset                          1.2.5
+[R.]  #10  zoxide-unstable               2023-11-20
+Closure size: 753 -> 742 (691 paths added, 702 paths removed, delta -11, disk usage -71.5MiB).
+```
+### lock change:
+```
+• Updated input 'darwin':
+    'github:LnL7/nix-darwin/bdbae6ecff8fcc322bf6b9053c0b984912378af7' (2024-02-02)
+  → 'github:LnL7/nix-darwin/daa03606dfb5296a22e842acb02b46c1c4e9f5e7' (2024-03-04)
+• Updated input 'doomemacs':
+    'github:doomemacs/doomemacs/b655f6aa1f55c385f8821ffc29d950ec2b68a9b1' (2024-02-09)
+  → 'github:doomemacs/doomemacs/bea81278fd2ecb65db6a63dbcd6db2f52921ee41' (2024-03-05)
+• Updated input 'emacs-overlay':
+    'github:nix-community/emacs-overlay/22cce99b0abb79c5d00583f6f82e823b2bdb131b' (2024-02-10)
+  → 'github:nix-community/emacs-overlay/9ae82c10a7065080516fb7665a143ff6f8a57136' (2024-03-06)
+• Updated input 'emacs-overlay/flake-utils':
+    'github:numtide/flake-utils/1ef2e671c3b0c19053962c07dbda38332dcebf26' (2024-01-15)
+  → 'github:numtide/flake-utils/d465f4819400de7c8d874d50b982301f28a84605' (2024-02-28)
+• Updated input 'emacs-overlay/nixpkgs':
+    'github:NixOS/nixpkgs/f8e2ebd66d097614d51a56a755450d4ae1632df1' (2024-02-07)
+  → 'github:NixOS/nixpkgs/b8697e57f10292a6165a20f03d2f42920dfaf973' (2024-03-03)
+• Updated input 'emacs-overlay/nixpkgs-stable':
+    'github:NixOS/nixpkgs/6832d0d99649db3d65a0e15fa51471537b2c56a6' (2024-02-07)
+  → 'github:NixOS/nixpkgs/617579a787259b9a6419492eaac670a5f7663917' (2024-03-04)
+• Updated input 'flake-utils':
+    'github:numtide/flake-utils/1ef2e671c3b0c19053962c07dbda38332dcebf26' (2024-01-15)
+  → 'github:numtide/flake-utils/d465f4819400de7c8d874d50b982301f28a84605' (2024-02-28)
+• Updated input 'fzf-tab':
+    'github:Aloxaf/fzf-tab/b06e7574577cd729c629419a62029d31d0565a7a' (2024-02-01)
+  → 'github:Aloxaf/fzf-tab/f3d892cf19bba09c0c44fa9fcaf6d616fe5b18e6' (2024-03-01)
+• Updated input 'home-manager':
+    'github:nix-community/home-manager/5b9156fa9a8b8beba917b8f9adbfd27bf63e16af' (2024-02-09)
+  → 'github:nix-community/home-manager/bdea159ffab9865f808b8d92fd2bef33521867b2' (2024-03-05)
+• Updated input 'home-manager/nixpkgs':
+    'github:NixOS/nixpkgs/b8b232ae7b8b144397fdb12d20f592e5e7c1a64d' (2024-01-31)
+  → 'github:NixOS/nixpkgs/5863c27340ba4de8f83e7e3c023b9599c3cb3c80' (2024-02-16)
+• Updated input 'nixpkgs-master':
+    'github:NixOS/nixpkgs/ef6206934d5726ed9315ac78879f5ba2a6b55785' (2024-02-10)
+  → 'github:NixOS/nixpkgs/9052a2666b6292fced270a2264776c203442fbe1' (2024-03-06)
+• Updated input 'nixpkgs-stable':
+    'github:NixOS/nixpkgs/01885a071465e223f8f68971f864b15829988504' (2024-02-13)
+  → 'github:NixOS/nixpkgs/880992dcc006a5e00dd0591446fdf723e6a51a64' (2024-03-05)
+• Updated input 'nixpkgs-unstable':
+    'github:NixOS/nixpkgs/442d407992384ed9c0e6d352de75b69079904e4e' (2024-02-09)
+  → 'github:NixOS/nixpkgs/311a4be96d940a0c673e88bd5bc83ea4f005cc02' (2024-03-05)
+• Updated input 'powerlevel10k':
+    'github:romkatv/powerlevel10k/5bba4b849b04da665d9776930f47371ebb9974a4' (2024-02-06)
+  → 'github:romkatv/powerlevel10k/0cc19ac2ede35fd8accff590fa71df580dc7e109' (2024-02-23)
+• Updated input 'spacemacs':
+    'github:syl20bnr/spacemacs/2dadee57110fc9db43756fcad08af9ac3ae7c9fa' (2024-02-04)
+  → 'github:syl20bnr/spacemacs/4a227fc94651136a8de54bcafa7d22abe1fa0295' (2024-02-17)
+```
 ## Update 2024-02-10
 ```go
 No version or selection state changes.
