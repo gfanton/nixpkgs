@@ -1,3 +1,49 @@
+## Update 2024-03-08
+```go
+Version changes:
+[C.]  #01  bash          5.2-p15, 5.2-p21, 5.2p26, 5.2p26-man -> 5.2-p15, 5.2-p21, 5.2p26 x2, 5.2p26-man
+[U.]  #02  eza           0.18.5, 0.18.5-man -> 0.18.6, 0.18.6-man
+[U.]  #03  gh            2.44.1 -> 2.45.0
+[C.]  #04  glibc         2.38-27, 2.38-44 x2, 2.38-44-bin, 2.38-44-dev, 2.38-44-getent -> 2.38-27, 2.38-44 x3, 2.38-44-bin, 2.38-44-dev, 2.38-44-getent
+[U.]  #05  go            1.22.0 -> 1.22.1
+[C.]  #06  iana-etc      20231227 -> 20231227 x2
+[C.]  #07  libidn2       2.3.4 x2, 2.3.7 -> 2.3.4 x2, 2.3.7 x2
+[C.]  #08  libunistring  1.1 x3 -> 1.1 x4
+[C.]  #09  mailcap       2.1.53 x2 -> 2.1.53 x3
+[C.]  #10  tzdata        2024a x2 -> 2024a x3
+[C.]  #11  xgcc          12.3.0-libgcc x2, 13.2.0-libgcc -> 12.3.0-libgcc x2, 13.2.0-libgcc x2
+Closure size: 742 -> 750 (18 paths added, 10 paths removed, delta +8, disk usage +35.3MiB).
+```
+### lock change:
+```
+• Updated input 'darwin':
+    'github:LnL7/nix-darwin/daa03606dfb5296a22e842acb02b46c1c4e9f5e7' (2024-03-04)
+  → 'github:LnL7/nix-darwin/550340062c16d7ef8c2cc20a3d2b97bcd3c6b6f6' (2024-03-07)
+• Updated input 'emacs-overlay':
+    'github:nix-community/emacs-overlay/9ae82c10a7065080516fb7665a143ff6f8a57136' (2024-03-06)
+  → 'github:nix-community/emacs-overlay/6cd7ddb6c8a8ac4b2bfb35ca3261d3e689740c8e' (2024-03-08)
+• Updated input 'emacs-overlay/nixpkgs':
+    'github:NixOS/nixpkgs/b8697e57f10292a6165a20f03d2f42920dfaf973' (2024-03-03)
+  → 'github:NixOS/nixpkgs/9df3e30ce24fd28c7b3e2de0d986769db5d6225d' (2024-03-06)
+• Updated input 'emacs-overlay/nixpkgs-stable':
+    'github:NixOS/nixpkgs/617579a787259b9a6419492eaac670a5f7663917' (2024-03-04)
+  → 'github:NixOS/nixpkgs/880992dcc006a5e00dd0591446fdf723e6a51a64' (2024-03-05)
+• Updated input 'home-manager':
+    'github:nix-community/home-manager/bdea159ffab9865f808b8d92fd2bef33521867b2' (2024-03-05)
+  → 'github:nix-community/home-manager/8b07ca541939211d3cc437ddfd74ebdef3d72471' (2024-03-08)
+• Updated input 'home-manager/nixpkgs':
+    'github:NixOS/nixpkgs/5863c27340ba4de8f83e7e3c023b9599c3cb3c80' (2024-02-16)
+  → 'github:NixOS/nixpkgs/b8697e57f10292a6165a20f03d2f42920dfaf973' (2024-03-03)
+• Updated input 'nixpkgs-master':
+    'github:NixOS/nixpkgs/9052a2666b6292fced270a2264776c203442fbe1' (2024-03-06)
+  → 'github:NixOS/nixpkgs/cd7e4e32b1fcd00b7292922c676b463afda01586' (2024-03-08)
+• Updated input 'nixpkgs-stable':
+    'github:NixOS/nixpkgs/880992dcc006a5e00dd0591446fdf723e6a51a64' (2024-03-05)
+  → 'github:NixOS/nixpkgs/3030c33c68a0826148335b72fc8bb734ff20c520' (2024-03-08)
+• Updated input 'nixpkgs-unstable':
+    'github:NixOS/nixpkgs/311a4be96d940a0c673e88bd5bc83ea4f005cc02' (2024-03-05)
+  → 'github:NixOS/nixpkgs/f945939fd679284d736112d3d5410eb867f3b31c' (2024-03-07)
+```
 ## Update 2024-03-06
 ```go
 Version changes:
