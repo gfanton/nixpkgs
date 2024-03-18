@@ -88,7 +88,7 @@ in {
 
     # enable completion
     enableCompletion = true;
-    enableAutosuggestions = true;
+    autosuggestion.enable = true;
     oh-my-zsh = {
       enable = true;
       custom = "${config.xdg.configHome}/oh-my-zsh";

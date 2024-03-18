@@ -76,6 +76,6 @@ update.spacemacs:; nix flake lock $(addprefix --update-input , $(SPACEMACS_CHANN
 update.doom:; nix flake lock $(addprefix --update-input , $(DOOM_CHANNELS))
 update.zsh:; nix flake lock $(addprefix --update-input ,$(ZSH_CHANNELS))
 update.misc:; nix flake lock $(addprefix --update-input ,$(MISC_CHANNELS))
-update.home:; nix flake lock $(addprefix --update-input , $(NIX_CHANNELS))
+update.home:; nix flake lock $(addprefix --update-input , $(HOME_CHANNELS))
 update.asdf:; nix flake lock $(addprefix --update-input , $(ASDF_CHANNELS))
 
