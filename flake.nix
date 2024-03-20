@@ -15,14 +15,9 @@
 
     flake-utils.url = "github:numtide/flake-utils";
 
-    # lsp
-    rnix-lsp.url = "github:nix-community/rnix-lsp";
-
     # overlay
     home-manager.url = "github:nix-community/home-manager/master";
     emacs-overlay.url = "github:nix-community/emacs-overlay";
-
-    # rnix-lsp
 
     # Other sources
 
@@ -52,7 +47,7 @@
     powerlevel10k.flake = false;
   };
 
-  outputs = { self, darwin, home-manager, rnix-lsp, flake-utils, ... }@inputs:
+  outputs = { self, darwin, home-manager, flake-utils, ... }@inputs:
     let
       inherit (self.lib) attrValues makeOverridable optionalAttrs singleton;
 
