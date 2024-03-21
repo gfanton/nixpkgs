@@ -1,3 +1,88 @@
+## Update 2024-03-20
+```go
+Version changes:
+[U.]  #01  abseil-cpp           20240116.0 -> 20240116.1
+[U.]  #02  binutils             2.40, 2.40-lib -> 2.41, 2.41-lib
+[U.]  #03  binutils-wrapper     2.40 -> 2.41
+[U.]  #04  cmake                3.28.2 -> 3.28.3
+[U.]  #05  dav1d                1.3.0 -> 1.4.0
+[U.]  #06  delta                0.16.5 -> 0.17.0
+[U.]  #07  docker-buildx        0.12.1 -> 0.13.0
+[U.]  #08  docker-compose       2.24.6 -> 2.25.0
+[U.]  #09  eza                  0.18.5, 0.18.5-man -> 0.18.7, 0.18.7-man
+[U.]  #10  fzf                  0.46.1, 0.46.1-man -> 0.47.0, 0.47.0-man
+[U.]  #11  gh                   2.44.1 -> 2.45.0
+[U.]  #12  git                  2.43.1, 2.43.1-doc -> 2.43.2, 2.43.2-doc
+[U.]  #13  git-lfs              3.5.0 -> 3.5.1
+[U.]  #14  go                   1.22.0 -> 1.22.1
+[U.]  #15  gopls                0.15.1 -> 0.15.2
+[U.]  #16  imath                3.1.10 -> 3.1.11
+[U.]  #17  kitty                0.32.2, 0.32.2-terminfo -> 0.33.0, 0.33.0-terminfo
+[U.]  #18  libcbor              0.10.2 -> 0.11.0
+[C.]  #19  libffi               3.4.4 x3 -> 3.4.4 x2, 3.4.6
+[U.]  #20  libheif              1.15.2 -> 1.17.6
+[U.]  #21  libmicrohttpd        0.9.71 -> 0.9.77
+[U.]  #22  libmpg123            1.32.4 -> 1.32.5
+[U.]  #23  libpulseaudio        16.1 -> 17.0
+[U.]  #24  libsecret            0.21.3 -> 0.21.4
+[U.]  #25  mesa                 24.0.1 -> 24.0.2
+[U.]  #26  mpg123               1.32.4 -> 1.32.5
+[C.]  #27  nix                  2.16.2 x2, 2.16.2-man x2, 2.18.1, 2.18.1-man -> 2.16.2, 2.16.2-man, 2.18.2, 2.18.2-man, 2.19.3, 2.19.3-man
+[U.]  #28  nix-zsh-completions  0.5.0 -> 0.5.1
+[U.]  #29  openjpeg             2.5.0 -> 2.5.2
+[U.]  #30  openssh              9.6p1 -> 9.7p1
+[U.]  #31  pcre2                10.42 -> 10.43
+[U.]  #32  procs                0.14.4 -> 0.14.5
+[U.]  #33  rootlesskit          2.0.1 -> 2.0.2
+[U.]  #34  shadow               4.14.3 -> 4.14.5
+[U.]  #35  unrar                6.2.12 -> 7.0.7
+[C.]  #36  xz                   5.4.4, 5.4.5, 5.4.6, 5.4.6-bin -> 5.4.4, 5.4.5, 5.6.0, 5.6.0-bin
+Removed packages:
+[R.]  #1  rav1e  0.7.1
+Closure size: 741 -> 740 (617 paths added, 618 paths removed, delta -1, disk usage -6.9MiB).
+```
+### lock change:
+```
+• Updated input 'doomemacs':
+    'github:doomemacs/doomemacs/bea81278fd2ecb65db6a63dbcd6db2f52921ee41' (2024-03-05)
+  → 'github:doomemacs/doomemacs/73f19acb66ff37d2ef1644516c0c983543ac2246' (2024-03-20)
+• Updated input 'emacs-overlay':
+    'github:nix-community/emacs-overlay/9ae82c10a7065080516fb7665a143ff6f8a57136' (2024-03-06)
+  → 'github:nix-community/emacs-overlay/76b6a3e62b790f56cb0707ce91bbe111c56cbcb7' (2024-03-20)
+• Updated input 'emacs-overlay/flake-utils':
+    'github:numtide/flake-utils/d465f4819400de7c8d874d50b982301f28a84605' (2024-02-28)
+  → 'github:numtide/flake-utils/b1d9ab70662946ef0850d488da1c9019f3a9752a' (2024-03-11)
+• Updated input 'emacs-overlay/nixpkgs':
+    'github:NixOS/nixpkgs/b8697e57f10292a6165a20f03d2f42920dfaf973' (2024-03-03)
+  → 'github:NixOS/nixpkgs/b06025f1533a1e07b6db3e75151caa155d1c7eb3' (2024-03-19)
+• Updated input 'emacs-overlay/nixpkgs-stable':
+    'github:NixOS/nixpkgs/617579a787259b9a6419492eaac670a5f7663917' (2024-03-04)
+  → 'github:NixOS/nixpkgs/fa9f817df522ac294016af3d40ccff82f5fd3a63' (2024-03-19)
+• Updated input 'flake-utils':
+    'github:numtide/flake-utils/d465f4819400de7c8d874d50b982301f28a84605' (2024-02-28)
+  → 'github:numtide/flake-utils/b1d9ab70662946ef0850d488da1c9019f3a9752a' (2024-03-11)
+• Updated input 'fzf-tab':
+    'github:Aloxaf/fzf-tab/f3d892cf19bba09c0c44fa9fcaf6d616fe5b18e6' (2024-03-01)
+  → 'github:Aloxaf/fzf-tab/bf3ef5588af6d3bf7cc60f2ad2c1c95bca216241' (2024-03-12)
+• Updated input 'home-manager':
+    'github:nix-community/home-manager/7b3fca5adcf6c709874a8f2e0c364fe9c58db989' (2024-03-17)
+  → 'github:nix-community/home-manager/022464438a85450abb23d93b91aa82e0addd71fb' (2024-03-19)
+• Updated input 'home-manager/nixpkgs':
+    'github:NixOS/nixpkgs/3030f185ba6a4bf4f18b87f345f104e6a6961f34' (2024-03-09)
+  → 'github:NixOS/nixpkgs/d691274a972b3165335d261cc4671335f5c67de9' (2024-03-14)
+• Updated input 'nixpkgs-master':
+    'github:NixOS/nixpkgs/9052a2666b6292fced270a2264776c203442fbe1' (2024-03-06)
+  → 'github:NixOS/nixpkgs/11fc7cb8d9d429c06710de725ff893b873b9cd22' (2024-03-20)
+• Updated input 'nixpkgs-stable':
+    'github:NixOS/nixpkgs/880992dcc006a5e00dd0591446fdf723e6a51a64' (2024-03-05)
+  → 'github:NixOS/nixpkgs/0754322c1741a035a033751a2d63a742816592b6' (2024-03-20)
+• Updated input 'nixpkgs-unstable':
+    'github:NixOS/nixpkgs/311a4be96d940a0c673e88bd5bc83ea4f005cc02' (2024-03-05)
+  → 'github:NixOS/nixpkgs/7872526e9c5332274ea5932a0c3270d6e4724f3b' (2024-03-19)
+• Updated input 'powerlevel10k':
+    'github:romkatv/powerlevel10k/0cc19ac2ede35fd8accff590fa71df580dc7e109' (2024-02-23)
+  → 'github:romkatv/powerlevel10k/da9b03777c4f2390c7e3f5c720ee4689336f811b' (2024-03-19)
+```
 ## Update 2024-03-08
 ```go
 Version changes:
