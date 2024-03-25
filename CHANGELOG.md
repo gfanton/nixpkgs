@@ -1,3 +1,77 @@
+## Update 2024-03-23
+```go
+Version changes:
+[U.]  #01  SDL2             2.30.0 -> 2.30.1
+[U.]  #02  at-spi2-core     2.50.0 -> 2.50.1
+[U.]  #03  ell              0.62 -> 0.63
+[U.]  #04  eza              0.18.7, 0.18.7-man -> 0.18.8, 0.18.8-man
+[U.]  #05  ffmpeg           6.1-data, 6.1-lib -> 6.1.1-data, 6.1.1-lib
+[U.]  #06  ffmpeg-headless  6.1-data, 6.1-lib -> 6.1.1-data, 6.1.1-lib
+[U.]  #07  gh               2.45.0 -> 2.46.0
+[U.]  #08  giflib           5.2.1 -> 5.2.2
+[U.]  #09  git              2.43.2, 2.43.2-doc -> 2.44.0, 2.44.0-doc
+[U.]  #10  hwdata           0.379 -> 0.380
+[U.]  #11  libXcursor       1.2.1 -> 1.2.2
+[U.]  #12  libassuan        2.5.6 -> 2.5.7
+[U.]  #13  libgpg-error     1.47 -> 1.48
+[U.]  #14  libksba          1.6.5 -> 1.6.6
+[U.]  #15  libopenmpt       0.7.3 -> 0.7.4
+[U.]  #16  libopus          1.4 -> 1.5.1
+[U.]  #17  libpng-apng      1.6.40 -> 1.6.43
+[U.]  #18  libsrtp          2.5.0 -> 2.6.0
+[U.]  #19  libunwind        1.8.0 -> 1.8.1
+[U.]  #20  mesa             24.0.2 -> 24.0.3
+[U.]  #21  networkmanager   1.44.2 -> 1.46.0
+[C.]  #22  nghttp2          1.57.0-lib, 1.59.0-lib -> 1.57.0-lib, 1.60.0-lib
+[U.]  #23  npth             1.6 -> 1.7
+[U.]  #24  pcsclite         2.0.1-lib -> 2.0.3-lib
+[U.]  #25  pipewire         1.0.3 -> 1.0.4
+[U.]  #26  pixman           0.43.2 -> 0.43.4
+[C.]  #27  s2n-tls          1.3.56, 1.4.3 -> 1.3.56, 1.4.6
+[U.]  #28  shadow           4.14.5 -> 4.14.6
+[U.]  #29  unbound          1.19.1-lib -> 1.19.2-lib
+[U.]  #30  wavpack          5.6.0 -> 5.7.0
+[C.]  #31  xz               5.4.4, 5.4.5, 5.6.0, 5.6.0-bin -> 5.4.4, 5.4.5, 5.6.1, 5.6.1-bin
+Added packages:
+[A.]  #1  perl5.38.2-File-BaseDir       0.09
+[A.]  #2  perl5.38.2-File-DesktopEntry  0.22
+[A.]  #3  perl5.38.2-File-MimeInfo      0.33
+[A.]  #4  perl5.38.2-IPC-System-Simple  1.30
+Closure size: 740 -> 744 (618 paths added, 614 paths removed, delta +4, disk usage +17.8MiB).
+```
+### lock change:
+```
+• Updated input 'doomemacs':
+    'github:doomemacs/doomemacs/73f19acb66ff37d2ef1644516c0c983543ac2246' (2024-03-20)
+  → 'github:doomemacs/doomemacs/bbadabda511027e515f02ccd7b70291ed03d8945' (2024-03-22)
+• Updated input 'emacs-overlay':
+    'github:nix-community/emacs-overlay/76b6a3e62b790f56cb0707ce91bbe111c56cbcb7' (2024-03-20)
+  → 'github:nix-community/emacs-overlay/75440e565fe138f169389e1a65cc21f7ec5f0a30' (2024-03-23)
+• Updated input 'emacs-overlay/nixpkgs':
+    'github:NixOS/nixpkgs/b06025f1533a1e07b6db3e75151caa155d1c7eb3' (2024-03-19)
+  → 'github:NixOS/nixpkgs/20f77aa09916374aa3141cbc605c955626762c9a' (2024-03-21)
+• Updated input 'emacs-overlay/nixpkgs-stable':
+    'github:NixOS/nixpkgs/fa9f817df522ac294016af3d40ccff82f5fd3a63' (2024-03-19)
+  → 'github:NixOS/nixpkgs/56528ee42526794d413d6f244648aaee4a7b56c0' (2024-03-22)
+• Updated input 'home-manager':
+    'github:nix-community/home-manager/022464438a85450abb23d93b91aa82e0addd71fb' (2024-03-19)
+  → 'github:nix-community/home-manager/1c2c5e4cabba4c43504ef0f8cc3f3dfa284e2dbb' (2024-03-22)
+• Updated input 'home-manager/nixpkgs':
+    'github:NixOS/nixpkgs/d691274a972b3165335d261cc4671335f5c67de9' (2024-03-14)
+  → 'github:NixOS/nixpkgs/b06025f1533a1e07b6db3e75151caa155d1c7eb3' (2024-03-19)
+• Updated input 'nixpkgs-master':
+    'github:NixOS/nixpkgs/11fc7cb8d9d429c06710de725ff893b873b9cd22' (2024-03-20)
+  → 'github:NixOS/nixpkgs/44d0940ea560dee511026a53f0e2e2cde489b4d4' (2024-03-23)
+• Updated input 'nixpkgs-stable':
+    'github:NixOS/nixpkgs/0754322c1741a035a033751a2d63a742816592b6' (2024-03-20)
+  → 'github:NixOS/nixpkgs/772b408ef5855fb3be56eabe3ab77a07388bad1b' (2024-03-23)
+• Updated input 'nixpkgs-unstable':
+    'github:NixOS/nixpkgs/7872526e9c5332274ea5932a0c3270d6e4724f3b' (2024-03-19)
+  → 'github:NixOS/nixpkgs/a3ed7406349a9335cb4c2a71369b697cecd9d351' (2024-03-22)
+• Updated input 'spacemacs':
+    'github:syl20bnr/spacemacs/4a227fc94651136a8de54bcafa7d22abe1fa0295' (2024-02-17)
+  → 'github:syl20bnr/spacemacs/17e03e6faba2a850c1ef38778326921cc0da1ccc' (2024-03-22)
+```
 ## Update 2024-03-20
 ```go
 Version changes:
