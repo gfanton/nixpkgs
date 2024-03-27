@@ -1,3 +1,38 @@
+## Update 2024-03-27
+```go
+Version changes:
+[U.]  #1  docker-buildx   0.13.0 -> 0.13.1
+[U.]  #2  docker-compose  2.25.0 -> 2.26.0
+[U.]  #3  kitty           0.33.0, 0.33.0-terminfo -> 0.33.1, 0.33.1-terminfo
+[U.]  #4  lazygit         0.40.2 -> 0.41.0
+Removed packages:
+[R.]  #1  docker-proxy-unstable  2020-12-15
+Closure size: 744 -> 743 (19 paths added, 20 paths removed, delta -1, disk usage +2.7MiB).
+```
+### lock change:
+```
+• Updated input 'doomemacs':
+    'github:doomemacs/doomemacs/bbadabda511027e515f02ccd7b70291ed03d8945' (2024-03-22)
+  → 'github:doomemacs/doomemacs/d5bad5b43061b6dfac6d2e8adf9d23f44d66ee5a' (2024-03-27)
+• Updated input 'emacs-overlay':
+    'github:nix-community/emacs-overlay/75440e565fe138f169389e1a65cc21f7ec5f0a30' (2024-03-23)
+  → 'github:nix-community/emacs-overlay/945d1bb0aa1424fce01b7107fbb6ec7254bbde55' (2024-03-27)
+• Updated input 'emacs-overlay/nixpkgs':
+    'github:NixOS/nixpkgs/20f77aa09916374aa3141cbc605c955626762c9a' (2024-03-21)
+  → 'github:NixOS/nixpkgs/57e6b3a9e4ebec5aa121188301f04a6b8c354c9b' (2024-03-25)
+• Updated input 'nixpkgs-master':
+    'github:NixOS/nixpkgs/44d0940ea560dee511026a53f0e2e2cde489b4d4' (2024-03-23)
+  → 'github:NixOS/nixpkgs/42eb76d2c49101eb85f51cd81ac6c231a48a659a' (2024-03-27)
+• Updated input 'nixpkgs-stable':
+    'github:NixOS/nixpkgs/772b408ef5855fb3be56eabe3ab77a07388bad1b' (2024-03-23)
+  → 'github:NixOS/nixpkgs/435103d35f9591ac6c80b7019b72f5cdf5e6d1fd' (2024-03-26)
+• Updated input 'nixpkgs-unstable':
+    'github:NixOS/nixpkgs/a3ed7406349a9335cb4c2a71369b697cecd9d351' (2024-03-22)
+  → 'github:NixOS/nixpkgs/07262b18b97000d16a4bdb003418bd2fb067a932' (2024-03-25)
+• Updated input 'spacemacs':
+    'github:syl20bnr/spacemacs/17e03e6faba2a850c1ef38778326921cc0da1ccc' (2024-03-22)
+  → 'github:syl20bnr/spacemacs/e9c0127db2cfb3510fb74651142d2294b4e61154' (2024-03-26)
+```
 ## Update 2024-03-23
 ```go
 Version changes:
