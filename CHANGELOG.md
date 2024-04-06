@@ -1,3 +1,92 @@
+## Update 2024-04-06
+```go
+Version changes:
+[U.]  #01  at-spi2-core              2.50.1 -> 2.50.2
+[U.]  #02  dav1d                     1.4.0 -> 1.4.1
+[U.]  #03  docker-buildx             0.13.0 -> 0.13.1
+[U.]  #04  docker-compose            2.25.0 -> 2.26.0
+[U.]  #05  elfutils                  0.190 -> 0.191
+[U.]  #06  emacs-gtk3                29.2 -> 29.3
+[U.]  #07  emacs-gtk3-with-packages  29.2 -> 29.3
+[C.]  #08  expat                     2.5.0, 2.6.0 -> 2.5.0, 2.6.2
+[U.]  #09  eza                       0.18.8, 0.18.8-man -> 0.18.9, 0.18.9-man
+[U.]  #10  getent-glibc              2.38-44 -> 2.39-5
+[U.]  #11  glib-networking           2.78.0 -> 2.78.1
+[C.]  #12  glibc                     2.38-27, 2.38-44 x2, 2.38-44-bin, 2.38-44-dev, 2.38-44-getent -> 2.38-27, 2.38-44, 2.39-5, 2.39-5-bin, 2.39-5-dev, 2.39-5-getent
+[U.]  #13  glibc-locales             2.38-44 -> 2.39-5
+[U.]  #14  gnupg                     2.4.4 x2 -> 2.4.5 x2
+[U.]  #15  gnutls                    3.8.3 -> 3.8.4
+[U.]  #16  iproute2                  6.7.0 -> 6.8.0
+[U.]  #17  kitty                     0.33.0, 0.33.0-terminfo -> 0.33.1, 0.33.1-terminfo
+[U.]  #18  lazygit                   0.40.2 -> 0.41.0
+[U.]  #19  libnice                   0.1.21 -> 0.1.22
+[U.]  #20  librsvg                   2.57.1 -> 2.57.92
+[U.]  #21  libva                     2.20.0 -> 2.21.0
+[U.]  #22  libva-minimal             2.20.0 -> 2.21.0
+[C.]  #23  libxml2                   2.11.5, 2.12.5 -> 2.11.5, 2.12.6
+[U.]  #24  pango                     1.51.0 -> 1.51.2
+[U.]  #25  parallel                  20240222, 20240222-man -> 20240322, 20240322-man
+[C.]  #26  python3                   3.11.8 x2, 3.11.8-env, 3.9.18, 3.9.18-env -> 3.11.8 x2, 3.11.8-env, 3.9.19, 3.9.19-env
+[C.]  #27  s2n-tls                   1.3.56, 1.4.6 -> 1.3.56, 1.4.8
+[C.]  #28  sqlite                    3.43.2 x2, 3.45.1, 3.45.1-bin -> 3.43.2 x2, 3.45.2, 3.45.2-bin
+[U.]  #29  svt-av1                   1.8.0 -> 2.0.0
+[U.]  #30  systemd                   255.2 -> 255.4
+[U.]  #31  systemd-minimal           255.2 -> 255.4
+[U.]  #32  systemd-minimal-libs      255.2 -> 255.4
+[U.]  #33  tig                       2.5.8 -> 2.5.9
+[U.]  #34  vulkan-loader             1.3.275.0 -> 1.3.280.0
+[U.]  #35  webkitgtk                 2.42.5+abi=4.0 -> 2.44.0+abi=4.0
+[U.]  #36  xfsprogs                  6.4.0, 6.4.0-bin -> 6.6.0, 6.6.0-bin
+[C.]  #37  xz                        5.4.4, 5.4.5, 5.6.1, 5.6.1-bin -> 5.4.4, 5.4.5, 5.4.6, 5.4.6-bin
+Added packages:
+[A.]  #1  lerc          4.0.0
+[A.]  #2  libbacktrace  0-unstable-2024-03-02
+[A.]  #3  which         2.21
+Removed packages:
+[R.]  #1  docker-proxy-unstable  2020-12-15
+[R.]  #2  libwpe                 1.14.2
+[R.]  #3  wpebackend-fdo         1.14.2
+Closure size: 744 -> 744 (643 paths added, 643 paths removed, delta +0, disk usage +17.9MiB).
+```
+### lock change:
+```
+• Updated input 'darwin':
+    'github:LnL7/nix-darwin/bcc8afd06e237df060c85bad6af7128e05fd61a3' (2024-03-17)
+  → 'github:LnL7/nix-darwin/36524adc31566655f2f4d55ad6b875fb5c1a4083' (2024-03-30)
+• Updated input 'doomemacs':
+    'github:doomemacs/doomemacs/bbadabda511027e515f02ccd7b70291ed03d8945' (2024-03-22)
+  → 'github:doomemacs/doomemacs/57f43e095344c562778859acfa300668f78af031' (2024-04-05)
+• Updated input 'emacs-overlay':
+    'github:nix-community/emacs-overlay/75440e565fe138f169389e1a65cc21f7ec5f0a30' (2024-03-23)
+  → 'github:nix-community/emacs-overlay/1c772b55c22f91a1b26c4318671deb1788628f24' (2024-04-06)
+• Updated input 'emacs-overlay/nixpkgs':
+    'github:NixOS/nixpkgs/20f77aa09916374aa3141cbc605c955626762c9a' (2024-03-21)
+  → 'github:NixOS/nixpkgs/fd281bd6b7d3e32ddfa399853946f782553163b5' (2024-04-03)
+• Updated input 'emacs-overlay/nixpkgs-stable':
+    'github:NixOS/nixpkgs/56528ee42526794d413d6f244648aaee4a7b56c0' (2024-03-22)
+  → 'github:NixOS/nixpkgs/1487bdea619e4a7a53a4590c475deabb5a9d1bfb' (2024-04-03)
+• Updated input 'home-manager':
+    'github:nix-community/home-manager/1c2c5e4cabba4c43504ef0f8cc3f3dfa284e2dbb' (2024-03-22)
+  → 'github:nix-community/home-manager/782eed8bb64b27acaeb7c17be4a095c85e65717f' (2024-04-05)
+• Updated input 'home-manager/nixpkgs':
+    'github:NixOS/nixpkgs/b06025f1533a1e07b6db3e75151caa155d1c7eb3' (2024-03-19)
+  → 'github:NixOS/nixpkgs/d8fe5e6c92d0d190646fb9f1056741a229980089' (2024-03-29)
+• Updated input 'nixpkgs-master':
+    'github:NixOS/nixpkgs/44d0940ea560dee511026a53f0e2e2cde489b4d4' (2024-03-23)
+  → 'github:NixOS/nixpkgs/f9280749b6bcec3143f4f28bbf2b2dc541e0225a' (2024-04-06)
+• Updated input 'nixpkgs-stable':
+    'github:NixOS/nixpkgs/772b408ef5855fb3be56eabe3ab77a07388bad1b' (2024-03-23)
+  → 'github:NixOS/nixpkgs/19bd6ce4616494d159f598348c2ec8c892bc7bf7' (2024-04-05)
+• Updated input 'nixpkgs-unstable':
+    'github:NixOS/nixpkgs/a3ed7406349a9335cb4c2a71369b697cecd9d351' (2024-03-22)
+  → 'github:NixOS/nixpkgs/23ff7d9dc4f3d553939e7bfe0d2667198f993536' (2024-04-04)
+• Updated input 'powerlevel10k':
+    'github:romkatv/powerlevel10k/da9b03777c4f2390c7e3f5c720ee4689336f811b' (2024-03-19)
+  → 'github:romkatv/powerlevel10k/aeff1153d405ebc9f60d4a8cb7afce5451c07358' (2024-04-05)
+• Updated input 'spacemacs':
+    'github:syl20bnr/spacemacs/17e03e6faba2a850c1ef38778326921cc0da1ccc' (2024-03-22)
+  → 'github:syl20bnr/spacemacs/a58a7d79b3713bcf693bb61d9ba83d650a6aba86' (2024-04-03)
+```
 ## Update 2024-03-23
 ```go
 Version changes:
