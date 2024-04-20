@@ -1,3 +1,63 @@
+## Update 2024-04-20
+```go
+Version changes:
+[C.]  #01  bash            5.2-p15, 5.2-p21, 5.2p26, 5.2p26-man -> 5.2-p15, 5.2-p21, 5.2p26 x2, 5.2p26-man
+[U.]  #02  docker-compose  2.26.0 -> 2.26.1
+[U.]  #03  eza             0.18.9, 0.18.9-man -> 0.18.10, 0.18.10-man
+[U.]  #04  fzf             0.47.0, 0.47.0-man -> 0.50.0, 0.50.0-man
+[U.]  #05  gh              2.46.0 -> 2.48.0
+[C.]  #06  glibc           2.38-27, 2.38-44, 2.39-5, 2.39-5-bin, 2.39-5-dev, 2.39-5-getent -> 2.38-27, 2.38-44, 2.39-5 x2, 2.39-5-bin, 2.39-5-dev, 2.39-5-getent
+[U.]  #07  go              1.22.1 -> 1.22.2
+[U.]  #08  gopls           0.15.2 -> 0.15.3
+[C.]  #09  iana-etc        20231227 -> 20231227, 20240318
+[U.]  #10  kitty           0.33.1, 0.33.1-terminfo -> 0.34.0, 0.34.0-terminfo
+[C.]  #11  libidn2         2.3.4 x2, 2.3.7 -> 2.3.4 x2, 2.3.7 x2
+[C.]  #12  libunistring    1.1 x3 -> 1.1 x4
+[C.]  #13  mailcap         2.1.53 x2 -> 2.1.53 x3
+[C.]  #14  nix             2.16.2, 2.16.2-man, 2.18.2, 2.18.2-man, 2.19.3, 2.19.3-man -> 2.16.2, 2.16.2-man, 2.18.2, 2.18.2-man, 2.19.4, 2.19.4-man
+[U.]  #15  oh-my-zsh       2023-11-29 -> 2024-04-12
+[C.]  #16  perl            <none>, 5.38.2 -> 5.38.2
+[C.]  #17  tzdata          2024a x2 -> 2024a x3
+[U.]  #18  webkitgtk       2.44.0+abi=4.0 -> 2.44.1+abi=4.0
+[C.]  #19  xgcc            12.3.0-libgcc x2, 13.2.0-libgcc -> 12.3.0-libgcc x2, 13.2.0-libgcc x2
+Closure size: 744 -> 751 (121 paths added, 114 paths removed, delta +7, disk usage +41.1MiB).
+```
+### lock change:
+```
+• Updated input 'darwin':
+    'github:LnL7/nix-darwin/36524adc31566655f2f4d55ad6b875fb5c1a4083' (2024-03-30)
+  → 'github:LnL7/nix-darwin/9e7c20ffd056e406ddd0276ee9d89f09c5e5f4ed' (2024-04-19)
+• Updated input 'doomemacs':
+    'github:doomemacs/doomemacs/57f43e095344c562778859acfa300668f78af031' (2024-04-05)
+  → 'github:doomemacs/doomemacs/9620bb45ac4cd7b0274c497b2d9d93c4ad9364ee' (2024-04-18)
+• Updated input 'emacs-overlay':
+    'github:nix-community/emacs-overlay/1c772b55c22f91a1b26c4318671deb1788628f24' (2024-04-06)
+  → 'github:nix-community/emacs-overlay/9ba8ea91b7d79baf8ced9723abc06d0217acace5' (2024-04-20)
+• Updated input 'emacs-overlay/nixpkgs':
+    'github:NixOS/nixpkgs/fd281bd6b7d3e32ddfa399853946f782553163b5' (2024-04-03)
+  → 'github:NixOS/nixpkgs/66adc1e47f8784803f2deb6cacd5e07264ec2d5c' (2024-04-16)
+• Updated input 'emacs-overlay/nixpkgs-stable':
+    'github:NixOS/nixpkgs/1487bdea619e4a7a53a4590c475deabb5a9d1bfb' (2024-04-03)
+  → 'github:NixOS/nixpkgs/e402c3eb6d88384ca6c52ef1c53e61bdc9b84ddd' (2024-04-17)
+• Updated input 'home-manager':
+    'github:nix-community/home-manager/782eed8bb64b27acaeb7c17be4a095c85e65717f' (2024-04-05)
+  → 'github:nix-community/home-manager/057117a401a34259c9615ce62218aea7afdee4d3' (2024-04-19)
+• Updated input 'home-manager/nixpkgs':
+    'github:NixOS/nixpkgs/d8fe5e6c92d0d190646fb9f1056741a229980089' (2024-03-29)
+  → 'github:NixOS/nixpkgs/5672bc9dbf9d88246ddab5ac454e82318d094bb8' (2024-04-16)
+• Updated input 'nixpkgs-master':
+    'github:NixOS/nixpkgs/f9280749b6bcec3143f4f28bbf2b2dc541e0225a' (2024-04-06)
+  → 'github:NixOS/nixpkgs/ebdd21f2079dfb6ff0ff0b4ef97c7ab427f711ee' (2024-04-20)
+• Updated input 'nixpkgs-stable':
+    'github:NixOS/nixpkgs/19bd6ce4616494d159f598348c2ec8c892bc7bf7' (2024-04-05)
+  → 'github:NixOS/nixpkgs/bc194f70731cc5d2b046a6c1b3b15f170f05999c' (2024-04-19)
+• Updated input 'nixpkgs-unstable':
+    'github:NixOS/nixpkgs/23ff7d9dc4f3d553939e7bfe0d2667198f993536' (2024-04-04)
+  → 'github:NixOS/nixpkgs/d764f230634fa4f86dc8d01c6af9619c7cc5d225' (2024-04-18)
+• Updated input 'powerlevel10k':
+    'github:romkatv/powerlevel10k/aeff1153d405ebc9f60d4a8cb7afce5451c07358' (2024-04-05)
+  → 'github:romkatv/powerlevel10k/178fcda3487afb3bd540d784cf472c60ec0de94a' (2024-04-09)
+```
 ## Update 2024-04-06
 ```go
 Version changes:
