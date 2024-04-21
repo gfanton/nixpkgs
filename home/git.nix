@@ -6,6 +6,10 @@
     # https://rycee.gitlab.io/home-manager/options.html#opt-enable
     # Aliases config in ./configs/git-aliases.nix
     enable = true;
+
+    # XXX: master need to be used to avoid sigkill on git
+    package = pkgs.pkgs-master.git;
+
     userEmail = config.home.user-info.email;
     userName = config.home.user-info.username;
 
