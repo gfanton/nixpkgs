@@ -172,6 +172,10 @@ in {
         dev = "(){ nix develop $1 -c $SHELL ;}";
         mydev = "(){ nix develop my#$1 -c $SHELL ;}";
 
+        xemacs = "${xterm-emacs}/bin/xemacs --with-profile=spacemacs -nw";
+        xemacsclient =
+          "${xterm-emacsclient}/bin/xemacsclient --with-profile=spacemacs -nw";
+
         # # kitty alias
         ssh = "${kitty}/bin/kitten ssh";
 
