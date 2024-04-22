@@ -202,6 +202,8 @@ in {
           "${restart-service}/bin/restart-service org.nixos.yabai.plist";
         restart-skhd =
           "${restart-service}/bin/restart-service org.nixos.skhd.plist";
+        restart-borders =
+          "${restart-service}/bin/restart-service org.nixos.jankyborders.plist";
       });
   };
 }
