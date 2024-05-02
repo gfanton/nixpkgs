@@ -31,12 +31,12 @@ in {
   };
 
   config = let
-    options =
-      concatMapStringsSep " " (optName: "${optName}=${cfg.config.${optName}}")
+    options = concatMapStringsSep " "
+      (optName: ''"${optName}=${cfg.config.${optName}}"'')
       (attrNames cfg.config);
 
     bordersrc = pkgs.writeShellScriptBin "bordersrc" ''
-      ${cfg.package}/bin/borders "${options}"        
+      ${cfg.package}/bin/borders ${options}
     '';
 
   in mkIf (cfg.enable && pkgs.stdenv.isDarwin) {
