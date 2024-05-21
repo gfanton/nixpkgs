@@ -12,10 +12,9 @@ in {
     enable = true;
     config = {
       style = "round";
-      width = "8.0";
+      width = "9.0";
       hidpi = "off";
       active_color = "0xff${hexYellow}";
-      inactive_color = "0xff${hexBlack}";
     };
   };
 }

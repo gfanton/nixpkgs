@@ -41,7 +41,8 @@
 
 (defun gno-mode-setup ()
   "Hook for setting up gno-mode."
-  (add-hook 'before-save-hook 'gno-format-buffer nil t))
+  (add-hook 'before-save-hook 'gno-format-buffer nil t)
+  (add-hook 'after-save-hook 'gnoimports-on-save nil t))
 
 (defun gno-format-buffer ()
   "Format the current buffer using gofumpt. This is an adapted version from go-mode gofmt."
@@ -75,6 +76,23 @@
       (kill-buffer patchbuf)
       (delete-file tmpfile))))
 
+(defun gnoimports-on-save ()
+  "Run gnoimports on the current file before saving."
+  (when (string-equal (file-name-extension (buffer-file-name)) "gno")
+    (let ((cmd (concat "gnoimports -w " (shell-quote-argument (buffer-file-name))))
+          (output-buf (get-buffer-create "*Gnoimports Output*")))
+      (message "Running: %s" cmd)
+      (with-current-buffer output-buf
+        (erase-buffer))
+      (let ((exit-code (call-process-shell-command cmd nil output-buf)))
+        (if (zerop exit-code)
+            (progn
+              (message "gnoimports succeeded")
+              (revert-buffer t t t)) ;; Revisit buffer to reflect changes
+          (message "gnoimports failed with exit code %d" exit-code)
+          (with-current-buffer output-buf
+            (message "gnoimports output:\n%s" (buffer-string))))))))
+
 (flycheck-define-checker gno-lint
   "A GNO syntax checker using the gno lint tool."
   :command ("gnolint" "lint"  (eval (concat "--root-dir=" gno-root-dir)) source-original)
@@ -107,7 +125,6 @@
 
 ;;;###autoload
 (add-to-list 'auto-mode-alist '("gno\\.mod\\'" . gno-dot-mod-mode))
-
 
 (provide 'gno-mode)
 
