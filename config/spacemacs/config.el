@@ -71,7 +71,7 @@ This function should only modify configuration layer settings."
      ;; web
      react
      node
-     html  
+     html
      (typescript :variables
                  typescript-linter 'eslint
                  typescript-backend 'lsp)
@@ -306,7 +306,7 @@ It should only modify the values of Spacemacs settings."
    ;; If non-nil the cursor color matches the state color in GUI Emacs.
    ;; (default t)
    dotspacemacs-colorize-cursor-according-to-state t
- 
+
    ;; Default font or prioritized list of fonts. The `:size' can be specified as
    ;; a non-negative integer (pixel size), or a floating-point (point size).
    ;; Point size is recommended, because it's device independent. (default 10.0)
@@ -605,7 +605,7 @@ This function is called immediately after `dotspacemacs/init', before layer
 configuration.
 It is mostly for variables that should be set before packages are loaded.
 If you are unsure, try setting them in `dotspacemacs/user-config' first."
-  (setq catppuccin-flavor 'macchiato) ;; or 'latte, 'macchiato, or 'mocha  
+  (setq catppuccin-flavor 'macchiato) ;; or 'latte, 'macchiato, or 'mocha
 )
 
 
@@ -622,7 +622,7 @@ This function is called at the very end of Spacemacs startup, after layer
 configuration.
 Put your configuration code here, except for variables that should be set
 before packages are loaded."
-  (spacemacs/load-spacemacs-env) 
+  (spacemacs/load-spacemacs-env)
 
   ;; load custom gno mode
   (require 'gno)
@@ -650,7 +650,7 @@ before packages are loaded."
   ;;    ))
 
   ;; magit
-  (require 'magit-diff)  
+  (require 'magit-diff)
   (define-key magit-hunk-section-map (kbd "RET") 'magit-diff-visit-file-other-window)
   (define-key magit-file-section-map (kbd "RET") 'magit-diff-visit-file-other-window)
 
@@ -788,6 +788,28 @@ before packages are loaded."
   ;; (defun my-gno-mode-hook ()
   ;;   "Hook for setting up gno-mode."
   ;;   (add-hook 'before-save-hook 'my-gno-gofumpt nil t))
+
+  ;; (defun my-gnoimports-on-save ()
+  ;;   "Run gnoimports on the current file."
+  ;;   (when (string-equal (file-name-extension buffer-file-name) "gno")
+  ;;     (shell-command (concat "gnoimports -w " (shell-quote-argument buffer-file-name)))))
+
+  ;; (add-hook 'before-save-hook 'my-gnoimports-on-save)
+
+  ;; catpuccin mode:
+  (require 'cl-lib)
+
+  (catppuccin-set-color 'rosewater "#04a5e5" 'latte)
+  (defun switch-catppuccin-flavor ()
+    "Cycles the Catppuccin theme flavor between 'frappe', 'macchiato', 'mocha', and 'latte', then reloads the Emacs theme."
+    (interactive)
+    (let* ((flavors '(frappe macchiato mocha latte))
+           (current (cl-position catppuccin-flavor flavors))
+           (next (% (1+ current) (length flavors))))
+      (setq catppuccin-flavor (nth next flavors))
+      (catppuccin-reload)))
+
+  (global-set-key (kbd "C-c C-t") 'switch-catppuccin-flavor)
 
   ;; regexp
   ;; set pcre as default
