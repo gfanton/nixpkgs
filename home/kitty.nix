@@ -21,7 +21,8 @@ let
     ${xterm-emacsclient}/bin/xemacs -t -e '(spacemacs/switch-to-scratch-buffer) (delete-other-windows) (evil-emacs-state)'
   '';
 
-  theme = config.colors.catppuccin-macchiato;
+  theme-dark = config.colors.catppuccin-macchiato;
+  theme-light = config.colors.catppuccin-latte;
 in {
   # Kitty terminal
   # https://sw.kovidgoyal.net/kitty/conf.html
@@ -74,8 +75,8 @@ in {
     enable = true;
 
     # Background dependent colors
-    dark = theme.pkgThemes.kitty;
-    # light = config.colors.solarized-light.pkgThemes.kitty;
+    dark = theme-dark.pkgThemes.kitty;
+    light = theme-light.pkgThemes.kitty;
   };
 
   programs.truecolor.enable = true;

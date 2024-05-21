@@ -89,6 +89,94 @@
     };
   };
 
+  colors.catppuccin-latte = {
+    colors = {
+      # black
+      color0 = "#bcc0cc"; # Default Black / surface1
+      color8 = "#acb0be"; # Bright Black / surface2
+      # red
+      color1 = "#d20f39"; # Default Red / Red
+      color9 = "#d20f39"; # Bright Red / Maroon
+      # green
+      color2 = "#40a02b"; # Default Green / Green
+      color10 = "#179299"; # Bright Green / Teal
+      # yellow
+      color3 = "#fe640b"; # Default Yellow / Peach
+      color11 = "#df8e1d"; # Bright Yellow / Yellow
+      # blue
+      color4 = "#1e66f5"; # Default Blue / Blue
+      color12 = "#7287fd"; # Bright Blue / Lavender
+      # megenta
+      color5 = "#ea76cb"; # Default Magenta / Pink
+      color13 = "#8839ef"; # Bright Magenta / Mauve
+      # cyan
+      color6 = "#04a5e5"; # Default Cyan / Sky
+      color14 = "#209fb5"; # Bright Cyan / Sapphire
+      # white
+      color7 = "#dc8a78"; # Default White / Rosewater
+      color15 = "#dd7878"; # Bright White / Flamingo
+
+      # other
+      color16 = "#4c4f69"; # text
+      color17 = "#eff1f5"; # base
+      color18 = "#e6e9ef"; # mantle
+      color19 = "#dce0e8"; # crust
+      color20 = "#ccd0da"; # surface
+
+      color21 = "none";
+    };
+
+    namedColors = {
+      # material name
+      black = "color0";
+      brightBlack = "color8";
+      red = "color1";
+      brightRed = "color9";
+      green = "color2";
+      brightGreen = "color10";
+      yellow = "color3";
+      brightYellow = "color11";
+      blue = "color4";
+      brightBlue = "color12";
+      magenta = "color5";
+      brightMagenta = "color13";
+      cyan = "color6";
+      brightCyan = "color14";
+      white = "color7";
+      brightWhite = "color15";
+
+      # other
+      text = "color16";
+      base = "color17";
+      mantle = "color18";
+      crust = "color19";
+      surface = "color20";
+
+      none = "color21";
+    };
+
+    terminal = {
+      bg = "base";
+      fg = "text";
+      cursorBg = "white";
+      cursorFg = "black";
+      selectionBg = "white";
+      selectionFg = "black";
+    };
+
+    pkgThemes.kitty = {
+      url_color = "blue";
+      tab_bar_background = "none";
+      active_tab_background = "yellow";
+      active_tab_foreground = "black";
+      inactive_tab_background = "crust";
+      inactive_tab_foreground = "text";
+      active_border_color = "yellow";
+      inactive_border_color = "surface";
+      bell_border_color = "brightBlue";
+    };
+  };
+
   colors.material = {
     colors = {
       # black
