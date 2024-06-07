@@ -11,6 +11,7 @@ in {
       cmd - return [
           * : ${pkgs.kitty}/bin/kitty --single-instance -d ~
           "kitty" ~
+          ".kitty-wrapped" ~
       ]
 
       # open new arc window

@@ -79,7 +79,7 @@
 (defun gnoimports-on-save ()
   "Run gnoimports on the current file before saving."
   (when (string-equal (file-name-extension (buffer-file-name)) "gno")
-    (let ((cmd (concat "gnoimports -w " (shell-quote-argument (buffer-file-name))))
+    (let ((cmd (concat "gno fmt -w " (shell-quote-argument (buffer-file-name))))
           (output-buf (get-buffer-create "*Gnoimports Output*")))
       (message "Running: %s" cmd)
       (with-current-buffer output-buf
@@ -95,7 +95,7 @@
 
 (flycheck-define-checker gno-lint
   "A GNO syntax checker using the gno lint tool."
-  :command ("gnolint" "lint"  (eval (concat "--root-dir=" gno-root-dir)) source-original)
+  :command ("gno" "lint"  (eval (concat "--root-dir=" gno-root-dir)) source-original)
   :error-patterns
   ((error line-start (file-name) ":" line ": " (message) " (code=" (id (one-or-more digit)) ")." line-end))
   ;; Ensure the file is saved, to work around

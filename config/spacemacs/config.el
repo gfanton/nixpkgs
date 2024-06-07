@@ -803,7 +803,8 @@ before packages are loaded."
   (defun switch-catppuccin-flavor ()
     "Cycles the Catppuccin theme flavor between 'frappe', 'macchiato', 'mocha', and 'latte', then reloads the Emacs theme."
     (interactive)
-    (let* ((flavors '(frappe macchiato mocha latte))
+    ;; (let* ((flavors '(frappe macchiato mocha latte))
+    (let* ((flavors '(macchiato latte))
            (current (cl-position catppuccin-flavor flavors))
            (next (% (1+ current) (length flavors))))
       (setq catppuccin-flavor (nth next flavors))
