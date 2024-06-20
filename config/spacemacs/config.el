@@ -118,6 +118,7 @@ This function should only modify configuration layer settings."
                                       sqlite3
                                       (catppuccin :location (recipe :fetcher github :repo "catppuccin/emacs"))
                                       (gno-mode :location "~/.spacemacs.d/packages/gno")
+                                      (templ-mode :location "~/.spacemacs.d/packages/templ")
                                       )
 
    ;; A list of packages that cannot be updated.
@@ -615,7 +616,6 @@ This function is called only while dumping Spacemacs configuration. You can
 `require' or `load' the libraries of your choice that will be included in the
 dump."
 )
-
 (defun dotspacemacs/user-config ()
   "Configuration for user code:
 This function is called at the very end of Spacemacs startup, after layer
@@ -627,6 +627,11 @@ before packages are loaded."
   ;; load custom gno mode
   (require 'gno)
 
+  ;; load custom templ mode
+  (require 'templ-mode)
+
+
+
   ;; @TODO: find a way to set this
   (unless (file-exists-p "/tmp/.emacs-saves/")
     (make-directory "/tmp/.emacs-saves/" t))
@@ -634,20 +639,20 @@ before packages are loaded."
         `((".*" "/tmp/.emacs-saves/" t)))
   ;; go
 
+  ;; treesit
+  ;; (setq treesit-language-source-alist
+  ;;       '((templ "https://github.com/vrischmann/tree-sitter-templ" "592faa3186ef857c92e4bd1c31d73c07a4a334db")
+  ;;         (javascript "https://github.com/tree-sitter/tree-sitter-javascript" "master" "src")
+  ;;         (go "https://github.com/tree-sitter/tree-sitter-go")
+  ;;         (html "https://github.com/tree-sitter/tree-sitter-html")
+  ;;         (typescript "https://github.com/tree-sitter/tree-sitter-typescript" "master" "typescript/src")))
+
   ;; Set up before-save hooks to format buffer and add/delete imports.
   ;; Make sure you don't have other gofmt/goimports hooks enabled.
   (defun lsp-go-install-save-hooks ()
     (add-hook 'before-save-hook #'lsp-format-buffer t t)
     (add-hook 'before-save-hook #'lsp-organize-imports t t))
   (add-hook 'go-mode-hook #'lsp-go-install-save-hooks)
-
-  ;; (lsp-register-custom-settings
-  ;;  '(
-  ;;    ;; common
-  ;;    ("gopls.completeUnimported" t t)
-  ;;    ("gopls.staticcheck" t t)
-  ;;    ("gopls.gofumpt" t t)
-  ;;    ))
 
   ;; magit
   (require 'magit-diff)
