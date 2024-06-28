@@ -1,3 +1,54 @@
+## Update 2024-06-26
+```go
+Version changes:
+[U.]  #01  docker-compose  2.27.1 -> 2.27.2
+[U.]  #02  eza             0.18.18, 0.18.18-man -> 0.18.19, 0.18.19-man
+[U.]  #03  gh              2.51.0 -> 2.52.0
+[U.]  #04  gopls           0.15.3 -> 0.16.0
+[U.]  #05  imagemagick     7.1.1-32 -> 7.1.1-34
+[U.]  #06  kitty           0.35.1, 0.35.1-terminfo -> 0.35.2, 0.35.2-terminfo
+[C.]  #07  nix             2.18.2, 2.18.2-man, 2.19.4 x2, 2.19.4-man x2 -> 2.18.3, 2.18.3-man, 2.19.4 x2, 2.19.4-man x2
+[U.]  #08  oh-my-zsh       2024-06-13 -> 2024-06-20
+[U.]  #09  roc-toolkit     0.3.0 -> 0.4.0
+[C.]  #10  s2n-tls         1.4.12, 1.4.14 -> 1.4.12, 1.4.16
+Closure size: 717 -> 717 (48 paths added, 48 paths removed, delta +0, disk usage +35.9MiB).
+```
+### lock change:
+```
+• Updated input 'darwin':
+    'github:LnL7/nix-darwin/29b3096a6e283d7e6779187244cb2a3942239fdf' (2024-06-17)
+  → 'github:LnL7/nix-darwin/50581970f37f06a4719001735828519925ef8310' (2024-06-23)
+• Updated input 'doomemacs':
+    'github:doomemacs/doomemacs/6479fc71327b55e65ac2cbf69bcdeccab8996fcb' (2024-06-20)
+  → 'github:doomemacs/doomemacs/cc7a509e10785dba94f899a0d428d01e6b8bb078' (2024-06-25)
+• Updated input 'emacs-overlay':
+    'github:nix-community/emacs-overlay/ddb455723166a611e0399169197b7454313f1ffc' (2024-06-20)
+  → 'github:nix-community/emacs-overlay/2005d1e0260e31e7775349c62eabbcd8ae5bd6e6' (2024-06-26)
+• Updated input 'emacs-overlay/nixpkgs':
+    'github:NixOS/nixpkgs/b60ebf54c15553b393d144357375ea956f89e9a9' (2024-06-16)
+  → 'github:NixOS/nixpkgs/2893f56de08021cffd9b6b6dfc70fd9ccd51eb60' (2024-06-24)
+• Updated input 'emacs-overlay/nixpkgs-stable':
+    'github:NixOS/nixpkgs/842253bf992c3a7157b67600c2857193f126563a' (2024-06-15)
+  → 'github:NixOS/nixpkgs/906320ae02f769d13a646eb3605a9821df0d6ea2' (2024-06-23)
+• Updated input 'home-manager':
+    'github:nix-community/home-manager/d7830d05421d0ced83a0f007900898bdcaf2a2ca' (2024-06-19)
+  → 'github:nix-community/home-manager/6b1f90a8ff92e81638ae6eb48cd62349c3e387bb' (2024-06-23)
+• Updated input 'home-manager/nixpkgs':
+    'github:NixOS/nixpkgs/b60ebf54c15553b393d144357375ea956f89e9a9' (2024-06-16)
+  → 'github:NixOS/nixpkgs/d603719ec6e294f034936c0d0dc06f689d91b6c3' (2024-06-20)
+• Updated input 'nixpkgs-master':
+    'github:NixOS/nixpkgs/e73ed3f6df7f20a96994ab9597dae896303aedd0' (2024-06-20)
+  → 'github:NixOS/nixpkgs/267d115a04e93a3487d3c2c26e3af5704a0144cc' (2024-06-26)
+• Updated input 'nixpkgs-stable':
+    'github:NixOS/nixpkgs/d68581cf0d770d9de36aa02035777e598e5feefb' (2024-06-20)
+  → 'github:NixOS/nixpkgs/8f1ca02fb2097f3e724f8cf6057ddbbdefa7c6cc' (2024-06-26)
+• Updated input 'nixpkgs-unstable':
+    'github:NixOS/nixpkgs/56fc115880db6498245adecda277ccdb33025bc2' (2024-06-18)
+  → 'github:NixOS/nixpkgs/9c513fc6fb75142f6aec6b7545cb8af2236b80f5' (2024-06-25)
+• Updated input 'spacemacs':
+    'github:syl20bnr/spacemacs/554d5cd16ee75cd03c065eb9b1e37907d54a5ee4' (2024-06-14)
+  → 'github:syl20bnr/spacemacs/4c02e843d962995210e1cc51464e26b39e439ce1' (2024-06-25)
+```
 ## Update 2024-06-20
 ```go
 Version changes:
