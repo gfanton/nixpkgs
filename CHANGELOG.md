@@ -1,3 +1,42 @@
+## Update 2024-06-29
+```go
+Version changes:
+[U.]  #1  eza  0.18.19, 0.18.19-man -> 0.18.20, 0.18.20-man
+Closure size: 717 -> 717 (8 paths added, 8 paths removed, delta +0, disk usage +4.8KiB).
+```
+### lock change:
+```
+• Updated input 'doomemacs':
+    'github:doomemacs/doomemacs/cc7a509e10785dba94f899a0d428d01e6b8bb078' (2024-06-25)
+  → 'github:doomemacs/doomemacs/d9c5f747abc29991b55009534ee3244e869eb109' (2024-06-28)
+• Updated input 'emacs-overlay':
+    'github:nix-community/emacs-overlay/2005d1e0260e31e7775349c62eabbcd8ae5bd6e6' (2024-06-26)
+  → 'github:nix-community/emacs-overlay/012409732a53433d75db7bb2e06dd0bdaf8ca7ea' (2024-06-29)
+• Updated input 'emacs-overlay/nixpkgs-stable':
+    'github:NixOS/nixpkgs/906320ae02f769d13a646eb3605a9821df0d6ea2' (2024-06-23)
+  → 'github:NixOS/nixpkgs/90bd1b26e23760742fdcb6152369919098f05417' (2024-06-24)
+• Updated input 'home-manager':
+    'github:nix-community/home-manager/6b1f90a8ff92e81638ae6eb48cd62349c3e387bb' (2024-06-23)
+  → 'github:nix-community/home-manager/7e68e55d2e16d3a1e92a679430728c35a30fd24e' (2024-06-28)
+• Updated input 'home-manager/nixpkgs':
+    'github:NixOS/nixpkgs/d603719ec6e294f034936c0d0dc06f689d91b6c3' (2024-06-20)
+  → 'github:NixOS/nixpkgs/2893f56de08021cffd9b6b6dfc70fd9ccd51eb60' (2024-06-24)
+• Updated input 'nixpkgs-master':
+    'github:NixOS/nixpkgs/267d115a04e93a3487d3c2c26e3af5704a0144cc' (2024-06-26)
+  → 'github:NixOS/nixpkgs/5e87fb56fd499ee4090e6ed939561a9470ac5f53' (2024-06-29)
+• Updated input 'nixpkgs-stable':
+    'github:NixOS/nixpkgs/8f1ca02fb2097f3e724f8cf6057ddbbdefa7c6cc' (2024-06-26)
+  → 'github:NixOS/nixpkgs/86bcf722477fc9030e0987df2f84fc35a6dd9fb3' (2024-06-28)
+• Updated input 'nixpkgs-unstable':
+    'github:NixOS/nixpkgs/9c513fc6fb75142f6aec6b7545cb8af2236b80f5' (2024-06-25)
+  → 'github:NixOS/nixpkgs/1e3deb3d8a86a870d925760db1a5adecc64d329d' (2024-06-27)
+• Updated input 'powerlevel10k':
+    'github:romkatv/powerlevel10k/bde5ca4c2aa6e0c52dd7f15cf216dffdb1ec788c' (2024-05-21)
+  → 'github:romkatv/powerlevel10k/df8ed163438c1989da4daeb4174bfcb30abb285e' (2024-06-28)
+• Updated input 'spacemacs':
+    'github:syl20bnr/spacemacs/4c02e843d962995210e1cc51464e26b39e439ce1' (2024-06-25)
+  → 'github:syl20bnr/spacemacs/7bce0c7a91809ad1fa578f04dfdbf64f56d71fec' (2024-06-26)
+```
 ## Update 2024-06-26
 ```go
 Version changes:
