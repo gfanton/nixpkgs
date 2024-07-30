@@ -50,6 +50,7 @@ in {
     "1password-cli"
     "whisky"
     "keycastr"
+    "numi"
   ];
 
   # Configuration related to casks
