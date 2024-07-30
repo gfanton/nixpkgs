@@ -16,7 +16,7 @@ HOME_CHANNELS := home-manager darwin
 EMACS_CHANNELS := emacs-overlay chemacs2
 SPACEMACS_CHANNELS := spacemacs
 DOOM_CHANNELS := doomemacs
-ZSH_CHANNELS := fast-syntax-highlighting fzf-tab powerlevel10k zi zsh-colored-man-pages
+ZSH_CHANNELS := fast-syntax-highlighting fzf-tab powerlevel10k
 ASDF_CHANNELS := asdf-plugins
 MISC_CHANNELS := flake-utils flake-compat
 
@@ -69,7 +69,7 @@ fclean:
 
 
 fast-update: update.nix update.zsh update.misc # fast update ignore emacs update
-update: update.nix update.emacs update.spacemacs update.zsh update.asdf update.misc
+update: update.nix update.home update.emacs update.spacemacs update.zsh update.asdf update.misc
 update.nix:; nix flake lock $(addprefix --update-input , $(NIX_CHANNELS))
 update.emacs:; nix flake lock $(addprefix --update-input , $(EMACS_CHANNELS))
 update.spacemacs:; nix flake lock $(addprefix --update-input , $(SPACEMACS_CHANNELS))
