@@ -598,7 +598,7 @@ default it calls `spacemacs/load-spacemacs-env' which loads the environment
 variables declared in `~/.spacemacs.env' or `~/.spacemacs.d/.spacemacs.env'.
 See the header of this file for more information."
   (spacemacs/load-spacemacs-env)
-)
+  )
 
 (defun dotspacemacs/user-init ()
   "Initialization for user code:
@@ -607,7 +607,7 @@ configuration.
 It is mostly for variables that should be set before packages are loaded.
 If you are unsure, try setting them in `dotspacemacs/user-config' first."
   (setq catppuccin-flavor 'macchiato) ;; or 'latte, 'macchiato, or 'mocha
-)
+  )
 
 
 (defun dotspacemacs/user-load ()
@@ -615,7 +615,7 @@ If you are unsure, try setting them in `dotspacemacs/user-config' first."
 This function is called only while dumping Spacemacs configuration. You can
 `require' or `load' the libraries of your choice that will be included in the
 dump."
-)
+  )
 (defun dotspacemacs/user-config ()
   "Configuration for user code:
 This function is called at the very end of Spacemacs startup, after layer
@@ -804,7 +804,7 @@ before packages are loaded."
   ;; catpuccin mode:
   (require 'cl-lib)
 
-  (catppuccin-set-color 'rosewater "#04a5e5" 'latte)
+  ;; (catppuccin-set-color 'rosewater "#04a5e5" 'latte)
   (defun switch-catppuccin-flavor ()
     "Cycles the Catppuccin theme flavor between 'frappe', 'macchiato', 'mocha', and 'latte', then reloads the Emacs theme."
     (interactive)
@@ -817,6 +817,17 @@ before packages are loaded."
 
   (global-set-key (kbd "C-c C-t") 'switch-catppuccin-flavor)
 
+  (defun switch-theme-dark ()
+    (interactive)
+    (setq catppuccin-flavor 'macchiato)
+    (catppuccin-reload))
+
+  (defun switch-theme-light ()
+    (interactive)
+    (setq catppuccin-flavor 'latte)
+    (catppuccin-reload))
+
+
   ;; regexp
   ;; set pcre as default
   (pcre-mode)
@@ -826,4 +837,4 @@ before packages are loaded."
   ;; Private File
   (if (boundp 'dotspacemacs-private-file)
       (load-file dotspacemacs-private-file))
-)
+  )
