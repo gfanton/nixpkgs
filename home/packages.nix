@@ -147,7 +147,7 @@ in {
       niv # easy dependency management for nix projects
       nix-prefetch
       nix-prefetch-git
-      nixfmt
+      nixfmt-rfc-style
     ] ++ lib.optionals stdenv.isDarwin [ cocoapods ]
     ++ lib.optionals stdenv.isLinux [ docker docker-compose ];
 }
