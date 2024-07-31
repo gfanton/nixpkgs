@@ -126,7 +126,7 @@ in {
       pkgs-stable.yarn
 
       # python (stable)
-      (pkgs-stable.python.withPackages
+      (pkgs-stable.python3.withPackages
         (p: with p; [ virtualenv pip mypy pylint yapf setuptools ]))
       pkgs-stable.pipenv
 
