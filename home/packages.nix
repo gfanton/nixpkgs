@@ -118,15 +118,15 @@ in {
       rustup
 
       # ruby
-      pkgs-stable.ruby_3_1
+      pkgs-stable.ruby
 
       # js (stable)
-      pkgs-stable.nodejs-18_x
+      pkgs-stable.nodejs
       pkgs-stable.nodePackages.pnpm
       pkgs-stable.yarn
 
       # python (stable)
-      (pkgs-stable.python39.withPackages
+      (pkgs-stable.python.withPackages
         (p: with p; [ virtualenv pip mypy pylint yapf setuptools ]))
       pkgs-stable.pipenv
 
