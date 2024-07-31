@@ -1,3 +1,29 @@
+## Update 2024-07-31
+```go
+No version or selection state changes.
+Closure size: 785 -> 785 (0 paths added, 0 paths removed, delta +0, disk usage +0B).
+```
+### lock change:
+```
+• Updated input 'doomemacs':
+    'github:doomemacs/doomemacs/d7f5e7033e1baf9ad85614443c6532095473cbfb?narHash=sha256-AeiTOEPHlwvnFtmUl%2B4aI1Q5ifYsNqB59Pw/yEERFmU%3D' (2024-07-03)
+  → 'github:doomemacs/doomemacs/8be1ef498b81628214ab5e78739661faaf9d950f?narHash=sha256-cKSqMOxIETdSfrBNvqLRCBOTHeHvcs/EFnUJMUpE1jE%3D' (2024-07-30)
+• Updated input 'emacs-overlay':
+    'github:nix-community/emacs-overlay/e237f6ef7ddd6d76c9e52125f88620a9051e85db?narHash=sha256-EFomVakrZ06L1RjA3Ux2Rf4uMSSSr6%2BCvvlj7OhGxGA%3D' (2024-07-30)
+  → 'github:nix-community/emacs-overlay/a24bf55fe66fc100fc584e3a400287a5b92f721c?narHash=sha256-CxiGnCzxxaiE4MN3/ePTfO7q8TnTtrmS32TgwmsnR18%3D' (2024-07-31)
+• Updated input 'emacs-overlay/nixpkgs':
+    'github:NixOS/nixpkgs/b73c2221a46c13557b1b3be9c2070cc42cf01eb3?narHash=sha256-QOS0ykELUmPbrrUGmegAUlpmUFznDQeR4q7rFhl8eQg%3D' (2024-07-27)
+  → 'github:NixOS/nixpkgs/52ec9ac3b12395ad677e8b62106f0b98c1f8569d?narHash=sha256-veKR07psFoJjINLC8RK4DiLniGGMgF3QMlS4tb74S6k%3D' (2024-07-28)
+• Updated input 'emacs-overlay/nixpkgs-stable':
+    'github:NixOS/nixpkgs/8c50662509100d53229d4be607f1a3a31157fa12?narHash=sha256-2ShmEaFi0kJVOEEu5gmlykN5dwjWYWYUJmlRTvZQRpU%3D' (2024-07-27)
+  → 'github:NixOS/nixpkgs/12bf09802d77264e441f48e25459c10c93eada2e?narHash=sha256-sga9SrrPb%2BpQJxG1ttJfMPheZvDOxApFfwXCFO0H9xw%3D' (2024-07-29)
+• Updated input 'home-manager':
+    'github:nix-community/home-manager/4fcd54df7cbb1d79cbe81209909ee8514d6b17a4?narHash=sha256-WeVWVRqkgrbLzmk6FfJoloJ7Xe7HWD27Pv950IUG2kI%3D' (2024-07-30)
+  → 'github:nix-community/home-manager/58cef3796271aaeabaed98884d4abaab5d9d162d?narHash=sha256-wcpVHUc2nBSSgOM7UJSpcRbyus4duREF31xlzHV5T%2BA%3D' (2024-07-31)
+• Updated input 'nixpkgs-master':
+    'github:NixOS/nixpkgs/489420ebfa991d5203e5128624b76ab8c967b9f9?narHash=sha256-f60/1kLv7J/229fWrEgSEcuXvqmiS/%2BFE8IL9IEpZx4%3D' (2024-07-30)
+  → 'github:NixOS/nixpkgs/69520473998b87e92841e510f6368e1d44fe891b?narHash=sha256-zYKYoSDa9W3SWqet3saQX2oHpXRV/e7F%2BXulwgkJ%2BYI%3D' (2024-07-31)
+```
 ## Update 2024-07-03
 ```go
 Version changes:
