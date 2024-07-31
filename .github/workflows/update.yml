@@ -24,7 +24,7 @@ jobs:
     steps:
     # Install Nix
     - name: Install Nix
-      uses: cachix/install-nix-action@v26
+      uses: cachix/install-nix-action@v27
       with:
         nix_path: nixpkgs=channel:nixos-23.11
         extra_nix_config: |
@@ -32,7 +32,7 @@ jobs:
 
     # Setup Cachix
     - name: Setup Cachix
-      uses: cachix/cachix-action@v14
+      uses: cachix/cachix-action@v15
       with:
         name: ${{ env.CACHIX_USER }}
         authToken: ${{ secrets.CACHIX_AUTH_TOKEN }}
