@@ -19,7 +19,7 @@
 
     trusted-users = [ "@admin" ];
 
-    auto-optimise-store = true;
+    auto-optimise-store = false;
 
     experimental-features = [ "nix-command" "flakes" ];
 
