@@ -1,7 +1,14 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
-let rust_home = "${config.xdg.dataHome}/rust";
-in {
+let
+  rust_home = "${config.xdg.dataHome}/rust";
+in
+{
   # ssh
   programs.ssh = {
     enable = true;
@@ -42,7 +49,10 @@ in {
     ${pkgs.rustup}/bin/rustup toolchain install stable 1>/dev/null
   '';
 
-  home.sessionPath = [ "${rust_home}/cargo/bin" "${rust_home}/rustup/bin" ];
+  home.sessionPath = [
+    "${rust_home}/cargo/bin"
+    "${rust_home}/rustup/bin"
+  ];
 
   # Bat, a substitute for cat.
   # https://github.com/sharkdp/bat
@@ -66,7 +76,8 @@ in {
     theme = "catppuccin-macchiato";
   };
 
-  home.packages = with pkgs;
+  home.packages =
+    with pkgs;
     [
       # Some basics
       tig
@@ -93,6 +104,15 @@ in {
       gnupg
       fzf
       tmux
+
+      # install templ grammar, mainly for emacs
+      (tree-sitter.withPlugins (p: [
+        p.tree-sitter-javascript
+        p.tree-sitter-templ
+        p.tree-sitter-go
+        p.tree-sitter-gomod
+        p.tree-sitter-gowork
+      ]))
 
       # my
       my-libvterm
@@ -126,8 +146,16 @@ in {
       pkgs-stable.yarn
 
       # python (stable)
-      (pkgs-stable.python3.withPackages
-        (p: with p; [ virtualenv pip mypy pylint yapf setuptools ]))
+      (pkgs-stable.python3.withPackages (
+        p: with p; [
+          virtualenv
+          pip
+          mypy
+          pylint
+          yapf
+          setuptools
+        ]
+      ))
       pkgs-stable.pipenv
 
       # go tools
@@ -135,8 +163,9 @@ in {
       pkgs-master.gopls
       delve
       # exclude bundle
-      (pkgs-master.gotools.overrideDerivation
-        (oldAttrs: { excludedPackages = [ "bundle" ]; }))
+      (pkgs-master.gotools.overrideDerivation (oldAttrs: {
+        excludedPackages = [ "bundle" ];
+      }))
 
       # gotools
 
@@ -148,6 +177,10 @@ in {
       nix-prefetch
       nix-prefetch-git
       nixfmt-rfc-style
-    ] ++ lib.optionals stdenv.isDarwin [ cocoapods ]
-    ++ lib.optionals stdenv.isLinux [ docker docker-compose ];
+    ]
+    ++ lib.optionals stdenv.isDarwin [ cocoapods ]
+    ++ lib.optionals stdenv.isLinux [
+      docker
+      docker-compose
+    ];
 }

@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   inherit (config.home) user-info homeDirectory;
@@ -6,6 +11,18 @@ let
   cacheDir = ".cache";
   dataDir = ".local/share";
   oh-my-zsh-custom = "${configDir}/oh-my-zsh";
+
+  treeSitterLang = pkgs.tree-sitter.withPlugins (p: [
+    p.tree-sitter-javascript
+    p.tree-sitter-templ
+  ]);
+
+  treeSitterLangRenamed = pkgs.runCommand "tree-sitter-lang-renamed" { } ''
+    mkdir -p $out
+    for file in ${treeSitterLang}/*.so; do
+      cp $file $out/libtree-sitter-$(basename $file)
+    done
+  '';
 
   xterm-emacsclient = pkgs.writeShellScriptBin "xemacsclient" ''
     export TERM=xterm-emacs
@@ -40,7 +57,8 @@ let
     fi
   '';
 
-in {
+in
+{
   xdg = {
     enable = true;
     configHome = "${homeDirectory}/${configDir}";
@@ -58,6 +76,8 @@ in {
   home.sessionVariables = {
     LC_ALL = "en_US.UTF-8";
     FZF_BASE = "${pkgs.fzf}/share/fzf";
+    # XXX: move this elsewhere
+    TREE_SITTER_LANG = treeSitterLangRenamed;
   };
 
   # Direnv, load and unload environment variables depending on the current directory.

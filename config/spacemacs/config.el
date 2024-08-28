@@ -114,11 +114,16 @@ This function should only modify configuration layer settings."
    ;; `:location' property: '(your-package :location "~/path/to/your-package/")
    ;; Also include the dependencies as they will not be resolved automatically.
    dotspacemacs-additional-packages '(
+                                      ;; polymode use for some custom pacakge
                                       polymode
+                                      ;; sqlite3 needed for git
                                       sqlite3
+                                      ;; catppuccin: main them
                                       (catppuccin :location (recipe :fetcher github :repo "catppuccin/emacs"))
+                                      ;; templ-ts-mode
+                                      templ-ts-mode
+                                      ;; my custom mode
                                       (gno-mode :location "~/.spacemacs.d/packages/gno")
-                                      (templ-mode :location "~/.spacemacs.d/packages/templ")
                                       )
 
    ;; A list of packages that cannot be updated.
@@ -627,27 +632,24 @@ before packages are loaded."
   ;; load custom gno mode
   (require 'gno)
 
-  ;; load custom templ mode
-  (require 'templ-mode)
-
-
-
   ;; @TODO: find a way to set this
   (unless (file-exists-p "/tmp/.emacs-saves/")
     (make-directory "/tmp/.emacs-saves/" t))
   (setq auto-save-file-name-transforms
         `((".*" "/tmp/.emacs-saves/" t)))
-  ;; go
 
-  ;; treesit
-  ;; (setq treesit-language-source-alist
-  ;;       '((templ "https://github.com/vrischmann/tree-sitter-templ" "592faa3186ef857c92e4bd1c31d73c07a4a334db")
-  ;;         (javascript "https://github.com/tree-sitter/tree-sitter-javascript" "master" "src")
-  ;;         (go "https://github.com/tree-sitter/tree-sitter-go")
-  ;;         (html "https://github.com/tree-sitter/tree-sitter-html")
-  ;;         (typescript "https://github.com/tree-sitter/tree-sitter-typescript" "master" "typescript/src")))
+  ;; tree siter load grammar
+  (add-to-list 'treesit-extra-load-path (getenv "TREE_SITTER_LANG"))
 
-  ;; Set up before-save hooks to format buffer and add/delete imports.
+  ;; add templ to mode-alist
+  (require 'templ-ts-mode)
+  (add-to-list 'auto-mode-alist '("\\.templ\\'" . templ-ts-mode))
+
+  (setq auto-mode-alist (rassq-delete-all 'go-ts-mode auto-mode-alist))
+  (add-to-list 'auto-mode-alist '("\\.go\\'" . go-mode))
+
+
+  q  ;; Set up before-save hooks to format buffer and add/delete imports.
   ;; Make sure you don't have other gofmt/goimports hooks enabled.
   (defun lsp-go-install-save-hooks ()
     (add-hook 'before-save-hook #'lsp-format-buffer t t)
