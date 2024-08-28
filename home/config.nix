@@ -1,9 +1,15 @@
-{ lib, pkgs, config, ... }:
+{
+  lib,
+  pkgs,
+  config,
+  ...
+}:
 
 let
   inherit (pkgs) stdenv;
   inherit (lib) mkIf;
-in {
+in
+{
   # btop
   home.file."/.config/btop" = {
     source = "${lib.cleanSource ../config/btop}";

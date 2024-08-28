@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   inherit (config.home) user-info homeDirectory;
   xterm-emacsclient = pkgs.writeShellScriptBin "xemacsclient" ''
@@ -9,7 +14,8 @@ let
     export TERM=xterm-emacs
     ${pkgs.emacs-gtk}/bin/emacs $@
   '';
-in {
+in
+{
 
   ## home dot D
   # spacemacs
@@ -54,7 +60,6 @@ in {
 
   # setup alias
   programs.zsh.shellAliases.emacs = "${xterm-emacs}/bin/xemacs";
-  programs.zsh.shellAliases.emacsclient =
-    "${xterm-emacsclient}/bin/xemacsclient";
+  programs.zsh.shellAliases.emacsclient = "${xterm-emacsclient}/bin/xemacsclient";
   programs.zsh.shellAliases.ec = "${xterm-emacsclient}/bin/xemacsclient -nw";
 }

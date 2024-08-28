@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   theme = config.colors.catppuccin-macchiato;
@@ -6,7 +11,8 @@ let
   black = theme.namedColors.black;
   hexYellow = builtins.substring 1 (builtins.stringLength yellow) yellow;
   hexBlack = builtins.substring 1 (builtins.stringLength black) black;
-in {
+in
+{
   services.yabai = {
     enable = true;
     enableScriptingAddition = false;

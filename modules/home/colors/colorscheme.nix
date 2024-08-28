@@ -1,34 +1,61 @@
-{ name, config, lib, ... }:
+{
+  name,
+  config,
+  lib,
+  ...
+}:
 
 let
   inherit (lib)
-    attrNames attrValues hasPrefix listToAttrs literalExpression mapAttrs
-    mkOption range types;
+    attrNames
+    attrValues
+    hasPrefix
+    listToAttrs
+    literalExpression
+    mapAttrs
+    mkOption
+    range
+    types
+    ;
 
-  baseColorOptions = listToAttrs (map (i: {
-    name = "color${toString i}";
-    value = mkOption { type = types.str; };
-  }) (range 0 15)) // listToAttrs (map (i: {
-    name = "color${toString i}";
-    value = mkOption {
-      default = "#00000";
-      type = types.str;
-    };
-  }) (range 16 99));
+  baseColorOptions =
+    listToAttrs (
+      map (i: {
+        name = "color${toString i}";
+        value = mkOption { type = types.str; };
+      }) (range 0 15)
+    )
+    // listToAttrs (
+      map (i: {
+        name = "color${toString i}";
+        value = mkOption {
+          default = "#00000";
+          type = types.str;
+        };
+      }) (range 16 99)
+    );
 
-  mkColorOption = args:
-    mkOption (args // {
-      type = types.enum (attrNames config.colors ++ attrValues config.colors
-        ++ attrNames config.namedColors);
-      apply = v: config.colors.${v} or config.namedColors.${v} or v;
-    });
+  mkColorOption =
+    args:
+    mkOption (
+      args
+      // {
+        type = types.enum (
+          attrNames config.colors ++ attrValues config.colors ++ attrNames config.namedColors
+        );
+        apply = v: config.colors.${v} or config.namedColors.${v} or v;
+      }
+    );
 
-  kittyBaseColorOptions = listToAttrs (map (i: {
-    name = "color${toString i}";
-    value = mkColorOption { default = "color${toString i}"; };
-  }) (range 0 15));
+  kittyBaseColorOptions = listToAttrs (
+    map (i: {
+      name = "color${toString i}";
+      value = mkColorOption { default = "color${toString i}"; };
+    }) (range 0 15)
+  );
 
-in {
+in
+{
   options = {
     name = mkOption {
       type = types.str;
@@ -36,15 +63,12 @@ in {
       defaultText = literalExpression "<name>";
     };
 
-    colors =
-      mkOption { type = types.submodule { options = baseColorOptions; }; };
+    colors = mkOption { type = types.submodule { options = baseColorOptions; }; };
 
     namedColors = mkOption {
-      type = types.attrsOf
-        (types.enum (attrNames config.colors ++ attrValues config.colors));
+      type = types.attrsOf (types.enum (attrNames config.colors ++ attrValues config.colors));
       default = { };
-      apply =
-        mapAttrs (_: v: if hasPrefix "color" v then config.colors.${v} else v);
+      apply = mapAttrs (_: v: if hasPrefix "color" v then config.colors.${v} else v);
     };
 
     terminal = mkOption {
@@ -67,12 +91,9 @@ in {
           background = mkColorOption { default = config.terminal.bg; };
           foreground = mkColorOption { default = config.terminal.fg; };
           cursor = mkColorOption { default = config.terminal.cursorBg; };
-          cursor_text_color =
-            mkColorOption { default = config.terminal.cursorFg; };
-          selection_background =
-            mkColorOption { default = config.terminal.selectionBg; };
-          selection_foreground =
-            mkColorOption { default = config.terminal.selectionFg; };
+          cursor_text_color = mkColorOption { default = config.terminal.cursorFg; };
+          selection_background = mkColorOption { default = config.terminal.selectionBg; };
+          selection_foreground = mkColorOption { default = config.terminal.selectionFg; };
 
           url_color = mkColorOption { };
           tab_bar_background = mkColorOption { };

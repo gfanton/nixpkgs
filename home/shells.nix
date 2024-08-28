@@ -99,12 +99,14 @@ in
   programs.zsh = {
     enable = true;
     dotDir = ".config/zsh";
-    plugins = [{
-      # add powerline10 custom config
-      name = "p10k-config";
-      src = lib.cleanSource ../config/zsh/p10k;
-      file = "config.zsh";
-    }];
+    plugins = [
+      {
+        # add powerline10 custom config
+        name = "p10k-config";
+        src = lib.cleanSource ../config/zsh/p10k;
+        file = "config.zsh";
+      }
+    ];
 
     # enable completion
     enableCompletion = true;
@@ -113,10 +115,12 @@ in
       enable = true;
       custom = "${config.xdg.configHome}/oh-my-zsh";
       extras = {
-        themes = [{
-          name = "powerlevel10k";
-          source = pkgs.zsh-plugins.powerlevel10k;
-        }];
+        themes = [
+          {
+            name = "powerlevel10k";
+            source = pkgs.zsh-plugins.powerlevel10k;
+          }
+        ];
         plugins = [
           {
             name = "fzf-tab";
@@ -143,15 +147,19 @@ in
         ];
       };
       theme = "powerlevel10k/powerlevel10k";
-      plugins = [
-        "sudo"
-        "git"
-        "fzf"
-        "zoxide"
-        "cp"
-      ]
-      # ++ [ "fzf-tab" "fast-syntax-highlighting" ] # extra plugins list
-        ++ lib.optionals pkgs.stdenv.isDarwin [ "brew" "macos" ]
+      plugins =
+        [
+          "sudo"
+          "git"
+          "fzf"
+          "zoxide"
+          "cp"
+        ]
+        # ++ [ "fzf-tab" "fast-syntax-highlighting" ] # extra plugins list
+        ++ lib.optionals pkgs.stdenv.isDarwin [
+          "brew"
+          "macos"
+        ]
         ++ lib.optionals pkgs.stdenv.isLinux [ ];
     };
 
@@ -178,23 +186,28 @@ in
       #
     '';
 
-    shellAliases = with pkgs;
+    shellAliases =
+      with pkgs;
       let
-        ezaTree = lib.listToAttrs (map (i: {
-          name = "ls${toString i}";
-          value = "ls -T --level=${toString i}";
-        }) (lib.range 0 10));
-        ezaTreelist = lib.listToAttrs (map (i: {
-          name = "l${toString i}";
-          value = "ls -T --level=${toString i} -l";
-        }) (lib.range 0 10));
-      in {
+        ezaTree = lib.listToAttrs (
+          map (i: {
+            name = "ls${toString i}";
+            value = "ls -T --level=${toString i}";
+          }) (lib.range 0 10)
+        );
+        ezaTreelist = lib.listToAttrs (
+          map (i: {
+            name = "l${toString i}";
+            value = "ls -T --level=${toString i} -l";
+          }) (lib.range 0 10)
+        );
+      in
+      {
         dev = "(){ nix develop $1 -c $SHELL ;}";
         mydev = "(){ nix develop my#$1 -c $SHELL ;}";
 
         xemacs = "${xterm-emacs}/bin/xemacs --with-profile=spacemacs -nw";
-        xemacsclient =
-          "${xterm-emacsclient}/bin/xemacsclient --with-profile=spacemacs -nw";
+        xemacsclient = "${xterm-emacsclient}/bin/xemacsclient --with-profile=spacemacs -nw";
 
         # # kitty alias
         ssh = "${kitty}/bin/kitten ssh";
@@ -203,8 +216,7 @@ in
         ".." = "cd ..";
         cat = "${bat}/bin/bat";
         du = "${du-dust}/bin/dust";
-        rg =
-          "${ripgrep}/bin/rg --column --line-number --no-heading --color=always --ignore-case";
+        rg = "${ripgrep}/bin/rg --column --line-number --no-heading --color=always --ignore-case";
         ps = "${procs}/bin/procs";
         # npmadd = "${mynodejs}/bin/npm install --global";
         htop = "${btop}/bin/btop";
@@ -216,18 +228,17 @@ in
         ll = "ls -lhmbgUFH --git --icons";
         lla = "ll -a";
         config = "make -C ${homeDirectory}/nixpkgs";
-      } // ezaTree // ezaTreelist
+      }
+      // ezaTree
+      // ezaTreelist
       // (lib.optionalAttrs (stdenv.system == "aarch64-darwin") {
         # switch on rosetta shell
         rosetta-zsh = "${pkgs-x86.zsh}/bin/zsh";
 
         # yabai & skhd
-        restart-yabai =
-          "${restart-service}/bin/restart-service org.nixos.yabai.plist";
-        restart-skhd =
-          "${restart-service}/bin/restart-service org.nixos.skhd.plist";
-        restart-borders =
-          "${restart-service}/bin/restart-service org.nixos.jankyborders.plist";
+        restart-yabai = "${restart-service}/bin/restart-service org.nixos.yabai.plist";
+        restart-skhd = "${restart-service}/bin/restart-service org.nixos.skhd.plist";
+        restart-borders = "${restart-service}/bin/restart-service org.nixos.jankyborders.plist";
       });
   };
 }

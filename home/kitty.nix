@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   xterm-emacsclient = pkgs.writeShellScriptBin "xemacs" ''
@@ -23,7 +28,8 @@ let
 
   theme-dark = config.colors.catppuccin-macchiato;
   theme-light = config.colors.catppuccin-latte;
-in {
+in
+{
   # Kitty terminal
   # https://sw.kovidgoyal.net/kitty/conf.html
   # https://rycee.gitlab.io/home-manager/options.html#opt-programs.kitty.enable
@@ -59,8 +65,7 @@ in {
 
     kitty_mod = "ctrl+alt";
 
-    font_features =
-      "+cv02 +cv05 +cv09 +cv14 +ss04 +cv16 +cv31 +cv25 +cv26 +cv32 +cv28 +ss10 +zero +onum";
+    font_features = "+cv02 +cv05 +cv09 +cv14 +ss04 +cv16 +cv31 +cv25 +cv26 +cv32 +cv28 +ss10 +zero +onum";
   };
 
   # # Change the style of italic font variants
@@ -106,8 +111,7 @@ in {
     "kitty_mod+down" = "neighboring_window down";
 
     # clear the terminal screen
-    "cmd+k" =
-      "combine : clear_terminal scrollback active : send_text normal,application x0c";
+    "cmd+k" = "combine : clear_terminal scrollback active : send_text normal,application x0c";
 
     # Map cmd + <num> to corresponding tabs
     "cmd+1" = "goto_tab 1";
@@ -126,19 +130,13 @@ in {
     "kitty_mod+0" = "change_font_size all 0";
 
     # hints
-    "cmd+g" =
-      "kitten hints --type=linenum --linenum-action=self ${xterm-emacsclient}/bin/xemacs -t +{line} {path}";
+    "cmd+g" = "kitten hints --type=linenum --linenum-action=self ${xterm-emacsclient}/bin/xemacs -t +{line} {path}";
     # screen rollback
-    "cmd+f" =
-      "launch --cwd=current --type=overlay --stdin-source=@screen_scrollback --stdin-add-formatting ${stdin-emacsclient}/bin/semacs";
+    "cmd+f" = "launch --cwd=current --type=overlay --stdin-source=@screen_scrollback --stdin-add-formatting ${stdin-emacsclient}/bin/semacs";
     # editor
-    "kitty_mod+s" =
-      "launch --cwd=current --type=overlay ${scratch-emacsclient}/bin/scratch";
-    "kitty_mod+o" =
-      "launch --cwd=current --type=overlay ${xterm-emacsclient}/bin/xemacs -t .";
-    "kitty_mod+d" =
-      "launch --cwd=current --type=overlay  ${pkgs.lazydocker}/bin/lazydocker";
-    "kitty_mod+g" =
-      "launch --cwd=current --type=overlay  ${pkgs.lazygit}/bin/lazygit";
+    "kitty_mod+s" = "launch --cwd=current --type=overlay ${scratch-emacsclient}/bin/scratch";
+    "kitty_mod+o" = "launch --cwd=current --type=overlay ${xterm-emacsclient}/bin/xemacs -t .";
+    "kitty_mod+d" = "launch --cwd=current --type=overlay  ${pkgs.lazydocker}/bin/lazydocker";
+    "kitty_mod+g" = "launch --cwd=current --type=overlay  ${pkgs.lazygit}/bin/lazygit";
   };
 }

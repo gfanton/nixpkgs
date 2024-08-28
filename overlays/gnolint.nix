@@ -1,6 +1,13 @@
 final: super:
-let inherit (super) pkgs lib fetchFromGitHub fetchGitLocal;
-in {
+let
+  inherit (super)
+    pkgs
+    lib
+    fetchFromGitHub
+    fetchGitLocal
+    ;
+in
+{
   my-gnolint = pkgs.buildGo121Module rec {
     pname = "gnolint";
     vendorHash = "sha256-OLHcsJrLC4rzuqtlrr2+MMu1LYbH5DuC7fRcC9Bi6Kw=";
@@ -12,8 +19,7 @@ in {
       repo = "gno";
       # The specific commit hash you want to fetch
       rev = "${version}"; # replace with the desired commit hash
-      sha256 =
-        "sha256-jOyv/w5AyaEPwoMC4KUpTgdcu7S7Wh0pz4FAtwid990="; # you will have to compute this
+      sha256 = "sha256-jOyv/w5AyaEPwoMC4KUpTgdcu7S7Wh0pz4FAtwid990="; # you will have to compute this
     };
 
     doCheck = false;

@@ -20,7 +20,13 @@
       pull.rebase = true;
     };
 
-    ignores = [ "*~" "*.swp" "*#" ".#*" ".DS_Store" ];
+    ignores = [
+      "*~"
+      "*.swp"
+      "*#"
+      ".#*"
+      ".DS_Store"
+    ];
 
     # Enhanced diffs
     delta.enable = true;
@@ -29,8 +35,7 @@
     lfs.enable = true;
 
     aliases = {
-      lg =
-        "log --graph --abbrev-commit --decorate --format=format:'%C(blue)%h%C(reset) - %C(green)(%ar)%C(reset) %s %C(italic)- %an%C(reset)%C(magenta bold)%d%C(reset)' --all";
+      lg = "log --graph --abbrev-commit --decorate --format=format:'%C(blue)%h%C(reset) - %C(green)(%ar)%C(reset) %s %C(italic)- %an%C(reset)%C(magenta bold)%d%C(reset)' --all";
     };
   };
 

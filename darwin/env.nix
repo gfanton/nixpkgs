@@ -7,7 +7,11 @@
   # Apps
   # `home-manager` currently has issues adding them to `~/Applications`
   # Issue: https://github.com/nix-community/home-manager/issues/1341
-  environment.systemPackages = with pkgs; [ emacs-gtk kitty terminal-notifier ];
+  environment.systemPackages = with pkgs; [
+    emacs-gtk
+    kitty
+    terminal-notifier
+  ];
 
   # https://github.com/nix-community/home-manager/issues/423
   environment.variables = {
@@ -19,7 +23,13 @@
   fonts.packages = with pkgs; [
     # recursive
     emacs-all-the-icons-fonts
-    (nerdfonts.override { fonts = [ "Iosevka" "JetBrainsMono" "FiraCode" ]; })
+    (nerdfonts.override {
+      fonts = [
+        "Iosevka"
+        "JetBrainsMono"
+        "FiraCode"
+      ];
+    })
   ];
 
   # Keyboard

@@ -1,9 +1,15 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   theme = config.colors.catppuccin-macchiato;
   yabai = "${pkgs.yabai}/bin/yabai";
-in {
+in
+{
   services.skhd = {
     enable = true;
     skhdConfig = ''

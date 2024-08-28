@@ -1,9 +1,17 @@
-{ config, lib, pkgs, home, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  home,
+  ...
+}:
 
 with lib;
 
-let cfg = config.services.jankyborders;
-in {
+let
+  cfg = config.services.jankyborders;
+in
+{
   options = with types; {
     services.jankyborders.enable = mkOption {
       type = bool;

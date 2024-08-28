@@ -36,8 +36,7 @@
     # yabai.flake = false;
 
     # zsh plugins
-    fast-syntax-highlighting.url =
-      "github:zdharma-continuum/fast-syntax-highlighting";
+    fast-syntax-highlighting.url = "github:zdharma-continuum/fast-syntax-highlighting";
     fast-syntax-highlighting.flake = false;
 
     fzf-tab.url = "github:Aloxaf/fzf-tab";
@@ -47,15 +46,29 @@
     powerlevel10k.flake = false;
   };
 
-  outputs = { self, darwin, home-manager, flake-utils, ... }@inputs:
+  outputs =
+    {
+      self,
+      darwin,
+      home-manager,
+      flake-utils,
+      ...
+    }@inputs:
     let
-      inherit (self.lib) attrValues makeOverridable optionalAttrs singleton;
+      inherit (self.lib)
+        attrValues
+        makeOverridable
+        optionalAttrs
+        singleton
+        ;
 
       homeStateVersion = "24.05";
 
       # Configuration for `nixpkgs`
       nixpkgsDefaults = {
-        config = { allowUnfree = true; };
+        config = {
+          allowUnfree = true;
+        };
         overlays = attrValues self.overlays ++ [
           # put stuff here
         ];
@@ -74,13 +87,16 @@
         email = "github-actions@github.com";
         nixConfigDirectory = "/Users/runner/work/nixpkgs/nixpkgs";
       };
-    in {
+    in
+    {
 
       # Add some additional functions to `lib`.
-      lib = inputs.nixpkgs-unstable.lib.extend (_: _: {
-        mkDarwinSystem = import ./lib/mkDarwinSystem.nix inputs;
-        lsnix = import ./lib/lsnix.nix;
-      });
+      lib = inputs.nixpkgs-unstable.lib.extend (
+        _: _: {
+          mkDarwinSystem = import ./lib/mkDarwinSystem.nix inputs;
+          lsnix = import ./lib/lsnix.nix;
+        }
+      );
 
       overlays = {
         # Overlays to add different versions `nixpkgs` into package set
@@ -104,7 +120,8 @@
         };
 
         # Overlay useful on Macs with Apple Silicon
-        pkgs-silicon = _: prev:
+        pkgs-silicon =
+          _: prev:
           optionalAttrs (prev.stdenv.system == "aarch64-darwin") {
             # Add access to x86 packages system is running Apple Silicon
             pkgs-x86 = import inputs.nixpkgs-unstable {
@@ -118,8 +135,7 @@
           spacemacs = inputs.spacemacs;
           doomemacs = inputs.doomemacs;
           chemacs2 = inputs.chemacs2;
-          zsh-plugins.fast-syntax-highlighting =
-            inputs.fast-syntax-highlighting;
+          zsh-plugins.fast-syntax-highlighting = inputs.fast-syntax-highlighting;
           zsh-plugins.fzf-tab = inputs.fzf-tab;
           zsh-plugins.powerlevel10k = inputs.powerlevel10k;
           # yabai = inputs.yabai;
@@ -169,14 +185,14 @@
         programs-truecolor = import ./modules/home/programs/truecolor;
         # programs-asdf = import ./modules/home/programs/asdf;
         programs-kitty-extras = import ./modules/home/programs/kitty/extras.nix;
-        programs-zsh-oh-my-zsh-extra =
-          import ./modules/home/programs/zsh/oh-my-zsh/extras.nix;
+        programs-zsh-oh-my-zsh-extra = import ./modules/home/programs/zsh/oh-my-zsh/extras.nix;
 
-        home-user-info = { lib, ... }: {
-          options.home.user-info = (self.darwinModules.users-primaryUser {
-            inherit lib;
-          }).options.users.primaryUser;
-        };
+        home-user-info =
+          { lib, ... }:
+          {
+            options.home.user-info =
+              (self.darwinModules.users-primaryUser { inherit lib; }).options.users.primaryUser;
+          };
       };
       # }}}
 
@@ -187,29 +203,41 @@
         # Mininal configurations to bootstrap systems
         bootstrap-x86 = makeOverridable darwin.lib.darwinSystem {
           system = "x86_64-darwin";
-          modules = [ ./darwin/bootstrap.nix { nixpkgs = nixpkgsDefaults; } ];
+          modules = [
+            ./darwin/bootstrap.nix
+            { nixpkgs = nixpkgsDefaults; }
+          ];
         };
         bootstrap-arm = bootstrap-x86.override { system = "aarch64-darwin"; };
 
         # My Apple Silicon macOS laptop config
-        macbook = makeOverridable self.lib.mkDarwinSystem (primaryUserInfo // {
-          system = "aarch64-darwin";
-          modules = (attrValues self.darwinModules)
-            ++ (attrValues self.commonModules) ++ singleton {
-              nixpkgs = nixpkgsDefaults;
-              networking.computerName = "guicp";
-              networking.hostName = "ghost";
-              networking.knownNetworkServices =
-                [ "Wi-Fi" "USB 10/100/1000 LAN" ];
-              nix.registry.my.flake = inputs.self;
-            };
+        macbook = makeOverridable self.lib.mkDarwinSystem (
+          primaryUserInfo
+          // {
+            system = "aarch64-darwin";
+            modules =
+              (attrValues self.darwinModules)
+              ++ (attrValues self.commonModules)
+              ++ singleton {
+                nixpkgs = nixpkgsDefaults;
+                networking.computerName = "guicp";
+                networking.hostName = "ghost";
+                networking.knownNetworkServices = [
+                  "Wi-Fi"
+                  "USB 10/100/1000 LAN"
+                ];
+                nix.registry.my.flake = inputs.self;
+              };
 
-          inherit homeStateVersion;
-          homeModules = (attrValues self.homeManagerModules)
-            ++ (attrValues self.commonModules) ++ [
+            inherit homeStateVersion;
+            homeModules =
+              (attrValues self.homeManagerModules)
+              ++ (attrValues self.commonModules)
+              ++ [
 
-            ];
-        });
+              ];
+          }
+        );
 
         # Config with small modifications needed/desired for CI with GitHub workflow
         githubCI = self.darwinConfigurations.macbook.override {
@@ -229,67 +257,78 @@
       # `nix build .#homeConfigurations.cloud.activationPackage && ./result/activate`
       homeConfigurations = {
         cloud = home-manager.lib.homeManagerConfiguration {
-          pkgs = import inputs.nixpkgs-unstable
-            (nixpkgsDefaults // { system = "x86_64-linux"; });
-          modules = attrValues self.homeManagerModules
-            ++ (attrValues self.commonModules) ++ singleton ({ config, ... }: {
-              home.user-info = primaryUserInfo // {
-                nixConfigDirectory = "${config.home.homeDirectory}/nixpkgs";
-              };
-              home.username = config.home.user-info.username;
-              home.homeDirectory = "/home/${config.home.username}";
-              home.stateVersion = homeStateVersion;
-            });
+          pkgs = import inputs.nixpkgs-unstable (nixpkgsDefaults // { system = "x86_64-linux"; });
+          modules =
+            attrValues self.homeManagerModules
+            ++ (attrValues self.commonModules)
+            ++ singleton (
+              { config, ... }:
+              {
+                home.user-info = primaryUserInfo // {
+                  nixConfigDirectory = "${config.home.homeDirectory}/nixpkgs";
+                };
+                home.username = config.home.user-info.username;
+                home.homeDirectory = "/home/${config.home.username}";
+                home.stateVersion = homeStateVersion;
+              }
+            );
         };
 
         # specific config for github ci
         githubCI = home-manager.lib.homeManagerConfiguration {
-          pkgs = import inputs.nixpkgs-unstable
-            (nixpkgsDefaults // { system = "x86_64-linux"; });
-          modules = attrValues self.homeManagerModules
-            ++ (attrValues self.commonModules) ++ singleton ({ config, ... }: {
-              home.user-info = ciUserInfo // {
-                nixConfigDirectory = "${config.home.homeDirectory}/nixpkgs";
-              };
-              home.username = config.home.user-info.username;
-              home.homeDirectory = "/home/${config.home.username}";
-              home.stateVersion = homeStateVersion;
-            });
+          pkgs = import inputs.nixpkgs-unstable (nixpkgsDefaults // { system = "x86_64-linux"; });
+          modules =
+            attrValues self.homeManagerModules
+            ++ (attrValues self.commonModules)
+            ++ singleton (
+              { config, ... }:
+              {
+                home.user-info = ciUserInfo // {
+                  nixConfigDirectory = "${config.home.homeDirectory}/nixpkgs";
+                };
+                home.username = config.home.user-info.username;
+                home.homeDirectory = "/home/${config.home.username}";
+                home.stateVersion = homeStateVersion;
+              }
+            );
         };
       };
       # }}}
 
       # Add re-export `nixpkgs` packages with overlays.
       # This is handy in combination with `nix registry add my /Users/gfanton/nixpkgs`
-    } // flake-utils.lib.eachDefaultSystem (system: {
+    }
+    // flake-utils.lib.eachDefaultSystem (system: {
       # Re-export `nixpkgs-unstable` with overlays.
       # This is handy in combination with setting `nix.registry.my.flake = inputs.self`.
       # Allows doing things like `nix run my#prefmanager -- watch --all`
-      legacyPackages =
-        import inputs.nixpkgs-unstable (nixpkgsDefaults // { inherit system; });
+      legacyPackages = import inputs.nixpkgs-unstable (nixpkgsDefaults // { inherit system; });
 
       # Development shells ----------------------------------------------------------------------{{{
       # Shell environments for development
       # With `nix.registry.my.flake = inputs.self`, development shells can be created by running,
       # e.g., `nix develop my#python`.
-      devShells = let pkgs = self.legacyPackages.${system};
-      in {
-        asdf = pkgs.mkShell {
-          name = "asdf";
-          inputsFrom = attrValues { inherit (pkgs) asdf-vm; };
-          shellHook = ''
-            if [ -f "${pkgs.asdf-vm}/share/asdf-vm/asdf.sh" ]; then
-              . "${pkgs.asdf-vm}/share/asdf-vm/asdf.sh"
-            fi
+      devShells =
+        let
+          pkgs = self.legacyPackages.${system};
+        in
+        {
+          asdf = pkgs.mkShell {
+            name = "asdf";
+            inputsFrom = attrValues { inherit (pkgs) asdf-vm; };
+            shellHook = ''
+              if [ -f "${pkgs.asdf-vm}/share/asdf-vm/asdf.sh" ]; then
+                . "${pkgs.asdf-vm}/share/asdf-vm/asdf.sh"
+              fi
 
-            fpath=(${pkgs.asdf-vm}/share/asdf-vm/completions $fpath)
+              fpath=(${pkgs.asdf-vm}/share/asdf-vm/completions $fpath)
 
-            if [ -f "''${ASDF_DATA_DIR}/.asdf/plugins/java/set-java-home.zsh" ]; then
-               . "''${ASDF_DATA_DIR}/.asdf/plugins/java/set-java-home.zsh"
-            fi
-          '';
+              if [ -f "''${ASDF_DATA_DIR}/.asdf/plugins/java/set-java-home.zsh" ]; then
+                 . "''${ASDF_DATA_DIR}/.asdf/plugins/java/set-java-home.zsh"
+              fi
+            '';
+          };
         };
-      };
       # }}}
     });
 }
