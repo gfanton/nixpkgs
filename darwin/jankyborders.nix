@@ -6,11 +6,12 @@ let
   black = theme.namedColors.black;
   hexYellow = builtins.substring 1 (builtins.stringLength yellow) yellow;
   hexBlack = builtins.substring 1 (builtins.stringLength black) black;
-in {
+in
+{
   services.jankyborders = {
     enable = true;
     width = 9.0;
     active_color = "0xff${hexYellow}";
+    inactive_color = "0xff414550"; # arbitraty color
   };
 }
-
