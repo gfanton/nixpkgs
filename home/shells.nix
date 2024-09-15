@@ -13,8 +13,12 @@ let
   oh-my-zsh-custom = "${configDir}/oh-my-zsh";
 
   treeSitterLang = pkgs.tree-sitter.withPlugins (p: [
+    p.tree-sitter-typescript
     p.tree-sitter-javascript
     p.tree-sitter-templ
+    p.tree-sitter-go
+    p.tree-sitter-gomod
+    p.tree-sitter-gowork
   ]);
 
   treeSitterLangRenamed = pkgs.runCommand "tree-sitter-lang-renamed" { } ''

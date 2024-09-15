@@ -648,13 +648,31 @@ before packages are loaded."
   (setq auto-mode-alist (rassq-delete-all 'go-ts-mode auto-mode-alist))
   (add-to-list 'auto-mode-alist '("\\.go\\'" . go-mode))
 
-
-  q  ;; Set up before-save hooks to format buffer and add/delete imports.
+  ;; Set up before-save hooks to format buffer and add/delete imports.
   ;; Make sure you don't have other gofmt/goimports hooks enabled.
   (defun lsp-go-install-save-hooks ()
     (add-hook 'before-save-hook #'lsp-format-buffer t t)
     (add-hook 'before-save-hook #'lsp-organize-imports t t))
   (add-hook 'go-mode-hook #'lsp-go-install-save-hooks)
+
+  (defvar auto-delete-trailing-whitespace t
+    "Automatically delete trailing whitespace on save.")
+
+  (defun toggle-auto-delete-trailing-whitespace ()
+    "Toggle the automatic deletion of trailing whitespace."
+    (interactive)
+    (setq auto-delete-trailing-whitespace (not auto-delete-trailing-whitespace))
+    (if auto-delete-trailing-whitespace
+        (message "Auto delete trailing whitespace enabled")
+      (message "Auto delete trailing whitespace disabled")))
+
+  (defun maybe-delete-trailing-whitespace ()
+    "Delete trailing whitespace if `auto-delete-trailing-whitespace' is non-nil."
+    (when auto-delete-trailing-whitespace
+      (delete-trailing-whitespace)))
+
+  (add-hook 'before-save-hook 'maybe-delete-trailing-whitespace)
+
 
   ;; magit
   (require 'magit-diff)

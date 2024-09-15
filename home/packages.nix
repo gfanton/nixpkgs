@@ -105,15 +105,6 @@ in
       fzf
       tmux
 
-      # install templ grammar, mainly for emacs
-      (tree-sitter.withPlugins (p: [
-        p.tree-sitter-javascript
-        p.tree-sitter-templ
-        p.tree-sitter-go
-        p.tree-sitter-gomod
-        p.tree-sitter-gowork
-      ]))
-
       # my
       my-libvterm
       my-loon
