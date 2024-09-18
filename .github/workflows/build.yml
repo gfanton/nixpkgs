@@ -5,7 +5,7 @@ on:
   pull_request:
     paths:
     - '**'
-    - '!*.md'      
+    - '!*.md'
   push:
     branches:
     - 'master'
@@ -52,15 +52,15 @@ jobs:
         nix build .#darwinConfigurations.bootstrap-arm.system
 
         # [hack] remove conflicting files
-        sudo rm -f /etc/nix/nix.conf
         sudo rm -f /etc/shells
+        sudo rm -f /etc/nix/nix.conf
 
         # Switch to bootstrap config
         ./result/sw/bin/darwin-rebuild switch --flake .#bootstrap-arm
 
         # Build and switch to full config
         /run/current-system/sw/bin/zsh -c "darwin-rebuild switch --flake .#$CONFIG_NAME"
-        
+
   build-linux-env:
     name: Build/cache Linux Nix env
     runs-on: ubuntu-latest
