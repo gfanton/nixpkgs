@@ -58,11 +58,12 @@
       inherit (self.lib)
         attrValues
         makeOverridable
+        mkForce
         optionalAttrs
         singleton
         ;
 
-      homeStateVersion = "24.05";
+      homeStateVersion = "24.11";
 
       # Configuration for `nixpkgs`
       nixpkgsDefaults = {
@@ -245,9 +246,11 @@
           username = "runner";
           nixConfigDirectory = "/Users/runner/work/nixpkgs/nixpkgs";
           extraModules = singleton {
-            homebrew.enable = self.lib.mkForce false;
-            services.yabai.enable = self.lib.mkForce false;
-            services.skhd.enable = self.lib.mkForce false;
+            environment.etc.shells.enable = mkForce false;
+            environment.etc."nix/nix.conf".enable = mkForce false;
+            homebrew.enable = mkForce false;
+            services.yabai.enable = mkForce false;
+            services.skhd.enable = mkForce false;
             ids.uids.nixbld = 300; # [hack] unil macos-15
           };
         };

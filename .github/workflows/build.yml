@@ -51,10 +51,6 @@ jobs:
         # Build to bootstrap config
         nix build .#darwinConfigurations.bootstrap-arm.system
 
-        # [hack] remove conflicting files
-        sudo rm -f /etc/shells
-        sudo rm -f /etc/nix/nix.conf
-
         # Switch to bootstrap config
         ./result/sw/bin/darwin-rebuild switch --flake .#bootstrap-arm
 
