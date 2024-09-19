@@ -1,3 +1,101 @@
+## Update 2024-09-19
+```go
+Version changes:
+[U.]  #01  SDL2               2.30.5 -> 2.30.6
+[C.]  #02  aws-c-auth         0.7.22, 0.7.25 -> 0.7.22, 0.7.26
+[C.]  #03  curl               8.7.1, 8.9.0 x2, 8.9.0-bin, 8.9.0-man -> 8.7.1, 8.9.1 x2, 8.9.1-bin, 8.9.1-man
+[U.]  #04  delta              0.18.0 -> 0.18.2
+[U.]  #05  docker             27.1.1 -> 27.2.0
+[U.]  #06  docker-containerd  27.1.1 -> 27.2.0
+[U.]  #07  docker-init        27.1.1 -> 27.2.0
+[U.]  #08  docker-runc        27.1.1 -> 27.2.0
+[C.]  #09  expat              2.6.2 x2 -> 2.6.2, 2.6.3
+[U.]  #10  eza                0.19.0, 0.19.0-man -> 0.19.3, 0.19.3-man
+[U.]  #11  fd                 10.1.0 -> 10.2.0
+[U.]  #12  ffmpeg             6.1.1-data, 6.1.1-lib -> 7.0.2-data, 7.0.2-lib
+[U.]  #13  ffmpeg-headless    6.1.1-data, 6.1.1-lib -> 6.1.2-data, 6.1.2-lib
+[U.]  #14  fzf                0.54.3, 0.54.3-man -> 0.55.0, 0.55.0-man
+[U.]  #15  gh                 2.55.0 -> 2.57.0
+[U.]  #16  git                2.45.2, 2.45.2-doc -> 2.46.0, 2.46.0-doc
+[U.]  #17  go                 1.22.5 -> 1.22.7
+[U.]  #18  gopls              0.16.1 -> 0.16.2
+[U.]  #19  hwdata             0.384 -> 0.385
+[U.]  #20  imagemagick        7.1.1-36 -> 7.1.1-38
+[U.]  #21  kitty              0.35.2, 0.35.2-terminfo -> 0.36.1, 0.36.1-terminfo
+[U.]  #22  lazygit            0.43.1 -> 0.44.0
+[U.]  #23  libcamera          0.3.0 -> 0.3.1
+[C.]  #24  libcpuid           0.6.5 x2 -> 0.6.5, 0.7.0
+[U.]  #25  libedit            20240517-3.1 -> 20240808-3.1
+[U.]  #26  libheif            1.18.0 -> 1.18.2
+[C.]  #27  libkrb5            1.21.2, 1.21.3 -> 1.21.2
+[U.]  #28  lvm2               2.03.23-lib -> 2.03.26-lib
+[U.]  #29  mesa               24.1.5 -> 24.2.2
+[U.]  #30  moby               27.1.1 -> 27.2.0
+[U.]  #31  nss-cacert         3.101 -> 3.104
+[U.]  #32  oh-my-zsh          2024-08-21 -> 2024-09-01
+[U.]  #33  openfec            1.4.2.9 -> 1.4.2.11
+[U.]  #34  pipewire           1.2.2 -> 1.2.3
+[C.]  #35  publicsuffix-list  0-unstable-2024-01-07, 0-unstable-2024-06-19 -> 0-unstable-2024-01-07, 0-unstable-2024-08-21
+[C.]  #36  python3            3.11.9, 3.11.9-env x2, 3.12.4 -> 3.11.9, 3.11.9-env x2, 3.12.5
+[U.]  #37  ripgrep            14.1.0 -> 14.1.1
+[U.]  #38  rootlesskit        2.1.0 -> 2.3.1
+[U.]  #39  socat              1.8.0.0 -> 1.8.0.1
+[U.]  #40  svt-av1            2.1.2 -> 2.2.0
+[U.]  #41  unbound            1.20.0-lib -> 1.21.0-lib
+[U.]  #42  vulkan-loader      1.3.283.0 -> 1.3.290.0
+[U.]  #43  wayland            1.23.0 -> 1.23.1
+[U.]  #44  xdg-dbus-proxy     0.1.5 -> 0.1.6
+[U.]  #45  zoxide             0.9.4 -> 0.9.5
+Added packages:
+[A.]  #1  krb5  1.21.3-lib
+[A.]  #2  llvm  18.1.8-lib
+Closure size: 712 -> 713 (659 paths added, 658 paths removed, delta +1, disk usage +521.2MiB).
+```
+### lock change:
+```
+• Updated input 'darwin':
+    'github:LnL7/nix-darwin/a8968d88e5a537b0491f68ce910749cd870bdbef?narHash=sha256-P5zMA17kD9tqiqMuNXwupkM7buM3gMNtoZ1VuJTRDE4%3D' (2024-08-22)
+  → 'github:LnL7/nix-darwin/6374cd7e50aa057a688142eed2345083047ad884?narHash=sha256-i0h300W3t7Q7PltJPmucj%2Bub45SE/bNQ%2Bpf83tasYAQ%3D' (2024-09-17)
+• Updated input 'doomemacs':
+    'github:doomemacs/doomemacs/0c1c37ad875a15ce8dae628856770af15701a0cf?narHash=sha256-w0qyMOmdHisyQRPL%2BjBB3sP/xwQEFuExGmuH68Ykp1w%3D' (2024-08-23)
+  → 'github:doomemacs/doomemacs/c8a5e6ec1ca85a35f94d6c820c2fd8888373c2ae?narHash=sha256-iwpBfHuJUd5jJjSGSXqlU9V0XKRNTeh6PvUq8riDnCE%3D' (2024-09-17)
+• Updated input 'emacs-overlay':
+    'github:nix-community/emacs-overlay/ae06276558dc3500804032c7d5457095f17561b7?narHash=sha256-VOZSEuWgdjrLKvn/WprrkHofJKOh9xWknibAWIkQftE%3D' (2024-08-24)
+  → 'github:nix-community/emacs-overlay/d10ed46cb14c2d6083b3174b52a0c1fbdebe6746?narHash=sha256-TTZk4%2BBiHGmgVpo9x3vjra%2Bd2NHak1/xzPb%2BQOSbU2k%3D' (2024-09-19)
+• Updated input 'emacs-overlay/flake-utils':
+    'github:numtide/flake-utils/b1d9ab70662946ef0850d488da1c9019f3a9752a?narHash=sha256-SZ5L6eA7HJ/nmkzGG7/ISclqe6oZdOZTNoesiInkXPQ%3D' (2024-03-11)
+  → 'github:numtide/flake-utils/c1dfcf08411b08f6b8615f7d8971a2bfa81d5e8a?narHash=sha256-X6rJYSESBVr3hBoH0WbKE5KvhPU5bloyZ2L4K60/fPQ%3D' (2024-09-17)
+• Updated input 'emacs-overlay/nixpkgs':
+    'github:NixOS/nixpkgs/c374d94f1536013ca8e92341b540eba4c22f9c62?narHash=sha256-Z/ELQhrSd7bMzTO8r7NZgi9g5emh%2BaRKoCdaAv5fiO0%3D' (2024-08-21)
+  → 'github:NixOS/nixpkgs/99dc8785f6a0adac95f5e2ab05cc2e1bf666d172?narHash=sha256-gI9kkaH0ZjakJOKrdjaI/VbaMEo9qBbSUl93DnU7f4c%3D' (2024-09-16)
+• Updated input 'emacs-overlay/nixpkgs-stable':
+    'github:NixOS/nixpkgs/797f7dc49e0bc7fab4b57c021cdf68f595e47841?narHash=sha256-Qb9MhKBUTCfWg/wqqaxt89Xfi6qTD3XpTzQ9eXi3JmE%3D' (2024-08-22)
+  → 'github:NixOS/nixpkgs/086b448a5d54fd117f4dc2dee55c9f0ff461bdc1?narHash=sha256-2yV8nmYE1p9lfmLHhOCbYwQC/W8WYfGQABoGzJOb1JQ%3D' (2024-09-16)
+• Updated input 'flake-utils':
+    'github:numtide/flake-utils/b1d9ab70662946ef0850d488da1c9019f3a9752a?narHash=sha256-SZ5L6eA7HJ/nmkzGG7/ISclqe6oZdOZTNoesiInkXPQ%3D' (2024-03-11)
+  → 'github:numtide/flake-utils/c1dfcf08411b08f6b8615f7d8971a2bfa81d5e8a?narHash=sha256-X6rJYSESBVr3hBoH0WbKE5KvhPU5bloyZ2L4K60/fPQ%3D' (2024-09-17)
+• Updated input 'home-manager':
+    'github:nix-community/home-manager/c2cd2a52e02f1dfa1c88f95abeb89298d46023be?narHash=sha256-UNky3lJNGQtUEXT2OY8gMxejakSWPTfWKvpFkpFlAfM%3D' (2024-08-23)
+  → 'github:nix-community/home-manager/d2493de5cd1da06b6a4c3e97f4e7d5dd791df457?narHash=sha256-/bxaYvIK6/d3zqpW26QFS0rqfd0cO4qreSNWvYLTl/w%3D' (2024-09-17)
+• Updated input 'home-manager/nixpkgs':
+    'github:NixOS/nixpkgs/5e0ca22929f3342b19569b21b2f3462f053e497b?narHash=sha256-M0xJ3FbDUc4fRZ84dPGx5VvgFsOzds77KiBMW/mMTnI%3D' (2024-08-09)
+  → 'github:NixOS/nixpkgs/4f807e8940284ad7925ebd0a0993d2a1791acb2f?narHash=sha256-IiA3jfbR7K/B5%2B9byVi9BZGWTD4VSbWe8VLpp9B/iYk%3D' (2024-09-11)
+• Updated input 'nixpkgs-master':
+    'github:NixOS/nixpkgs/0b6fa5ee40c14df33494d4ed9da1251e872fb0c2?narHash=sha256-oZW7ymnqv9yyd6Ey04j/fjp%2BX7kayKEpBUbnAHlcGU4%3D' (2024-08-24)
+  → 'github:NixOS/nixpkgs/f93ebff8dc3a3dbf6d82ddc2ed221fa4a5209f91?narHash=sha256-fozKcZqE%2ByPvP69vbCZAxSKnLUDTvjBmAKGdey%2B1G3I%3D' (2024-09-19)
+• Updated input 'nixpkgs-stable':
+    'github:NixOS/nixpkgs/43b394aa9f470b20f0e0cb22f8200b8455d92034?narHash=sha256-I3NUGHDSYdJpvGiIf8MRmxVuTnFtQIWLPCzOUrdpPHo%3D' (2024-08-23)
+  → 'github:NixOS/nixpkgs/aecd17c0dbd112d6df343827d9324f071ef9c502?narHash=sha256-w235Gx0YLnjY8M9J07L5T/FiWA56xkD5JMD9sRXjHAA%3D' (2024-09-19)
+• Updated input 'nixpkgs-unstable':
+    'github:NixOS/nixpkgs/5de1564aed415bf9d0f281461babc2d101dd49ff?narHash=sha256-Nf/iQWamRVAwAPFccQMfm5Qcf%2BrLLnU1rWG3f9orDVE%3D' (2024-08-22)
+  → 'github:NixOS/nixpkgs/658e7223191d2598641d50ee4e898126768fe847?narHash=sha256-zACxiQx8knB3F8%2BZe%2B1BpiYrI%2BCbhxyWpcSID9kVhkQ%3D' (2024-09-17)
+• Updated input 'powerlevel10k':
+    'github:romkatv/powerlevel10k/a42e374e25226d2032a38b38fc544ec1d65b0d01?narHash=sha256-H7DYDLNANFnws3pCANnMJAQIMDXCf9S%2BggUOGUy1oO0%3D' (2024-08-21)
+  → 'github:romkatv/powerlevel10k/087405df7838f4c3e835025699bd7b98b9731acc?narHash=sha256-cI7Nf%2BW02xfnarri7Dy%2BnXXpq5u%2BGgh7HKk1%2B%2B0Qq4Q%3D' (2024-09-17)
+• Updated input 'spacemacs':
+    'github:syl20bnr/spacemacs/b3e43f15c0cb69222b558da0b6ac6267d49203fe?narHash=sha256-a/vbSJd4qm1PKFZRvi24OU8cccqMzLsPF1l8BT5i/fg%3D' (2024-08-22)
+  → 'github:syl20bnr/spacemacs/08cb523b1b34f6473248c25925022cd1b175e06a?narHash=sha256-YhMcMsICdVGpf5vTzWB6ubdRgPsRKJpnCgetCskGQeY%3D' (2024-09-19)
+```
 ## Update 2024-08-24
 ```go
 Version changes:
