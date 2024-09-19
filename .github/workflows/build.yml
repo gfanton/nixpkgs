@@ -21,8 +21,6 @@ jobs:
   build-macos-env:
     name: Build/cache macOS Nix env
     runs-on: macos-14
-    env:
-      CONFIG_NAME: githubCI
 
     steps:
     - name: Checkout repository
@@ -48,20 +46,14 @@ jobs:
         # Prevent conflict between Cachix installed by workflow and the one installed in the config
         nix-env --set-flag priority 1 cachix
 
-        # Build to bootstrap config
-        nix build .#darwinConfigurations.bootstrap-arm.system
-
-        # Switch to bootstrap config
-        ./result/sw/bin/darwin-rebuild switch --flake .#bootstrap-arm
-
+        # Build and Switch to config
+        nix build .#darwinConfigurations.githubCI.system
         # Build and switch to full config
-        /run/current-system/sw/bin/zsh -c "darwin-rebuild switch --flake .#$CONFIG_NAME"
+        /run/current-system/sw/bin/zsh -c "darwin-rebuild switch --flake .#githubCI
 
   build-linux-env:
     name: Build/cache Linux Nix env
     runs-on: ubuntu-latest
-    env:
-      CONFIG_NAME: githubCI
     steps:
     - name: Checkout repository
       uses: actions/checkout@v3
@@ -83,4 +75,4 @@ jobs:
         # Prevent conflict between Cachix installed by workflow and the one installed in the config
         nix-env --set-flag priority 1 cachix
         # Build and switch to home-manager env
-        nix build ".#homeConfigurations.$CONFIG_NAME.activationPackage"; ./result/activate
+        nix build ".#homeConfigurations.githubCI.activationPackage"; ./result/activate
