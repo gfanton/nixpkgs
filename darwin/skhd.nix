@@ -11,7 +11,7 @@ let
 in
 {
   services.skhd = {
-    enable = true;
+    enable = false;
     skhdConfig = ''
       # open terminal
       cmd - return [

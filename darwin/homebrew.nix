@@ -24,6 +24,7 @@ in
     "koekeishiya/formulae"
     "FelixKratz/formulae"
     "withgraphite/tap"
+    "nikitabobko/tap"
   ];
 
   # Prefer installing application from the Mac App Store
@@ -51,6 +52,7 @@ in
     "whisky"
     "keycastr"
     "numi"
+    "aerospace"
   ];
 
   # Configuration related to casks
@@ -64,6 +66,7 @@ in
   homebrew.brews = [
     { name = "ical-buddy"; }
     "graphite"
+
     # {
     #   name = "koekeishiya/formulae/yabai";
     # }
