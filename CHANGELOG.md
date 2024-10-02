@@ -1,3 +1,64 @@
+## Update 2024-10-02
+```go
+Version changes:
+[U.]  #01  btop               1.3.2 -> 1.4.0
+[U.]  #02  delve              1.23.0 -> 1.23.1
+[U.]  #03  docker             27.2.0 -> 27.3.0
+[U.]  #04  docker-buildx      0.16.2 -> 0.17.1
+[U.]  #05  docker-compose     2.29.2 -> 2.29.7
+[U.]  #06  docker-containerd  27.2.0 -> 27.3.0
+[U.]  #07  docker-init        27.2.0 -> 27.3.0
+[U.]  #08  docker-runc        27.2.0 -> 27.3.0
+[U.]  #09  eza                0.19.3, 0.19.3-man -> 0.20.0, 0.20.0-man
+[U.]  #10  kitty              0.36.1, 0.36.1-terminfo -> 0.36.4, 0.36.4-terminfo
+[U.]  #11  lazygit            0.44.0 -> 0.44.1
+[U.]  #12  libmanette         0.2.7 -> 0.2.9
+[U.]  #13  moby               27.2.0 -> 27.3.0
+[C.]  #14  nix                2.18.5, 2.18.5-man, 2.19.4, 2.19.4-man, 2.19.6, 2.19.6-man -> 2.18.8, 2.18.8-man, 2.19.4, 2.19.4-man, 2.19.6, 2.19.6-man
+[U.]  #15  oh-my-zsh          2024-09-01 -> 2024-09-22
+[U.]  #16  tmux               3.4, 3.4-man -> 3.5, 3.5-man
+[U.]  #17  webkitgtk          2.44.3+abi=4.0 -> 2.46.0+abi=4.0
+[U.]  #18  zoxide             0.9.5 -> 0.9.6
+Added packages:
+[A.]  #1  hyphen  2.8.8
+Closure size: 713 -> 714 (34 paths added, 33 paths removed, delta +1, disk usage +4.0MiB).
+```
+### lock change:
+```
+• Updated input 'darwin':
+    'github:LnL7/nix-darwin/6374cd7e50aa057a688142eed2345083047ad884?narHash=sha256-i0h300W3t7Q7PltJPmucj%2Bub45SE/bNQ%2Bpf83tasYAQ%3D' (2024-09-17)
+  → 'github:LnL7/nix-darwin/f61d5f2051a387a15817007220e9fb3bbead57b3?narHash=sha256-8XZp5XO2FC6INZEZ2WlwErtvFVpl45ACn8CJ2hfTA0Y%3D' (2024-09-30)
+• Updated input 'emacs-overlay':
+    'github:nix-community/emacs-overlay/d10ed46cb14c2d6083b3174b52a0c1fbdebe6746?narHash=sha256-TTZk4%2BBiHGmgVpo9x3vjra%2Bd2NHak1/xzPb%2BQOSbU2k%3D' (2024-09-19)
+  → 'github:nix-community/emacs-overlay/57f92101924dff3eb03689bf9ba0ce0c49a6d6e8?narHash=sha256-I%2BwTQnZgZaNE7fj1fqeajvrMH%2BfPUl1ofD1JAp2uPKo%3D' (2024-10-02)
+• Updated input 'emacs-overlay/nixpkgs':
+    'github:NixOS/nixpkgs/99dc8785f6a0adac95f5e2ab05cc2e1bf666d172?narHash=sha256-gI9kkaH0ZjakJOKrdjaI/VbaMEo9qBbSUl93DnU7f4c%3D' (2024-09-16)
+  → 'github:NixOS/nixpkgs/06cf0e1da4208d3766d898b7fdab6513366d45b9?narHash=sha256-S5kVU7U82LfpEukbn/ihcyNt2%2BEvG7Z5unsKW9H/yFA%3D' (2024-09-29)
+• Updated input 'emacs-overlay/nixpkgs-stable':
+    'github:NixOS/nixpkgs/086b448a5d54fd117f4dc2dee55c9f0ff461bdc1?narHash=sha256-2yV8nmYE1p9lfmLHhOCbYwQC/W8WYfGQABoGzJOb1JQ%3D' (2024-09-16)
+  → 'github:NixOS/nixpkgs/1719f27dd95fd4206afb9cec9f415b539978827e?narHash=sha256-9/79hjQc9%2BxyH%2BQxeMcRsA6hDyw6Z9Eo1/oxjvwirLk%3D' (2024-09-30)
+• Updated input 'fzf-tab':
+    'github:Aloxaf/fzf-tab/7fed01afba9392b6392408b9a0cf888522ed7a10?narHash=sha256-By6Bgc8Fu79eNTSfCusT57RP7P3XHeekjp4YhsKZS1Y%3D' (2024-08-02)
+  → 'github:Aloxaf/fzf-tab/cf57116eb2410139b8bd78fcb793dd84db79e28f?narHash=sha256-IA7JoauKkNOMETUTH4ekKIZWgwmGuEfu2ZN7BKhCXSA%3D' (2024-09-25)
+• Updated input 'home-manager':
+    'github:nix-community/home-manager/d2493de5cd1da06b6a4c3e97f4e7d5dd791df457?narHash=sha256-/bxaYvIK6/d3zqpW26QFS0rqfd0cO4qreSNWvYLTl/w%3D' (2024-09-17)
+  → 'github:nix-community/home-manager/ffe2d07e771580a005e675108212597e5b367d2d?narHash=sha256-4/vacp3CwdGoPf8U4e/N8OsGYtO09WTcQK5FqYfJbKs%3D' (2024-09-26)
+• Updated input 'home-manager/nixpkgs':
+    'github:NixOS/nixpkgs/4f807e8940284ad7925ebd0a0993d2a1791acb2f?narHash=sha256-IiA3jfbR7K/B5%2B9byVi9BZGWTD4VSbWe8VLpp9B/iYk%3D' (2024-09-11)
+  → 'github:NixOS/nixpkgs/9357f4f23713673f310988025d9dc261c20e70c6?narHash=sha256-bvGoiQBvponpZh8ClUcmJ6QnsNKw0EMrCQJARK3bI1c%3D' (2024-09-21)
+• Updated input 'nixpkgs-master':
+    'github:NixOS/nixpkgs/f93ebff8dc3a3dbf6d82ddc2ed221fa4a5209f91?narHash=sha256-fozKcZqE%2ByPvP69vbCZAxSKnLUDTvjBmAKGdey%2B1G3I%3D' (2024-09-19)
+  → 'github:NixOS/nixpkgs/35d02934a17a4fdc53a8857826ed35f3694e5f1c?narHash=sha256-%2Bt0jCdN1AFWLpi%2BXwHK4r/Jp%2BpJfo9ePHIy%2B4/BUCI4%3D' (2024-10-02)
+• Updated input 'nixpkgs-stable':
+    'github:NixOS/nixpkgs/aecd17c0dbd112d6df343827d9324f071ef9c502?narHash=sha256-w235Gx0YLnjY8M9J07L5T/FiWA56xkD5JMD9sRXjHAA%3D' (2024-09-19)
+  → 'github:NixOS/nixpkgs/27bdd5c053af08606a1ec142ef3c1e8e359dcdaa?narHash=sha256-xHBVJWHG5lo%2B8U1gtgryQa8Pf%2BsFUYX2GQjuV0kdTFo%3D' (2024-10-02)
+• Updated input 'nixpkgs-unstable':
+    'github:NixOS/nixpkgs/658e7223191d2598641d50ee4e898126768fe847?narHash=sha256-zACxiQx8knB3F8%2BZe%2B1BpiYrI%2BCbhxyWpcSID9kVhkQ%3D' (2024-09-17)
+  → 'github:NixOS/nixpkgs/d78d09350ac7dfe503cf48cbc59764aef4157b9a?narHash=sha256-5jw7zwOcWOpxTO6NCzmFZfq0klNGA%2Bktw%2BYb3n35eUQ%3D' (2024-10-01)
+• Updated input 'spacemacs':
+    'github:syl20bnr/spacemacs/08cb523b1b34f6473248c25925022cd1b175e06a?narHash=sha256-YhMcMsICdVGpf5vTzWB6ubdRgPsRKJpnCgetCskGQeY%3D' (2024-09-19)
+  → 'github:syl20bnr/spacemacs/2fce156bb845e0f5c53b3d0ba5a1e41606ef8799?narHash=sha256-ft5AZBe4BavIOq5sUiVlrIQmiw6BjZdA6o9QXR9cFfY%3D' (2024-09-21)
+```
 ## Update 2024-09-19
 ```go
 Version changes:
