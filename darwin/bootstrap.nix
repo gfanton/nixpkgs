@@ -59,5 +59,13 @@
 
   # Used for backwards compatibility, please read the changelog before changing.
   # $ darwin-rebuild changelog
-  system.stateVersion = 4;
+  system = {
+    stateVersion = 4;
+    activationScripts.postActivation.text = ''
+      # Stop iTunes from responding to the keyboard media keys
+      # Disable monitor wake up
+      sudo pmset powernap 0
+      sudo pmset tcpkeepalive 0
+    '';
+  };
 }

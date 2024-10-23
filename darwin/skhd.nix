@@ -20,6 +20,9 @@ in
           ".kitty-wrapped" ~
       ]
 
+      # sleep mode
+      0xB2 : pmset displaysleepnow
+
       # open new arc window
       # cmd + <-
       cmd + shift - return : osascript -e 'tell application "Arc" to make new window' -e 'tell application "Arc" to activate'
