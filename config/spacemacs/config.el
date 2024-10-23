@@ -124,6 +124,8 @@ This function should only modify configuration layer settings."
                                       templ-ts-mode
                                       ;; my custom mode
                                       (gno-mode :location "~/.spacemacs.d/packages/gno")
+                                      ;; catppuccin: main them
+                                      (go-template-mode :location "~/.spacemacs.d/packages/gotemplate")
                                       )
 
    ;; A list of packages that cannot be updated.
@@ -525,6 +527,13 @@ It should only modify the values of Spacemacs settings."
    ;; (default '("rg" "ag" "pt" "ack" "grep"))
    dotspacemacs-search-tools '("rg" "ag" "pt" "ack" "grep")
 
+   ;; The backend used for undo/redo functionality. Possible values are
+   ;; `undo-fu', `undo-redo' and `undo-tree' see also `evil-undo-system'.
+   ;; Note that saved undo history does not get transferred when changing
+   ;; your undo system. The default is currently `undo-fu' as `undo-tree'
+   ;; is not maintained anymore and `undo-redo' is very basic."
+   dotspacemacs-undo-system 'undo-fu
+
    ;; Format specification for setting the frame title.
    ;; %a - the `abbreviated-file-name', or `buffer-name'
    ;; %t - `projectile-project-name'
@@ -645,6 +654,11 @@ before packages are loaded."
   (require 'templ-ts-mode)
   (add-to-list 'auto-mode-alist '("\\.templ\\'" . templ-ts-mode))
 
+  ;; add go template to mode-alist
+  (require 'go-template-mode)
+  (add-to-list 'auto-mode-alist '("\\.gohtml\\'" . go-template-mode))
+
+
   (setq auto-mode-alist (rassq-delete-all 'go-ts-mode auto-mode-alist))
   (add-to-list 'auto-mode-alist '("\\.go\\'" . go-mode))
 
@@ -679,6 +693,7 @@ before packages are loaded."
   (define-key magit-hunk-section-map (kbd "RET") 'magit-diff-visit-file-other-window)
   (define-key magit-file-section-map (kbd "RET") 'magit-diff-visit-file-other-window)
 
+  (global-set-key (kbd "C-x u") 'vundo)
 
   ;; use aspell istead of ispell
   ;; @FIXME: dont use nixprofil path

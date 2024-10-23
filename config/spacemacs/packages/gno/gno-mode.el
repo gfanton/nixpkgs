@@ -31,10 +31,10 @@
 (define-derived-mode gno-mode go-mode "GNO"
   "Major mode for GNO files, an alias for go-mode."
   (setq-local tab-width gno-tab-width) ;; Use the custom gno-tab-width variable
-  ;; FIXME: disable lsp for now
-  (when (fboundp 'lsp-disconnect) ;; Check if the lsp-disconnect function is available
-    (lsp-disconnect)) ;; lsp doesn't work with gno yet
-  (gno-mode-setup))
+  ;; (flycheck-mode)
+  ;; If LSP is available, configure and start it.
+  (when (fboundp 'lsp)
+    (lsp)))
 
 ;;;###autoload
 (add-to-list 'auto-mode-alist '("\\.gno\\'" . gno-mode))
