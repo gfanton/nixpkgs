@@ -15,7 +15,7 @@ in
 {
   services.jankyborders = {
     enable = true;
-    width = 9.0;
+    width = 8.0;
     active_color = "0xff${hexYellow}";
     inactive_color = "0xff414550"; # arbitraty color
   };

@@ -8,7 +8,7 @@ let
     ;
 in
 {
-  my-gnolint = pkgs.buildGo121Module rec {
+  my-gnolint = pkgs.buildGo123Module rec {
     pname = "gnolint";
     vendorHash = "sha256-OLHcsJrLC4rzuqtlrr2+MMu1LYbH5DuC7fRcC9Bi6Kw=";
     version = "b3ff1d71fcf09be37d3356908a8cc5147304c763";

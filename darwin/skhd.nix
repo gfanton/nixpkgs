@@ -11,7 +11,7 @@ let
 in
 {
   services.skhd = {
-    enable = true;
+    enable = false;
     skhdConfig = ''
       # open terminal
       cmd - return [
@@ -19,6 +19,9 @@ in
           "kitty" ~
           ".kitty-wrapped" ~
       ]
+
+      # sleep mode
+      0xB2 : pmset displaysleepnow
 
       # open new arc window
       # cmd + <-

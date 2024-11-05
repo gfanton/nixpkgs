@@ -14,7 +14,7 @@ let
 in
 {
   services.yabai = {
-    enable = true;
+    enable = false;
     enableScriptingAddition = false;
     config = {
       layout = "bsp";
