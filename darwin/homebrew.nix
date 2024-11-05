@@ -52,7 +52,7 @@ in
     "whisky"
     "keycastr"
     "numi"
-    "aerospace"
+    "amethyst"
   ];
 
   # Configuration related to casks
