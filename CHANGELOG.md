@@ -1,3 +1,259 @@
+## Update 2024-11-05
+```go
+Version changes:
+[U.]  #001  alsa-lib                   1.2.11 -> 1.2.12
+[U.]  #002  alsa-ucm-conf              1.2.11 -> 1.2.12
+[U.]  #003  at-spi2-core               2.52.0 -> 2.54.0
+[C.]  #004  aws-c-mqtt                 0.10.4, 0.10.5 -> 0.10.5 x2
+[C.]  #005  bash                       5.2p32 x3, 5.2p32-man -> 5.2p32 x2, 5.2p37, 5.2p37-man
+[U.]  #006  bash-interactive           5.2p32 -> 5.2p37
+[U.]  #007  binutils                   2.42, 2.42-lib -> 2.43.1, 2.43.1-lib
+[U.]  #008  binutils-wrapper           2.42 -> 2.43.1
+[U.]  #009  bluez                      5.76 -> 5.78
+[C*]  #010  cachix                     1.7.4-bin, 1.7.5-bin -> 1.7.5-bin x2
+[U.]  #011  cairo                      1.18.0 -> 1.18.2
+[U.]  #012  cmake                      3.29.6 -> 3.30.4
+[U.]  #013  cryptsetup                 2.7.3 -> 2.7.5
+[U.]  #014  cups                       2.4.10-lib -> 2.4.11-lib
+[C.]  #015  curl                       8.9.1 x3, 8.9.1-bin, 8.9.1-man -> 8.10.1 x2, 8.10.1-bin, 8.10.1-man, 8.9.1
+[U.]  #016  direnv                     2.34.0 -> 2.35.0
+[U.]  #017  docker                     27.3.0 -> 27.3.1
+[U.]  #018  docker-buildx              0.17.1 -> 0.18.0
+[U.]  #019  docker-containerd          27.3.0 -> 27.3.1
+[U.]  #020  docker-init                27.3.0 -> 27.3.1
+[U.]  #021  docker-runc                27.3.0 -> 27.3.1
+[U.]  #022  ell                        0.67 -> 0.69
+[C.]  #023  expat                      2.6.2, 2.6.3 -> 2.6.3 x2
+[U.]  #024  eza                        0.20.0, 0.20.0-man -> 0.20.6, 0.20.6-man
+[U.]  #025  ffmpeg                     7.0.2-data, 7.0.2-lib -> 7.1-data, 7.1-lib
+[U.]  #026  ffmpeg-headless            6.1.2-data, 6.1.2-lib -> 7.1-data, 7.1-lib
+[U.]  #027  fluidsynth                 2.3.5 -> 2.3.6
+[U.]  #028  freetype                   2.13.2 -> 2.13.3
+[U.]  #029  fribidi                    1.0.15 -> 1.0.16
+[U.]  #030  fzf                        0.55.0, 0.55.0-man -> 0.56.0, 0.56.0-man
+[U.]  #031  gawk                       5.2.2 -> 5.3.1
+[U.]  #032  getent-glibc               2.39-52 -> 2.40-36
+[U.]  #033  gh                         2.57.0 -> 2.60.0
+[U.]  #034  git                        2.46.0, 2.46.0-doc -> 2.47.0, 2.47.0-doc
+[U.]  #035  glib                       2.80.4 -> 2.82.1
+[C.]  #036  glibc                      2.39-52 x2, 2.39-52-bin, 2.39-52-dev, 2.39-52-getent, 2.40-36 -> 2.39-52, 2.40-36 x2, 2.40-36-bin, 2.40-36-dev, 2.40-36-getent
+[U.]  #037  glibc-locales              2.39-52 -> 2.40-36
+[U.]  #038  go                         1.22.7 -> 1.22.8
+[U.]  #039  gobject-introspection      1.80.1 -> 1.82.0
+[U.]  #040  gotools                    0.22.0 -> 0.25.0
+[U.]  #041  gsettings-desktop-schemas  46.0 -> 47.1
+[U.]  #042  gst-plugins-bad            1.24.3 -> 1.24.7
+[U.]  #043  gst-plugins-base           1.24.3 -> 1.24.7
+[U.]  #044  gstreamer                  1.24.3 -> 1.24.7
+[U.]  #045  gtest                      1.14.0 -> 1.15.2
+[U.]  #046  hwdata                     0.385 -> 0.388
+[U.]  #047  imagemagick                7.1.1-38 -> 7.1.1-39
+[U.]  #048  iproute2                   6.10.0 -> 6.11.0
+[U.]  #049  iso-codes                  4.16.0 -> 4.17.0
+[C.]  #050  jq                         1.7.1, 1.7.1-bin, 1.7.1-doc, 1.7.1-lib, 1.7.1-man -> 1.7.1, 1.7.1-bin, 1.7.1-man
+[U.]  #051  json-glib                  1.8.0 -> 1.10.0
+[U.]  #052  kexec-tools                2.0.28 -> 2.0.29
+[U.]  #053  kitty                      0.36.4, 0.36.4-terminfo -> 0.37.0, 0.37.0-terminfo
+[U.]  #054  ldns                       1.8.3 -> 1.8.4
+[U.]  #055  less                       661, 661-man -> 668, 668-man
+[U.]  #056  libXi                      1.8.1 -> 1.8.2
+[U.]  #057  libXtst                    1.2.4 -> 1.2.5
+[U.]  #058  libaom                     3.9.1, 3.9.1-bin, 3.9.1-dev -> 3.10.0, 3.10.0-bin, 3.10.0-dev
+[U.]  #059  libapparmor                4.0.1 -> 4.0.3
+[C.]  #060  libarchive                 3.7.4-lib x2 -> 3.7.4-lib, 3.7.6-lib
+[U.]  #061  libavif                    1.1.0 -> 1.1.1
+[U.]  #062  libbpf                     1.4.5 -> 1.4.6
+[U.]  #063  libcamera                  0.3.1 -> 0.3.2
+[U.]  #064  libdeflate                 1.20 -> 1.22
+[U.]  #065  libdrm                     2.4.122 -> 2.4.123
+[U.]  #066  libevdev                   1.13.2 -> 1.13.3
+[U.]  #067  libjxl                     0.10.3 -> 0.11.0
+[U.]  #068  libmpg123                  1.32.6 -> 1.32.7
+[U.]  #069  libnetfilter_conntrack     1.0.9 -> 1.1.0
+[U.]  #070  libnftnl                   1.2.7 -> 1.2.8
+[U.]  #071  libnl                      3.8.0 -> 3.10.0
+[U.]  #072  libopenmpt                 0.7.9 -> 0.7.10
+[U.]  #073  libpcap                    1.10.4 -> 1.10.5
+[U.]  #074  libpipeline                1.5.7 -> 1.5.8
+[U.]  #075  libproxy                   0.5.7 -> 0.5.9
+[U.]  #076  libraw                     0.21.2-lib -> 0.21.3-lib
+[U.]  #077  librsvg                    2.58.2 -> 2.58.3
+[U.]  #078  libselinux                 3.6 -> 3.7
+[C.]  #079  libsoup                    2.74.3, 3.4.4 -> 2.74.3, 3.6.0
+[U.]  #080  libssh                     0.10.6 -> 0.11.1
+[U.]  #081  libtiff                    4.6.0 -> 4.7.0
+[U.]  #082  liburcu                    0.14.0 -> 0.14.1
+[C.]  #083  libxml2                    2.13.3, 2.13.4 -> 2.13.4 x2
+[U.]  #084  linux-headers              6.9 -> 6.10
+[C.]  #085  lowdown                    1.1.0-lib x2 -> 1.1.0-lib, 1.2.0-lib
+[U.]  #086  lvm2                       2.03.26-lib -> 2.03.27-lib
+[U.]  #087  lz4                        1.9.4-lib -> 1.10.0-lib
+[U.]  #088  m17n-db                    1.8.5 -> 1.8.7
+[U.]  #089  man-db                     2.12.1 -> 2.13.0
+[U.]  #090  mesa                       24.2.2 -> 24.2.5
+[U.]  #091  moby                       27.3.0 -> 27.3.1
+[U.]  #092  mpg123                     1.32.6 -> 1.32.7
+[U.]  #093  msgpack-c                  6.0.2 -> 6.1.0
+[C.]  #094  nghttp2                    1.62.1-lib, 1.63.0-lib -> 1.63.0-lib x2
+[C.]  #095  nix                        2.18.8, 2.18.8-man, 2.19.6 x2, 2.19.6-man x2 -> 2.19.6, 2.19.6-man, 2.19.7, 2.19.7-man, 2.24.10, 2.24.10-man
+[U.]  #096  oh-my-zsh                  2024-09-22 -> 2024-10-01
+[C.]  #097  openssl                    3.0.14 x2, 3.0.14-bin, 3.0.14-dev, 3.3.2 -> 3.0.14, 3.0.14-bin, 3.0.14-dev, 3.3.2 x2
+[U.]  #098  orc                        0.4.39 -> 0.4.40
+[U.]  #099  pango                      1.52.2 -> 1.54.0
+[U.]  #100  parallel                   20240722, 20240722-man -> 20240922, 20240922-man
+[U.]  #101  pcsclite                   2.2.3-lib -> 2.3.0-lib
+[U.]  #102  perl                       5.38.2 -> 5.40.0
+[U.]  #103  pipewire                   1.2.3 -> 1.2.5
+[U.]  #104  procps                     3.3.17 -> 4.0.4
+[U.]  #105  procs                      0.14.6 -> 0.14.7
+[U.]  #106  protobuf                   25.4 -> 28.2
+[C.]  #107  publicsuffix-list          0-unstable-2024-08-21, 0-unstable-2024-09-10 -> 0-unstable-2024-09-10 x2
+[C.]  #108  python3                    3.11.9, 3.11.9-env x2, 3.12.5 -> 3.11.9, 3.11.9-env x2, 3.12.7
+[C.]  #109  readline                   8.2p10 x2 -> 8.2p10, 8.2p13
+[C.]  #110  s2n-tls                    1.5.1 x2 -> 1.5.1, 1.5.5
+[C.]  #111  sqlite                     3.45.3, 3.46.0, 3.46.0-bin, 3.46.1 -> 3.45.3, 3.46.1 x2, 3.46.1-bin
+[U.]  #112  svt-av1                    2.2.0 -> 2.2.1
+[U.]  #113  systemd                    256.4 -> 256.7
+[U.]  #114  systemd-minimal            256.4 -> 256.7
+[U.]  #115  systemd-minimal-libs       256.4 -> 256.7
+[C.]  #116  tmux                       3.5, 3.5-man -> 3.5a, 3.5a-man
+[U.]  #117  tree-sitter                0.22.6 -> 0.24.3
+[C.]  #118  tzdata                     2024a x2 -> 2024a, 2024b
+[U.]  #119  unbound                    1.21.0-lib -> 1.21.1-lib
+[U.]  #120  vulkan-loader              1.3.290.0 -> 1.3.296.0
+[U.]  #121  webkitgtk                  2.46.0+abi=4.0 -> 2.46.3+abi=4.0
+[U.]  #122  xfsprogs                   6.9.0, 6.9.0-bin -> 6.11.0, 6.11.0-bin
+[U.]  #123  xkeyboard-config           2.42 -> 2.43
+[C.]  #124  xz                         5.4.7, 5.6.2 x2, 5.6.2-bin -> 5.4.7, 5.6.2, 5.6.3, 5.6.3-bin
+Added packages:
+[A.]  #01  fftw-double                       3.3.10
+[A.]  #02  git-minimal                       2.47.0
+[A.]  #03  libgit2                           1.8.1-lib
+[A.]  #04  libxshmfence                      1.3.2
+[A.]  #05  perl5.40.0-Authen-SASL            2.1700
+[A.]  #06  perl5.40.0-CGI                    4.59
+[A.]  #07  perl5.40.0-CGI-Fast               2.16
+[A.]  #08  perl5.40.0-Clone                  0.46
+[A.]  #09  perl5.40.0-Digest-HMAC            1.04
+[A.]  #10  perl5.40.0-Encode-Locale          1.05
+[A.]  #11  perl5.40.0-FCGI                   0.82
+[A.]  #12  perl5.40.0-FCGI-ProcManager       0.28
+[A.]  #13  perl5.40.0-File-Listing           6.16
+[A.]  #14  perl5.40.0-HTML-Parser            3.81
+[A.]  #15  perl5.40.0-HTML-TagCloud          0.38
+[A.]  #16  perl5.40.0-HTML-Tagset            3.20
+[A.]  #17  perl5.40.0-HTTP-CookieJar         0.014
+[A.]  #18  perl5.40.0-HTTP-Cookies           6.10
+[A.]  #19  perl5.40.0-HTTP-Daemon            6.16
+[A.]  #20  perl5.40.0-HTTP-Date              6.06
+[A.]  #21  perl5.40.0-HTTP-Message           6.45
+[A.]  #22  perl5.40.0-HTTP-Negotiate         6.01
+[A.]  #23  perl5.40.0-IO-HTML                1.004
+[A.]  #24  perl5.40.0-IO-Socket-SSL          2.083
+[A.]  #25  perl5.40.0-LWP-MediaTypes         6.04
+[A.]  #26  perl5.40.0-Mozilla-CA             20230821
+[A.]  #27  perl5.40.0-Net-HTTP               6.23
+[A.]  #28  perl5.40.0-Net-SMTP-SSL           1.04
+[A.]  #29  perl5.40.0-Net-SSLeay             1.92
+[A.]  #30  perl5.40.0-TermReadKey            2.38
+[A.]  #31  perl5.40.0-Test-Fatal             0.017
+[A.]  #32  perl5.40.0-Test-Needs             0.002010
+[A.]  #33  perl5.40.0-Test-RequiresInternet  0.05
+[A.]  #34  perl5.40.0-TimeDate               2.33
+[A.]  #35  perl5.40.0-Try-Tiny               0.31
+[A.]  #36  perl5.40.0-URI                    5.21
+[A.]  #37  perl5.40.0-WWW-RobotRules         6.02
+[A.]  #38  perl5.40.0-libnet                 3.15
+[A.]  #39  perl5.40.0-libwww-perl            6.72
+[A.]  #40  raptor2                           2.0.16
+[A.]  #41  tinysparql                        3.8.0
+[A.]  #42  vid.stab-unstable                 2022-05-30
+Removed packages:
+[R.]  #01  libargon2                         20190702
+[R.]  #02  libogg                            1.3.5
+[R.]  #03  perl5.38.2-Authen-SASL            2.1700
+[R.]  #04  perl5.38.2-CGI                    4.59
+[R.]  #05  perl5.38.2-CGI-Fast               2.16
+[R.]  #06  perl5.38.2-Clone                  0.46
+[R.]  #07  perl5.38.2-Digest-HMAC            1.04
+[R.]  #08  perl5.38.2-Encode-Locale          1.05
+[R.]  #09  perl5.38.2-FCGI                   0.82
+[R.]  #10  perl5.38.2-FCGI-ProcManager       0.28
+[R.]  #11  perl5.38.2-File-Listing           6.16
+[R.]  #12  perl5.38.2-HTML-Parser            3.81
+[R.]  #13  perl5.38.2-HTML-TagCloud          0.38
+[R.]  #14  perl5.38.2-HTML-Tagset            3.20
+[R.]  #15  perl5.38.2-HTTP-CookieJar         0.014
+[R.]  #16  perl5.38.2-HTTP-Cookies           6.10
+[R.]  #17  perl5.38.2-HTTP-Daemon            6.16
+[R.]  #18  perl5.38.2-HTTP-Date              6.06
+[R.]  #19  perl5.38.2-HTTP-Message           6.45
+[R.]  #20  perl5.38.2-HTTP-Negotiate         6.01
+[R.]  #21  perl5.38.2-IO-HTML                1.004
+[R.]  #22  perl5.38.2-IO-Socket-SSL          2.083
+[R.]  #23  perl5.38.2-LWP-MediaTypes         6.04
+[R.]  #24  perl5.38.2-Mozilla-CA             20230821
+[R.]  #25  perl5.38.2-Net-HTTP               6.23
+[R.]  #26  perl5.38.2-Net-SMTP-SSL           1.04
+[R.]  #27  perl5.38.2-Net-SSLeay             1.92
+[R.]  #28  perl5.38.2-TermReadKey            2.38
+[R.]  #29  perl5.38.2-Test-Fatal             0.017
+[R.]  #30  perl5.38.2-Test-Needs             0.002010
+[R.]  #31  perl5.38.2-Test-RequiresInternet  0.05
+[R.]  #32  perl5.38.2-TimeDate               2.33
+[R.]  #33  perl5.38.2-Try-Tiny               0.31
+[R.]  #34  perl5.38.2-URI                    5.21
+[R.]  #35  perl5.38.2-WWW-RobotRules         6.02
+[R.]  #36  perl5.38.2-libnet                 3.15
+[R.]  #37  perl5.38.2-libwww-perl            6.72
+[R.]  #38  raptor2-unstable                  2022-06-06
+[R.]  #39  tracker                           3.7.3
+Closure size: 714 -> 715 (596 paths added, 595 paths removed, delta +1, disk usage +79.5MiB).
+```
+### lock change:
+```
+• Updated input 'darwin':
+    'github:LnL7/nix-darwin/f61d5f2051a387a15817007220e9fb3bbead57b3?narHash=sha256-8XZp5XO2FC6INZEZ2WlwErtvFVpl45ACn8CJ2hfTA0Y%3D' (2024-09-30)
+  → 'github:LnL7/nix-darwin/0e3f3f017c14467085f15d42343a3aaaacd89bcb?narHash=sha256-5WI9AnsBwhLzVRnQm3Qn9oAbROnuLDQTpaXeyZCK8qw%3D' (2024-11-05)
+• Updated input 'doomemacs':
+    'github:doomemacs/doomemacs/c8a5e6ec1ca85a35f94d6c820c2fd8888373c2ae?narHash=sha256-iwpBfHuJUd5jJjSGSXqlU9V0XKRNTeh6PvUq8riDnCE%3D' (2024-09-17)
+  → 'github:doomemacs/doomemacs/48d043301ef86a7603bbf9e230e839db4112f6ca?narHash=sha256-DB%2BLKM2ErRqu5Kl/TBAFVknfhODf5ri9ZZtNYAgJmYQ%3D' (2024-11-05)
+• Updated input 'emacs-overlay':
+    'github:nix-community/emacs-overlay/57f92101924dff3eb03689bf9ba0ce0c49a6d6e8?narHash=sha256-I%2BwTQnZgZaNE7fj1fqeajvrMH%2BfPUl1ofD1JAp2uPKo%3D' (2024-10-02)
+  → 'github:nix-community/emacs-overlay/0c0c0dba05690c02ea7d508fd59389052c5f6438?narHash=sha256-olT8nqVIOx5A3F1qrO%2BlQtiJY55gtKGt0bUzkEwEyVE%3D' (2024-11-05)
+• Removed input 'emacs-overlay/flake-utils'
+• Removed input 'emacs-overlay/flake-utils/systems'
+• Updated input 'emacs-overlay/nixpkgs':
+    'github:NixOS/nixpkgs/06cf0e1da4208d3766d898b7fdab6513366d45b9?narHash=sha256-S5kVU7U82LfpEukbn/ihcyNt2%2BEvG7Z5unsKW9H/yFA%3D' (2024-09-29)
+  → 'github:NixOS/nixpkgs/7ffd9ae656aec493492b44d0ddfb28e79a1ea25d?narHash=sha256-Dqg6si5CqIzm87sp57j5nTaeBbWhHFaVyG7V6L8k3lY%3D' (2024-11-02)
+• Updated input 'emacs-overlay/nixpkgs-stable':
+    'github:NixOS/nixpkgs/1719f27dd95fd4206afb9cec9f415b539978827e?narHash=sha256-9/79hjQc9%2BxyH%2BQxeMcRsA6hDyw6Z9Eo1/oxjvwirLk%3D' (2024-09-30)
+  → 'github:NixOS/nixpkgs/d063c1dd113c91ab27959ba540c0d9753409edf3?narHash=sha256-edm8WG19kWozJ/GqyYx2VjW99EdhjKwbY3ZwdlPAAlo%3D' (2024-11-04)
+• Updated input 'fzf-tab':
+    'github:Aloxaf/fzf-tab/cf57116eb2410139b8bd78fcb793dd84db79e28f?narHash=sha256-IA7JoauKkNOMETUTH4ekKIZWgwmGuEfu2ZN7BKhCXSA%3D' (2024-09-25)
+  → 'github:Aloxaf/fzf-tab/b6e1b22458a131f835c6fe65bdb88eb45093d2d2?narHash=sha256-4A7zpaO1rNPvS0rrmmxg56rJGpZHnw/g%2Bx5FJd0EshI%3D' (2024-10-11)
+• Updated input 'home-manager':
+    'github:nix-community/home-manager/ffe2d07e771580a005e675108212597e5b367d2d?narHash=sha256-4/vacp3CwdGoPf8U4e/N8OsGYtO09WTcQK5FqYfJbKs%3D' (2024-09-26)
+  → 'github:nix-community/home-manager/8f6ca7855d409aeebe2a582c6fd6b6a8d0bf5661?narHash=sha256-ZFJqIXpvVKvzOVFKWNRDyIyAo%2BGYdmEPaYi1bZB6uf0%3D' (2024-11-03)
+• Updated input 'home-manager/nixpkgs':
+    'github:NixOS/nixpkgs/9357f4f23713673f310988025d9dc261c20e70c6?narHash=sha256-bvGoiQBvponpZh8ClUcmJ6QnsNKw0EMrCQJARK3bI1c%3D' (2024-09-21)
+  → 'github:NixOS/nixpkgs/807e9154dcb16384b1b765ebe9cd2bba2ac287fd?narHash=sha256-l253w0XMT8nWHGXuXqyiIC/bMvh1VRszGXgdpQlfhvU%3D' (2024-10-29)
+• Updated input 'nixpkgs-master':
+    'github:NixOS/nixpkgs/35d02934a17a4fdc53a8857826ed35f3694e5f1c?narHash=sha256-%2Bt0jCdN1AFWLpi%2BXwHK4r/Jp%2BpJfo9ePHIy%2B4/BUCI4%3D' (2024-10-02)
+  → 'github:NixOS/nixpkgs/b7546315457a024bdd2471417bdf8690423c58fb?narHash=sha256-jcss5b/Z7mF1bDVu5c%2BQ7VL%2Bf9tON3aZaDSI951NDPg%3D' (2024-11-05)
+• Updated input 'nixpkgs-stable':
+    'github:NixOS/nixpkgs/27bdd5c053af08606a1ec142ef3c1e8e359dcdaa?narHash=sha256-xHBVJWHG5lo%2B8U1gtgryQa8Pf%2BsFUYX2GQjuV0kdTFo%3D' (2024-10-02)
+  → 'github:NixOS/nixpkgs/12d2bf6310b6b71b4a76ae9c5f2ebec4e3f60bdb?narHash=sha256-JondW3tjHomfZ/9ZA4PobsO2Tiz4AYqPJRHObuutAps%3D' (2024-11-05)
+• Updated input 'nixpkgs-unstable':
+    'github:NixOS/nixpkgs/d78d09350ac7dfe503cf48cbc59764aef4157b9a?narHash=sha256-5jw7zwOcWOpxTO6NCzmFZfq0klNGA%2Bktw%2BYb3n35eUQ%3D' (2024-10-01)
+  → 'github:NixOS/nixpkgs/a04d33c0c3f1a59a2c1cb0c6e34cd24500e5a1dc?narHash=sha256-8AKquNnnSaJRXZxc5YmF/WfmxiHX6MMZZasRP6RRQkE%3D' (2024-11-05)
+• Updated input 'powerlevel10k':
+    'github:romkatv/powerlevel10k/087405df7838f4c3e835025699bd7b98b9731acc?narHash=sha256-cI7Nf%2BW02xfnarri7Dy%2BnXXpq5u%2BGgh7HKk1%2B%2B0Qq4Q%3D' (2024-09-17)
+  → 'github:romkatv/powerlevel10k/8a331b82108dd5c5834cebdc0abbe778cc1a2735?narHash=sha256-nf9LQMNS2xj201wuZ30YW9n19lLYs4IBcp4KXn/0kkc%3D' (2024-10-28)
+• Updated input 'spacemacs':
+    'github:syl20bnr/spacemacs/2fce156bb845e0f5c53b3d0ba5a1e41606ef8799?narHash=sha256-ft5AZBe4BavIOq5sUiVlrIQmiw6BjZdA6o9QXR9cFfY%3D' (2024-09-21)
+  → 'github:syl20bnr/spacemacs/60dcd8cf95f8d4b249c605d25bca2adb0dfd6318?narHash=sha256-BaezCBSTBxw%2BtOl76NfaWpj2RHuNiUkhqywGgvrWqpU%3D' (2024-11-05)
+```
 ## Update 2024-10-02
 ```go
 Version changes:
