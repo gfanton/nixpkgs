@@ -1,3 +1,112 @@
+## Update 2024-12-11
+```go
+Version changes:
+[U.]  #01  aspell-dict-en-computers                  <none> -> 0
+[U.]  #02  aspell-dict-en-science                    <none> -> 0-unstable-2015-07-27
+[C.]  #03  boehm-gc                                  8.2.6 x3 -> 8.2.6, 8.2.8 x2
+[U.]  #04  bubblewrap                                0.10.0 -> 0.11.0
+[C.]  #05  busybox-static-x86_64-unknown-linux-musl  1.36.1 x2 -> 1.36.1
+[U.]  #06  cmake                                     3.30.4 -> 3.30.5
+[C.]  #07  curl                                      8.10.1 x2, 8.10.1-bin, 8.10.1-man, 8.9.1 -> 8.11.0 x2, 8.11.0-bin, 8.11.0-man, 8.9.1
+[U.]  #08  dav1d                                     1.4.3, 1.4.3-dev -> 1.5.0, 1.5.0-dev
+[U.]  #09  docker-compose                            2.29.7 -> 2.30.3
+[C.]  #10  expat                                     2.6.3 x2 -> 2.6.3, 2.6.4
+[U.]  #11  eza                                       0.20.6, 0.20.6-man -> 0.20.11, 0.20.11-man
+[U.]  #12  fzf                                       0.56.0, 0.56.0-man -> 0.56.3, 0.56.3-man
+[U.]  #13  gh                                        2.60.0 -> 2.63.2
+[U.]  #14  git-lfs                                   3.5.1 -> 3.6.0
+[U.]  #15  go                                        1.22.8 -> 1.22.10
+[U.]  #16  harfbuzz                                  9.0.0 -> 10.0.1
+[U.]  #17  harfbuzz-icu                              9.0.0 -> 10.0.1
+[U.]  #18  imagemagick                               7.1.1-39 -> 7.1.1-40
+[U.]  #19  imath                                     3.1.11 -> 3.1.12
+[U.]  #20  lazydocker                                0.23.3 -> 0.24.1
+[C.]  #21  libarchive                                3.7.4-lib, 3.7.6-lib -> 3.7.4-lib, 3.7.7-lib
+[U.]  #22  libbpf                                    1.4.6 -> 1.4.7
+[U.]  #23  libgit2                                   1.8.1-lib -> 1.8.4-lib
+[U.]  #24  libjpeg-turbo                             3.0.3 -> 3.0.4
+[U.]  #25  libmpg123                                 1.32.7 -> 1.32.8
+[U.]  #26  libopenmpt                                0.7.10 -> 0.7.11
+[C.]  #27  libssh2                                   1.11.0 x2 -> 1.11.0, 1.11.1
+[U.]  #28  libvpx                                    1.14.1 -> 1.15.0
+[U.]  #29  mesa                                      24.2.5 -> 24.2.6
+[U.]  #30  mpg123                                    1.32.7 -> 1.32.8
+[C.]  #31  nghttp2                                   1.63.0-lib x2 -> 1.63.0-lib, 1.64.0-lib
+[C.]  #32  nix                                       2.19.6, 2.19.6-man, 2.19.7, 2.19.7-man, 2.24.10, 2.24.10-man -> 2.19.6, 2.19.6-man, 2.24.10, 2.24.10-man
+[U.]  #33  nixfmt-unstable                           2024-08-16 -> 2024-12-04
+[U.]  #34  nodejs                                    20.15.1 -> 20.17.0
+[U.]  #35  openssh                                   9.8p1 -> 9.9p1
+[U.]  #36  parallel                                  20240922, 20240922-man -> 20241122, 20241122-man
+[U.]  #37  pipewire                                  1.2.5 -> 1.2.6
+[U.]  #38  protobuf                                  28.2 -> 28.3
+[C.]  #39  publicsuffix-list                         0-unstable-2024-09-10 x2 -> 0-unstable-2024-09-10, 0-unstable-2024-10-25
+[C.]  #40  python3                                   3.11.9, 3.11.9-env x2, 3.12.7 -> 3.11.10, 3.11.10-env x2, 3.12.7
+[U.]  #41  serd                                      0.30.16 -> 0.32.2
+[C.]  #42  sqlite                                    3.45.3, 3.46.1 x2, 3.46.1-bin -> 3.45.3, 3.46.1 x2, 3.46.1-bin, 3.46.1-man
+[U.]  #43  systemd                                   256.7 -> 256.8
+[U.]  #44  systemd-minimal                           256.7 -> 256.8
+[U.]  #45  systemd-minimal-libs                      256.7 -> 256.8
+[U.]  #46  tree                                      2.1.3 -> 2.2.1
+[C.]  #47  tzdata                                    2024a, 2024b -> 2024b x2
+[U.]  #48  unrar                                     7.0.9 -> 7.1.2
+[U.]  #49  webkitgtk                                 2.46.3+abi=4.0 -> 2.46.4+abi=4.0
+[U.]  #50  wget                                      1.24.5 -> 1.25.0
+Added packages:
+[A.]  #1  busybox  1.36.1
+[A.]  #2  cjson    1.7.18
+[A.]  #3  libogg   1.3.5
+[A.]  #4  librist  0.2.10
+[A.]  #5  mbedtls  3.6.2
+Closure size: 715 -> 718 (661 paths added, 658 paths removed, delta +3, disk usage +1.1MiB).
+```
+### lock change:
+```
+• Updated input 'darwin':
+    'github:LnL7/nix-darwin/0e3f3f017c14467085f15d42343a3aaaacd89bcb?narHash=sha256-5WI9AnsBwhLzVRnQm3Qn9oAbROnuLDQTpaXeyZCK8qw%3D' (2024-11-05)
+  → 'github:LnL7/nix-darwin/a35b08d09efda83625bef267eb24347b446c80b8?narHash=sha256-sQJAxY1TYWD1UyibN/FnN97paTFuwBw3Vp3DNCyKsMk%3D' (2024-12-07)
+• Updated input 'doomemacs':
+    'github:doomemacs/doomemacs/48d043301ef86a7603bbf9e230e839db4112f6ca?narHash=sha256-DB%2BLKM2ErRqu5Kl/TBAFVknfhODf5ri9ZZtNYAgJmYQ%3D' (2024-11-05)
+  → 'github:doomemacs/doomemacs/ba1dca322f9a07bc2b7bec6a98f2c3c55c0bbd77?narHash=sha256-sebujw5VvBWMS%2BwXyjiGF81iyjPM/QQDnw5l7tDJCvk%3D' (2024-12-05)
+• Updated input 'emacs-overlay':
+    'github:nix-community/emacs-overlay/0c0c0dba05690c02ea7d508fd59389052c5f6438?narHash=sha256-olT8nqVIOx5A3F1qrO%2BlQtiJY55gtKGt0bUzkEwEyVE%3D' (2024-11-05)
+  → 'github:nix-community/emacs-overlay/f8ae6558b7d7fb3493937cab280b6869a9195621?narHash=sha256-FfeY6r0pcHHiMOhuyH8W64U5dpOI6o%2BDIg7%2BDVzEnTI%3D' (2024-12-11)
+• Updated input 'emacs-overlay/nixpkgs':
+    'github:NixOS/nixpkgs/7ffd9ae656aec493492b44d0ddfb28e79a1ea25d?narHash=sha256-Dqg6si5CqIzm87sp57j5nTaeBbWhHFaVyG7V6L8k3lY%3D' (2024-11-02)
+  → 'github:NixOS/nixpkgs/a73246e2eef4c6ed172979932bc80e1404ba2d56?narHash=sha256-463SNPWmz46iLzJKRzO3Q2b0Aurff3U1n0nYItxq7jU%3D' (2024-12-09)
+• Updated input 'emacs-overlay/nixpkgs-stable':
+    'github:NixOS/nixpkgs/d063c1dd113c91ab27959ba540c0d9753409edf3?narHash=sha256-edm8WG19kWozJ/GqyYx2VjW99EdhjKwbY3ZwdlPAAlo%3D' (2024-11-04)
+  → 'github:NixOS/nixpkgs/e2605d0744c2417b09f8bf850dfca42fcf537d34?narHash=sha256-NcGumB4Lr6KSDq%2BnIqXtNA8QwAQKDSZT7N9OTGWbTrs%3D' (2024-12-07)
+• Updated input 'flake-compat':
+    'github:edolstra/flake-compat/0f9255e01c2351cc7d116c072cb317785dd33b33?narHash=sha256-kvjfFW7WAETZlt09AgDn1MrtKzP7t90Vf7vypd3OL1U%3D' (2023-10-04)
+  → 'github:edolstra/flake-compat/ff81ac966bb2cae68946d5ed5fc4994f96d0ffec?narHash=sha256-NeCCThCEP3eCl2l/%2B27kNNK7QrwZB1IJCrXfrbv5oqU%3D' (2024-12-04)
+• Updated input 'flake-utils':
+    'github:numtide/flake-utils/c1dfcf08411b08f6b8615f7d8971a2bfa81d5e8a?narHash=sha256-X6rJYSESBVr3hBoH0WbKE5KvhPU5bloyZ2L4K60/fPQ%3D' (2024-09-17)
+  → 'github:numtide/flake-utils/11707dc2f618dd54ca8739b309ec4fc024de578b?narHash=sha256-l0KFg5HjrsfsO/JpG%2Br7fRrqm12kzFHyUHqHCVpMMbI%3D' (2024-11-13)
+• Updated input 'fzf-tab':
+    'github:Aloxaf/fzf-tab/b6e1b22458a131f835c6fe65bdb88eb45093d2d2?narHash=sha256-4A7zpaO1rNPvS0rrmmxg56rJGpZHnw/g%2Bx5FJd0EshI%3D' (2024-10-11)
+  → 'github:Aloxaf/fzf-tab/6aced3f35def61c5edf9d790e945e8bb4fe7b305?narHash=sha256-EWMeslDgs/DWVaDdI9oAS46hfZtp4LHTRY8TclKTNK8%3D' (2024-11-06)
+• Updated input 'home-manager':
+    'github:nix-community/home-manager/8f6ca7855d409aeebe2a582c6fd6b6a8d0bf5661?narHash=sha256-ZFJqIXpvVKvzOVFKWNRDyIyAo%2BGYdmEPaYi1bZB6uf0%3D' (2024-11-03)
+  → 'github:nix-community/home-manager/f26aa4b76fb7606127032d33ac73d7d507d82758?narHash=sha256-dTosiZ3sZ/NKoLKQ%2B%2Bv8nZdEHya0eTNEsaizNp%2BMUPM%3D' (2024-12-10)
+• Updated input 'home-manager/nixpkgs':
+    'github:NixOS/nixpkgs/807e9154dcb16384b1b765ebe9cd2bba2ac287fd?narHash=sha256-l253w0XMT8nWHGXuXqyiIC/bMvh1VRszGXgdpQlfhvU%3D' (2024-10-29)
+  → 'github:NixOS/nixpkgs/55d15ad12a74eb7d4646254e13638ad0c4128776?narHash=sha256-M1%2BuCoV5igihRfcUKrr1riygbe73/dzNnzPsmaLCmpo%3D' (2024-12-03)
+• Updated input 'nixpkgs-master':
+    'github:NixOS/nixpkgs/b7546315457a024bdd2471417bdf8690423c58fb?narHash=sha256-jcss5b/Z7mF1bDVu5c%2BQ7VL%2Bf9tON3aZaDSI951NDPg%3D' (2024-11-05)
+  → 'github:NixOS/nixpkgs/4b2b10f9208c2a30e39bf1af98524ee071ae6832?narHash=sha256-kfis9BrMwhiuTfOd9kxZyPtnjF5hhzmJ589ar74tgAc%3D' (2024-12-11)
+• Updated input 'nixpkgs-stable':
+    'github:NixOS/nixpkgs/12d2bf6310b6b71b4a76ae9c5f2ebec4e3f60bdb?narHash=sha256-JondW3tjHomfZ/9ZA4PobsO2Tiz4AYqPJRHObuutAps%3D' (2024-11-05)
+  → 'github:NixOS/nixpkgs/5650e3f82b115dae9b43a53f66562b7180364038?narHash=sha256-pmbwr19/x3UzcBNXqZF8%2B2f6x8iejowxNeVWhDUJqFQ%3D' (2024-12-10)
+• Updated input 'nixpkgs-unstable':
+    'github:NixOS/nixpkgs/a04d33c0c3f1a59a2c1cb0c6e34cd24500e5a1dc?narHash=sha256-8AKquNnnSaJRXZxc5YmF/WfmxiHX6MMZZasRP6RRQkE%3D' (2024-11-05)
+  → 'github:NixOS/nixpkgs/bc27f0fde01ce4e1bfec1ab122d72b7380278e68?narHash=sha256-%2B5qdtgXceqhK5ZR1YbP1fAUsweBIrhL38726oIEAtDs%3D' (2024-12-09)
+• Updated input 'powerlevel10k':
+    'github:romkatv/powerlevel10k/8a331b82108dd5c5834cebdc0abbe778cc1a2735?narHash=sha256-nf9LQMNS2xj201wuZ30YW9n19lLYs4IBcp4KXn/0kkc%3D' (2024-10-28)
+  → 'github:romkatv/powerlevel10k/ef83e13c22cf8641f7ab2d50cd1338d01bb31cd2?narHash=sha256-0ORdl9kLhfaDPhUZU3bxd3oVqB7hsrZPZ2wUPVu48gY%3D' (2024-11-15)
+• Updated input 'spacemacs':
+    'github:syl20bnr/spacemacs/60dcd8cf95f8d4b249c605d25bca2adb0dfd6318?narHash=sha256-BaezCBSTBxw%2BtOl76NfaWpj2RHuNiUkhqywGgvrWqpU%3D' (2024-11-05)
+  → 'github:syl20bnr/spacemacs/173af7e4e5037df77e9241fd1f4327a120ca2233?narHash=sha256-5EKKqCLk%2B9Sl/yZDA0cGtjY7rgdcFs2iL8SWsX9AFj4%3D' (2024-12-10)
+```
 ## Update 2024-11-05
 ```go
 Version changes:
