@@ -19,17 +19,13 @@
   };
   programs.nix-index.enable = true;
 
-  # Fonts  
+  # Fonts
   fonts.packages = with pkgs; [
     # recursive
     emacs-all-the-icons-fonts
-    (nerdfonts.override {
-      fonts = [
-        "Iosevka"
-        "JetBrainsMono"
-        "FiraCode"
-      ];
-    })
+    nerd-fonts.iosevka
+    nerd-fonts.jetbrains_mono
+    nerd-fonts.fira_code
   ];
 
   # Keyboard
