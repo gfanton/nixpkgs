@@ -24,8 +24,8 @@
     # recursive
     emacs-all-the-icons-fonts
     nerd-fonts.iosevka
-    nerd-fonts.jetbrains_mono
-    nerd-fonts.fira_code
+    nerd-fonts.jetbrains-mono
+    nerd-fonts.fira-code
   ];
 
   # Keyboard
