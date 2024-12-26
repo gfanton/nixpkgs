@@ -251,7 +251,7 @@
             homebrew.enable = mkForce false;
             services.yabai.enable = mkForce false;
             services.skhd.enable = mkForce false;
-
+            ids.gids.nixbld = 350; # [hack]
           };
         };
       };
