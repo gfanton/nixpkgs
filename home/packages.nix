@@ -35,7 +35,7 @@ in
     enable = true;
     goPath = ".local/share/go";
     goBin = ".local/bin";
-    package = pkgs.pkgs-master.go_1_22;
+    package = pkgs.pkgs-master.go_1_23;
   };
 
   # rust env
@@ -129,15 +129,15 @@ in
       rustup
 
       # ruby
-      pkgs-stable.ruby
+      ruby
 
       # js (stable)
-      pkgs-stable.nodejs
-      pkgs-stable.nodePackages.pnpm
-      pkgs-stable.yarn
+      nodejs
+      nodePackages.pnpm
+      yarn
 
       # python (stable)
-      (pkgs-stable.python3.withPackages (
+      (python3.withPackages (
         p: with p; [
           virtualenv
           pip

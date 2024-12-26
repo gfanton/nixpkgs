@@ -65,7 +65,6 @@
       # Stop iTunes from responding to the keyboard media keys
       # Disable monitor wake up
       sudo pmset powernap 0
-      sudo pmset tcpkeepalive 0
     '';
   };
 }

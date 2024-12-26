@@ -15,7 +15,7 @@ in
     skhdConfig = ''
       # open terminal
       cmd - return [
-          * : ${pkgs.kitty}/bin/kitty --single-instance -d ~
+          * : ${config.programs.kitty.package}/bin/kitty --single-instance -d ~
           "kitty" ~
           ".kitty-wrapped" ~
       ]

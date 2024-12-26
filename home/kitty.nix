@@ -28,6 +28,7 @@ let
 
   theme-dark = config.colors.catppuccin-macchiato;
   theme-light = config.colors.catppuccin-latte;
+  pkgs-kitty = pkgs.kitty;
 in
 {
   # Kitty terminal
@@ -35,8 +36,11 @@ in
   # https://rycee.gitlab.io/home-manager/options.html#opt-programs.kitty.enable
   programs.kitty.enable = true;
 
+  programs.kitty.package = pkgs-kitty;
+
   programs.kitty.settings = {
     # https://fsd.it/shop/fonts/pragmatapro/
+
     font_family = "FiraCode Nerd Font Mono";
     font_size = "14.0";
     adjust_line_height = "120%";
@@ -86,7 +90,7 @@ in
 
   programs.truecolor.enable = true;
   programs.truecolor.useterm = "xterm-kitty";
-  programs.truecolor.terminfo = "${pkgs.kitty.terminfo}/share/terminfo";
+  programs.truecolor.terminfo = "${pkgs-kitty.terminfo}/share/terminfo";
 
   programs.kitty.keybindings = {
     # open new tab with cmd+t
@@ -130,9 +134,11 @@ in
     "kitty_mod+0" = "change_font_size all 0";
 
     # hints
-    "cmd+g" = "kitten hints --type=linenum --linenum-action=self ${xterm-emacsclient}/bin/xemacs -t +{line} {path}";
+    "cmd+g" =
+      "kitten hints --type=linenum --linenum-action=self ${xterm-emacsclient}/bin/xemacs -t +{line} {path}";
     # screen rollback
-    "cmd+f" = "launch --cwd=current --type=overlay --stdin-source=@screen_scrollback --stdin-add-formatting ${stdin-emacsclient}/bin/semacs";
+    "cmd+f" =
+      "launch --cwd=current --type=overlay --stdin-source=@screen_scrollback --stdin-add-formatting ${stdin-emacsclient}/bin/semacs";
     # editor
     "kitty_mod+s" = "launch --cwd=current --type=overlay ${scratch-emacsclient}/bin/scratch";
     "kitty_mod+o" = "launch --cwd=current --type=overlay ${xterm-emacsclient}/bin/xemacs -t .";
