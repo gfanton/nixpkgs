@@ -2,7 +2,7 @@
   inputs = {
     # Package sets
     nixpkgs-master.url = "github:NixOS/nixpkgs/master";
-    nixpkgs-stable.url = "github:NixOS/nixpkgs/release-24.05";
+    nixpkgs-stable.url = "github:NixOS/nixpkgs/release-24.11";
     nixpkgs-unstable.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
 
     # Environment/system management
@@ -251,7 +251,7 @@
             homebrew.enable = mkForce false;
             services.yabai.enable = mkForce false;
             services.skhd.enable = mkForce false;
-            ids.uids.nixbld = 300; # [hack] unil macos-15
+            ids.gids.nixbld = 350; # [hack]
           };
         };
       };
