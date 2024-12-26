@@ -251,7 +251,7 @@
             homebrew.enable = mkForce false;
             services.yabai.enable = mkForce false;
             services.skhd.enable = mkForce false;
-            ids.uids.nixbld = 300; # [hack] unil macos-15
+            ids.uids.nixbld = 350; # [hack] unil macos-15
           };
         };
       };
