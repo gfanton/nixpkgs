@@ -66,6 +66,7 @@ jobs:
         ./result/activate switch --verbose --fallback
 
         # Source result
+        find ./result -iname 'bashrc'
         source ./result/etc/bashrc
 
         # Determine the new and old generations
