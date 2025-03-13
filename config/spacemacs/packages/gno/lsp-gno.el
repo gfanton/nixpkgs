@@ -51,6 +51,31 @@
   :type '(choice (directory :tag "Root directory") (const :tag "Unspecified" nil))
   :group 'lsp-gno)
 
+(defvar lsp-gno-debug-address nil
+  "Debug address for the gnopls server. When non-nil, debug mode is enabled.")
+
+(defun lsp-gno-enable-debug ()
+  "Enable debugging for the gnopls server.
+Prompt the user for an address in the form addr:port or :port and store it for the current session."
+  (interactive)
+  (setq lsp-gno-debug-address (read-string "Enter debug address (addr:port or :port): "))
+  (message "Gnopls debug enabled with address: %s" lsp-gno-debug-address))
+
+(defun lsp-gno--gnopls-command ()
+  "Return the command to start the gnopls server."
+  (let* ((base-command (if lsp-gno-debug-address
+                           (list lsp-gno-gnopls-server-path "-v" "serve")
+                         (list lsp-gno-gnopls-server-path "serve")))
+         (command (if lsp-gno-debug-address
+                      (append base-command
+                              (list "--debug" lsp-gno-debug-address
+                                    "--remote.debug" lsp-gno-debug-address
+                                    "--logfile" "auto"
+                                    "--remote.logfile" "auto"))
+                    base-command)))
+    (message "Starting gnopls with command: %s" (mapconcat 'identity command " "))
+    command))
+
 (lsp-register-custom-settings
  '(("gnopls.gno" lsp-gno-gnopls-server-path)
    ("gnopls.gnokey" lsp-gno-gnopls-gnokey-path)
@@ -59,12 +84,7 @@
    ("gnopls.root" lsp-gno-root)))
 
 (lsp-register-client
- (make-lsp-client :new-connection (lsp-stdio-connection
-                                   (lambda ()
-                                     (if lsp-gno-root
-                                         (list lsp-gno-gnopls-server-path "serve")
-                                       (message "lsp-gno-root is not specified")
-                                       nil)))
+ (make-lsp-client :new-connection (lsp-stdio-connection #'lsp-gno--gnopls-command)
                   :activation-fn (lsp-activate-on "gno" "gnomod")
                   :priority 1 ;; should override gopls
                   :server-id 'gnopls
