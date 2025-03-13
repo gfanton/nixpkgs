@@ -773,6 +773,9 @@ before packages are loaded."
         cand)))
   ;;END Vertico
 
+  ;; put lockfile inside tmp folder
+  (setq lock-file-name-transforms
+        `((".*" ,temporary-file-directory t)))
 
   (global-set-key (kbd "C-x k") 'spacemacs/kill-this-buffer)
 
