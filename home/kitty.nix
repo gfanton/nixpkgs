@@ -28,7 +28,7 @@ let
 
   theme-dark = config.colors.catppuccin-macchiato;
   theme-light = config.colors.catppuccin-latte;
-  pkgs-kitty = pkgs.kitty;
+  pkgs-kitty = pkgs.pkgs-stable.kitty;
 in
 {
   # Kitty terminal

@@ -213,8 +213,8 @@ in
         xemacs = "${xterm-emacs}/bin/xemacs --with-profile=spacemacs -nw";
         xemacsclient = "${xterm-emacsclient}/bin/xemacsclient --with-profile=spacemacs -nw";
 
-        # # kitty alias
-        ssh = "${kitty}/bin/kitten ssh";
+        # kitty alias
+        ssh = "${pkgs.pkgs-stable.kitty}/bin/kitten ssh";
 
         # core alias
         ".." = "cd ..";
