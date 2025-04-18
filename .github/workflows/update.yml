@@ -65,9 +65,8 @@ jobs:
         nix build ".#homeConfigurations.$CONFIG_NAME.activationPackage"
         ./result/activate switch --verbose --fallback
 
-        # Source result
-        find ./result -iname 'bashrc'
-        source ./result/etc/bashrc
+        # Source bashrc
+        source /etc/bashrc
 
         # Determine the new and old generations
         nixos_new_gen=$(readlink -f $HOME/.nix-profile)
