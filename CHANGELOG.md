@@ -1,3 +1,63 @@
+## Update 2025-05-07
+```go
+
+```
+### lock change:
+```
+unpacking 'github:plexus/chemacs2/c2d700b784c793cc82131ef86323801b8d6e67bb' into the Git cache...
+unpacking 'github:LnL7/nix-darwin/760a11c87009155afa0140d55c40e7c336d62d7a' into the Git cache...
+unpacking 'github:doomemacs/doomemacs/b70d137f1a224cdbac3994d249fb5e8c7fcc203a' into the Git cache...
+unpacking 'github:nix-community/emacs-overlay/60602c520d62d95640bf4d8807da1cd48e2f8f61' into the Git cache...
+unpacking 'github:zdharma-continuum/fast-syntax-highlighting/cf318e06a9b7c9f2219d78f41b46fa6e06011fd9' into the Git cache...
+unpacking 'github:edolstra/flake-compat/ff81ac966bb2cae68946d5ed5fc4994f96d0ffec' into the Git cache...
+unpacking 'github:numtide/flake-utils/11707dc2f618dd54ca8739b309ec4fc024de578b' into the Git cache...
+unpacking 'github:Aloxaf/fzf-tab/2abe1f2f1cbcb3d3c6b879d849d683de5688111f' into the Git cache...
+unpacking 'github:nix-community/home-manager/35535345be0be7dbae2e9b787c6cf790f8c893d5' into the Git cache...
+unpacking 'github:NixOS/nixpkgs/ed9159fe6b91c44bcf8d1198af39f0cddfcdb6a5' into the Git cache...
+unpacking 'github:NixOS/nixpkgs/209c5b3b0f5cf5b5a7e12ddea59bf19699f97e75' into the Git cache...
+unpacking 'github:NixOS/nixpkgs/ed30f8aba41605e3ab46421e3dcb4510ec560ff8' into the Git cache...
+unpacking 'github:romkatv/powerlevel10k/36f3045d69d1ba402db09d09eb12b42eebe0fa3b' into the Git cache...
+unpacking 'github:syl20bnr/spacemacs/3f24feea1c42ec039bed9eaf05618ea3dd9c3af5' into the Git cache...
+• Updated input 'darwin':
+    'github:LnL7/nix-darwin/2fb6b09b678a1ab258cf88e3ea4a966edceec6a8?narHash=sha256-4J46D8sOZ3UroVyGYKYMU3peq9gv0tjRX0KbZihWhhw%3D' (2025-03-12)
+  → 'github:LnL7/nix-darwin/760a11c87009155afa0140d55c40e7c336d62d7a?narHash=sha256-Y062AuRx6l%2BTJNX8wxZcT59SSLsqD9EedAY0mqgTtQE%3D' (2025-05-03)
+• Updated input 'doomemacs':
+    'github:doomemacs/doomemacs/ba1dca322f9a07bc2b7bec6a98f2c3c55c0bbd77?narHash=sha256-sebujw5VvBWMS%2BwXyjiGF81iyjPM/QQDnw5l7tDJCvk%3D' (2024-12-05)
+  → 'github:doomemacs/doomemacs/b70d137f1a224cdbac3994d249fb5e8c7fcc203a?narHash=sha256-bfoTBSsy/1S7%2B6uR3ig5EA8AAQ1RhmDLNF/m2RXU2sM%3D' (2025-05-06)
+• Updated input 'emacs-overlay':
+    'github:nix-community/emacs-overlay/34c2a5d93606f6f952c34a85e5346029869bd8f0?narHash=sha256-ZJgTnduyZzNPPCEKxzKa0x1FhWLxlMgJzVdE89s%2BLWs%3D' (2025-03-13)
+  → 'github:nix-community/emacs-overlay/60602c520d62d95640bf4d8807da1cd48e2f8f61?narHash=sha256-Gun6JAQos%2BRmuK/qKufgDaTUTgCEHF9Wacn3t9BVIeU%3D' (2025-05-07)
+• Updated input 'emacs-overlay/nixpkgs':
+    'github:NixOS/nixpkgs/e3e32b642a31e6714ec1b712de8c91a3352ce7e1?narHash=sha256-7rTAMNTY1xoBwz0h7ZMtEcd8LELk9R5TzBPoHuhNSCk%3D' (2025-03-09)
+  → 'github:NixOS/nixpkgs/3730d8a308f94996a9ba7c7138ede69c1b9ac4ae?narHash=sha256-7%2BpG1I9jvxNlmln4YgnlW4o%2Bw0TZX24k688mibiFDUE%3D' (2025-05-05)
+• Updated input 'emacs-overlay/nixpkgs-stable':
+    'github:NixOS/nixpkgs/ebe2788eafd539477f83775ef93c3c7e244421d3?narHash=sha256-yfDy6chHcM7pXpMF4wycuuV%2BILSTG486Z/vLx/Bdi6Y%3D' (2025-03-10)
+  → 'github:NixOS/nixpkgs/5b35d248e9206c1f3baf8de6a7683fee126364aa?narHash=sha256-NTtKOTLQv6dPfRe00OGSywg37A1FYqldS6xiNmqBUYc%3D' (2025-05-05)
+• Updated input 'fzf-tab':
+    'github:Aloxaf/fzf-tab/01dad759c4466600b639b442ca24aebd5178e799?narHash=sha256-q26XVS/LcyZPRqDNwKKA9exgBByE0muyuNb0Bbar2lY%3D' (2025-02-18)
+  → 'github:Aloxaf/fzf-tab/2abe1f2f1cbcb3d3c6b879d849d683de5688111f?narHash=sha256-zc9Sc1WQIbJ132hw73oiS1ExvxCRHagi6vMkCLd4ZhI%3D' (2025-04-09)
+• Updated input 'home-manager':
+    'github:nix-community/home-manager/18780912345970e5b546b1b085385789b6935a83?narHash=sha256-4Y427uj0eql4yRU5rely3EcOlB9q457UDbG9omPtXiA%3D' (2025-03-12)
+  → 'github:nix-community/home-manager/35535345be0be7dbae2e9b787c6cf790f8c893d5?narHash=sha256-p%2B3fK8HEYC%2B0q4gPKSE4OSRxqt5H/tWZkB9wF7aaWOY%3D' (2025-05-07)
+• Updated input 'home-manager/nixpkgs':
+    'github:NixOS/nixpkgs/e3e32b642a31e6714ec1b712de8c91a3352ce7e1?narHash=sha256-7rTAMNTY1xoBwz0h7ZMtEcd8LELk9R5TzBPoHuhNSCk%3D' (2025-03-09)
+  → 'github:NixOS/nixpkgs/7a2622e2c0dbad5c4493cb268aba12896e28b008?narHash=sha256-MHmBH2rS8KkRRdoU/feC/dKbdlMkcNkB5mwkuipVHeQ%3D' (2025-05-03)
+• Updated input 'nixpkgs-master':
+    'github:NixOS/nixpkgs/6607cf789e541e7873d40d3a8f7815ea92204f32?narHash=sha256-cPfs8qMccim2RBgtKGF%2Bx9IBCduRvd/N5F4nYpU0TVE%3D' (2025-03-13)
+  → 'github:NixOS/nixpkgs/ed9159fe6b91c44bcf8d1198af39f0cddfcdb6a5?narHash=sha256-L9zGyLHdJN93YodwuIATJhgm/jWZp5D3CDFAWX20IxY%3D' (2025-05-07)
+• Updated input 'nixpkgs-stable':
+    'github:NixOS/nixpkgs/80b53fdb4f883238807ced86db41be809d60f3b5?narHash=sha256-0etyrY6jOzFwVILODzMc43MTtUanxzFSaqe3kVLvew4%3D' (2025-03-13)
+  → 'github:NixOS/nixpkgs/209c5b3b0f5cf5b5a7e12ddea59bf19699f97e75?narHash=sha256-I40weT0FZWth1IEjgR5a0zC9LLyrPwTC0DAQcejtTJE%3D' (2025-05-06)
+• Updated input 'nixpkgs-unstable':
+    'github:NixOS/nixpkgs/b62d2a95c72fb068aecd374a7262b37ed92df82b?narHash=sha256-cNRqdQD4sZpN7JLqxVOze4%2BWsWTmv2DGH0wNCOVwrWc%3D' (2025-03-11)
+  → 'github:NixOS/nixpkgs/ed30f8aba41605e3ab46421e3dcb4510ec560ff8?narHash=sha256-5oLdRa3vWSRbuqPIFFmQBGGUqaYZBxX%2BGGtN9f/n4lU%3D' (2025-05-04)
+• Updated input 'powerlevel10k':
+    'github:romkatv/powerlevel10k/8fa10f43a0f65a5e15417128be63e68e1d5b1f66?narHash=sha256-isxgLWpbBuNoETXCOlJ4nwGSxMwCjoVF5D0dMZWtM5s%3D' (2025-01-29)
+  → 'github:romkatv/powerlevel10k/36f3045d69d1ba402db09d09eb12b42eebe0fa3b?narHash=sha256-BRJyGn%2BgTGUWifpJ1ziBKVHACcWw%2BR5N/HdUi8HzSvY%3D' (2025-04-29)
+• Updated input 'spacemacs':
+    'github:syl20bnr/spacemacs/b5e0f1733361ea993b6f4218f5852de361aad039?narHash=sha256-/%2BVen3qWzVzkBdB0yt2uXoHQX7TKoNs1255LfWcOSvk%3D' (2025-03-13)
+  → 'github:syl20bnr/spacemacs/3f24feea1c42ec039bed9eaf05618ea3dd9c3af5?narHash=sha256-arxooAcYUNNSy0YZNEInq2/5sDDE%2BtHAigT9S35Hc5g%3D' (2025-05-06)
+```
 ## Update 2024-12-11
 ```go
 Version changes:
