@@ -63,7 +63,7 @@ jobs:
 
         # Update all inputs by recreating the flake and switching to the new home-manager environment
         nix build ".#homeConfigurations.$CONFIG_NAME.activationPackage"
-        ./result/activate switch --verbose --fallback
+        sudo ./result/activate switch --verbose --fallback
 
         # Source bashrc
         source /etc/bashrc
