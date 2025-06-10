@@ -2,7 +2,7 @@
   inputs = {
     # Package sets
     nixpkgs-master.url = "github:NixOS/nixpkgs/master";
-    nixpkgs-stable.url = "github:NixOS/nixpkgs/release-24.11";
+    nixpkgs-stable.url = "github:NixOS/nixpkgs/release-25.05";
     nixpkgs-unstable.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
 
     # Environment/system management
@@ -63,7 +63,7 @@
         singleton
         ;
 
-      homeStateVersion = "24.11";
+      homeStateVersion = "25.11";
 
       # Configuration for `nixpkgs`
       nixpkgsDefaults = {

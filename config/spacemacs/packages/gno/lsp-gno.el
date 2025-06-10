@@ -81,7 +81,8 @@ Prompt the user for an address in the form addr:port or :port and store it for t
    ("gnopls.gnokey" lsp-gno-gnopls-gnokey-path)
    ("gnopls.precompileOnSave" lsp-gno-precompile-on-save t)
    ("gnopls.buildOnSave" lsp-gno-build-on-save t)
-   ("gnopls.root" lsp-gno-root)))
+   ("gnopls.root" lsp-gno-root)
+   ("gopls.hoverKind" "FullDocumentation")))
 
 (lsp-register-client
  (make-lsp-client :new-connection (lsp-stdio-connection #'lsp-gno--gnopls-command)

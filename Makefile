@@ -36,7 +36,7 @@ switch.bootstrap: result/sw/bin/darwin-rebuild
 switch.macbook: result/sw/bin/darwin-rebuild
 	TERM=xterm ./result/sw/bin/darwin-rebuild switch ${impure} ${fallback} --verbose --flake .#macbook
 switch.bot: result/sw/bin/darwin-rebuild
-	./result/sw/bin/darwin-rebuild switch ${impure} ${fallback} --verbose --flake .#bot
+	../result/sw/bin/darwin-rebuild switch ${impure} ${fallback} --verbose --flake .#bot
 
 result/sw/bin/darwin-rebuild:
 	nix --experimental-features 'flakes nix-command' build ".#darwinConfigurations.$(BOOTSTRAP).system"
@@ -78,4 +78,3 @@ update.zsh:; nix flake lock $(addprefix --update-input ,$(ZSH_CHANNELS))
 update.misc:; nix flake lock $(addprefix --update-input ,$(MISC_CHANNELS))
 update.home:; nix flake lock $(addprefix --update-input , $(HOME_CHANNELS))
 update.asdf:; nix flake lock $(addprefix --update-input , $(ASDF_CHANNELS))
-
