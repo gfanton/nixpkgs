@@ -777,7 +777,7 @@ before packages are loaded."
   (setq lock-file-name-transforms
         `((".*" ,temporary-file-directory t)))
 
-  (global-set-key (kbd "C-x k") 'spacemacs/kill-this-buffer)
+  (global-set-key (kbd "C-x k") 'kill-current-buffer)
 
   (setq org-folder "~/org/")
   (setq deft-directory (concat org-folder "notes/"))

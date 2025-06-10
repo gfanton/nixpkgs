@@ -167,28 +167,29 @@ in
         ++ lib.optionals pkgs.stdenv.isLinux [ ];
     };
 
-    initExtraFirst = ''
-      # Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
-      if [[ -r "''${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-''${(%):-%n}.zsh" ]]; then
-        source "''${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-''${(%):-%n}.zsh"
-      fi
-    '';
+    initContent = lib.mkMerge [
+      (lib.mkBefore ''
+        # Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
+        if [[ -r "''${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-''${(%):-%n}.zsh" ]]; then
+          source "''${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-''${(%):-%n}.zsh"
+        fi
+      '')
+      (lib.mkAfter ''
+        # autosuggest color
+        export ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=240'
 
-    initExtra = ''
-      # autosuggest color
-      export ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=240'
+        # tab title
+        export ZSH_TAB_TITLE_ONLY_FOLDER=true
+        export ZSH_TAB_TITLE_ADDITIONAL_TERMS='iterm|kitty'
 
-      # tab title
-      export ZSH_TAB_TITLE_ONLY_FOLDER=true
-      export ZSH_TAB_TITLE_ADDITIONAL_TERMS='iterm|kitty'
+        # extra z config
+        zstyle ":completion:*:git-checkout:*" sort false
+        zstyle ':completion:*:descriptions' format '[%d]'
+        zstyle ':completion:*' list-colors ''${(s.:.)LS_COLORS}
 
-      # extra z config
-      zstyle ":completion:*:git-checkout:*" sort false
-      zstyle ':completion:*:descriptions' format '[%d]'
-      zstyle ':completion:*' list-colors ''${(s.:.)LS_COLORS}
-
-      #
-    '';
+        #
+      '')
+    ];
 
     shellAliases =
       with pkgs;
