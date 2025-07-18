@@ -60,9 +60,9 @@ in
     enable = true;
     extraConfig = ''
       # Bind Ctrl-e to run emacsclient
-      bind-key C-e run-shell "cd #{pane_current_path} && ${xemacsclient}/bin/xemacsclient -t ."
+      bind-key C-e run-shell "cd #{pane_current_path} && TERM=xterm-emacs ${xemacsclient}/bin/xemacsclient -t ."
       # Bind e to open emacsclient in new window
-      bind-key e new-window -c "#{pane_current_path}" "${xemacsclient}/bin/xemacsclient -t ."
+      bind-key e new-window -c "#{pane_current_path}" "TERM=xterm-emacs ${xemacsclient}/bin/xemacsclient -t ."
     '';
   };
 
