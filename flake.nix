@@ -177,6 +177,7 @@
         my-shells = import ./home/shells.nix;
         my-git = import ./home/git.nix;
         my-kitty = import ./home/kitty.nix;
+        my-alacritty = import ./home/alacritty.nix;
         my-packages = import ./home/packages.nix;
         my-asdf = import ./home/asdf.nix;
         my-emacs = import ./home/emacs.nix;

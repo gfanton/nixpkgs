@@ -87,6 +87,41 @@
       inactive_border_color = "surface";
       bell_border_color = "brightBlue";
     };
+
+    pkgThemes.alacritty = {
+      primary = {
+        background = "base";
+        foreground = "text";
+      };
+      cursor = {
+        text = "base";
+        cursor = "white";
+      };
+      selection = {
+        text = "base";
+        background = "white";
+      };
+      normal = {
+        black = "color0";
+        red = "color1";
+        green = "color2";
+        yellow = "color11";
+        blue = "color4";
+        magenta = "color5";
+        cyan = "color10";
+        white = "color7";
+      };
+      bright = {
+        black = "color8";
+        red = "color1";
+        green = "color2";
+        yellow = "color11";
+        blue = "color4";
+        magenta = "color5";
+        cyan = "color10";
+        white = "color15";
+      };
+    };
   };
 
   colors.catppuccin-latte = {
@@ -174,6 +209,41 @@
       active_border_color = "yellow";
       inactive_border_color = "surface";
       bell_border_color = "brightBlue";
+    };
+
+    pkgThemes.alacritty = {
+      primary = {
+        background = "base";
+        foreground = "text";
+      };
+      cursor = {
+        text = "base";
+        cursor = "white";
+      };
+      selection = {
+        text = "base";
+        background = "white";
+      };
+      normal = {
+        black = "color0";
+        red = "color1";
+        green = "color2";
+        yellow = "color11";
+        blue = "color4";
+        magenta = "color5";
+        cyan = "color10";
+        white = "color7";
+      };
+      bright = {
+        black = "color8";
+        red = "color1";
+        green = "color2";
+        yellow = "color11";
+        blue = "color4";
+        magenta = "color5";
+        cyan = "color10";
+        white = "color15";
+      };
     };
   };
 

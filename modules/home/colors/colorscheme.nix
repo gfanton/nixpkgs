@@ -107,5 +107,64 @@ in
         };
       };
     };
+
+    pkgThemes.alacritty = mkOption {
+      type = types.submodule {
+        options = {
+          primary = mkOption {
+            type = types.submodule {
+              options = {
+                background = mkColorOption { default = config.terminal.bg; };
+                foreground = mkColorOption { default = config.terminal.fg; };
+              };
+            };
+          };
+          cursor = mkOption {
+            type = types.submodule {
+              options = {
+                text = mkColorOption { default = config.terminal.cursorFg; };
+                cursor = mkColorOption { default = config.terminal.cursorBg; };
+              };
+            };
+          };
+          selection = mkOption {
+            type = types.submodule {
+              options = {
+                text = mkColorOption { default = config.terminal.selectionFg; };
+                background = mkColorOption { default = config.terminal.selectionBg; };
+              };
+            };
+          };
+          normal = mkOption {
+            type = types.submodule {
+              options = {
+                black = mkColorOption { default = "color0"; };
+                red = mkColorOption { default = "color1"; };
+                green = mkColorOption { default = "color2"; };
+                yellow = mkColorOption { default = "color3"; };
+                blue = mkColorOption { default = "color4"; };
+                magenta = mkColorOption { default = "color5"; };
+                cyan = mkColorOption { default = "color6"; };
+                white = mkColorOption { default = "color7"; };
+              };
+            };
+          };
+          bright = mkOption {
+            type = types.submodule {
+              options = {
+                black = mkColorOption { default = "color8"; };
+                red = mkColorOption { default = "color9"; };
+                green = mkColorOption { default = "color10"; };
+                yellow = mkColorOption { default = "color11"; };
+                blue = mkColorOption { default = "color12"; };
+                magenta = mkColorOption { default = "color13"; };
+                cyan = mkColorOption { default = "color14"; };
+                white = mkColorOption { default = "color15"; };
+              };
+            };
+          };
+        };
+      };
+    };
   };
 }
