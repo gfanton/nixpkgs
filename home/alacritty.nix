@@ -61,12 +61,15 @@ in
       save_to_clipboard = true;
     };
 
-    # Live config reload
-    live_config_reload = true;
+    # General settings
+    general = {
+      live_config_reload = true;
+    };
 
     # Environment
     env = {
       TERM = "alacritty";
+      TERMINFO_DIRS = "/etc/profiles/per-user/gfanton/share/terminfo:/usr/share/terminfo";
     };
 
     # Colors (using dark theme by default)
@@ -84,7 +87,7 @@ in
       { key = "K"; mods = "Command"; chars = "\f"; }
       
       # Font size controls
-      { key = "Equal"; mods = "Control|Alt"; action = "IncreaseFontSize"; }
+      { key = "Equals"; mods = "Control|Alt"; action = "IncreaseFontSize"; }
       { key = "Minus"; mods = "Control|Alt"; action = "DecreaseFontSize"; }
       { key = "Key0"; mods = "Control|Alt"; action = "ResetFontSize"; }
       
