@@ -187,7 +187,21 @@ in
         zstyle ':completion:*:descriptions' format '[%d]'
         zstyle ':completion:*' list-colors ''${(s.:.)LS_COLORS}
 
-        #
+        # tmux shell integration functions (adapted from https://chadaustin.me/2024/02/tmux-config/)
+        if [[ "$TMUX" ]]; then
+            function lv() {
+                tmux split-window -h less "$@"
+            }
+            function ev() {
+                tmux split-window -h ${xterm-emacsclient}/bin/xemacsclient "$@"
+            }
+            function lh() {
+                tmux split-window -v less "$@"
+            }
+            function eh() {
+                tmux split-window -v ${xterm-emacsclient}/bin/xemacsclient "$@"
+            }
+        fi
       '')
     ];
 

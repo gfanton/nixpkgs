@@ -55,12 +55,78 @@ in
     "${rust_home}/rustup/bin"
   ];
 
-  # tmux
+  # tmux with catppuccin theme
   programs.tmux = {
     enable = true;
+    plugins = with pkgs; [
+      {
+        plugin = tmuxPlugins.catppuccin;
+        extraConfig = ''
+          set -g @catppuccin_flavor 'macchiato'
+          set -g @catppuccin_window_status_style "rounded"
+        '';
+      }
+    ];
     extraConfig = ''
-      # Bind Ctrl-e to run emacsclient
-      bind-key C-e run-shell "cd #{pane_current_path} && TERM=xterm-emacs ${xemacsclient}/bin/xemacsclient -t ."
+      # Terminal detection and color support
+      if "[ $(tput colors) = 16777216 ]" {
+        set -g default-terminal "tmux-direct"
+      } {
+        if "[ $(tput colors) = 256 ]" {
+          set -g default-terminal "tmux-256color"
+        } {
+          set -g default-terminal "tmux"
+        }
+      }
+      
+      # General settings
+      setw -g mode-keys emacs
+      set -s escape-time 200
+      set -g history-limit 100000
+      setw -g aggressive-resize on
+      set -g mouse on
+      
+      # Window and pane numbering
+      set -g base-index 1
+      setw -g pane-base-index 1
+      setw -g renumber-windows on
+      
+      # Status bar
+      set -g status-keys emacs
+      set -g status-interval 5
+      
+      # Window titles
+      set -g set-titles on
+      set -g set-titles-string "#T"
+      
+      # Activity monitoring
+      setw -g monitor-activity on
+      set -g visual-activity off
+      set -g bell-action none
+      
+      # Alt+number window selection
+      bind-key -n M-1 select-window -t 1
+      bind-key -n M-2 select-window -t 2
+      bind-key -n M-3 select-window -t 3
+      bind-key -n M-4 select-window -t 4
+      bind-key -n M-5 select-window -t 5
+      bind-key -n M-6 select-window -t 6
+      bind-key -n M-7 select-window -t 7
+      bind-key -n M-8 select-window -t 8
+      bind-key -n M-9 select-window -t 9
+      
+      # Window reordering
+      bind-key -n M-< swap-window -t -1 \; previous-window
+      bind-key -n M-> swap-window -t +1 \; next-window
+      
+      # Toggle status bar
+      bind-key t set -g status
+      
+      # Reload config
+      bind-key r source-file ~/.config/tmux/tmux.conf \; display-message "Config reloaded"
+      
+      # Bind Ctrl-e to run emacsclient in current pane
+      bind-key C-e send-keys "cd #{pane_current_path} && TERM=xterm-emacs ${xemacsclient}/bin/xemacsclient -t ." Enter
       # Bind e to open emacsclient in new window
       bind-key e new-window -c "#{pane_current_path}" "TERM=xterm-emacs ${xemacsclient}/bin/xemacsclient -t ."
     '';
