@@ -2,6 +2,7 @@
   config,
   lib,
   pkgs,
+  xemacsclient,
   ...
 }:
 
@@ -54,6 +55,17 @@ in
     "${rust_home}/rustup/bin"
   ];
 
+  # tmux
+  programs.tmux = {
+    enable = true;
+    extraConfig = ''
+      # Bind Ctrl-e to run emacsclient
+      bind-key C-e run-shell "cd #{pane_current_path} && ${xemacsclient}/bin/xemacsclient -t ."
+      # Bind e to open emacsclient in new window
+      bind-key e new-window -c "#{pane_current_path}" "${xemacsclient}/bin/xemacsclient -t ."
+    '';
+  };
+
   # Bat, a substitute for cat.
   # https://github.com/sharkdp/bat
   # https://rycee.gitlab.io/home-manager/options.html#opt-programs.bat.enable
@@ -103,7 +115,6 @@ in
       cmake
       gnupg
       fzf
-      tmux
 
       # my
       my-libvterm

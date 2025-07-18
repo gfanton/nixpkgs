@@ -16,6 +16,8 @@ let
   '';
 in
 {
+  # Export xterm-emacsclient for use in other modules
+  _module.args.xemacsclient = xterm-emacsclient;
 
   ## home dot D
   # spacemacs
@@ -59,7 +61,8 @@ in
   programs.emacs.package = pkgs.emacs-gtk;
 
   # setup alias
-  programs.zsh.shellAliases.emacs = "${xterm-emacs}/bin/xemacs";
-  programs.zsh.shellAliases.emacsclient = "${xterm-emacsclient}/bin/xemacsclient";
-  programs.zsh.shellAliases.ec = "${xterm-emacsclient}/bin/xemacsclient -nw";
+  programs.zsh.shellAliases.xemacs = "${xterm-emacs}/bin/xemacs --with-profile=spacemacs";
+  programs.zsh.shellAliases.xemacsclient = "${xterm-emacsclient}/bin/xemacsclient";
+  programs.zsh.shellAliases.emacs = "xemacs -nw";
+  programs.zsh.shellAliases.emacsclient = "xemacsclient -nw";
 }

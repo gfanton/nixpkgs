@@ -211,8 +211,8 @@ in
         dev = "(){ nix develop $1 -c $SHELL ;}";
         mydev = "(){ nix develop my#$1 -c $SHELL ;}";
 
-        xemacs = "${xterm-emacs}/bin/xemacs --with-profile=spacemacs -nw";
-        xemacsclient = "${xterm-emacsclient}/bin/xemacsclient --with-profile=spacemacs -nw";
+        # emacs defined in emacs.nix
+        ec = "emacsclient";
 
         # kitty alias
         ssh = "${pkgs.pkgs-stable.kitty}/bin/kitten ssh";

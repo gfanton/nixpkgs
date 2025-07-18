@@ -2,28 +2,24 @@
   config,
   lib,
   pkgs,
+  xemacsclient,
   ...
 }:
 
 let
-  xterm-emacsclient = pkgs.writeShellScriptBin "xemacs" ''
-    export TERM=xterm-emacs
-    ${pkgs.emacs-gtk}/bin/emacsclient $@
-  '';
-
   stdin-emacsclient = pkgs.writeShellScriptBin "semacs" ''
     TMP="$(mktemp /tmp/stdin-XXXX)"
     cat > $TMP.ansi
-    ${xterm-emacsclient}/bin/xemacs -t $TMP.ansi
+    ${xemacsclient}/bin/xemacsclient -t $TMP.ansi
     rm $TMP*
   '';
 
   magit-emacsclient = pkgs.writeShellScriptBin "magit" ''
-    ${xterm-emacsclient}/bin/xemacs -t -e '(magit-status) (delete-other-windows)'
+    ${xemacsclient}/bin/xemacsclient -t -e '(magit-status) (delete-other-windows)'
   '';
 
   scratch-emacsclient = pkgs.writeShellScriptBin "scratch" ''
-    ${xterm-emacsclient}/bin/xemacs -t -e '(spacemacs/switch-to-scratch-buffer) (delete-other-windows) (evil-emacs-state)'
+    ${xemacsclient}/bin/xemacsclient -t -e '(spacemacs/switch-to-scratch-buffer) (delete-other-windows) (evil-emacs-state)'
   '';
 
   theme-dark = config.colors.catppuccin-macchiato;
@@ -135,13 +131,13 @@ in
 
     # hints
     "cmd+g" =
-      "kitten hints --type=linenum --linenum-action=self ${xterm-emacsclient}/bin/xemacs -t +{line} {path}";
+      "kitten hints --type=linenum --linenum-action=self ${xemacsclient}/bin/xemacsclient -t +{line} {path}";
     # screen rollback
     "cmd+f" =
       "launch --cwd=current --type=overlay --stdin-source=@screen_scrollback --stdin-add-formatting ${stdin-emacsclient}/bin/semacs";
     # editor
     "kitty_mod+s" = "launch --cwd=current --type=overlay ${scratch-emacsclient}/bin/scratch";
-    "kitty_mod+o" = "launch --cwd=current --type=overlay ${xterm-emacsclient}/bin/xemacs -t .";
+    "kitty_mod+o" = "launch --cwd=current --type=overlay ${xemacsclient}/bin/xemacsclient -t .";
     "kitty_mod+d" = "launch --cwd=current --type=overlay  ${pkgs.lazydocker}/bin/lazydocker";
     "kitty_mod+g" = "launch --cwd=current --type=overlay  ${pkgs.lazygit}/bin/lazygit";
   };
