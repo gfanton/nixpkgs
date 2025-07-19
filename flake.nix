@@ -146,6 +146,7 @@
         my-loon = import ./overlays/loon.nix;
         my-gnolint = import ./overlays/gnolint.nix;
         my-libvterm = import ./overlays/libvterm.nix;
+        my-tmux-open-emacs = import ./overlays/tmux-open-emacs.nix;
       };
 
       # Non-system outputs --------------------------------------------------------------------- {{{

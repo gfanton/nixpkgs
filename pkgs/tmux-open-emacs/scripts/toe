@@ -1,0 +1,25 @@
+#!/usr/bin/env bash
+
+# tmux-open-emacs (toe) script
+# Opens emacsclient in current tmux pane and directory
+
+# Get current pane information
+current_dir=$(tmux display-message -p '#{pane_current_path}')
+current_pane=$(tmux display-message -p '#{pane_id}')
+
+# Get emacsclient path from environment or use default
+emacsclient_cmd="${EMACSCLIENT_PATH:-emacsclient}"
+
+# Check if emacsclient is available
+if ! command -v "$emacsclient_cmd" >/dev/null 2>&1; then
+    tmux display-message "Error: emacsclient not found"
+    exit 1
+fi
+
+# Get optional file argument (for future extension)
+file_to_open="${1:-$current_dir}"
+
+# Kill any existing process in current pane and run emacsclient
+tmux send-keys -t "$current_pane" C-c
+tmux send-keys -t "$current_pane" "cd '$current_dir'" Enter
+tmux send-keys -t "$current_pane" "TERM=xterm-emacs $emacsclient_cmd -t '$file_to_open'" Enter

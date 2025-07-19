@@ -66,6 +66,15 @@ in
           set -g @catppuccin_window_status_style "rounded"
         '';
       }
+      {
+        plugin = tmuxPlugins.tmux-open-emacs.override {
+          xemacsclient = xemacsclient;
+        };
+        extraConfig = ''
+          # Configure tmux-open-emacs plugin
+          set -g @toe-open-key 'C-e'
+        '';
+      }
     ];
     extraConfig = ''
       # Terminal detection and color support
