@@ -35,7 +35,7 @@ in
     # Font configuration
     font = {
       normal = {
-        family = "FiraCode Nerd Font Mono";
+        family = "JetBrainsMono Nerd Font Mono";
       };
       size = 14.0;
     };
@@ -86,6 +86,9 @@ in
       # Clear screen (similar to kitty cmd+k)
       { key = "K"; mods = "Command"; chars = "\f"; }
       
+      # Clear screen with Ctrl+L
+      { key = "L"; mods = "Control"; chars = "\f"; }
+      
       # Font size controls
       { key = "Equals"; mods = "Control|Alt"; action = "IncreaseFontSize"; }
       { key = "Minus"; mods = "Control|Alt"; action = "DecreaseFontSize"; }
@@ -100,6 +103,9 @@ in
       
       # Hide window
       { key = "H"; mods = "Command"; action = "Hide"; }
+      
+      # Toggle fullscreen
+      { key = "F"; mods = "Command|Shift"; action = "ToggleFullscreen"; }
     ];
   };
 }

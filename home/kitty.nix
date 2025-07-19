@@ -37,7 +37,7 @@ in
   programs.kitty.settings = {
     # https://fsd.it/shop/fonts/pragmatapro/
 
-    font_family = "FiraCode Nerd Font Mono";
+    font_family = "JetBrainsMono Nerd Font Mono";
     font_size = "14.0";
     adjust_line_height = "120%";
     disable_ligatures = "cursor"; # disable ligatures when cursor is on them
@@ -73,7 +73,7 @@ in
   #   font_features FiraCode Nerd Font
   # '';
 
-  programs.kitty.extras.useSymbolsFromNerdFont = "FiraCode Nerd Font Mono";
+  programs.kitty.extras.useSymbolsFromNerdFont = "JetBrainsMono Nerd Font Mono";
   # }}}
 
   programs.kitty.extras.colors = {

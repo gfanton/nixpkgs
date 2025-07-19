@@ -125,10 +125,11 @@ in
       # Reload config
       bind-key r source-file ~/.config/tmux/tmux.conf \; display-message "Config reloaded"
       
-      # Bind Ctrl-e to run emacsclient in current pane
-      bind-key C-e send-keys "cd #{pane_current_path} && TERM=xterm-emacs ${xemacsclient}/bin/xemacsclient -t ." Enter
       # Bind e to open emacsclient in new window
       bind-key e new-window -c "#{pane_current_path}" "TERM=xterm-emacs ${xemacsclient}/bin/xemacsclient -t ."
+      
+      # Clear screen with Ctrl+L
+      bind-key -n C-l send-keys "clear" Enter
     '';
   };
 

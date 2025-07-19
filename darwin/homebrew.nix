@@ -44,6 +44,7 @@ in
     "font-fira-mono-nerd-font"
     "font-fira-code-nerd-font"
     "font-jetbrains-mono-nerd-font"
+    "font-sauce-code-pro-nerd-font"
     "orbstack"
     "arc"
     "raycast"

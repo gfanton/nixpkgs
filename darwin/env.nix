@@ -11,6 +11,7 @@
     emacs-gtk
     kitty
     terminal-notifier
+    pam-reattach
   ];
 
   # https://github.com/nix-community/home-manager/issues/423
@@ -26,6 +27,7 @@
     nerd-fonts.iosevka
     nerd-fonts.jetbrains-mono
     nerd-fonts.fira-code
+    nerd-fonts.sauce-code-pro
   ];
 
   # Keyboard
@@ -38,6 +40,18 @@
     enable = true;
   };
 
-  # Add ability to used TouchID for sudo authentication
-  security.pam.services.sudo_local.touchIdAuth = true;
+  # Add ability to used TouchID for sudo authentication with tmux support
+  
+  security.pam.services.sudo_local.text = ''
+    # sudo_local: local config file which survives system update and is included for sudo
+    # uncomment the following line to implicitly trust users in the admin group
+    #auth       sufficient     pam_admin.so
+    # if this isn't set darwin will fall back to NOPASSWD for wheel group
+    auth       optional       ${pkgs.pam-reattach}/lib/pam/pam_reattach.so
+    auth       sufficient     pam_tid.so
+    auth       required       pam_opendirectory.so
+    account    required       pam_permit.so
+    password   required       pam_deny.so
+    session    required       pam_permit.so
+  '';
 }
