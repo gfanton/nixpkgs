@@ -171,78 +171,6 @@ in
         ];
         plugins = [
           {
-            name = "fzf-tab";
-            source = pkgs.zsh-plugins.fzf-tab;
-            config = ''
-              # fzf-tab configuration following official Aloxaf/fzf-tab best practices
-              # https://github.com/Aloxaf/fzf-tab
-              
-              # ESSENTIAL: Core fzf-tab configuration 
-              # Disable menu globally to allow fzf-tab to work (required)
-              zstyle ':completion:*' menu no
-              zstyle ':completion:*:descriptions' format '[%d]'
-              zstyle ':completion:*' list-colors ''${(s.:.)LS_COLORS}
-              
-              # PERFORMANCE: Disable sort for git operations (recommended by fzf-tab)
-              zstyle ':completion:*:git-checkout:*' sort false
-              
-              # PREVIEW: Directory navigation (official recommendation)
-              zstyle ':fzf-tab:complete:cd:*' fzf-preview '${pkgs.eza}/bin/eza -1 --color=always $realpath'
-              
-              # PREVIEW: File viewing with fallback
-              zstyle ':fzf-tab:complete:(cat|bat|less|more|head|tail):*' fzf-preview ' \
-                ${pkgs.bat}/bin/bat --color=always --style=numbers --line-range :500 $realpath 2>/dev/null || \
-                ${pkgs.eza}/bin/eza --color=always $realpath'
-              
-              # PREVIEW: Process management (kill/ps commands)
-              zstyle ':completion:*:*:*:*:processes' command "ps -u $USER -o pid,user,comm,cmd -w -w"
-              zstyle ':fzf-tab:complete:(kill|ps):argument-rest' fzf-preview \
-                '[[ $group == "[process ID]" ]] && ps --pid=$word -o pid,ppid,user,comm,cmd --no-headers -w -w'
-              zstyle ':fzf-tab:complete:(kill|ps):argument-rest' fzf-flags --preview-window=down:3:wrap
-              
-              # PREVIEW: Git operations
-              zstyle ':fzf-tab:complete:git-(add|diff|restore):*' fzf-preview \
-                'git diff --color=always $word 2>/dev/null || git status --short'
-              zstyle ':fzf-tab:complete:git-log:*' fzf-preview \
-                'git log --color=always --oneline --graph $word'
-              zstyle ':fzf-tab:complete:git-show:*' fzf-preview \
-                'git show --color=always $word'
-              zstyle ':fzf-tab:complete:git-checkout:*' fzf-preview \
-                'case "$group" in \
-                  "modified file") git diff --color=always $word;; \
-                  "recent commit object name") git show --color=always $word;; \
-                  *) git log --color=always --oneline $word;; \
-                esac'
-              
-              # PREVIEW: Environment variables
-              zstyle ':fzf-tab:complete:(-command-|-parameter-|-brace-parameter-|export|unset|expand):*' \
-                fzf-preview 'echo ''${(P)word}'
-              
-              # PREVIEW: Manual pages
-              zstyle ':fzf-tab:complete:(man|help):*' fzf-preview \
-                'man $word 2>/dev/null | head -200'
-              
-              # NAVIGATION: Group switching (F1/F2 alternative)
-              zstyle ':fzf-tab:*' switch-group ',' '.'
-              
-              # NAVIGATION: Continuous trigger
-              zstyle ':fzf-tab:*' continuous-trigger '/'
-              
-              # APPEARANCE: Modern color scheme and bindings
-              zstyle ':fzf-tab:*' fzf-flags \
-                --color=fg:#908caa,bg:#191724,hl:#ebbcba \
-                --color=fg+:#e0def4,bg+:#26233a,hl+:#f6c177 \
-                --color=border:#403d52,header:#31748f \
-                --color=pointer:#c4a7e7,marker:#eb6f92,prompt:#908caa \
-                --bind=tab:accept,shift-tab:up \
-                --bind=ctrl-space:toggle \
-                --cycle
-              
-              # OPTIMIZATION: Enable prefix matching for better performance
-              zstyle ':fzf-tab:*' prefix ""
-            '';
-          }
-          {
             name = "fast-syntax-highlighting";
             source = pkgs.zsh-plugins.fast-syntax-highlighting;
           }
@@ -276,18 +204,11 @@ in
         export ZSH_TAB_TITLE_ADDITIONAL_TERMS=iterm
 
         # Additional completion configuration 
-        zstyle ":completion:*:git-checkout:*" sort false
         zstyle ':completion:*:descriptions' format '[%d]'
         zstyle ':completion:*' list-colors "''${(s.:.)LS_COLORS}"
 
         # Project completion configuration
-        # Option 1: Disable fzf-tab for p command to use native zsh completion
-        zstyle ':fzf-tab:complete:p:*' disabled-on any
         zstyle ':completion:*:p:*' menu yes select interactive
-        
-        # Option 2: Enhanced fzf-tab integration for p command (alternative)
-        # zstyle ':fzf-tab:complete:p:*' fzf-preview 'echo "Navigate to: {}"'
-        # zstyle ':fzf-tab:complete:p:*' fzf-flags --header="Project Navigation" --height=60%
         
         # Load project shell integration if available
         if command -v proj >/dev/null 2>&1; then
