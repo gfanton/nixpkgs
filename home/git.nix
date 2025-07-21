@@ -26,6 +26,7 @@
       "*#"
       ".#*"
       ".DS_Store"
+      ".claude"
     ];
 
     # Enhanced diffs

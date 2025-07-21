@@ -44,6 +44,10 @@
 
     powerlevel10k.url = "github:romkatv/powerlevel10k";
     powerlevel10k.flake = false;
+
+    # My project
+    project.url = "github:gfanton/projects";
+    project.inputs.nixpkgs.follows = "nixpkgs-unstable";
   };
 
   outputs =
@@ -140,6 +144,8 @@
           zsh-plugins.fzf-tab = inputs.fzf-tab;
           zsh-plugins.powerlevel10k = inputs.powerlevel10k;
           # yabai = inputs.yabai;
+          # Use project from flake input
+          project = inputs.project.packages.${final.system}.default;
         };
 
         # My overlays

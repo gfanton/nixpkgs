@@ -95,8 +95,9 @@ in
     # open new split (window) with cmd+d retaining the cwd
     "kitty_mod+l" = "next_layout";
 
-    "cmd+d" = "launch --cwd=current --location=vsplit";
-    "cmd+shift+d" = "launch --cwd=current --location=hsplit";
+    # Commented out to train with tmux instead
+    # "cmd+d" = "launch --cwd=current --location=vsplit";
+    # "cmd+shift+d" = "launch --cwd=current --location=hsplit";
 
     "cmd+enter" = "new_os_window_with_cwd";
 

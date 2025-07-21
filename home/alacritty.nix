@@ -31,6 +31,9 @@ in
   # https://nix-community.github.io/home-manager/options.html#opt-programs.alacritty.enable
   programs.alacritty.enable = true;
 
+  # Enable truecolor support for Alacritty (conditional to avoid conflict with Kitty)
+  programs.truecolor.enable = true;
+
   programs.alacritty.settings = {
     # Font configuration
     font = {
@@ -70,6 +73,12 @@ in
     env = {
       TERM = "alacritty";
       TERMINFO_DIRS = "/etc/profiles/per-user/gfanton/share/terminfo:/usr/share/terminfo";
+      COLORTERM = "truecolor";
+    };
+
+    # Terminal settings for better color accuracy
+    terminal = {
+      osc52 = "CopyPaste";  # Enable OSC 52 for clipboard
     };
 
     # Colors (using dark theme by default)
@@ -86,8 +95,7 @@ in
       # Clear screen (similar to kitty cmd+k)
       { key = "K"; mods = "Command"; chars = "\f"; }
       
-      # Clear screen with Ctrl+L
-      { key = "L"; mods = "Control"; chars = "\f"; }
+      # Note: Ctrl+L removed to let tmux handle it properly
       
       # Font size controls
       { key = "Equals"; mods = "Control|Alt"; action = "IncreaseFontSize"; }

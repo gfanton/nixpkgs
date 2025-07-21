@@ -77,16 +77,17 @@ in
       }
     ];
     extraConfig = ''
-      # Terminal detection and color support
-      if "[ $(tput colors) = 16777216 ]" {
-        set -g default-terminal "tmux-direct"
-      } {
-        if "[ $(tput colors) = 256 ]" {
-          set -g default-terminal "tmux-256color"
-        } {
-          set -g default-terminal "tmux"
-        }
-      }
+      # Terminal and color support
+      set -g default-terminal "tmux-256color"
+      set -ag terminal-overrides ",alacritty:RGB,alacritty:Tc"
+      set -ag terminal-overrides ",xterm-256color:RGB,xterm-256color:Tc"
+      set -ag terminal-overrides ",*256col*:RGB,*256col*:Tc"
+      set -ag terminal-overrides ",xterm-kitty:RGB,xterm-kitty:Tc"
+      
+      # Enable true color support and other capabilities
+      set -sa terminal-features ',alacritty:RGB:usstyle'
+      set -sa terminal-features ',xterm-256color:RGB:usstyle'
+      set -sa terminal-features ',xterm-kitty:RGB:usstyle'
       
       # General settings
       setw -g mode-keys emacs
@@ -138,7 +139,17 @@ in
       bind-key e new-window -c "#{pane_current_path}" "TERM=xterm-emacs ${xemacsclient}/bin/xemacsclient -t ."
       
       # Clear screen with Ctrl+L
-      bind-key -n C-l send-keys "clear" Enter
+      bind-key -n C-l send-keys C-l
+      
+      # Split panes with current directory
+      bind-key '"' split-window -c "#{pane_current_path}"
+      bind-key % split-window -h -c "#{pane_current_path}"
+      
+      # New window with current directory
+      bind-key c new-window -c "#{pane_current_path}"
+      
+      # Create new session with prompted name
+      bind-key S command-prompt -p "New session name:" "new-session -s '%%'"
     '';
   };
 
@@ -190,12 +201,12 @@ in
       entr
       cmake
       gnupg
-      fzf
 
       # my
       my-libvterm
       my-loon
       my-gnolint
+      project  # From flake input
 
       # stable
       procs # fancy version of `ps`
