@@ -178,6 +178,7 @@ in
               # https://github.com/Aloxaf/fzf-tab
               
               # ESSENTIAL: Core fzf-tab configuration 
+              # Disable menu globally to allow fzf-tab to work (required)
               zstyle ':completion:*' menu no
               zstyle ':completion:*:descriptions' format '[%d]'
               zstyle ':completion:*' list-colors ''${(s.:.)LS_COLORS}
@@ -278,6 +279,20 @@ in
         zstyle ":completion:*:git-checkout:*" sort false
         zstyle ':completion:*:descriptions' format '[%d]'
         zstyle ':completion:*' list-colors "''${(s.:.)LS_COLORS}"
+
+        # Project completion configuration
+        # Option 1: Disable fzf-tab for p command to use native zsh completion
+        zstyle ':fzf-tab:complete:p:*' disabled-on any
+        zstyle ':completion:*:p:*' menu yes select interactive
+        
+        # Option 2: Enhanced fzf-tab integration for p command (alternative)
+        # zstyle ':fzf-tab:complete:p:*' fzf-preview 'echo "Navigate to: {}"'
+        # zstyle ':fzf-tab:complete:p:*' fzf-flags --header="Project Navigation" --height=60%
+        
+        # Load project shell integration if available
+        if command -v proj >/dev/null 2>&1; then
+          eval "$(proj init zsh)"
+        fi
 
         # tmux shell integration functions (adapted from https://chadaustin.me/2024/02/tmux-config/)
         if [[ "$TMUX" ]]; then

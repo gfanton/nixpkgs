@@ -153,6 +153,7 @@
         my-gnolint = import ./overlays/gnolint.nix;
         my-libvterm = import ./overlays/libvterm.nix;
         my-tmux-open-emacs = import ./overlays/tmux-open-emacs.nix;
+        my-tmux-notify = import ./overlays/tmux-notify.nix;
       };
 
       # Non-system outputs --------------------------------------------------------------------- {{{

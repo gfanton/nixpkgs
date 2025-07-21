@@ -75,6 +75,12 @@ in
           set -g @toe-open-key 'C-e'
         '';
       }
+      {
+        plugin = tmuxPlugins.tmux-notify;
+        extraConfig = ''
+          # tmux-notify plugin config would go here if needed
+        '';
+      }
     ];
     extraConfig = ''
       # Terminal and color support

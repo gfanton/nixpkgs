@@ -31,10 +31,13 @@ all:
 	@echo "switch.macbook"
 	@echo "switch.bot"
 
+build.macbook:
+	nix build ${impure} ${fallback} --verbose .#darwinConfigurations.macbook.system
+
 switch.bootstrap: result/sw/bin/darwin-rebuild
 	./result/sw/bin/darwin-rebuild switch ${impure} ${fallback} --verbose --flake ".#$(BOOTSTRAP)"
 switch.macbook: result/sw/bin/darwin-rebuild
-	TERM=xterm ./result/sw/bin/darwin-rebuild switch ${impure} ${fallback} --verbose --flake .#macbook
+	TERM=xterm sudo ./result/sw/bin/darwin-rebuild switch ${impure} ${fallback} --verbose --flake .#macbook
 switch.bot: result/sw/bin/darwin-rebuild
 	../result/sw/bin/darwin-rebuild switch ${impure} ${fallback} --verbose --flake .#bot
 
