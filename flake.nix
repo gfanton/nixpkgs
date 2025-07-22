@@ -39,14 +39,12 @@
     fast-syntax-highlighting.url = "github:zdharma-continuum/fast-syntax-highlighting";
     fast-syntax-highlighting.flake = false;
 
-    fzf-tab.url = "github:Aloxaf/fzf-tab";
-    fzf-tab.flake = false;
 
     powerlevel10k.url = "github:romkatv/powerlevel10k";
     powerlevel10k.flake = false;
 
     # My project
-    project.url = "github:gfanton/projects";
+    project.url = "github:gfanton/projects/v0.11.0";
     project.inputs.nixpkgs.follows = "nixpkgs-unstable";
   };
 
@@ -141,11 +139,12 @@
           doomemacs = inputs.doomemacs;
           chemacs2 = inputs.chemacs2;
           zsh-plugins.fast-syntax-highlighting = inputs.fast-syntax-highlighting;
-          zsh-plugins.fzf-tab = inputs.fzf-tab;
           zsh-plugins.powerlevel10k = inputs.powerlevel10k;
           # yabai = inputs.yabai;
-          # Use project from flake input
-          project = inputs.project.packages.${final.system}.default;
+          # Use project from flake input with fixed vendorHash
+          project = inputs.project.packages.${final.system}.default.overrideAttrs (oldAttrs: {
+            vendorHash = "sha256-B375AvklOVKxpIR60CatnmRgOFpqhlKyKF32isB+ncI=";
+          });
         };
 
         # My overlays

@@ -110,6 +110,7 @@ in
       # Status bar
       set -g status-keys emacs
       set -g status-interval 5
+      set -g status-position top
       
       # Window titles
       set -g set-titles on

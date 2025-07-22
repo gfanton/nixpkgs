@@ -26,7 +26,9 @@
       "*#"
       ".#*"
       ".DS_Store"
+      ".mynote"
       ".claude"
+      "CLAUDE.md"
     ];
 
     # Enhanced diffs
