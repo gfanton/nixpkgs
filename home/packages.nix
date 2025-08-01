@@ -89,38 +89,38 @@ in
       set -ag terminal-overrides ",xterm-256color:RGB,xterm-256color:Tc"
       set -ag terminal-overrides ",*256col*:RGB,*256col*:Tc"
       set -ag terminal-overrides ",xterm-kitty:RGB,xterm-kitty:Tc"
-      
+
       # Enable true color support and other capabilities
       set -sa terminal-features ',alacritty:RGB:usstyle'
       set -sa terminal-features ',xterm-256color:RGB:usstyle'
       set -sa terminal-features ',xterm-kitty:RGB:usstyle'
-      
+
       # General settings
       setw -g mode-keys emacs
       set -s escape-time 200
       set -g history-limit 100000
       setw -g aggressive-resize on
       set -g mouse on
-      
+
       # Window and pane numbering
       set -g base-index 1
       setw -g pane-base-index 1
       setw -g renumber-windows on
-      
+
       # Status bar
       set -g status-keys emacs
       set -g status-interval 5
       set -g status-position top
-      
+
       # Window titles
       set -g set-titles on
       set -g set-titles-string "#T"
-      
+
       # Activity monitoring
       setw -g monitor-activity on
       set -g visual-activity off
       set -g bell-action none
-      
+
       # Alt+number window selection
       bind-key -n M-1 select-window -t 1
       bind-key -n M-2 select-window -t 2
@@ -131,30 +131,30 @@ in
       bind-key -n M-7 select-window -t 7
       bind-key -n M-8 select-window -t 8
       bind-key -n M-9 select-window -t 9
-      
+
       # Window reordering
       bind-key -n M-< swap-window -t -1 \; previous-window
       bind-key -n M-> swap-window -t +1 \; next-window
-      
+
       # Toggle status bar
       bind-key t set -g status
-      
+
       # Reload config
       bind-key r source-file ~/.config/tmux/tmux.conf \; display-message "Config reloaded"
-      
+
       # Bind e to open emacsclient in new window
       bind-key e new-window -c "#{pane_current_path}" "TERM=xterm-emacs ${xemacsclient}/bin/xemacsclient -t ."
-      
+
       # Clear screen with Ctrl+L
       bind-key -n C-l send-keys C-l
-      
+
       # Split panes with current directory
       bind-key '"' split-window -c "#{pane_current_path}"
       bind-key % split-window -h -c "#{pane_current_path}"
-      
+
       # New window with current directory
       bind-key c new-window -c "#{pane_current_path}"
-      
+
       # Create new session with prompted name
       bind-key S command-prompt -p "New session name:" "new-session -s '%%'"
     '';
@@ -213,7 +213,7 @@ in
       my-libvterm
       my-loon
       my-gnolint
-      project  # From flake input
+      project # From flake input
 
       # stable
       procs # fancy version of `ps`

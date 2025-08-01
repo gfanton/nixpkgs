@@ -193,23 +193,26 @@ in
         ++ lib.optionals pkgs.stdenv.isLinux [ ];
     };
 
-    initExtra = lib.mkMerge [
+    initContent = lib.mkMerge [
       (lib.mkBefore ''
         # Powerlevel10k instant prompt will be enabled by the theme
       '')
       (lib.mkAfter ''
         # Shell environment configuration
-        export ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE=fg:240
         export ZSH_TAB_TITLE_ONLY_FOLDER=true
         export ZSH_TAB_TITLE_ADDITIONAL_TERMS=iterm
 
-        # Additional completion configuration 
+        # Set autosuggestion style after plugins are loaded
+        # Using color0 (surface1 from catppuccin-macchiato: #494d64)
+        ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=0'
+
+        # Additional completion configuration
         zstyle ':completion:*:descriptions' format '[%d]'
         zstyle ':completion:*' list-colors "''${(s.:.)LS_COLORS}"
 
         # Project completion configuration
         zstyle ':completion:*:p:*' menu yes select interactive
-        
+
         # Load project shell integration if available
         if command -v proj >/dev/null 2>&1; then
           eval "$(proj init zsh)"

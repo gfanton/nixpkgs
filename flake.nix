@@ -39,12 +39,11 @@
     fast-syntax-highlighting.url = "github:zdharma-continuum/fast-syntax-highlighting";
     fast-syntax-highlighting.flake = false;
 
-
     powerlevel10k.url = "github:romkatv/powerlevel10k";
     powerlevel10k.flake = false;
 
     # My project
-    project.url = "github:gfanton/projects/v0.11.0";
+    project.url = "github:gfanton/projects";
     project.inputs.nixpkgs.follows = "nixpkgs-unstable";
   };
 
