@@ -41,7 +41,7 @@
   };
 
   # Add ability to used TouchID for sudo authentication with tmux support
-  
+
   security.pam.services.sudo_local.text = ''
     # sudo_local: local config file which survives system update and is included for sudo
     # uncomment the following line to implicitly trust users in the admin group

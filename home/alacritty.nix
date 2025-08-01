@@ -78,7 +78,7 @@ in
 
     # Terminal settings for better color accuracy
     terminal = {
-      osc52 = "CopyPaste";  # Enable OSC 52 for clipboard
+      osc52 = "CopyPaste"; # Enable OSC 52 for clipboard
     };
 
     # Colors (using dark theme by default)
@@ -87,33 +87,77 @@ in
     # Keyboard bindings
     keyboard.bindings = [
       # New tab (similar to kitty cmd+t)
-      { key = "T"; mods = "Command"; action = "CreateNewWindow"; }
-      
+      {
+        key = "T";
+        mods = "Command";
+        action = "CreateNewWindow";
+      }
+
       # New window
-      { key = "Return"; mods = "Command"; action = "CreateNewWindow"; }
-      
+      {
+        key = "Return";
+        mods = "Command";
+        action = "CreateNewWindow";
+      }
+
       # Clear screen (similar to kitty cmd+k)
-      { key = "K"; mods = "Command"; chars = "\f"; }
-      
+      {
+        key = "K";
+        mods = "Command";
+        chars = "\f";
+      }
+
       # Note: Ctrl+L removed to let tmux handle it properly
-      
+
       # Font size controls
-      { key = "Equals"; mods = "Control|Alt"; action = "IncreaseFontSize"; }
-      { key = "Minus"; mods = "Control|Alt"; action = "DecreaseFontSize"; }
-      { key = "Key0"; mods = "Control|Alt"; action = "ResetFontSize"; }
-      
+      {
+        key = "Equals";
+        mods = "Control|Alt";
+        action = "IncreaseFontSize";
+      }
+      {
+        key = "Minus";
+        mods = "Control|Alt";
+        action = "DecreaseFontSize";
+      }
+      {
+        key = "Key0";
+        mods = "Control|Alt";
+        action = "ResetFontSize";
+      }
+
       # Copy/Paste
-      { key = "C"; mods = "Command"; action = "Copy"; }
-      { key = "V"; mods = "Command"; action = "Paste"; }
-      
+      {
+        key = "C";
+        mods = "Command";
+        action = "Copy";
+      }
+      {
+        key = "V";
+        mods = "Command";
+        action = "Paste";
+      }
+
       # Quit
-      { key = "Q"; mods = "Command"; action = "Quit"; }
-      
+      {
+        key = "Q";
+        mods = "Command";
+        action = "Quit";
+      }
+
       # Hide window
-      { key = "H"; mods = "Command"; action = "Hide"; }
-      
+      {
+        key = "H";
+        mods = "Command";
+        action = "Hide";
+      }
+
       # Toggle fullscreen
-      { key = "F"; mods = "Command|Shift"; action = "ToggleFullscreen"; }
+      {
+        key = "F";
+        mods = "Command|Shift";
+        action = "ToggleFullscreen";
+      }
     ];
   };
 }
