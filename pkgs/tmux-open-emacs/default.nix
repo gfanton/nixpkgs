@@ -1,16 +1,17 @@
-{ lib
-, tmuxPlugins
-, makeWrapper
-, tmux
-, xemacsclient ? null
+{
+  lib,
+  tmuxPlugins,
+  makeWrapper,
+  tmux,
+  xemacsclient ? null,
 }:
 
 tmuxPlugins.mkTmuxPlugin {
   pluginName = "tmux-open-emacs";
   version = "1.0.0";
-  
+
   src = ./.;
-  
+
   rtpFilePath = "tmux-open-emacs.tmux";
 
   nativeBuildInputs = [ makeWrapper ];
@@ -21,11 +22,13 @@ tmuxPlugins.mkTmuxPlugin {
     mkdir -p $out/bin
     cp scripts/toe $out/bin/toe
     chmod +x $out/bin/toe
-    
+
     # Wrap the CLI script to include necessary tools in PATH
     wrapProgram $out/bin/toe \
       --prefix PATH : ${lib.makeBinPath [ tmux ]} \
-      ${lib.optionalString (xemacsclient != null) "--set EMACSCLIENT_PATH ${xemacsclient}/bin/xemacsclient"}
+      ${lib.optionalString (
+        xemacsclient != null
+      ) "--set EMACSCLIENT_PATH ${xemacsclient}/bin/xemacsclient"}
   '';
 
   meta = with lib; {

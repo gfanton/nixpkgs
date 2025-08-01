@@ -1,9 +1,13 @@
-{ lib, tmuxPlugins, fetchFromGitHub }:
+{
+  lib,
+  tmuxPlugins,
+  fetchFromGitHub,
+}:
 
 tmuxPlugins.mkTmuxPlugin {
   pluginName = "tmux-notify";
   version = "1.6.0";
-  
+
   src = fetchFromGitHub {
     owner = "rickstaa";
     repo = "tmux-notify";
@@ -24,6 +28,6 @@ tmuxPlugins.mkTmuxPlugin {
     description = "A tmux plugin that enables you to receive notifications when processes complete";
     license = licenses.mit;
     platforms = platforms.unix;
-    maintainers = [];
+    maintainers = [ ];
   };
 }

@@ -81,6 +81,46 @@ in
           # tmux-notify plugin config would go here if needed
         '';
       }
+      {
+        plugin = pkgs.tmuxPlugins.mkTmuxPlugin rec {
+          pluginName = "tmux-proj";
+          version = "0.16.2";
+          rtpFilePath = "proj-tmux.tmux";
+          
+          # Use the plugin source directly from the project flake
+          src = "${project.src}/plugins/proj-tmux/plugin";
+
+          nativeBuildInputs = with pkgs; [ makeWrapper ];
+
+          postInstall = ''
+            # Wrap scripts to ensure proj is in PATH
+            if [ -d $out/share/tmux-plugins/tmux-proj/scripts ]; then
+              for script in $out/share/tmux-plugins/tmux-proj/scripts/*.sh; do
+                if [ -f "$script" ]; then
+                  wrapProgram "$script" \
+                    --prefix PATH : ${pkgs.lib.makeBinPath [ project pkgs.tmux ]}
+                fi
+              done
+            fi
+          '';
+
+          meta = with pkgs.lib; {
+            description = "A tmux plugin for proj - Git-based project management with session integration";
+            homepage = "https://github.com/gfanton/project";
+            license = licenses.mit;
+            platforms = platforms.unix;
+          };
+        };
+        extraConfig = ''
+          # Configure tmux-proj plugin
+          set -g @proj_key 'P'
+          set -g @proj_popup_key 'C-p'
+          set -g @proj_auto_session 'on'
+          set -g @proj_show_status 'on'
+          set -g @proj_session_format 'proj-#{org}-#{name}'
+          set -g @proj_window_format '#{branch}'
+        '';
+      }
     ];
     extraConfig = ''
       # Terminal and color support
@@ -274,9 +314,13 @@ in
       nix-prefetch-git
       nixfmt-rfc-style
     ]
-    ++ lib.optionals stdenv.isDarwin [ cocoapods ]
+    ++ lib.optionals stdenv.isDarwin [ 
+      cocoapods
+      colima # Container runtime for macOS
+    ]
     ++ lib.optionals stdenv.isLinux [
       docker
       docker-compose
+      colima # Container runtime for Linux
     ];
 }

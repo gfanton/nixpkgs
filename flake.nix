@@ -43,7 +43,7 @@
     powerlevel10k.flake = false;
 
     # My project
-    project.url = "github:gfanton/projects";
+    project.url = "github:gfanton/project/v0.16.2";
     project.inputs.nixpkgs.follows = "nixpkgs-unstable";
   };
 
@@ -152,6 +152,7 @@
         my-libvterm = import ./overlays/libvterm.nix;
         my-tmux-open-emacs = import ./overlays/tmux-open-emacs.nix;
         my-tmux-notify = import ./overlays/tmux-notify.nix;
+        # my-tmux-proj = import ./overlays/tmux-proj.nix; # Temporarily disabled
       };
 
       # Non-system outputs --------------------------------------------------------------------- {{{
@@ -171,9 +172,11 @@
         my-yabai = import ./darwin/yabai.nix;
         my-jankyborders = import ./darwin/jankyborders.nix;
         my-skhd = import ./darwin/skhd.nix;
+        my-colima = import ./darwin/colima.nix;
 
         # local modules
         services-emacsd = import ./modules/darwin/services/emacsd.nix;
+        services-colima = import ./modules/darwin/services/colima.nix;
         users-primaryUser = import ./modules/darwin/users.nix;
         programs-nix-index = import ./modules/darwin/programs/nix-index.nix;
       };
@@ -188,6 +191,7 @@
         my-asdf = import ./home/asdf.nix;
         my-emacs = import ./home/emacs.nix;
         my-config = import ./home/config.nix;
+        my-colima = import ./home/colima.nix;
 
         # local modules
         programs-truecolor = import ./modules/home/programs/truecolor;
