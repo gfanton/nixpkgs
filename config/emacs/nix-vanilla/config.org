@@ -98,10 +98,17 @@
     :demand t
     :config
     (general-create-definer my/leader-keys
-      :keymaps '(normal insert visual emacs)
+      :states '(normal insert visual emacs)
+      :keymaps 'override
       :prefix "SPC"
-      :global-prefix "C-SPC")
-    
+      :global-prefix "M-SPC")
+
+    ;; Major mode leader key (comma) for evil normal state
+    (general-create-definer my/major-mode-keys
+      :states '(normal visual)
+      :prefix ","
+      :non-normal-prefix "C-,")
+
     (my/leader-keys
       "f" '(:ignore t :which-key "files")
       "ff" '(find-file :which-key "find file")
@@ -141,7 +148,7 @@
       "ls" '(lsp-workspace-shutdown :which-key "shutdown workspace")
       "ld" '(lsp-describe-session :which-key "describe session")
       "lS" '(consult-lsp-symbols :which-key "workspace symbols")
-      "lf" '(consult-lsp-file-symbols :which-key "file symbols") 
+      "lf" '(consult-lsp-file-symbols :which-key "file symbols")
       "le" '(consult-lsp-diagnostics :which-key "diagnostics")
       "t" '(:ignore t :which-key "toggle")
       "tt" '(my/toggle-theme :which-key "toggle theme")))
@@ -151,7 +158,48 @@
     :config
     (which-key-mode))
 
-  ;; Mode-specific keybindings for LSP
+  ;; LSP major mode keybindings (Spacemacs style)
+  (defun my/lsp-setup-keybindings ()
+    "Setup LSP keybindings in major mode style."
+    (my/major-mode-keys
+      :keymaps 'lsp-mode-map
+      ;; Navigation (like Spacemacs SPC m g)
+      "g" '(:ignore t :which-key "goto")
+      "gd" 'lsp-find-definition
+      "gD" 'lsp-find-declaration
+      "gi" 'lsp-find-implementation
+      "gt" 'lsp-find-type-definition
+      "gr" 'lsp-find-references
+      "gb" 'xref-go-back
+
+      ;; Refactoring (like Spacemacs SPC m r)
+      "r" '(:ignore t :which-key "refactor")
+      "rr" 'lsp-rename
+
+      ;; Actions (like Spacemacs SPC m a)
+      "a" '(:ignore t :which-key "actions")
+      "aa" 'lsp-execute-code-action
+
+      ;; Format (like Spacemacs SPC m =)
+      "=" '(:ignore t :which-key "format")
+      "=b" 'lsp-format-buffer
+      "=r" 'lsp-format-region
+      "=o" 'lsp-organize-imports
+
+      ;; Help (like Spacemacs SPC m h)
+      "h" '(:ignore t :which-key "help")
+      "hh" 'lsp-describe-thing-at-point
+
+      ;; Backend/Workspace (like Spacemacs SPC m b)
+      "b" '(:ignore t :which-key "backend")
+      "br" 'lsp-workspace-restart
+      "bs" 'lsp-workspace-shutdown
+      "bd" 'lsp-describe-session))
+
+  ;; Apply LSP keybindings when lsp-mode starts
+  (add-hook 'lsp-mode-hook #'my/lsp-setup-keybindings)
+
+  ;; Global navigation bindings for any LSP-enabled buffer
   (general-define-key
    :states '(normal visual)
    :keymaps 'lsp-mode-map
@@ -159,14 +207,7 @@
    "gd" 'lsp-find-definition
    "gD" 'lsp-find-declaration
    "gi" 'lsp-find-implementation
-   "gt" 'lsp-find-type-definition
-   "," '(:ignore t :which-key "major mode")
-   ",r" '(:ignore t :which-key "refactor")
-   ",rr" 'lsp-rename
-   ",a" 'lsp-execute-code-action
-   ",f" 'lsp-format-buffer
-   ",h" 'lsp-describe-thing-at-point
-   ",=" 'lsp-format-buffer)
+   "gt" 'lsp-find-type-definition)
 
   ;; Evil normal state bindings for LSP UI
   (general-define-key
@@ -178,12 +219,12 @@
    "l" 'lsp-ui-peek--select-next-file)
 
   ;; Modern consult/embark integration patterns (2024-2025 best practices)
-  
+
   ;; Project search with better project root detection
   (defun my/consult-ripgrep-project (&optional initial)
     "Search project with consult-ripgrep using modern project detection."
     (interactive)
-    (let ((project-root (or 
+    (let ((project-root (or
                          ;; Try modern project.el first
                          (and (fboundp 'project-current)
                               (when-let (project (project-current))
@@ -195,7 +236,7 @@
                          ;; Final fallback
                          default-directory)))
       (consult-ripgrep project-root initial)))
-  
+
   ;; Modern wgrep integration (inspired by junkw/dot.emacs.d)
   (defun my/embark-export-wgrep ()
     "Export consult results to wgrep-enabled buffer."
@@ -250,7 +291,11 @@
      consult-bookmark consult-recent-file consult-xref
      consult--source-bookmark consult--source-recent-file
      consult--source-project-recent-file
-     :preview-key '(:debounce 0.4 any)))
+     :preview-key '(:debounce 0.4 any))
+
+    ;; Disable automatic follow in ripgrep, use M-. for manual follow
+    (consult-customize
+     consult-ripgrep :preview-key "M-."))
 
   (use-package embark
     :bind (("C-." . embark-act)
@@ -508,7 +553,7 @@
 * File associations
 
 #+begin_src emacs-lisp
-  ;; File associations  
+  ;; File associations
   (add-to-list 'auto-mode-alist '("\\.gohtml\\'" . go-template-mode))
 #+end_src
 
@@ -543,7 +588,7 @@
 * Spell checking
 
 #+begin_src emacs-lisp
-  ;; Aspell configuration (from your Spacemacs config) 
+  ;; Aspell configuration (from your Spacemacs config)
   (setq ispell-program-name "aspell")
 #+end_src
 
