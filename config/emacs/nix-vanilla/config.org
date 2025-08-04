@@ -1,0 +1,578 @@
+#  -*- coding: utf-8 -*-
+#+TITLE: Nix-Vanilla Emacs Configuration
+#+AUTHOR: Generated from Spacemacs migration
+
+* Performance optimizations
+
+#+begin_src emacs-lisp
+  (emacs-nix-log "Setting performance optimizations")
+  (setq gc-cons-threshold 100000000)
+  (setq read-process-output-max (* 1024 1024))
+  (emacs-nix-log "Performance optimizations set")
+#+end_src
+
+* Use-package setup
+
+#+begin_src emacs-lisp
+  (emacs-nix-log "Setting up use-package")
+  (require 'use-package)
+  (setq use-package-always-ensure nil) ; Nix manages packages
+  (setq use-package-always-defer t)
+  (emacs-nix-log "use-package configured")
+#+end_src
+
+* Basic settings
+
+#+begin_src emacs-lisp
+  (setq inhibit-startup-message t)
+  (setq visible-bell t)
+  (menu-bar-mode -1)
+  (tool-bar-mode -1)
+  (scroll-bar-mode -1)
+  (column-number-mode 1)
+  (global-display-line-numbers-mode 1)
+#+end_src
+
+* Font configuration
+
+#+begin_src emacs-lisp
+  (set-face-attribute 'default nil
+                      :font "JetBrainsMono Nerd Font"
+                      :height 120)
+#+end_src
+
+* Theme configuration
+
+#+begin_src emacs-lisp
+  ;; Theme
+  (use-package catppuccin-theme
+    :demand t
+    :config
+    (setq catppuccin-flavor 'macchiato)
+    (load-theme 'catppuccin t))
+
+  ;; Theme toggle function
+  (defun my/toggle-theme ()
+    "Toggle between light and dark theme."
+    (interactive)
+    (if (eq catppuccin-flavor 'macchiato)
+        (progn
+          (setq catppuccin-flavor 'latte)
+          (catppuccin-reload))
+      (progn
+        (setq catppuccin-flavor 'macchiato)
+        (catppuccin-reload))))
+#+end_src
+
+* Evil mode configuration
+
+#+begin_src emacs-lisp
+  (use-package evil
+    :demand t
+    :init
+    (setq evil-want-integration t)
+    (setq evil-want-keybinding nil)
+    (setq evil-want-C-u-scroll t)
+    (setq evil-want-C-i-jump nil)
+    :config
+    (evil-mode 1))
+
+  (use-package evil-collection
+    :after evil
+    :demand t
+    :config
+    (evil-collection-init))
+
+  (use-package evil-surround
+    :after evil
+    :demand t
+    :config
+    (global-evil-surround-mode 1))
+#+end_src
+
+* Keybinding framework
+
+#+begin_src emacs-lisp
+  ;; General keybinding framework
+  (use-package general
+    :demand t
+    :config
+    (general-create-definer my/leader-keys
+      :keymaps '(normal insert visual emacs)
+      :prefix "SPC"
+      :global-prefix "C-SPC")
+    
+    (my/leader-keys
+      "f" '(:ignore t :which-key "files")
+      "ff" '(find-file :which-key "find file")
+      "fs" '(save-buffer :which-key "save file")
+      "p" '(:ignore t :which-key "project")
+      "pp" '(projectile-switch-project :which-key "switch project")
+      "pf" '(projectile-find-file :which-key "find file in project")
+      "g" '(:ignore t :which-key "git")
+      "gs" '(magit-status :which-key "git status")
+      "b" '(:ignore t :which-key "buffer")
+      "bb" '(consult-buffer :which-key "switch buffer")
+      "bd" '(kill-current-buffer :which-key "kill buffer")
+      "w" '(:ignore t :which-key "window")
+      "wv" '(split-window-right :which-key "split vertical")
+      "ws" '(split-window-below :which-key "split horizontal")
+      "wd" '(delete-window :which-key "delete window")
+      "s" '(:ignore t :which-key "search")
+      "sp" '(my/consult-ripgrep-project :which-key "search project")
+      "ss" '(consult-line :which-key "search current buffer")
+      "si" '(consult-imenu :which-key "search imenu")
+      "so" '(consult-outline :which-key "search outline")
+      "sj" '(consult-line-multi :which-key "search all buffers")
+      "c" '(:ignore t :which-key "code")
+      "ca" '(lsp-execute-code-action :which-key "code action")
+      "cr" '(lsp-rename :which-key "rename symbol")
+      "cd" '(lsp-find-definition :which-key "go to definition")
+      "cD" '(lsp-find-declaration :which-key "go to declaration")
+      "ci" '(lsp-find-implementation :which-key "find implementation")
+      "ct" '(lsp-find-type-definition :which-key "go to type definition")
+      "cs" '(lsp-find-references :which-key "find references")
+      "ch" '(lsp-describe-thing-at-point :which-key "describe at point")
+      "cf" '(lsp-format-buffer :which-key "format buffer")
+      "cF" '(lsp-format-region :which-key "format region")
+      "co" '(lsp-organize-imports :which-key "organize imports")
+      "l" '(:ignore t :which-key "lsp")
+      "lr" '(lsp-workspace-restart :which-key "restart workspace")
+      "ls" '(lsp-workspace-shutdown :which-key "shutdown workspace")
+      "ld" '(lsp-describe-session :which-key "describe session")
+      "lS" '(consult-lsp-symbols :which-key "workspace symbols")
+      "lf" '(consult-lsp-file-symbols :which-key "file symbols") 
+      "le" '(consult-lsp-diagnostics :which-key "diagnostics")
+      "t" '(:ignore t :which-key "toggle")
+      "tt" '(my/toggle-theme :which-key "toggle theme")))
+
+  (use-package which-key
+    :demand t
+    :config
+    (which-key-mode))
+
+  ;; Mode-specific keybindings for LSP
+  (general-define-key
+   :states '(normal visual)
+   :keymaps 'lsp-mode-map
+   "gr" 'lsp-find-references
+   "gd" 'lsp-find-definition
+   "gD" 'lsp-find-declaration
+   "gi" 'lsp-find-implementation
+   "gt" 'lsp-find-type-definition
+   "," '(:ignore t :which-key "major mode")
+   ",r" '(:ignore t :which-key "refactor")
+   ",rr" 'lsp-rename
+   ",a" 'lsp-execute-code-action
+   ",f" 'lsp-format-buffer
+   ",h" 'lsp-describe-thing-at-point
+   ",=" 'lsp-format-buffer)
+
+  ;; Evil normal state bindings for LSP UI
+  (general-define-key
+   :states 'normal
+   :keymaps 'lsp-ui-peek-mode-map
+   "j" 'lsp-ui-peek--select-next
+   "k" 'lsp-ui-peek--select-prev
+   "h" 'lsp-ui-peek--select-prev-file
+   "l" 'lsp-ui-peek--select-next-file)
+
+  ;; Modern consult/embark integration patterns (2024-2025 best practices)
+  
+  ;; Project search with better project root detection
+  (defun my/consult-ripgrep-project (&optional initial)
+    "Search project with consult-ripgrep using modern project detection."
+    (interactive)
+    (let ((project-root (or 
+                         ;; Try modern project.el first
+                         (and (fboundp 'project-current)
+                              (when-let (project (project-current))
+                                (if (fboundp 'project-root)
+                                    (project-root project)
+                                  (car (project-roots project)))))
+                         ;; Fallback to projectile
+                         (projectile-project-root)
+                         ;; Final fallback
+                         default-directory)))
+      (consult-ripgrep project-root initial)))
+  
+  ;; Modern wgrep integration (inspired by junkw/dot.emacs.d)
+  (defun my/embark-export-wgrep ()
+    "Export consult results to wgrep-enabled buffer."
+    (interactive)
+    (embark-export)
+    ;; Auto-enable wgrep after export
+    (run-with-timer 0.1 nil
+                    (lambda ()
+                      (when (derived-mode-p 'grep-mode)
+                        (wgrep-change-to-wgrep-mode)))))
+#+end_src
+
+* Completion framework (Vertico ecosystem)
+
+#+begin_src emacs-lisp
+  ;; Vertico completion
+  (use-package vertico
+    :demand t
+    :bind (:map vertico-map
+           ("C-c C-e" . my/embark-export-wgrep))
+    :config
+    (vertico-mode))
+
+  (use-package orderless
+    :demand t
+    :custom
+    (completion-styles '(orderless basic))
+    (completion-category-overrides '((file (styles basic partial-completion)))))
+
+  (use-package marginalia
+    :demand t
+    :config
+    (marginalia-mode))
+
+  (use-package consult
+    :bind (("C-s" . consult-line)
+           ("C-x b" . consult-buffer)
+           ("M-y" . consult-yank-pop))
+    :init
+    ;; Modern project integration (from minad/consult best practices)
+    (setq consult-project-function
+          (lambda (_may-prompt)
+            (and (fboundp 'project-current)
+                 (when-let (project (project-current))
+                   (if (fboundp 'project-root)
+                       (project-root project)
+                     (car (project-roots project)))))))
+    :config
+    (consult-customize
+     consult-theme :preview-key '(:debounce 0.2 any)
+     consult-ripgrep consult-git-grep consult-grep
+     consult-bookmark consult-recent-file consult-xref
+     consult--source-bookmark consult--source-recent-file
+     consult--source-project-recent-file
+     :preview-key '(:debounce 0.4 any)))
+
+  (use-package embark
+    :bind (("C-." . embark-act)
+           ("C-;" . embark-dwim)
+           ("C-h B" . embark-bindings)
+           :map minibuffer-local-map
+           ("C-c C-e" . my/embark-export-wgrep))
+    :config
+    (add-to-list 'display-buffer-alist
+                 '("\\`\\*Embark Collect \\(Live\\|Completions\\)\\*"
+                   nil
+                   (window-parameters (mode-line-format . none)))))
+
+  (use-package embark-consult
+    :hook
+    (embark-collect-mode . consult-preview-at-point-mode))
+
+  ;; wgrep for editing grep results (modern approach)
+  (use-package wgrep
+    :config
+    (setq wgrep-auto-save-buffer t)
+    (setq wgrep-change-readonly-file t))
+
+  ;; Corfu for in-buffer completion
+  (use-package corfu
+    :demand t
+    :custom
+    (corfu-cycle t)
+    (corfu-auto t)
+    (corfu-separator ?\s)
+    (corfu-quit-no-match 'separator)
+    :config
+    (global-corfu-mode))
+
+  ;; Cape for completion at point extensions
+  (use-package cape
+    :config
+    (add-to-list 'completion-at-point-functions #'cape-dabbrev)
+    (add-to-list 'completion-at-point-functions #'cape-file))
+#+end_src
+
+* LSP Mode
+
+#+begin_src emacs-lisp
+  (use-package lsp-mode
+    :hook ((go-mode . lsp-deferred)
+           (rust-mode . lsp-deferred)
+           (typescript-mode . lsp-deferred)
+           (js2-mode . lsp-deferred)
+           (web-mode . lsp-deferred)
+           (nix-mode . lsp-deferred))
+    :commands (lsp lsp-deferred)
+    :custom
+    (lsp-completion-provider :none) ; Use corfu instead
+    (lsp-keymap-prefix "C-c l")
+    (lsp-idle-delay 0.5)
+    (lsp-enable-which-key-integration t)
+    :config
+    (defun my/lsp-mode-setup-completion ()
+      (setf (alist-get 'styles (alist-get 'lsp-capf completion-category-defaults))
+            '(orderless)))
+    :hook
+    (lsp-completion-mode . my/lsp-mode-setup-completion))
+
+  (use-package lsp-ui
+    :hook (lsp-mode . lsp-ui-mode)
+    :custom
+    (lsp-ui-sideline-enable nil)
+    (lsp-ui-doc-position 'bottom)
+    (lsp-ui-peek-always-show t)
+    (lsp-ui-doc-enable t))
+
+  ;; Modern LSP + Consult integration (2024-2025 best practices)
+  (use-package consult-lsp
+    :after (consult lsp-mode)
+    :bind (:map lsp-mode-map
+           ("C-c l s" . consult-lsp-symbols)
+           ("C-c l S" . consult-lsp-file-symbols)
+           ("C-c l d" . consult-lsp-diagnostics)))
+#+end_src
+
+* Programming languages
+
+#+begin_src emacs-lisp
+  ;; Go
+  (use-package go-mode
+    :mode "\\.go\\'"
+    :hook ((go-mode . lsp-deferred)
+           (before-save . lsp-format-buffer)
+           (before-save . lsp-organize-imports)))
+
+  ;; Rust
+  (use-package rust-mode
+    :mode "\\.rs\\'"
+    :hook (rust-mode . lsp-deferred))
+
+  ;; TypeScript/JavaScript
+  (use-package typescript-mode
+    :mode (("\\.ts\\'" . typescript-mode)
+           ("\\.tsx\\'" . typescript-mode)))
+
+  (use-package js2-mode
+    :mode "\\.js\\'"
+    :config
+    (setq js2-basic-offset 2))
+
+  ;; Web
+  (use-package web-mode
+    :mode (("\\.html\\'" . web-mode)
+           ("\\.css\\'" . web-mode)
+           ("\\.scss\\'" . web-mode)))
+
+  ;; Nix
+  (use-package nix-mode
+    :mode "\\.nix\\'")
+
+  ;; YAML/JSON
+  (use-package yaml-mode
+    :mode "\\.ya?ml\\'")
+
+  (use-package json-mode
+    :mode "\\.json\\'")
+
+  ;; Markdown
+  (use-package markdown-mode
+    :mode (("\\.md\\'" . markdown-mode)
+           ("\\.markdown\\'" . markdown-mode)))
+#+end_src
+
+* Git integration
+
+#+begin_src emacs-lisp
+  (use-package magit
+    :bind (("C-x g" . magit-status))
+    :config
+    (define-key magit-hunk-section-map (kbd "RET") 'magit-diff-visit-file-other-window)
+    (define-key magit-file-section-map (kbd "RET") 'magit-diff-visit-file-other-window))
+
+  (use-package forge
+    :after magit)
+
+  (use-package diff-hl
+    :demand t
+    :config
+    (global-diff-hl-mode))
+#+end_src
+
+* Project management
+
+#+begin_src emacs-lisp
+  (use-package projectile
+    :demand t
+    :config
+    (projectile-mode +1)
+    (setq projectile-switch-project-action 'projectile-dired))
+
+  (use-package consult-projectile
+    :after (consult projectile))
+#+end_src
+
+* Treemacs
+
+#+begin_src emacs-lisp
+  (use-package treemacs
+    :bind (("M-0" . treemacs-select-window)
+           ("C-x t 1" . treemacs-delete-other-windows)
+           ("C-x t t" . treemacs)
+           ("C-x t B" . treemacs-bookmark)
+           ("C-x t C-t" . treemacs-find-file)
+           ("C-x t M-t" . treemacs-find-tag)))
+
+  (use-package treemacs-evil
+    :after (treemacs evil))
+
+  (use-package treemacs-projectile
+    :after (treemacs projectile))
+
+  (use-package treemacs-magit
+    :after (treemacs magit))
+#+end_src
+
+* Org mode
+
+#+begin_src emacs-lisp
+  (use-package org
+    :mode (("\\.org\\'" . org-mode))
+    :config
+    (setq org-directory "~/org/")
+    (setq org-agenda-files '("~/org/"))
+    (setq org-startup-indented t)
+    (setq org-hide-emphasis-markers t))
+#+end_src
+
+* Terminal
+
+#+begin_src emacs-lisp
+  (use-package vterm
+    :bind (("C-c t" . vterm)))
+#+end_src
+
+* UI enhancements
+
+#+begin_src emacs-lisp
+  (use-package doom-modeline
+    :demand t
+    :config
+    (doom-modeline-mode 1))
+
+  (use-package all-the-icons)
+#+end_src
+
+* Utilities
+
+#+begin_src emacs-lisp
+  (use-package smartparens
+    :demand t
+    :config
+    (require 'smartparens-config)
+    (smartparens-global-mode t))
+
+  (use-package rainbow-delimiters
+    :hook (prog-mode . rainbow-delimiters-mode))
+
+  (use-package ws-butler
+    :hook (prog-mode . ws-butler-mode))
+
+  (use-package flycheck
+    :hook (prog-mode . flycheck-mode))
+
+  (use-package yasnippet
+    :demand t
+    :config
+    (yas-global-mode 1))
+
+  (use-package yasnippet-snippets
+    :after yasnippet)
+#+end_src
+
+* Custom modes
+
+#+begin_src emacs-lisp
+  (use-package templ-ts-mode
+    :mode "\\.templ\\'")
+
+  (use-package gno-mode
+    :mode "\\.gno\\'"
+    :config
+    (require 'gno))
+
+  (use-package go-template-mode
+    :mode (("\\.gohtml\\'" . go-template-mode)
+           ("\\.gotmpl\\'" . go-template-mode)))
+#+end_src
+
+* File associations
+
+#+begin_src emacs-lisp
+  ;; File associations  
+  (add-to-list 'auto-mode-alist '("\\.gohtml\\'" . go-template-mode))
+#+end_src
+
+* Window movement and keybindings
+
+#+begin_src emacs-lisp
+  ;; Window movement (maintain Spacemacs-like behavior)
+  (global-set-key (kbd "C-h") 'windmove-left)
+  (global-set-key (kbd "C-j") 'windmove-down)
+  (global-set-key (kbd "C-k") 'windmove-up)
+  (global-set-key (kbd "C-l") 'windmove-right)
+
+  ;; Additional keybindings from your Spacemacs config
+  (global-set-key (kbd "C-x k") 'kill-current-buffer)
+  (global-set-key (kbd "C-c C-t") 'my/toggle-theme)
+#+end_src
+
+* File management
+
+#+begin_src emacs-lisp
+  ;; Auto-save configuration (from your Spacemacs config)
+  (unless (file-exists-p "/tmp/.emacs-saves/")
+    (make-directory "/tmp/.emacs-saves/" t))
+  (setq auto-save-file-name-transforms
+        `((".*" "/tmp/.emacs-saves/" t)))
+
+  ;; Lock files in tmp (from your Spacemacs config)
+  (setq lock-file-name-transforms
+        `((".*" ,temporary-file-directory t)))
+#+end_src
+
+* Spell checking
+
+#+begin_src emacs-lisp
+  ;; Aspell configuration (from your Spacemacs config) 
+  (setq ispell-program-name "aspell")
+#+end_src
+
+* Whitespace management
+
+#+begin_src emacs-lisp
+  ;; Delete trailing whitespace configuration (from your Spacemacs config)
+  (defvar auto-delete-trailing-whitespace t
+    "Automatically delete trailing whitespace on save.")
+
+  (defun toggle-auto-delete-trailing-whitespace ()
+    "Toggle the automatic deletion of trailing whitespace."
+    (interactive)
+    (setq auto-delete-trailing-whitespace (not auto-delete-trailing-whitespace))
+    (if auto-delete-trailing-whitespace
+        (message "Auto delete trailing whitespace enabled")
+      (message "Auto delete trailing whitespace disabled")))
+
+  (defun maybe-delete-trailing-whitespace ()
+    "Delete trailing whitespace if `auto-delete-trailing-whitespace' is non-nil."
+    (when auto-delete-trailing-whitespace
+      (delete-trailing-whitespace)))
+
+  (add-hook 'before-save-hook 'maybe-delete-trailing-whitespace)
+#+end_src
+
+* Performance restore
+
+#+begin_src emacs-lisp
+  ;; Performance optimization: restore GC threshold
+  (setq gc-cons-threshold 800000)
+#+end_src

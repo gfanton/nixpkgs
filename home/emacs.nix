@@ -16,6 +16,11 @@ let
   '';
 in
 {
+  # Import the new Nix-native Emacs configuration
+  imports = [
+    ./emacs-nix.nix
+  ];
+
   # Export xterm-emacsclient for use in other modules
   _module.args.xemacsclient = xterm-emacsclient;
 
@@ -39,15 +44,7 @@ in
   home.file.".emacs-profile" = with pkgs; {
     source = writeText "emacs-profiles" "spacemacs";
   };
-  home.file.".emacs-profiles.el" = with pkgs; {
-    source = writeText "emacs-profiles" ''
-      (
-       ("doom" . ((user-emacs-directory . "~/emacs/doomemacs")
-             (env . (("DOOMDIR" . "~/doom-config")))))
-       ("spacemacs" . ((user-emacs-directory . "~/emacs/spacemacs")))
-      )
-    '';
-  };
+  # Note: .emacs-profiles.el is now managed by emacs-nix.nix to include all profiles
 
   home.packages = [ pkgs.sqlite ]; # add sqlite packages required by magit
 
@@ -57,8 +54,9 @@ in
     recursive = true;
   };
 
-  programs.emacs.enable = true;
-  programs.emacs.package = pkgs.emacs-gtk;
+  # Emacs program configuration will be managed by individual profiles
+  # programs.emacs.enable = true;
+  # programs.emacs.package = pkgs.emacs-gtk;
 
   # setup alias
   programs.zsh.shellAliases.xemacs = "${xterm-emacs}/bin/xemacs --with-profile=spacemacs";
