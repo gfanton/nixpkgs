@@ -7,8 +7,8 @@
 let
   inherit (config.home) user-info homeDirectory;
 
-  # Modern Emacs with overlay for latest packages
-  emacs-base = pkgs.emacs-gtk.override {
+  # Terminal-only Emacs (no GUI dependencies)
+  emacs-base = pkgs.emacs-nox.override {
     withNativeCompilation = true;
     withTreeSitter = true;
   };
@@ -111,10 +111,10 @@ let
       org-cliplink
 
       # UI enhancements
-      doom-modeline
-      all-the-icons
       catppuccin-theme
       modus-themes
+      doom-modeline
+      all-the-icons
 
       # Terminal integration
       vterm
@@ -184,16 +184,8 @@ let
     # Tree-sitter grammars will be managed by Emacs packages instead
   ];
 
-  # Terminal wrappers
-  xterm-emacsclient = pkgs.writeShellScriptBin "xemacsclient" ''
-    export TERM=xterm-emacs
-    ${myEmacs}/bin/emacsclient $@
-  '';
-
-  xterm-emacs = pkgs.writeShellScriptBin "xemacs" ''
-    export TERM=xterm-emacs
-    ${myEmacs}/bin/emacs $@
-  '';
+  # Clean terminal wrappers for nix-vanilla (no xterm overrides)
+  # Note: xterm overrides are preserved for Spacemacs in emacs.nix
 
 in
 {
@@ -222,23 +214,18 @@ in
   home.packages = customPackages ++ [
     # Make myEmacs available through aliases
     myEmacs
-    # Install wrapper scripts for terminal settings
-    xterm-emacs
-    xterm-emacsclient
   ];
 
   # Export the new emacs for use in other modules
   _module.args.myEmacs = myEmacs;
 
-  # Shell aliases for the new configuration (use mkDefault to avoid conflicts)
+  # Shell aliases for the nix-vanilla configuration (clean, no xterm overrides)
   programs.zsh.shellAliases = {
-    # New nix-vanilla profile
-    "emacs-nix" = "${xterm-emacs}/bin/xemacs --with-profile=nix-vanilla";
-    "emacsclient-nix" = "${xterm-emacsclient}/bin/xemacsclient";  # Client connects to existing daemon
+    # Nix-vanilla profile aliases using myEmacs (with all packages) - clean terminal support
+    "emacs-nix" = "${myEmacs}/bin/emacs --with-profile=nix-vanilla";
+    "emacsclient-nix" = "${myEmacs}/bin/emacsclient";  # Client connects to existing daemon
     "emacs-nix-nw" = "${myEmacs}/bin/emacs -nw --with-profile=nix-vanilla";
     "emacsclient-nix-nw" = "${myEmacs}/bin/emacsclient -nw";  # Client connects to existing daemon
-
-    # Keep spacemacs as default, don't override existing aliases
   };
 
   # Tree-sitter will be managed by Emacs tree-sitter packages

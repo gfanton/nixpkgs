@@ -26,9 +26,10 @@
 #+begin_src emacs-lisp
   (setq inhibit-startup-message t)
   (setq visible-bell t)
-  (menu-bar-mode -1)
-  (tool-bar-mode -1)
-  (scroll-bar-mode -1)
+  ;; Terminal-only settings (no GUI elements)
+  (when (fboundp 'menu-bar-mode) (menu-bar-mode -1))
+  (when (fboundp 'tool-bar-mode) (tool-bar-mode -1))
+  (when (fboundp 'scroll-bar-mode) (scroll-bar-mode -1))
   (column-number-mode 1)
   (global-display-line-numbers-mode 1)
 #+end_src
@@ -36,9 +37,11 @@
 * Font configuration
 
 #+begin_src emacs-lisp
-  (set-face-attribute 'default nil
-                      :font "JetBrainsMono Nerd Font"
-                      :height 120)
+  ;; Font configuration (terminal will use its own font)
+  (when (display-graphic-p)
+    (set-face-attribute 'default nil
+                        :font "JetBrainsMono Nerd Font"
+                        :height 120))
 #+end_src
 
 * Theme configuration
@@ -62,6 +65,56 @@
       (progn
         (setq catppuccin-flavor 'macchiato)
         (catppuccin-reload))))
+#+end_src
+
+* Doom Modeline
+
+#+begin_src emacs-lisp
+  ;; Doom modeline for modern status bar
+  (use-package doom-modeline
+    :demand t
+    :hook (after-init . doom-modeline-mode)
+    :config
+    ;; Enable icons (requires all-the-icons)
+    (setq doom-modeline-icon t)
+    ;; Show file icons
+    (setq doom-modeline-major-mode-icon t)
+    ;; Show colors for major modes
+    (setq doom-modeline-major-mode-color-icon t)
+    ;; Enable buffer state icons
+    (setq doom-modeline-buffer-state-icon t)
+    ;; Show file modification time
+    (setq doom-modeline-buffer-modification-icon t)
+    ;; Enable unicode fallback for terminal
+    (setq doom-modeline-unicode-fallback t)
+    ;; Set height
+    (setq doom-modeline-height 25)
+    ;; Set bar width
+    (setq doom-modeline-bar-width 3)
+    ;; Show project name
+    (setq doom-modeline-project-detection 'auto)
+    ;; Show workspace name
+    (setq doom-modeline-workspace-name t)
+    ;; Show LSP info
+    (setq doom-modeline-lsp t)
+    ;; Show github info
+    (setq doom-modeline-github t)
+    ;; Show mu4e notifications
+    (setq doom-modeline-mu4e nil)
+    ;; Show IRC notifications
+    (setq doom-modeline-irc nil)
+    ;; Environment variable
+    (setq doom-modeline-env-version t)
+    ;; Whether to use hud instead of default bar
+    (setq doom-modeline-hud t))
+
+  ;; All the icons for doom-modeline
+  (use-package all-the-icons
+    :demand t
+    :config
+    ;; Install fonts automatically if they don't exist
+    (unless (find-font (font-spec :name "all-the-icons"))
+      (all-the-icons-install-fonts t)))
 #+end_src
 
 * Evil mode configuration
