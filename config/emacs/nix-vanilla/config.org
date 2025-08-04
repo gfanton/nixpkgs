@@ -619,6 +619,9 @@
   (global-set-key (kbd "C-k") 'windmove-up)
   (global-set-key (kbd "C-l") 'windmove-right)
 
+  ;; Enable windmove with shift+arrow keys
+  (windmove-default-keybindings 'shift)
+
   ;; Additional keybindings from your Spacemacs config
   (global-set-key (kbd "C-x k") 'kill-current-buffer)
   (global-set-key (kbd "C-c C-t") 'my/toggle-theme)
@@ -666,6 +669,50 @@
       (delete-trailing-whitespace)))
 
   (add-hook 'before-save-hook 'maybe-delete-trailing-whitespace)
+#+end_src
+
+* macOS specific configurations
+
+#+begin_src emacs-lisp
+  ;; macOS-specific settings (only apply on macOS)
+  (when (eq system-type 'darwin)
+    ;; Modifier key configurations for better macOS integration
+    (setq mac-command-modifier 'hyper     ; Cmd key as Hyper
+          mac-option-modifier 'meta       ; Option key as Meta (Alt)
+          mac-control-modifier 'control)  ; Control key as Control
+
+    ;; Use macOS native ls via coreutils if available
+    (when (executable-find "gls")
+      (setq insert-directory-program "gls"))
+
+    ;; macOS-style keybindings using Hyper (Cmd) modifier
+    (global-set-key (kbd "H-=") 'text-scale-increase)      ; Cmd+= to zoom in
+    (global-set-key (kbd "H--") 'text-scale-decrease)      ; Cmd+- to zoom out
+    (global-set-key (kbd "H-0") 'text-scale-adjust)        ; Cmd+0 to reset zoom
+    (global-set-key (kbd "H-q") 'save-buffers-kill-terminal) ; Cmd+Q to quit
+    (global-set-key (kbd "H-v") 'yank)                     ; Cmd+V to paste
+    (global-set-key (kbd "H-c") 'kill-ring-save)           ; Cmd+C to copy
+    (global-set-key (kbd "H-x") 'kill-region)              ; Cmd+X to cut
+    (global-set-key (kbd "H-a") 'mark-whole-buffer)        ; Cmd+A to select all
+    (global-set-key (kbd "H-w") 'delete-window)            ; Cmd+W to close window
+    (global-set-key (kbd "H-z") 'undo)                     ; Cmd+Z to undo
+    (global-set-key (kbd "H-s") 'save-buffer)              ; Cmd+S to save
+    (global-set-key (kbd "H-n") 'make-frame-command)       ; Cmd+N for new frame
+    (global-set-key (kbd "H-t") 'find-file)                ; Cmd+T for new "tab" (file)
+    (global-set-key (kbd "H-o") 'find-file)                ; Cmd+O to open file
+    
+    ;; Fullscreen toggle
+    (global-set-key (kbd "C-H-f") 'toggle-frame-fullscreen) ; Ctrl+Cmd+F for fullscreen
+    
+    ;; macOS-style mouse wheel scrolling
+    (setq mouse-wheel-scroll-amount '(1 ((shift) . 5) ((control) . nil)))
+    (setq mouse-wheel-progressive-speed nil)
+    
+    ;; Better frame title showing full path
+    (setq frame-title-format
+          '((:eval (if (buffer-file-name)
+                       (abbreviate-file-name (buffer-file-name))
+                     "%b")))))
 #+end_src
 
 * Performance restore
