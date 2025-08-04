@@ -49,11 +49,19 @@ endif # end osx
 
 ifeq ($(UNAME), Linux) # linux rules
 
+# Detect architecture for Linux
+LINUX_ARCH := $(shell uname -m)
+ifeq ($(LINUX_ARCH),aarch64)
+CLOUD_TARGET := cloud-arm
+else
+CLOUD_TARGET := cloud-x86
+endif
+
 all:
 	@echo "switch.cloud"
 
 switch.cloud:
-	nix build .#homeConfigurations.cloud.activationPackage
+	nix build --extra-experimental-features nix-command --extra-experimental-features flakes .#homeConfigurations.$(CLOUD_TARGET).activationPackage
 	./result/activate switch ${impure} ${fallback} --verbose; ./result/activate
 
 endif # end linux
