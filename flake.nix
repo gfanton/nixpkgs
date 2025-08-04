@@ -175,7 +175,7 @@
         my-colima = import ./darwin/colima.nix;
 
         # local modules
-        services-emacsd = import ./modules/darwin/services/emacsd.nix;
+        services-my-emacs = import ./modules/darwin/services/my-emacs.nix;
         services-colima = import ./modules/darwin/services/colima.nix;
         users-primaryUser = import ./modules/darwin/users.nix;
         programs-nix-index = import ./modules/darwin/programs/nix-index.nix;

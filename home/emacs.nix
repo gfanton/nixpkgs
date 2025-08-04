@@ -42,7 +42,7 @@ in
   };
 
   home.file.".emacs-profile" = with pkgs; {
-    source = writeText "emacs-profiles" "spacemacs";
+    source = writeText "emacs-profiles" "nix-vanilla";
   };
   # Note: .emacs-profiles.el is now managed by emacs-nix.nix to include all profiles
 
@@ -58,9 +58,18 @@ in
   # programs.emacs.enable = true;
   # programs.emacs.package = pkgs.emacs-gtk;
 
-  # setup alias
-  programs.zsh.shellAliases.xemacs = "${xterm-emacs}/bin/xemacs --with-profile=spacemacs";
-  programs.zsh.shellAliases.xemacsclient = "${xterm-emacsclient}/bin/xemacsclient";
-  programs.zsh.shellAliases.emacs = "xemacs -nw";
-  programs.zsh.shellAliases.emacsclient = "xemacsclient -nw";
+  # setup aliases - nix-vanilla is now default, spacemacs as fallback
+  programs.zsh.shellAliases = {
+    # Primary aliases use nix-vanilla (leveraging myEmacs from emacs-nix.nix)
+    "xemacs" = "emacs-nix";  # GUI with nix-vanilla
+    "xemacsclient" = "emacsclient-nix";  # GUI client with nix-vanilla
+    "emacs" = "emacs-nix-nw";  # Terminal with nix-vanilla
+    "emacsclient" = "emacsclient-nix-nw";  # Terminal client with nix-vanilla
+    
+    # Spacemacs fallback aliases
+    "spacemacs" = "${xterm-emacs}/bin/xemacs --with-profile=spacemacs";
+    "spacemacs-nw" = "${xterm-emacs}/bin/xemacs -nw --with-profile=spacemacs";
+    "spacemacsclient" = "${xterm-emacsclient}/bin/xemacsclient";
+    "spacemacsclient-nw" = "${xterm-emacsclient}/bin/xemacsclient -nw";
+  };
 }

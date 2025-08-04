@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ pkgs, config, ... }:
 
 {
   # Networking
@@ -8,7 +8,6 @@
   # `home-manager` currently has issues adding them to `~/Applications`
   # Issue: https://github.com/nix-community/home-manager/issues/1341
   environment.systemPackages = with pkgs; [
-    emacs-gtk
     kitty
     terminal-notifier
     pam-reattach
@@ -34,11 +33,33 @@
   system.keyboard.enableKeyMapping = true;
   system.keyboard.remapCapsLockToControl = true;
 
-  # emacs daemon
-  services.emacsd = {
-    package = pkgs.emacs-gtk;
-    enable = true;
-  };
+  # Custom emacs daemon service
+  services.my-emacs =
+    let
+      primaryUser = config.users.primaryUser.username;
+      homeDir = config.users.users.${primaryUser}.home;
+
+      # Use standard Nix profile paths from environment.profiles pattern
+      perUserProfile = "/etc/profiles/per-user/${primaryUser}";
+      userNixProfile = "${homeDir}/.nix-profile";
+      nixStateProfile = "${homeDir}/.local/state/nix/profile";
+    in
+    {
+      enable = true;
+      # Use the emacs package from home-manager user profile
+      package = pkgs.writeShellScriptBin "emacs" ''
+        exec ${perUserProfile}/bin/emacs "$@"
+      '';
+      # Add user profile paths for tools like ripgrep (following environment.profiles order)
+      additionalPath = [
+        "${perUserProfile}/bin"
+        "${userNixProfile}/bin"
+        "${nixStateProfile}/bin"
+        "${homeDir}/.local/bin"
+        "/opt/homebrew/bin"
+        "/usr/local/bin"
+      ];
+    };
 
   # Add ability to used TouchID for sudo authentication with tmux support
 
