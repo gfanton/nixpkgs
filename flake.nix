@@ -268,13 +268,13 @@
       # Build and activate on new system with:
       # `nix build .#homeConfigurations.cloud.activationPackage && ./result/activate`
       homeConfigurations = {
-        cloud = home-manager.lib.homeManagerConfiguration {
+        cloud-x86 = home-manager.lib.homeManagerConfiguration {
           pkgs = import inputs.nixpkgs-unstable (nixpkgsDefaults // { system = "x86_64-linux"; });
           modules =
             attrValues self.homeManagerModules
             ++ (attrValues self.commonModules)
             ++ singleton (
-              { config, ... }:
+              { config, lib, ... }:
               {
                 home.user-info = primaryUserInfo // {
                   nixConfigDirectory = "${config.home.homeDirectory}/nixpkgs";
@@ -282,9 +282,32 @@
                 home.username = config.home.user-info.username;
                 home.homeDirectory = "/home/${config.home.username}";
                 home.stateVersion = homeStateVersion;
+
               }
             );
         };
+
+        cloud-arm = home-manager.lib.homeManagerConfiguration {
+          pkgs = import inputs.nixpkgs-unstable (nixpkgsDefaults // { system = "aarch64-linux"; });
+          modules =
+            attrValues self.homeManagerModules
+            ++ (attrValues self.commonModules)
+            ++ singleton (
+              { config, lib, ... }:
+              {
+                home.user-info = primaryUserInfo // {
+                  nixConfigDirectory = "${config.home.homeDirectory}/nixpkgs";
+                };
+                home.username = config.home.user-info.username;
+                home.homeDirectory = "/home/${config.home.username}";
+                home.stateVersion = homeStateVersion;
+
+              }
+            );
+        };
+
+        # Alias for backward compatibility
+        cloud = self.homeConfigurations.cloud-x86;
 
         # specific config for github ci
         githubCI = home-manager.lib.homeManagerConfiguration {
