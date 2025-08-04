@@ -55,16 +55,59 @@ ifeq ($(UNAME), Linux) # linux rules
 LINUX_ARCH := $(shell uname -m)
 ifeq ($(LINUX_ARCH),aarch64)
 CLOUD_TARGET := cloud-arm
+NIXOS_TARGET := cloud-arm
 else
 CLOUD_TARGET := cloud-x86
+NIXOS_TARGET := cloud-x86
 endif
 
 all:
-	@echo "switch.cloud"
+	@echo "Available targets:"
+	@echo "  switch.cloud       - Home Manager cloud configuration"
+	@echo "  build.nixos        - Build NixOS cloud configuration"
+	@echo "  build.nixos-lvm    - Build NixOS LVM configuration"
+	@echo "  install.nixos      - Install NixOS using nixos-anywhere (requires TARGET_HOST)"
+	@echo "  install.nixos-lvm  - Install NixOS LVM using nixos-anywhere (requires TARGET_HOST)"
+	@echo "  install.script     - Run automated installation script"
 
+# Home Manager configuration (existing)
 switch.cloud:
 	nix build --extra-experimental-features nix-command --extra-experimental-features flakes .#homeConfigurations.$(CLOUD_TARGET).activationPackage
 	./result/activate
+
+# NixOS configuration builds
+build.nixos:
+	nix build ${impure} ${fallback} --verbose .#nixosConfigurations.$(NIXOS_TARGET).config.system.build.toplevel
+
+build.nixos-lvm:
+	nix build ${impure} ${fallback} --verbose .#nixosConfigurations.cloud-lvm-$(NIXOS_TARGET).config.system.build.toplevel
+
+# NixOS installation using nixos-anywhere (requires TARGET_HOST environment variable)
+install.nixos:
+	@if [ -z "$(TARGET_HOST)" ]; then \
+		echo "Error: TARGET_HOST environment variable is required"; \
+		echo "Example: TARGET_HOST=root@192.168.1.100 make install.nixos"; \
+		exit 1; \
+	fi
+	nixos-anywhere --flake .#$(NIXOS_TARGET) $(TARGET_HOST)
+
+install.nixos-lvm:
+	@if [ -z "$(TARGET_HOST)" ]; then \
+		echo "Error: TARGET_HOST environment variable is required"; \
+		echo "Example: TARGET_HOST=root@192.168.1.100 make install.nixos-lvm"; \
+		exit 1; \
+	fi
+	nixos-anywhere --flake .#cloud-lvm-$(NIXOS_TARGET) $(TARGET_HOST)
+
+# Easy deployment script
+install.script:
+	@echo "Running NixOS installation script..."
+	@if [ -f "./install.sh" ]; then \
+		chmod +x ./install.sh && ./install.sh $(ARGS); \
+	else \
+		echo "Error: install.sh not found"; \
+		exit 1; \
+	fi
 
 endif # end linux
 

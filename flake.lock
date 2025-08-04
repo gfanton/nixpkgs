@@ -38,6 +38,26 @@
         "type": "github"
       }
     },
+    "disko": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs-unstable"
+        ]
+      },
+      "locked": {
+        "lastModified": 1753140376,
+        "narHash": "sha256-7lrVrE0jSvZHrxEzvnfHFE/Wkk9DDqb+mYCodI5uuB8=",
+        "owner": "nix-community",
+        "repo": "disko",
+        "rev": "545aba02960caa78a31bd9a8709a0ad4b6320a5c",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nix-community",
+        "repo": "disko",
+        "type": "github"
+      }
+    },
     "doomemacs": {
       "flake": false,
       "locked": {
@@ -299,6 +319,7 @@
       "inputs": {
         "chemacs2": "chemacs2",
         "darwin": "darwin",
+        "disko": "disko",
         "doomemacs": "doomemacs",
         "emacs-overlay": "emacs-overlay",
         "fast-syntax-highlighting": "fast-syntax-highlighting",

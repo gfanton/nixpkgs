@@ -19,6 +19,10 @@
     home-manager.url = "github:nix-community/home-manager/master";
     emacs-overlay.url = "github:nix-community/emacs-overlay";
 
+    # NixOS cloud deployment
+    disko.url = "github:nix-community/disko";
+    disko.inputs.nixpkgs.follows = "nixpkgs-unstable";
+
     # Other sources
 
     # emacs
@@ -53,6 +57,7 @@
       darwin,
       home-manager,
       flake-utils,
+      disko,
       ...
     }@inputs:
     let
@@ -264,6 +269,7 @@
         };
       };
 
+
       # Config I use with non-NixOS Linux systems (e.g., cloud VMs etc.)
       # Build and activate on new system with:
       # `nix build .#homeConfigurations.cloud.activationPackage && ./result/activate`
@@ -332,6 +338,135 @@
 
       # Add re-export `nixpkgs` packages with overlays.
       # This is handy in combination with `nix registry add my /Users/gfanton/nixpkgs`
+      
+      # NixOS cloud configurations (cloud-agnostic)
+      nixosConfigurations = {
+        # Cloud configuration for x86_64 (works on all major cloud providers)
+        cloud-x86 = inputs.nixpkgs-unstable.lib.nixosSystem {
+          system = "x86_64-linux";
+          modules = [
+            disko.nixosModules.disko
+            ./nixos/cloud-x86.nix
+            {
+              nixpkgs = nixpkgsDefaults;
+              networking.hostName = "nixos-cloud";
+              users.users.root.openssh.authorizedKeys.keys = [
+                # Add your SSH public key here for deployment
+                # "ssh-rsa AAAAB3NzaC1yc2E... your-key-here"
+              ];
+            }
+          ];
+        };
+
+        # Cloud configuration for ARM64 (works on all major cloud providers)
+        cloud-arm = inputs.nixpkgs-unstable.lib.nixosSystem {
+          system = "aarch64-linux";
+          modules = [
+            disko.nixosModules.disko
+            ./nixos/cloud-arm.nix
+            {
+              nixpkgs = nixpkgsDefaults;
+              networking.hostName = "nixos-cloud";
+              users.users.root.openssh.authorizedKeys.keys = [
+                # Add your SSH public key here for deployment
+                # "ssh-rsa AAAAB3NzaC1yc2E... your-key-here"
+              ];
+            }
+          ];
+        };
+
+        # LVM configuration for x86_64 (advanced storage)
+        cloud-lvm-x86 = inputs.nixpkgs-unstable.lib.nixosSystem {
+          system = "x86_64-linux";
+          modules = [
+            disko.nixosModules.disko
+            ./nixos/cloud-x86.nix
+            {
+              nixpkgs = nixpkgsDefaults;
+              networking.hostName = "nixos-cloud";
+              imports = [ ./nixos/disk-configs/cloud-lvm.nix ];
+              users.users.root.openssh.authorizedKeys.keys = [
+                # Add your SSH public key here for deployment
+                # "ssh-rsa AAAAB3NzaC1yc2E... your-key-here"
+              ];
+            }
+          ];
+        };
+
+        # LVM configuration for ARM64 (advanced storage)
+        cloud-lvm-arm = inputs.nixpkgs-unstable.lib.nixosSystem {
+          system = "aarch64-linux";
+          modules = [
+            disko.nixosModules.disko
+            ./nixos/cloud-arm.nix
+            {
+              nixpkgs = nixpkgsDefaults;
+              networking.hostName = "nixos-cloud";
+              imports = [ ./nixos/disk-configs/cloud-lvm.nix ];
+              users.users.root.openssh.authorizedKeys.keys = [
+                # Add your SSH public key here for deployment
+                # "ssh-rsa AAAAB3NzaC1yc2E... your-key-here"
+              ];
+            }
+          ];
+        };
+
+        # Hetzner Cloud ARM64 VM configuration
+        # Based on: https://github.com/LGUG2Z/nixos-hetzner-cloud-starter
+        # Simplified approach matching LGUG2Z working configuration
+        hetzner-vm = inputs.nixpkgs-unstable.lib.nixosSystem {
+          system = "aarch64-linux";
+          pkgs = import inputs.nixpkgs-unstable {
+            system = "aarch64-linux";
+            config = { allowUnfree = true; };
+            overlays = attrValues self.overlays;
+          };
+          specialArgs = {
+            hostname = "vanille";
+            username = "gfanton";
+            inherit inputs self;
+          };
+          modules = [
+            disko.nixosModules.disko
+            inputs.home-manager.nixosModules.home-manager
+            ./nixos/hosts/hetzner-vm/configuration.nix
+            ./nixos/hosts/hetzner-vm/hardware-configuration.nix
+            ./nixos/hosts/hetzner-vm/disk-config.nix
+            ./nixos/users.nix
+            {
+              home-manager.useGlobalPkgs = true;
+              home-manager.useUserPackages = true;
+              home-manager.users.${primaryUserInfo.username} = {
+                imports = [
+                  # Essential modules 
+                  self.homeManagerModules.home-user-info
+                  # Skip git for now to avoid pkgs issues
+                  ({ pkgs, ... }: {
+                    home.user-info = primaryUserInfo // {
+                      nixConfigDirectory = "/home/${primaryUserInfo.username}/nixpkgs";
+                    };
+                    home.username = primaryUserInfo.username;
+                    home.homeDirectory = "/home/${primaryUserInfo.username}";
+                    home.stateVersion = homeStateVersion;
+                    
+                    # Basic packages
+                    home.packages = with pkgs; [
+                      tmux
+                      emacs-nox
+                      git
+                      zsh
+                      curl
+                      wget
+                      tree
+                      htop
+                    ];
+                  })
+                ];
+              };
+            }
+          ];
+        };
+      };
     }
     // flake-utils.lib.eachDefaultSystem (system: {
       # Re-export `nixpkgs-unstable` with overlays.
