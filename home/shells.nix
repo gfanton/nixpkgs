@@ -243,8 +243,8 @@ in
         export ZSH_TAB_TITLE_ADDITIONAL_TERMS=iterm
 
         # Set autosuggestion style after plugins are loaded
-        # Using color0 (surface1 from catppuccin-macchiato: #494d64)
-        ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=0'
+        # Using color8 (surface2 from catppuccin-macchiato: #5b6078) for better visibility
+        ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=8'
 
         # Additional completion configuration
         zstyle ':completion:*:descriptions' format '[%d]'
