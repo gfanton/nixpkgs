@@ -234,9 +234,6 @@ in
 
     initContent = lib.mkMerge [
       (lib.mkBefore ''
-        # Set ZDOTDIR to XDG config directory for zsh
-        export ZDOTDIR="${config.xdg.configHome}/zsh"
-        
         # Powerlevel10k instant prompt will be enabled by the theme
       '')
       (lib.mkAfter ''
@@ -245,8 +242,8 @@ in
         export ZSH_TAB_TITLE_ADDITIONAL_TERMS=iterm
 
         # Set autosuggestion style after plugins are loaded
-        # Using color0 (surface1 from catppuccin-macchiato: #494d64)
-        ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=0'
+        # Using color8 (surface2 from catppuccin-macchiato: #5b6078) for better visibility
+        ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=8'
 
         # Additional completion configuration
         zstyle ':completion:*:descriptions' format '[%d]'
