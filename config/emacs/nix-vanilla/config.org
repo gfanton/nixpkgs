@@ -35,6 +35,12 @@
   (when (fboundp 'scroll-bar-mode) (scroll-bar-mode -1))
   (column-number-mode 1)
   (global-display-line-numbers-mode 1)
+  
+  ;; Enable savehist mode for persistent history
+  (savehist-mode 1)
+  (setq savehist-file "~/.emacs.d/savehist")
+  (setq history-length 1000)
+  (setq savehist-save-minibuffer-history t)
 #+end_src
 
 * Font configuration
@@ -198,6 +204,7 @@
       "cf" '(lsp-format-buffer :which-key "format buffer")
       "cF" '(lsp-format-region :which-key "format region")
       "co" '(lsp-organize-imports :which-key "organize imports")
+      "cc" '(completion-at-point :which-key "complete at point")
       "l" '(:ignore t :which-key "lsp")
       "lr" '(lsp-workspace-restart :which-key "restart workspace")
       "ls" '(lsp-workspace-shutdown :which-key "shutdown workspace")
@@ -321,7 +328,7 @@
   (use-package vertico
     :demand t
     :bind (:map vertico-map
-           ("C-c C-e" . my/embark-export-wgrep))
+                ("C-c C-e" . my/embark-export-wgrep))
     :config
     (vertico-mode))
 
@@ -397,12 +404,50 @@
     (corfu-quit-at-boundary nil)     ;; Never quit at completion boundary
     (corfu-quit-no-match nil)        ;; Never quit, even if there is no match
     (corfu-preview-current nil)      ;; Disable current candidate preview
-    (corfu-preselect 'prompt)        ;; Preselect the prompt
+    (corfu-preselect 'first)         ;; Preselect the first candidate
     (corfu-on-exact-match nil)       ;; Configure handling of exact matches
     (corfu-scroll-margin 5)          ;; Use scroll margin
+    :bind
+    (:map corfu-map
+  	("TAB" . corfu-next)
+  	([tab] . corfu-next)
+  	("S-TAB" . corfu-previous)
+  	([backtab] . corfu-previous)
+  	("M-d" . corfu-info-documentation)  ;; Show documentation manually
+  	("M-l" . corfu-info-location)       ;; Show location
+  	("M-p" . corfu-popupinfo-toggle)    ;; Toggle popup info
+  	("M-h" . corfu-popupinfo-documentation) ;; Force show documentation popup
+  	("C-p" . corfu-popupinfo-scroll-down)   ;; Scroll popup down
+  	("C-n" . corfu-popupinfo-scroll-up))    ;; Scroll popup up
+
     :config
     (global-corfu-mode)
-    (emacs-nix-log "Corfu completion enabled with auto-completion"))
+        
+    (emacs-nix-log "Corfu completion enabled with auto-completion and proper TAB handling"))
+
+  ;; Enable corfu extensions
+  (with-eval-after-load 'corfu
+    ;; Enable corfu-info for manual documentation display
+    (require 'corfu-info)
+    
+    ;; Enable corfu-popupinfo for automatic documentation popup
+    (require 'corfu-popupinfo)
+    (setq corfu-popupinfo-delay 0.5)     ;; Delay before showing popup
+    (setq corfu-popupinfo-max-width 80)  ;; Maximum width of popup
+    (setq corfu-popupinfo-max-height 20) ;; Maximum height of popup
+    
+    ;; Ensure corfu-popupinfo works in terminal mode
+    (setq corfu-popupinfo-hide nil)       ;; Don't hide popup automatically
+        
+    (corfu-popupinfo-mode 1)              ;; Enable automatic popup
+    
+    ;; Enable corfu-history to remember completions
+    (require 'corfu-history)
+    (corfu-history-mode 1)
+    ;; Persist history across Emacs sessions
+    (add-to-list 'savehist-additional-variables 'corfu-history)
+    
+    (emacs-nix-log "Corfu extensions loaded: info, popupinfo, and history with LSP integration"))
 
   ;; Terminal support for Corfu (Emacs 30 and older)
   (use-package popon)  ; Ensure popon is loaded first
@@ -455,6 +500,9 @@
     (lsp-enable-file-watchers t)
     ;; Reduce completion complexity to avoid timeouts
     (lsp-completion-enable-additional-text-edit nil)
+    ;; Enable completion item resolve for documentation
+    (lsp-completion-show-detail t)
+    (lsp-completion-show-kind t)
     :config
     ;; Setup LSP completion to work reliably with Corfu
     (defun my/lsp-mode-setup-completion ()
@@ -467,25 +515,24 @@
     ;; Apply completion setup in LSP buffers
     (add-hook 'lsp-mode-hook #'my/lsp-mode-setup-completion)
 
-    ;; Ensure Corfu is enabled in LSP buffers
-    (add-hook 'lsp-mode-hook
-              (lambda ()
-                ;; Force enable corfu-mode locally (global-corfu-mode might not be enough)
-                (unless (bound-and-true-p corfu-mode)
-                  (corfu-mode 1)))))
 
   (use-package lsp-ui
     :hook (lsp-mode . lsp-ui-mode)
     :custom
-    ;; Optimized LSP UI settings for 2024-2025
+    ;; Optimized LSP UI settings for hover documentation
     (lsp-ui-sideline-enable nil)           ;; Disable sideline (distracting)
     (lsp-ui-sideline-show-hover nil)       ;; Disable hover in sideline
     (lsp-ui-sideline-show-code-actions nil) ;; Use manual code actions instead
     (lsp-ui-doc-enable t)                  ;; Enable documentation popup
-    (lsp-ui-doc-position 'bottom)          ;; Position docs at bottom
-    (lsp-ui-doc-show-with-cursor nil)      ;; Don't show docs automatically
-    (lsp-ui-doc-show-with-mouse nil)       ;; Don't show docs on mouse hover
+    (lsp-ui-doc-position 'at-point)        ;; Show docs at point
+    (lsp-ui-doc-show-with-cursor t)        ;; Show docs automatically on hover
+    (lsp-ui-doc-show-with-mouse nil)       ;; Don't show docs on mouse hover (terminal)
     (lsp-ui-doc-delay 0.5)                 ;; Delay before showing docs
+    (lsp-ui-doc-include-signature t)       ;; Include function signatures
+    (lsp-ui-doc-max-width 80)              ;; Max width of doc popup
+    (lsp-ui-doc-max-height 20)             ;; Max height of doc popup
+    (lsp-ui-doc-use-childframe nil)       ;; Don't use childframes (terminal friendly)
+    (lsp-ui-doc-use-webkit nil)           ;; Don't use webkit (terminal friendly)
     (lsp-ui-peek-enable t)                 ;; Enable peek functionality
     (lsp-ui-peek-always-show t)            ;; Always show peek
     (lsp-ui-peek-list-width 40)            ;; Peek list width
@@ -813,7 +860,7 @@
     (defun osx/list-available-dictionaries ()
       "List available dictionaries on macOS."
       (interactive)
-      (message "%s" (shell-command-to-string 
+      (message "%s" (shell-command-to-string
                      "defaults read com.apple.HIToolbox AppleEnabledInputSources | grep -E '(KeyboardLayout|InputMode)' | grep -E 'BundleID|InputModeID' | cut -d'\"' -f4 | sort | uniq")))
 
     ;; === ENHANCED KEYBINDINGS (Spacemacs OSX layer style) ===
@@ -867,7 +914,7 @@
 
   ;; Additional completion performance optimizations (2024-2025)
   (setq completion-cycle-threshold 3)     ;; TAB cycles if few candidates
-  (setq tab-always-indent 'complete)      ;; TAB completes when possible
+  (setq tab-always-indent t)              ;; TAB should always indent first
   (setq completion-pcm-word-delimiters "-_./:| ") ;; Better word completion
 
   ;; Terminal-only configuration
