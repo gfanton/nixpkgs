@@ -10,15 +10,14 @@ else
 BOOTSTRAP := bootstrap-x86
 endif
 
-# Channels
-NIX_CHANNELS := nixpkgs-master nixpkgs-stable nixpkgs-unstable nixos-stable
+# Channels (matching flake.nix inputs)
+NIX_CHANNELS := nixpkgs-master nixpkgs-stable nixpkgs-unstable
 HOME_CHANNELS := home-manager darwin
 EMACS_CHANNELS := emacs-overlay chemacs2
 SPACEMACS_CHANNELS := spacemacs
 DOOM_CHANNELS := doomemacs
-ZSH_CHANNELS := fast-syntax-highlighting fzf-tab powerlevel10k
-ASDF_CHANNELS := asdf-plugins
-MISC_CHANNELS := flake-utils flake-compat
+ZSH_CHANNELS := fast-syntax-highlighting powerlevel10k
+MISC_CHANNELS := flake-utils flake-compat project
 
 NIX_FILES := $(shell find . -type f -name '*.nix')
 
@@ -27,19 +26,22 @@ fallback := $(if $(filter $(FALLBACK),true),--fallback,)
 
 ifeq ($(UNAME), Darwin) # darwin rules
 all:
-	@echo "switch.osx_bootstrap"
+	@echo "switch.bootstrap"
 	@echo "switch.macbook"
-	@echo "switch.bot"
 
 build.macbook:
 	nix build ${impure} ${fallback} --verbose .#darwinConfigurations.macbook.system
+
+build.cloud:
+	nix build ${impure} ${fallback} --verbose .#homeConfigurations.$(CLOUD_TARGET).activationPackage
+
+check:
+	nix flake check
 
 switch.bootstrap: result/sw/bin/darwin-rebuild
 	./result/sw/bin/darwin-rebuild switch ${impure} ${fallback} --verbose --flake ".#$(BOOTSTRAP)"
 switch.macbook: result/sw/bin/darwin-rebuild
 	TERM=xterm sudo ./result/sw/bin/darwin-rebuild switch ${impure} ${fallback} --verbose --flake .#macbook
-switch.bot: result/sw/bin/darwin-rebuild
-	../result/sw/bin/darwin-rebuild switch ${impure} ${fallback} --verbose --flake .#bot
 
 result/sw/bin/darwin-rebuild:
 	nix --experimental-features 'flakes nix-command' build ".#darwinConfigurations.$(BOOTSTRAP).system"
@@ -62,7 +64,7 @@ all:
 
 switch.cloud:
 	nix build --extra-experimental-features nix-command --extra-experimental-features flakes .#homeConfigurations.$(CLOUD_TARGET).activationPackage
-	./result/activate switch ${impure} ${fallback} --verbose; ./result/activate
+	./result/activate
 
 endif # end linux
 
@@ -80,7 +82,7 @@ fclean:
 
 
 fast-update: update.nix update.zsh update.misc # fast update ignore emacs update
-update: update.nix update.home update.emacs update.spacemacs update.zsh update.asdf update.misc
+update: update.nix update.home update.emacs update.spacemacs update.zsh update.misc
 update.nix:; nix flake lock $(addprefix --update-input , $(NIX_CHANNELS))
 update.emacs:; nix flake lock $(addprefix --update-input , $(EMACS_CHANNELS))
 update.spacemacs:; nix flake lock $(addprefix --update-input , $(SPACEMACS_CHANNELS))
@@ -88,4 +90,3 @@ update.doom:; nix flake lock $(addprefix --update-input , $(DOOM_CHANNELS))
 update.zsh:; nix flake lock $(addprefix --update-input ,$(ZSH_CHANNELS))
 update.misc:; nix flake lock $(addprefix --update-input ,$(MISC_CHANNELS))
 update.home:; nix flake lock $(addprefix --update-input , $(HOME_CHANNELS))
-update.asdf:; nix flake lock $(addprefix --update-input , $(ASDF_CHANNELS))
