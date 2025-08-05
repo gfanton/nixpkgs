@@ -86,7 +86,7 @@ in
           pluginName = "tmux-proj";
           version = "0.16.2";
           rtpFilePath = "proj-tmux.tmux";
-          
+
           # Use the plugin source directly from the project flake
           src = "${project.src}/plugins/proj-tmux/plugin";
 
@@ -98,7 +98,12 @@ in
               for script in $out/share/tmux-plugins/tmux-proj/scripts/*.sh; do
                 if [ -f "$script" ]; then
                   wrapProgram "$script" \
-                    --prefix PATH : ${pkgs.lib.makeBinPath [ project pkgs.tmux ]}
+                    --prefix PATH : ${
+                      pkgs.lib.makeBinPath [
+                        project
+                        pkgs.tmux
+                      ]
+                    }
                 fi
               done
             fi
@@ -314,7 +319,7 @@ in
       nix-prefetch-git
       nixfmt-rfc-style
     ]
-    ++ lib.optionals stdenv.isDarwin [ 
+    ++ lib.optionals stdenv.isDarwin [
       cocoapods
       colima # Container runtime for macOS
     ]

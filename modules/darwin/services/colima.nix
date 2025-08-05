@@ -47,7 +47,8 @@ in
         ProgramArguments = [
           "${cfg.package}/bin/colima"
           "start"
-          "--profile" "${cfg.profile}"
+          "--profile"
+          "${cfg.profile}"
           "--save-config=false"
         ];
         RunAtLoad = true;
