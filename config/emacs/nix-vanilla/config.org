@@ -6,8 +6,11 @@
 
 #+begin_src emacs-lisp
   (emacs-nix-log "Setting performance optimizations")
+  ;; Increase gc-cons-threshold during startup for faster loading
   (setq gc-cons-threshold 100000000)
   (setq read-process-output-max (* 1024 1024))
+  ;; LSP performance optimizations
+  (setq gc-cons-percentage 0.6)
   (emacs-nix-log "Performance optimizations set")
 #+end_src
 
@@ -37,11 +40,9 @@
 * Font configuration
 
 #+begin_src emacs-lisp
-  ;; Font configuration (terminal will use its own font)
-  (when (display-graphic-p)
-    (set-face-attribute 'default nil
-                        :font "JetBrainsMono Nerd Font"
-                        :height 120))
+  ;; Terminal-only setup - no font configuration needed
+  ;; Terminal font is handled by the terminal emulator itself
+  (emacs-nix-log "Terminal-only mode - skipping font configuration")
 #+end_src
 
 * Theme configuration
@@ -108,13 +109,13 @@
     ;; Whether to use hud instead of default bar
     (setq doom-modeline-hud t))
 
-  ;; All the icons for doom-modeline
+  ;; All the icons for doom-modeline (terminal compatible)
   (use-package all-the-icons
     :demand t
     :config
-    ;; Install fonts automatically if they don't exist
-    (unless (find-font (font-spec :name "all-the-icons"))
-      (all-the-icons-install-fonts t)))
+    ;; Terminal mode - use unicode fallbacks, no font installation needed
+    (setq all-the-icons-terminal-fallback-fonts nil)
+    (emacs-nix-log "all-the-icons configured for terminal use"))
 #+end_src
 
 * Evil mode configuration
@@ -174,6 +175,7 @@
       "b" '(:ignore t :which-key "buffer")
       "bb" '(consult-buffer :which-key "switch buffer")
       "bd" '(kill-current-buffer :which-key "kill buffer")
+      "bs" '(scratch-buffer :which-key "scratch buffer")
       "w" '(:ignore t :which-key "window")
       "wv" '(split-window-right :which-key "split vertical")
       "ws" '(split-window-below :which-key "split horizontal")
@@ -317,7 +319,7 @@
     :demand t
     :custom
     (completion-styles '(orderless basic))
-    (completion-category-overrides '((file (styles basic partial-completion)))))
+    (completion-category-overrides '((file (styles partial-completion)))))
 
   (use-package marginalia
     :demand t
@@ -353,7 +355,7 @@
   (use-package embark
     :bind (("C-." . embark-act)
            ("C-;" . embark-dwim)
-           ("C-h B" . embark-bindings)
+           ("C-c h b" . embark-bindings)
            :map minibuffer-local-map
            ("C-c C-e" . my/embark-export-wgrep))
     :config
@@ -372,54 +374,121 @@
     (setq wgrep-auto-save-buffer t)
     (setq wgrep-change-readonly-file t))
 
-  ;; Corfu for in-buffer completion
+  ;; Corfu completion system with auto-completion
   (use-package corfu
     :demand t
     :custom
-    (corfu-cycle t)
-    (corfu-auto t)
-    (corfu-separator ?\s)
-    (corfu-quit-no-match 'separator)
+    ;; Enable auto completion
+    (corfu-auto t)                    ;; Enable automatic completion
+    (corfu-auto-delay 0.2)           ;; Short delay for auto completion
+    (corfu-auto-prefix 2)            ;; Minimum prefix length for auto completion
+    (corfu-cycle t)                  ;; Enable cycling for `corfu-next/previous'
+    (corfu-separator ?\s)            ;; Orderless field separator
+    (corfu-quit-at-boundary nil)     ;; Never quit at completion boundary
+    (corfu-quit-no-match nil)        ;; Never quit, even if there is no match
+    (corfu-preview-current nil)      ;; Disable current candidate preview
+    (corfu-preselect 'prompt)        ;; Preselect the prompt
+    (corfu-on-exact-match nil)       ;; Configure handling of exact matches
+    (corfu-scroll-margin 5)          ;; Use scroll margin
     :config
-    (global-corfu-mode))
+    (global-corfu-mode)
+    (emacs-nix-log "Corfu completion enabled with auto-completion"))
 
-  ;; Cape for completion at point extensions
+  ;; Terminal support for Corfu (Emacs 30 and older)
+  (use-package popon)  ; Ensure popon is loaded first
+
+  ;; Load corfu-terminal for terminal mode
+  (unless (display-graphic-p)
+    (require 'corfu-terminal)
+    (corfu-terminal-mode +1)
+    (emacs-nix-log "Corfu terminal mode enabled for TTY"))
+
+  ;; Cape - completion sources (rasendubi's configuration)
   (use-package cape
+    :demand t
     :config
+    ;; Add completion sources
+    (add-to-list 'completion-at-point-functions #'cape-file)
     (add-to-list 'completion-at-point-functions #'cape-dabbrev)
-    (add-to-list 'completion-at-point-functions #'cape-file))
+    (emacs-nix-log "Cape completion sources configured"))
 #+end_src
 
 * LSP Mode
 
 #+begin_src emacs-lisp
   (use-package lsp-mode
+    ;; Performance optimization - disable plists for compatibility
+    :init
+    ;; Disable plist to fix hash-table-p errors with gopls
+    (setq lsp-use-plists nil)
     :hook ((go-mode . lsp-deferred)
            (rust-mode . lsp-deferred)
            (typescript-mode . lsp-deferred)
            (js2-mode . lsp-deferred)
            (web-mode . lsp-deferred)
-           (nix-mode . lsp-deferred))
+           (nix-mode . lsp-deferred)
+           (gno-mode . lsp-deferred))
     :commands (lsp lsp-deferred)
     :custom
-    (lsp-completion-provider :none) ; Use corfu instead
+    ;; Use LSP completion via CAPF (compatible with Corfu)
+    (lsp-completion-provider :capf)
     (lsp-keymap-prefix "C-c l")
     (lsp-idle-delay 0.5)
     (lsp-enable-which-key-integration t)
+    ;; Performance optimizations for LSP
+    (lsp-file-watch-threshold 2000)
+    (lsp-log-io nil)
+    (lsp-enable-snippet t)
+    (lsp-keep-workspace-alive nil)
+    ;; Additional gopls compatibility settings
+    (lsp-response-timeout 60)
+    (lsp-enable-file-watchers t)
+    ;; Reduce completion complexity to avoid timeouts
+    (lsp-completion-enable-additional-text-edit nil)
     :config
+    ;; Setup LSP completion to work reliably with Corfu
     (defun my/lsp-mode-setup-completion ()
-      (setf (alist-get 'styles (alist-get 'lsp-capf completion-category-defaults))
-            '(orderless)))
-    :hook
-    (lsp-completion-mode . my/lsp-mode-setup-completion))
+      "Configure LSP completion for reliable operation with Corfu."
+      ;; Use basic completion styles for LSP to avoid timeout issues with orderless
+      (setq-local completion-styles '(basic partial-completion))
+      ;; Enable case-insensitive completion
+      (setq-local completion-ignore-case t))
+
+    ;; Apply completion setup in LSP buffers
+    (add-hook 'lsp-mode-hook #'my/lsp-mode-setup-completion)
+
+    ;; Ensure Corfu is enabled in LSP buffers
+    (add-hook 'lsp-mode-hook
+              (lambda ()
+                ;; Force enable corfu-mode locally (global-corfu-mode might not be enough)
+                (unless (bound-and-true-p corfu-mode)
+                  (corfu-mode 1)))))
 
   (use-package lsp-ui
     :hook (lsp-mode . lsp-ui-mode)
     :custom
-    (lsp-ui-sideline-enable nil)
-    (lsp-ui-doc-position 'bottom)
-    (lsp-ui-peek-always-show t)
-    (lsp-ui-doc-enable t))
+    ;; Optimized LSP UI settings for 2024-2025
+    (lsp-ui-sideline-enable nil)           ;; Disable sideline (distracting)
+    (lsp-ui-sideline-show-hover nil)       ;; Disable hover in sideline
+    (lsp-ui-sideline-show-code-actions nil) ;; Use manual code actions instead
+    (lsp-ui-doc-enable t)                  ;; Enable documentation popup
+    (lsp-ui-doc-position 'bottom)          ;; Position docs at bottom
+    (lsp-ui-doc-show-with-cursor nil)      ;; Don't show docs automatically
+    (lsp-ui-doc-show-with-mouse nil)       ;; Don't show docs on mouse hover
+    (lsp-ui-doc-delay 0.5)                 ;; Delay before showing docs
+    (lsp-ui-peek-enable t)                 ;; Enable peek functionality
+    (lsp-ui-peek-always-show t)            ;; Always show peek
+    (lsp-ui-peek-list-width 40)            ;; Peek list width
+    (lsp-ui-peek-peek-height 15)           ;; Peek window height
+    :bind
+    ;; Better LSP UI keybindings
+    (:map lsp-ui-mode-map
+          ("C-c l d" . lsp-ui-doc-show)
+          ("C-c l D" . lsp-ui-doc-hide)
+          ("C-c l p" . lsp-ui-peek-find-definitions)
+          ("C-c l r" . lsp-ui-peek-find-references)
+          ("C-c l i" . lsp-ui-peek-find-implementation)
+          ("C-c l s" . lsp-ui-peek-find-workspace-symbol)))
 
   ;; Modern LSP + Consult integration (2024-2025 best practices)
   (use-package consult-lsp
@@ -625,6 +694,9 @@
   ;; Additional keybindings from your Spacemacs config
   (global-set-key (kbd "C-x k") 'kill-current-buffer)
   (global-set-key (kbd "C-c C-t") 'my/toggle-theme)
+
+  ;; Ctrl+K to erase everything after cursor (kill-line)
+  (global-set-key (kbd "C-k") 'kill-line)
 #+end_src
 
 * File management
@@ -674,9 +746,9 @@
 * macOS specific configurations
 
 #+begin_src emacs-lisp
-  ;; macOS-specific settings (only apply on macOS)
+  ;; macOS-specific settings for terminal use (no GUI features)
   (when (eq system-type 'darwin)
-    ;; Modifier key configurations for better macOS integration
+    ;; Modifier key configurations for terminal
     (setq mac-command-modifier 'hyper     ; Cmd key as Hyper
           mac-option-modifier 'meta       ; Option key as Meta (Alt)
           mac-control-modifier 'control)  ; Control key as Control
@@ -685,10 +757,7 @@
     (when (executable-find "gls")
       (setq insert-directory-program "gls"))
 
-    ;; macOS-style keybindings using Hyper (Cmd) modifier
-    (global-set-key (kbd "H-=") 'text-scale-increase)      ; Cmd+= to zoom in
-    (global-set-key (kbd "H--") 'text-scale-decrease)      ; Cmd+- to zoom out
-    (global-set-key (kbd "H-0") 'text-scale-adjust)        ; Cmd+0 to reset zoom
+    ;; Terminal-friendly keybindings (no GUI frame commands)
     (global-set-key (kbd "H-q") 'save-buffers-kill-terminal) ; Cmd+Q to quit
     (global-set-key (kbd "H-v") 'yank)                     ; Cmd+V to paste
     (global-set-key (kbd "H-c") 'kill-ring-save)           ; Cmd+C to copy
@@ -697,27 +766,38 @@
     (global-set-key (kbd "H-w") 'delete-window)            ; Cmd+W to close window
     (global-set-key (kbd "H-z") 'undo)                     ; Cmd+Z to undo
     (global-set-key (kbd "H-s") 'save-buffer)              ; Cmd+S to save
-    (global-set-key (kbd "H-n") 'make-frame-command)       ; Cmd+N for new frame
     (global-set-key (kbd "H-t") 'find-file)                ; Cmd+T for new "tab" (file)
     (global-set-key (kbd "H-o") 'find-file)                ; Cmd+O to open file
-    
-    ;; Fullscreen toggle
-    (global-set-key (kbd "C-H-f") 'toggle-frame-fullscreen) ; Ctrl+Cmd+F for fullscreen
-    
-    ;; macOS-style mouse wheel scrolling
-    (setq mouse-wheel-scroll-amount '(1 ((shift) . 5) ((control) . nil)))
-    (setq mouse-wheel-progressive-speed nil)
-    
-    ;; Better frame title showing full path
-    (setq frame-title-format
+
+    ;; Terminal title (since we don't have frame titles in terminal)
+    (setq terminal-title-format
           '((:eval (if (buffer-file-name)
                        (abbreviate-file-name (buffer-file-name))
-                     "%b")))))
+                     "%b"))))
+
+    (emacs-nix-log "macOS terminal configuration loaded"))
 #+end_src
 
-* Performance restore
+* Performance restore and completion optimizations
 
 #+begin_src emacs-lisp
-  ;; Performance optimization: restore GC threshold
-  (setq gc-cons-threshold 800000)
+  ;; Performance optimization: restore GC threshold to recommended LSP value
+  ;; LSP doctor requires gc-cons-threshold >= 100mb for green status
+  (setq gc-cons-threshold 100000000)  ; 100mb (LSP doctor required)
+
+  ;; Additional completion performance optimizations (2024-2025)
+  (setq completion-cycle-threshold 3)     ;; TAB cycles if few candidates
+  (setq tab-always-indent 'complete)      ;; TAB completes when possible
+  (setq completion-pcm-word-delimiters "-_./:| ") ;; Better word completion
+
+  ;; Terminal-only configuration
+  ;; We're running in terminal mode, Corfu child frames supported in Emacs 31+
+  ;; For older versions, terminal overlays are used automatically
+  (emacs-nix-log "Terminal-only Emacs configuration active")
+
+  ;; Completion debugging helpers (uncomment if needed)
+  ;; (setq completion-show-help t)
+  ;; (setq completion-auto-help 'always)
+
+  (emacs-nix-log "=== Completion and LSP configuration loaded successfully ===")
 #+end_src

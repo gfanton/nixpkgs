@@ -9,7 +9,7 @@
 (defun emacs-nix-log (message)
   "Log MESSAGE to the emacs-nix log file with timestamp."
   (with-temp-buffer
-    (insert (format "[%s] %s\n" 
+    (insert (format "[%s] %s\n"
                     (format-time-string "%Y-%m-%d %H:%M:%S")
                     message))
     (append-to-file (point-min) (point-max) emacs-nix-log-file)))

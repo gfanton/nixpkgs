@@ -7,10 +7,11 @@
 let
   inherit (config.home) user-info homeDirectory;
 
-  # Terminal-only Emacs (no GUI dependencies)
-  emacs-base = pkgs.emacs-nox.override {
+  # Emacs from overlay with optimizations (terminal)
+  emacs-base = pkgs.emacs-pgtk.override {
     withNativeCompilation = true;
     withTreeSitter = true;
+    withSQLite3 = true;
   };
 
   # Comprehensive package list following 2024-2025 best practices
@@ -51,7 +52,11 @@ let
       embark-consult
       marginalia
       orderless
+
+      # Completion UI
       corfu
+      corfu-terminal  # Terminal support for Emacs 30
+      popon           # Required dependency for corfu-terminal
       cape
       wgrep
 
@@ -68,11 +73,6 @@ let
       lsp-mode
       lsp-ui
       consult-lsp
-      lsp-treemacs
-      treemacs
-      treemacs-evil
-      treemacs-projectile
-      treemacs-magit
 
       # Programming languages
       # Go
@@ -106,19 +106,15 @@ let
 
       # Org mode
       org
-      org-roam
-      org-super-agenda
       org-cliplink
 
       # UI enhancements
       catppuccin-theme
-      modus-themes
       doom-modeline
       all-the-icons
 
       # Terminal integration
       vterm
-      multi-vterm
 
       # Utilities
       expand-region
@@ -129,13 +125,15 @@ let
       ws-butler
       editorconfig
       flycheck
-      company
       yasnippet
       yasnippet-snippets
 
       # Custom modes from your Spacemacs config
       polymode
       templ-ts-mode
+
+      # Tree-sitter grammars (from emacs-overlay)
+      treesit-grammars.with-all-grammars
 
       # Local custom packages
       gno-mode
@@ -219,13 +217,17 @@ in
   # Export the new emacs for use in other modules
   _module.args.myEmacs = myEmacs;
 
-  # Shell aliases for the nix-vanilla configuration (clean, no xterm overrides)
+  # Shell aliases - nix-vanilla is default, all terminal-only
   programs.zsh.shellAliases = {
-    # Nix-vanilla profile aliases using myEmacs (with all packages) - clean terminal support
-    "emacs-nix" = "${myEmacs}/bin/emacs --with-profile=nix-vanilla";
-    "emacsclient-nix" = "${myEmacs}/bin/emacsclient";  # Client connects to existing daemon
+    # Default emacs commands use nix-vanilla (terminal-only)
+    "emacs" = "${myEmacs}/bin/emacs -nw --with-profile=nix-vanilla";
+    "emacsclient" = "${myEmacs}/bin/emacsclient -nw";
+
+    # Explicit nix-vanilla aliases (for clarity/backward compatibility)
+    "emacs-nix" = "${myEmacs}/bin/emacs -nw --with-profile=nix-vanilla";
+    "emacsclient-nix" = "${myEmacs}/bin/emacsclient -nw";
     "emacs-nix-nw" = "${myEmacs}/bin/emacs -nw --with-profile=nix-vanilla";
-    "emacsclient-nix-nw" = "${myEmacs}/bin/emacsclient -nw";  # Client connects to existing daemon
+    "emacsclient-nix-nw" = "${myEmacs}/bin/emacsclient -nw";
   };
 
   # Tree-sitter will be managed by Emacs tree-sitter packages

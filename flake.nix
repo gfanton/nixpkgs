@@ -72,7 +72,8 @@
           allowUnfree = true;
         };
         overlays = attrValues self.overlays ++ [
-          # put stuff here
+          # Emacs overlay for latest packages and optimizations
+          inputs.emacs-overlay.overlays.default
         ];
       };
 

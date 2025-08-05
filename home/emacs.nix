@@ -8,11 +8,11 @@ let
   inherit (config.home) user-info homeDirectory;
   xterm-emacsclient = pkgs.writeShellScriptBin "xemacsclient" ''
     export TERM=xterm-emacs
-    ${pkgs.emacs-gtk}/bin/emacsclient $@
+    ${pkgs.emacs}/bin/emacsclient $@
   '';
   xterm-emacs = pkgs.writeShellScriptBin "xemacs" ''
     export TERM=xterm-emacs
-    ${pkgs.emacs-gtk}/bin/emacs $@
+    ${pkgs.emacs}/bin/emacs $@
   '';
 in
 {
@@ -58,18 +58,10 @@ in
   # programs.emacs.enable = true;
   # programs.emacs.package = pkgs.emacs-gtk;
 
-  # setup aliases - nix-vanilla is now default, spacemacs as fallback
+  # Spacemacs-specific aliases (explicit terminal-only commands)
   programs.zsh.shellAliases = {
-    # Primary aliases use nix-vanilla (leveraging myEmacs from emacs-nix.nix)
-    "xemacs" = "emacs-nix";  # GUI with nix-vanilla
-    "xemacsclient" = "emacsclient-nix";  # GUI client with nix-vanilla
-    "emacs" = "emacs-nix-nw";  # Terminal with nix-vanilla
-    "emacsclient" = "emacsclient-nix-nw";  # Terminal client with nix-vanilla
-    
-    # Spacemacs fallback aliases
-    "spacemacs" = "${xterm-emacs}/bin/xemacs --with-profile=spacemacs";
-    "spacemacs-nw" = "${xterm-emacs}/bin/xemacs -nw --with-profile=spacemacs";
-    "spacemacsclient" = "${xterm-emacsclient}/bin/xemacsclient";
-    "spacemacsclient-nw" = "${xterm-emacsclient}/bin/xemacsclient -nw";
+    # Explicit spacemacs commands (terminal-only) - main emacs/emacsclient handled by emacs-nix.nix
+    "spacemacs" = "${xterm-emacs}/bin/xemacs -nw --with-profile=spacemacs";
+    "spacemacsclient" = "${xterm-emacsclient}/bin/xemacsclient -nw";
   };
 }

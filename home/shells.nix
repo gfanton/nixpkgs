@@ -30,11 +30,11 @@ let
 
   xterm-emacsclient = pkgs.writeShellScriptBin "xemacsclient" ''
     export TERM=xterm-emacs
-    ${pkgs.emacs-gtk}/bin/emacsclient $@
+    ${pkgs.emacs}/bin/emacsclient $@
   '';
   xterm-emacs = pkgs.writeShellScriptBin "xemacs" ''
     export TERM=xterm-emacs
-    ${pkgs.emacs-gtk}/bin/emacs $@
+    ${pkgs.emacs}/bin/emacs $@
   '';
 
   restart-service = pkgs.writeShellScriptBin "restart-service" ''
