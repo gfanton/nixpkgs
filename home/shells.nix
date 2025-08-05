@@ -186,6 +186,7 @@ in
 
   programs.zsh = {
     enable = true;
+    dotDir = ".config/zsh";
     plugins = [
       {
         # add powerline10 custom config
@@ -234,9 +235,6 @@ in
 
     initContent = lib.mkMerge [
       (lib.mkBefore ''
-        # Set ZDOTDIR to XDG config directory for zsh
-        export ZDOTDIR="${config.xdg.configHome}/zsh"
-        
         # Powerlevel10k instant prompt will be enabled by the theme
       '')
       (lib.mkAfter ''
