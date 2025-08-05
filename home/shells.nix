@@ -30,29 +30,27 @@ let
 
   xterm-emacsclient = pkgs.writeShellScriptBin "xemacsclient" ''
     export TERM=xterm-emacs
-    ${pkgs.emacs}/bin/emacsclient $@
+    ${pkgs.emacs}/bin/emacsclient -nw -t "$@"
   '';
   xterm-emacs = pkgs.writeShellScriptBin "xemacs" ''
     export TERM=xterm-emacs
-    ${pkgs.emacs}/bin/emacs $@
+    ${pkgs.emacs}/bin/emacs -nw "$@"
   '';
 
   ec-script = pkgs.writeShellScriptBin "ec" ''
-    export TERM=xterm-emacs
     if [ $# -eq 0 ]; then
       # No arguments: open current directory
-      ${pkgs.emacs}/bin/emacsclient .
+      ${xterm-emacsclient}/bin/xemacsclient .
     else
       # Arguments provided: pass them to emacsclient
-      ${pkgs.emacs}/bin/emacsclient "$@"
+      ${xterm-emacsclient}/bin/xemacsclient "$@"
     fi
   '';
 
   eg-script = pkgs.writeShellScriptBin "eg" ''
-    export TERM=xterm-emacs
     if [ $# -eq 0 ]; then
       # No arguments: open magit in current directory
-      ${pkgs.emacs}/bin/emacsclient --eval "(magit-status)"
+      ${xterm-emacsclient}/bin/xemacsclient --eval "(progn (magit-status) (delete-other-windows))"
     else
       # Path provided: find git root and open magit there
       target_path="$1"
@@ -66,12 +64,12 @@ let
         echo "Error: '$target_path' is not a valid file or directory"
         exit 1
       fi
-      
+
       # Find the git root directory
       git_root=$(cd "$target_dir" && git rev-parse --show-toplevel 2>/dev/null)
       if [ $? -eq 0 ]; then
         # Open magit in the git root directory
-        ${pkgs.emacs}/bin/emacsclient --eval "(let ((default-directory \"$git_root/\")) (magit-status))"
+        ${xterm-emacsclient}/bin/xemacsclient --eval "(progn (let ((default-directory \"$git_root/\")) (magit-status)) (delete-other-windows))"
       else
         echo "Error: '$target_path' is not in a git repository"
         exit 1
@@ -219,20 +217,19 @@ in
         ];
       };
       theme = "powerlevel10k/powerlevel10k";
-      plugins =
-        [
-          "sudo"
-          "git"
-          "fzf"
-          "zoxide"
-          "cp"
-        ]
-        # ++ [ "fzf-tab" "fast-syntax-highlighting" ] # extra plugins list
-        ++ lib.optionals pkgs.stdenv.isDarwin [
-          "brew"
-          "macos"
-        ]
-        ++ lib.optionals pkgs.stdenv.isLinux [ ];
+      plugins = [
+        "sudo"
+        "git"
+        "fzf"
+        "zoxide"
+        "cp"
+      ]
+      # ++ [ "fzf-tab" "fast-syntax-highlighting" ] # extra plugins list
+      ++ lib.optionals pkgs.stdenv.isDarwin [
+        "brew"
+        "macos"
+      ]
+      ++ lib.optionals pkgs.stdenv.isLinux [ ];
     };
 
     initContent = lib.mkMerge [
@@ -266,13 +263,13 @@ in
                 tmux split-window -h less "$@"
             }
             function ev() {
-                tmux split-window -h ''${xterm-emacsclient}/bin/xemacsclient "$@"
+                tmux split-window -h ''${xterm-emacsclient}/bin/xemacsclient -n "$@"
             }
             function lh() {
                 tmux split-window -v less "$@"
             }
             function eh() {
-                tmux split-window -v ''${xterm-emacsclient}/bin/xemacsclient "$@"
+                tmux split-window -v ''${xterm-emacsclient}/bin/xemacsclient -n "$@"
             }
         fi
       '')
