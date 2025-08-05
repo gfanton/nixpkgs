@@ -37,6 +37,48 @@ let
     ${pkgs.emacs}/bin/emacs $@
   '';
 
+  ec-script = pkgs.writeShellScriptBin "ec" ''
+    export TERM=xterm-emacs
+    if [ $# -eq 0 ]; then
+      # No arguments: open current directory
+      ${pkgs.emacs}/bin/emacsclient .
+    else
+      # Arguments provided: pass them to emacsclient
+      ${pkgs.emacs}/bin/emacsclient "$@"
+    fi
+  '';
+
+  eg-script = pkgs.writeShellScriptBin "eg" ''
+    export TERM=xterm-emacs
+    if [ $# -eq 0 ]; then
+      # No arguments: open magit in current directory
+      ${pkgs.emacs}/bin/emacsclient --eval "(magit-status)"
+    else
+      # Path provided: find git root and open magit there
+      target_path="$1"
+      if [ -f "$target_path" ]; then
+        # If it's a file, get its directory
+        target_dir=$(dirname "$target_path")
+      elif [ -d "$target_path" ]; then
+        # If it's a directory, use it directly
+        target_dir="$target_path"
+      else
+        echo "Error: '$target_path' is not a valid file or directory"
+        exit 1
+      fi
+      
+      # Find the git root directory
+      git_root=$(cd "$target_dir" && git rev-parse --show-toplevel 2>/dev/null)
+      if [ $? -eq 0 ]; then
+        # Open magit in the git root directory
+        ${pkgs.emacs}/bin/emacsclient --eval "(let ((default-directory \"$git_root/\")) (magit-status))"
+      else
+        echo "Error: '$target_path' is not in a git repository"
+        exit 1
+      fi
+    fi
+  '';
+
   restart-service = pkgs.writeShellScriptBin "restart-service" ''
     set -e
 
@@ -257,7 +299,8 @@ in
         mydev = "(){ nix develop my#$1 -c $SHELL ;}";
 
         # emacs defined in emacs.nix
-        ec = "emacsclient";
+        ec = "${ec-script}/bin/ec";
+        eg = "${eg-script}/bin/eg";
 
         # kitty alias
         ssh = "${pkgs.pkgs-stable.kitty}/bin/kitten ssh";
@@ -289,6 +332,7 @@ in
         restart-yabai = "${restart-service}/bin/restart-service org.nixos.yabai.plist";
         restart-skhd = "${restart-service}/bin/restart-service org.nixos.skhd.plist";
         restart-borders = "${restart-service}/bin/restart-service org.nixos.jankyborders.plist";
+        restart-emacs = "${restart-service}/bin/restart-service org.gnu.emacs.daemon.plist";
       });
   };
 }
