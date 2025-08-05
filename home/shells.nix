@@ -217,19 +217,20 @@ in
         ];
       };
       theme = "powerlevel10k/powerlevel10k";
-      plugins = [
-        "sudo"
-        "git"
-        "fzf"
-        "zoxide"
-        "cp"
-      ]
-      # ++ [ "fzf-tab" "fast-syntax-highlighting" ] # extra plugins list
-      ++ lib.optionals pkgs.stdenv.isDarwin [
-        "brew"
-        "macos"
-      ]
-      ++ lib.optionals pkgs.stdenv.isLinux [ ];
+      plugins =
+        [
+          "sudo"
+          "git"
+          "fzf"
+          "zoxide"
+          "cp"
+        ]
+        # ++ [ "fzf-tab" "fast-syntax-highlighting" ] # extra plugins list
+        ++ lib.optionals pkgs.stdenv.isDarwin [
+          "brew"
+          "macos"
+        ]
+        ++ lib.optionals pkgs.stdenv.isLinux [ ];
     };
 
     initContent = lib.mkMerge [

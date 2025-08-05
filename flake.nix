@@ -151,16 +151,13 @@
         my-loon = import ./overlays/loon.nix;
         my-gnolint = import ./overlays/gnolint.nix;
         my-libvterm = import ./overlays/libvterm.nix;
-        my-tmux-open-emacs = import ./overlays/tmux-open-emacs.nix;
-        my-tmux-notify = import ./overlays/tmux-notify.nix;
-        # my-tmux-proj = import ./overlays/tmux-proj.nix; # Temporarily disabled
+        my-tmux = import ./overlays/tmux.nix;
       };
 
       # Non-system outputs --------------------------------------------------------------------- {{{
 
       commonModules = {
         colors = import ./modules/home/colors;
-
         my-colors = import ./home/colors.nix;
       };
 
@@ -196,7 +193,6 @@
 
         # local modules
         programs-truecolor = import ./modules/home/programs/truecolor;
-        # programs-asdf = import ./modules/home/programs/asdf;
         programs-kitty-extras = import ./modules/home/programs/kitty/extras.nix;
         programs-zsh-oh-my-zsh-extra = import ./modules/home/programs/zsh/oh-my-zsh/extras.nix;
 
