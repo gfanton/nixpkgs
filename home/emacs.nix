@@ -53,11 +53,12 @@ let
       marginalia
       orderless
 
-      # Completion UI
+      # Completion UI (Ultimate Corfu setup)
       corfu
       corfu-terminal # Terminal support for Emacs 30
       popon # Required dependency for corfu-terminal
       cape
+      kind-icon # Beautiful completion icons
       wgrep
 
       # Evil mode + vim bindings
@@ -69,9 +70,8 @@ let
       general
       which-key
 
-      # LSP integration
+      # LSP integration (Pure Corfu approach - no LSP-UI)
       lsp-mode
-      lsp-ui
       consult-lsp
 
       # Programming languages
@@ -158,6 +158,9 @@ let
     nodePackages.eslint
     nixd
     nil # Alternative Nix LSP server
+
+    # LSP Performance booster (2-10x faster LSP)
+    emacs-lsp-booster
 
     # Formatters
     gofumpt

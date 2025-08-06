@@ -332,11 +332,16 @@
     :config
     (vertico-mode))
 
+  ;; === ORDERLESS: Flexible matching ===
   (use-package orderless
     :demand t
     :custom
     (completion-styles '(orderless basic))
-    (completion-category-overrides '((file (styles partial-completion)))))
+    (completion-category-defaults nil)
+    (completion-category-overrides 
+     '((file (styles partial-completion))
+       (eglot (styles orderless))
+       (lsp-capf (styles orderless)))))
 
   (use-package marginalia
     :demand t
@@ -391,165 +396,278 @@
     (setq wgrep-auto-save-buffer t)
     (setq wgrep-change-readonly-file t))
 
-  ;; Corfu completion system with auto-completion
+  ;; === CORFU: Modern completion UI ===
   (use-package corfu
     :demand t
     :custom
-    ;; Enable auto completion
-    (corfu-auto t)                    ;; Enable automatic completion
-    (corfu-auto-delay 0.2)           ;; Short delay for auto completion
-    (corfu-auto-prefix 2)            ;; Minimum prefix length for auto completion
-    (corfu-cycle t)                  ;; Enable cycling for `corfu-next/previous'
-    (corfu-preselect 'prompt)         ;; Preselect the first candidate
-    (corfu-on-exact-match nil)       ;; Configure handling of exact matches
-    (corfu-scroll-margin 5)          ;; Use scroll margin
-    ;; Completion styles
-    (completion-styles '(orderless basic))
-    (completion-category-defaults nil)
-    (completion-category-overrides '((file (styles partial-completion))))
+    ;; === AUTO-COMPLETION SETTINGS ===
+    (corfu-auto t)                    ; Enable auto completion
+    (corfu-auto-delay 0.2)           ; Quick response time
+    (corfu-auto-prefix 2)            ; Start after 2 characters
+    (corfu-cycle t)                  ; Enable cycling
+    (corfu-preselect 'prompt)        ; Preselect first candidate
+    (corfu-on-exact-match nil)       ; Don't auto-accept exact matches
+    (corfu-scroll-margin 5)          ; Scroll margin
+    
+    ;; === APPEARANCE SETTINGS ===
+    (corfu-max-width 80)             ; Maximum popup width
+    (corfu-min-width 15)             ; Minimum popup width
+    (corfu-count 10)                 ; Show up to 10 candidates
+    (corfu-preview-current nil)      ; Don't preview (less distracting)
+    (corfu-echo-documentation 0.25)  ; Quick doc in echo area
+    
     :bind
     (:map corfu-map
-    	("TAB" . corfu-next)
-    	([tab] . corfu-next)
-    	("S-TAB" . corfu-previous)
-    	([backtab] . corfu-previous)
-    	("M-d" . corfu-info-documentation)  ;; Show documentation manually
-    	("M-l" . corfu-info-location)       ;; Show location
-    	("M-p" . corfu-popupinfo-toggle)    ;; Toggle popup info
-    	("M-h" . corfu-popupinfo-documentation) ;; Force show documentation popup
-    	("C-p" . corfu-popupinfo-scroll-down)   ;; Scroll popup down
-    	("C-n" . corfu-popupinfo-scroll-up))    ;; Scroll popup up
-
+          ;; Navigation
+          ("TAB" . corfu-next)
+          ([tab] . corfu-next)
+          ("S-TAB" . corfu-previous)
+          ([backtab] . corfu-previous)
+          
+          ;; Documentation (manual)
+          ("M-d" . corfu-info-documentation)
+          ("M-l" . corfu-info-location)
+          ("M-p" . corfu-popupinfo-toggle)
+          
+          ;; Scroll documentation
+          ("M-n" . corfu-popupinfo-scroll-up)
+          ("M-p" . corfu-popupinfo-scroll-down)
+          
+          ;; Quick selection (with corfu-indexed)
+          ("M-1" . corfu-indexed-complete)
+          ("M-2" . corfu-indexed-complete)
+          ("M-3" . corfu-indexed-complete)
+          
+          ;; Control
+          ("C-g" . corfu-quit))
+          
     :config
     (global-corfu-mode)
+    (emacs-nix-log "Corfu completion system activated"))
 
-    (emacs-nix-log "Corfu completion enabled with auto-completion and proper TAB handling"))
-
-  ;; Enable corfu extensions
+  ;; === CORFU EXTENSIONS ===
   (with-eval-after-load 'corfu
-    ;; Enable corfu-info for manual documentation display
-    (require 'corfu-info)
-
-    ;; Enable corfu-popupinfo for automatic documentation popup
-    (require 'corfu-popupinfo)
-    (setq corfu-popupinfo-delay 0.5)     ;; Delay before showing popup
-    (setq corfu-popupinfo-max-width 80)  ;; Maximum width of popup
-    (setq corfu-popupinfo-max-height 20) ;; Maximum height of popup
-
-    (corfu-popupinfo-mode 1)              ;; Enable automatic popup
-
-    ;; Enable corfu-history to remember completions
-    (require 'corfu-history)
+    ;; Load all extensions
+    (require 'corfu-info)       ; Manual documentation
+    (require 'corfu-popupinfo)  ; Auto documentation popup
+    (require 'corfu-history)    ; Remember completions
+    (require 'corfu-indexed)    ; Number candidates
+    
+    ;; === POPUPINFO CONFIGURATION ===
+    (setq corfu-popupinfo-delay 0.4)         ; Show after 0.4s
+    (setq corfu-popupinfo-hide nil)          ; Don't auto-hide
+    (setq corfu-popupinfo-resize t)          ; Resize based on content
+    
+    ;; Responsive sizing
+    (if (display-graphic-p)
+        (progn
+          (setq corfu-popupinfo-max-width 100)
+          (setq corfu-popupinfo-max-height 25))
+      (progn
+        (setq corfu-popupinfo-max-width 80)
+        (setq corfu-popupinfo-max-height 15)))
+    
+    ;; Smart positioning
+    (setq corfu-popupinfo-direction '(right left top bottom))
+    
+    ;; Enable extensions
+    (corfu-popupinfo-mode 1)
     (corfu-history-mode 1)
-    ;; Persist history across Emacs sessions
+    (corfu-indexed-mode 1)
+    
+    ;; Persist history
     (add-to-list 'savehist-additional-variables 'corfu-history)
+    
+    (emacs-nix-log "All Corfu extensions loaded and configured"))
 
-    (emacs-nix-log "Corfu extensions loaded: info, popupinfo, and history with LSP integration"))
+  ;; === TERMINAL SUPPORT ===
+  (use-package corfu-terminal
+    :demand t
+    :config
+    ;; Smart terminal detection
+    (defun my/corfu-enable-in-terminal ()
+      "Enable corfu-terminal-mode in terminal frames."
+      (unless (display-graphic-p (selected-frame))
+        (corfu-terminal-mode 1)))
+    
+    ;; Enable for current session
+    (unless (display-graphic-p)
+      (corfu-terminal-mode 1))
+    
+    ;; Enable for new frames (daemon support)
+    (add-hook 'server-after-make-frame-hook #'my/corfu-enable-in-terminal)
+    (add-hook 'after-make-frame-functions
+              (lambda (frame)
+                (with-selected-frame frame
+                  (my/corfu-enable-in-terminal))))
+    
+    (emacs-nix-log "Corfu terminal support configured"))
+  
+  ;; === TERMINAL POPUPINFO SUPPORT ===
+  ;; Custom extension to enable documentation popups in terminal
+  (use-package corfu-terminal-popupinfo
+    :load-path "~/nixpkgs/config/emacs/packages/corfu-terminal-popupinfo"
+    :after (corfu-terminal corfu-popupinfo)
+    :config
+    (unless (display-graphic-p)
+      (corfu-terminal-popupinfo-mode 1)
+      (emacs-nix-log "Corfu terminal popupinfo support enabled")))
 
-  ;; Terminal support for Corfu (Emacs 30 and older)
-  (use-package popon)  ; Ensure popon is loaded first
+  ;; Ensure popon is available for terminal mode
+  (use-package popon)
 
-  ;; Load corfu-terminal for terminal mode
-  (unless (display-graphic-p)
-    (require 'corfu-terminal)
-    (corfu-terminal-mode +1)
-    (emacs-nix-log "Corfu terminal mode enabled for TTY"))
-
-  ;; Cape - completion sources (rasendubi's configuration)
+  ;; === CAPE: Completion sources ===
   (use-package cape
     :demand t
     :config
-    ;; Add completion sources
-    (add-to-list 'completion-at-point-functions #'cape-file)
-    (add-to-list 'completion-at-point-functions #'cape-dabbrev)
+    ;; Add useful completion sources
+    (add-to-list 'completion-at-point-functions #'cape-dabbrev)    ; Dynamic abbrev
+    (add-to-list 'completion-at-point-functions #'cape-file)      ; File paths
+    (add-to-list 'completion-at-point-functions #'cape-elisp-block) ; Elisp blocks
+    
+    ;; Mode-specific sources
+    (add-hook 'org-mode-hook 
+              (lambda ()
+                (add-to-list 'completion-at-point-functions #'cape-elisp-block)))
+                
+    (add-hook 'text-mode-hook
+              (lambda ()
+                (add-to-list 'completion-at-point-functions #'cape-dict)))
+                
     (emacs-nix-log "Cape completion sources configured"))
 #+end_src
 
 * LSP Mode
 
 #+begin_src emacs-lisp
+  ;; === LSP-MODE: Language Server Protocol ===
   (use-package lsp-mode
-    ;; Performance optimization - disable plists for compatibility
-    :init
-    ;; Disable plist to fix hash-table-p errors with gopls
-    (setq lsp-use-plists nil)
-    :hook ((go-mode . lsp-deferred)
-           (rust-mode . lsp-deferred)
-           (typescript-mode . lsp-deferred)
-           (js2-mode . lsp-deferred)
-           (web-mode . lsp-deferred)
-           (nix-mode . lsp-deferred)
-           (gno-mode . lsp-deferred))
     :commands (lsp lsp-deferred)
+    :hook (lsp-completion-mode . my/lsp-mode-setup-completion)
     :custom
-    ;; Use LSP completion via CAPF (compatible with Corfu)
-    (lsp-completion-provider :capf)
+    ;; === COMPLETION SETTINGS ===
+    (lsp-completion-provider :none)          ; Use CAPF (Corfu)
+    (lsp-completion-show-detail t)           ; Show details
+    (lsp-completion-show-kind t)             ; Show kinds
+    
+    ;; === PERFORMANCE OPTIMIZATIONS ===
+    (lsp-idle-delay 0.5)                    ; Update delay
+    (lsp-log-io nil)                        ; No IO logging
+    (lsp-file-watch-threshold 2000)         ; File watch limit
+    (lsp-enable-file-watchers nil)          ; Disable watchers
+    (lsp-response-timeout 30)               ; Reasonable timeout
+    (lsp-keep-workspace-alive nil)          ; Don't keep alive
+    
+    ;; === LSP-BOOSTER (PERFORMANCE BOOST) ===
+    (lsp-use-plists t)                      ; Required for booster
+    
+    ;; === UI SETTINGS ===
     (lsp-keymap-prefix "C-c l")
-    (lsp-idle-delay 0.5)
     (lsp-enable-which-key-integration t)
-    ;; Performance optimizations for LSP
-    (lsp-file-watch-threshold 2000)
-    (lsp-log-io nil)
     (lsp-enable-snippet t)
-    (lsp-keep-workspace-alive nil)
-    ;; Additional gopls compatibility settings
-    (lsp-response-timeout 60)
-    (lsp-enable-file-watchers t)
-    ;; Reduce completion complexity to avoid timeouts
-    (lsp-completion-enable-additional-text-edit nil)
-    ;; Enable completion item resolve for documentation
-    (lsp-completion-show-detail t)
-    (lsp-completion-show-kind t)
+    (lsp-headerline-breadcrumb-enable nil)  ; Clean UI
+    (lsp-signature-auto-activate nil)       ; Manual signatures
+    (lsp-eldoc-render-all nil)              ; Simple eldoc
+    
     :config
-    ;; Setup LSP completion to work reliably with Corfu
-    (defun my/lsp-mode-setup-completion ()
-      "Configure LSP completion for reliable operation with Corfu."
-      ;; Use basic completion styles for LSP to avoid timeout issues with orderless
-      (setq-local completion-styles '(basic partial-completion))
-      ;; Enable case-insensitive completion
-      (setq-local completion-ignore-case t))
+    ;; === LSP-BOOSTER INTEGRATION ===
+    (defun lsp-booster--advice-json-parse (old-fn &rest args)
+      "Try to parse bytecode instead of json."
+      (or
+       (when (equal (following-char) ?#)
+         (let ((bytecode (read (current-buffer))))
+           (when (byte-code-function-p bytecode)
+             (funcall bytecode))))
+       (apply old-fn args)))
 
-    ;; Apply completion setup in LSP buffers
-    (add-hook 'lsp-mode-hook #'my/lsp-mode-setup-completion))
+    (advice-add (if (progn (require 'json)
+                           (fboundp 'json-parse-buffer))
+                    'json-parse-buffer
+                  'json-read)
+                :around
+                #'lsp-booster--advice-json-parse)
 
-  (use-package lsp-ui
-    :hook (lsp-mode . lsp-ui-mode)
-    :custom
-    ;; Optimized LSP UI settings for hover documentation
-    (lsp-ui-sideline-enable nil)           ;; Disable sideline (distracting)
-    (lsp-ui-sideline-show-hover nil)       ;; Disable hover in sideline
-    (lsp-ui-sideline-show-code-actions nil) ;; Use manual code actions instead
-    (lsp-ui-doc-enable t)                  ;; Enable documentation popup
-    (lsp-ui-doc-position 'at-point)        ;; Show docs at point
-    (lsp-ui-doc-show-with-cursor t)        ;; Show docs automatically on hover
-    (lsp-ui-doc-show-with-mouse nil)       ;; Don't show docs on mouse hover (terminal)
-    (lsp-ui-doc-delay 0.5)                 ;; Delay before showing docs
-    (lsp-ui-doc-include-signature t)       ;; Include function signatures
-    (lsp-ui-doc-max-width 80)              ;; Max width of doc popup
-    (lsp-ui-doc-max-height 20)             ;; Max height of doc popup
-    (lsp-ui-doc-use-childframe nil)       ;; Don't use childframes (terminal friendly)
-    (lsp-ui-doc-use-webkit nil)           ;; Don't use webkit (terminal friendly)
-    (lsp-ui-peek-enable t)                 ;; Enable peek functionality
-    (lsp-ui-peek-always-show t)            ;; Always show peek
-    (lsp-ui-peek-list-width 40)            ;; Peek list width
-    (lsp-ui-peek-peek-height 15)           ;; Peek window height
-    :bind
-    ;; Better LSP UI keybindings
-    (:map lsp-ui-mode-map
-          ("C-c l d" . lsp-ui-doc-show)
-          ("C-c l D" . lsp-ui-doc-hide)
-          ("C-c l p" . lsp-ui-peek-find-definitions)
-          ("C-c l r" . lsp-ui-peek-find-references)
-          ("C-c l i" . lsp-ui-peek-find-implementation)
-          ("C-c l s" . lsp-ui-peek-find-workspace-symbol)))
+    (defun lsp-booster--advice-final-command (old-fn cmd &optional test?)
+      "Prepend emacs-lsp-booster command to lsp CMD."
+      (let ((orig-result (funcall old-fn cmd test?)))
+        (if (and (not test?)
+                 (not (file-remote-p default-directory))
+                 lsp-use-plists
+                 (not (functionp 'json-rpc-connection))
+                 (executable-find "emacs-lsp-booster"))
+            (progn
+              (when-let* ((command-from-exec-path (executable-find (car orig-result))))
+                (setcar orig-result command-from-exec-path))
+              (message "Using emacs-lsp-booster for %s!" orig-result)
+              (cons "emacs-lsp-booster" orig-result))
+          orig-result)))
+          
+    (advice-add 'lsp-resolve-final-command :around #'lsp-booster--advice-final-command)
+    
+    (emacs-nix-log "LSP-Mode with booster integration configured"))
 
-  ;; Modern LSP + Consult integration (2024-2025 best practices)
+  ;; === LSP COMPLETION SETUP ===
+  (defun my/lsp-mode-setup-completion ()
+    "Setup LSP completion with Corfu and orderless."
+    ;; Configure orderless for LSP
+    (setf (alist-get 'styles (alist-get 'lsp-capf completion-category-defaults))
+          '(orderless))
+    
+    ;; Add flex matching for first word
+    (add-hook 'orderless-style-dispatchers #'my/orderless-dispatch-flex-first nil 'local)
+    
+    ;; Use cape-capf-buster to prevent hangs
+    (setq-local completion-at-point-functions
+                (list (cape-capf-buster #'lsp-completion-at-point))))
+
+  (defun my/orderless-dispatch-flex-first (_pattern index _total)
+    "Use flex matching for the first completion component."
+    (and (eq index 0) 'orderless-flex))
+
+
+  ;; === CONSULT-LSP: Modern LSP navigation ===
   (use-package consult-lsp
     :after (consult lsp-mode)
     :bind (:map lsp-mode-map
-           ("C-c l s" . consult-lsp-symbols)
-           ("C-c l S" . consult-lsp-file-symbols)
-           ("C-c l d" . consult-lsp-diagnostics)))
+                ("C-c l s" . consult-lsp-symbols)
+                ("C-c l S" . consult-lsp-file-symbols)
+                ("C-c l d" . consult-lsp-diagnostics)
+                ("C-c l e" . consult-lsp-diagnostics)))
+
+  ;; === CONTEXT-AWARE COMPLETION SETTINGS ===
+  (defun my/corfu-popupinfo-setup ()
+    "Setup context-aware corfu-popupinfo settings."
+    (cond
+     ;; LSP modes - fast and detailed
+     ((and (bound-and-true-p lsp-mode)
+           (memq #'lsp-completion-at-point completion-at-point-functions))
+      (setq-local corfu-popupinfo-delay 0.2)
+      (setq-local corfu-popupinfo-max-height 25))
+     
+     ;; Go mode - very fast (gopls is quick)
+     ((derived-mode-p 'go-mode)
+      (setq-local corfu-popupinfo-delay 0.1))
+     
+     ;; Elisp - standard
+     ((derived-mode-p 'emacs-lisp-mode)
+      (setq-local corfu-popupinfo-delay 0.3))
+     
+     ;; Text modes - slower (less useful docs)
+     ((derived-mode-p 'text-mode 'org-mode 'markdown-mode)
+      (setq-local corfu-popupinfo-delay 0.8))
+     
+     ;; Default
+     (t
+      (setq-local corfu-popupinfo-delay 0.5))))
+
+  ;; Apply context settings
+  (add-hook 'corfu-mode-hook #'my/corfu-popupinfo-setup)
+
+  ;; Terminal-specific optimizations
+  (unless (display-graphic-p)
+    (with-eval-after-load 'corfu
+      (setq corfu-popupinfo-delay 0.6)        ; Longer delay in terminal
+      (setq corfu-echo-documentation nil)))   ; Disable echo in terminal
 #+end_src
 
 * Programming languages
@@ -844,23 +962,22 @@
 * Performance restore and completion optimizations
 
 #+begin_src emacs-lisp
-  ;; Performance optimization: restore GC threshold to recommended LSP value
-  ;; LSP doctor requires gc-cons-threshold >= 100mb for green status
-  (setq gc-cons-threshold 100000000)  ; 100mb (LSP doctor required)
+  ;; === PERFORMANCE OPTIMIZATIONS ===
+  ;; Set at startup
+  (setq gc-cons-threshold 100000000)          ; 100MB for LSP
+  (setq read-process-output-max (* 1024 1024)) ; 1MB read buffer
+  (setq gc-cons-percentage 0.6)               ; GC percentage
 
-  ;; Additional completion performance optimizations (2024-2025)
-  (setq completion-cycle-threshold 3)     ;; TAB cycles if few candidates
-  (setq tab-always-indent t)              ;; TAB should always indent first
-  (setq completion-pcm-word-delimiters "-_./:| ") ;; Better word completion
+  ;; Completion performance
+  (setq completion-cycle-threshold 3)         ; TAB cycles with few candidates
+  (setq tab-always-indent 'complete)          ; TAB completes
+  (setq completion-pcm-word-delimiters "-_./:| ")
 
-  ;; Terminal-only configuration
-  ;; We're running in terminal mode, Corfu child frames supported in Emacs 31+
-  ;; For older versions, terminal overlays are used automatically
-  (emacs-nix-log "Terminal-only Emacs configuration active")
+  ;; At the end of config, restore reasonable GC
+  (add-hook 'emacs-startup-hook
+            (lambda ()
+              (setq gc-cons-threshold 100000000)  ; Keep high for LSP
+              (emacs-nix-log "Performance settings optimized for LSP + Corfu")))
 
-  ;; Completion debugging helpers (uncomment if needed)
-  ;; (setq completion-show-help t)
-  ;; (setq completion-auto-help 'always)
-
-  (emacs-nix-log "=== Completion and LSP configuration loaded successfully ===")
+  (emacs-nix-log "=== Ultimate Corfu + LSP configuration loaded successfully ===")
 #+end_src
