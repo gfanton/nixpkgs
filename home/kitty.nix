@@ -66,6 +66,9 @@ in
     kitty_mod = "ctrl+alt";
 
     font_features = "+cv02 +cv05 +cv09 +cv14 +ss04 +cv16 +cv31 +cv25 +cv26 +cv32 +cv28 +ss10 +zero +onum";
+
+    # OSC 52 clipboard support for universal clipboard integration
+    clipboard_control = "write-clipboard write-primary read-clipboard read-primary";
   };
 
   # # Change the style of italic font variants

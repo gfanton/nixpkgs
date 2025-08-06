@@ -217,8 +217,8 @@
       ;; macOS integration shortcuts
       "o" '(:ignore t :which-key "os")
       "om" '(:ignore t :which-key "macOS")
-      "omc" '(osx/pbcopy :which-key "copy to macOS clipboard")
-      "omv" '(osx/pbpaste :which-key "paste from macOS clipboard")
+      "omc" '(osx/pbcopy :which-key "copy to clipboard")
+      "omv" '(osx/pbpaste :which-key "paste from clipboard")
       "omd" '(osx/define-word-at-point :which-key "define word")
       "omD" '(osx/list-available-dictionaries :which-key "list dictionaries")
       "om+" '(osx/scale-font-up :which-key "scale font up")
@@ -796,6 +796,21 @@
   (add-hook 'before-save-hook 'maybe-delete-trailing-whitespace)
 #+end_src
 
+* Clipeboard Configurations
+
+#+begin_src emacs-lisp
+  (use-package clipetty
+    :ensure t
+    :hook
+    (after-init . global-clipetty-mode)
+    :config
+    ;; For tmux users: Tell clipetty to assume nested mux when over SSH
+    (setq clipetty-assume-nested-mux t)
+    ;; Bind Cmd+C to use clipetty's kill-ring-save for manual clipboard operations
+    (global-set-key (kbd "H-c") 'clipetty-kill-ring-save)
+    (emacs-nix-log "Clipetty OSC 52 clipboard integration enabled"))
+#+end_src
+
 * macOS specific configurations
 
 #+begin_src emacs-lisp
@@ -810,55 +825,6 @@
     (when (executable-find "gls")
       (setq insert-directory-program "gls"))
 
-    ;; === CLIPBOARD INTEGRATION (pbcopy/pbpaste) ===
-    ;; Enhanced clipboard integration with macOS system clipboard
-    (defun osx/pbcopy ()
-      "Copy current region or whole buffer to macOS clipboard using pbcopy."
-      (interactive)
-      (let ((text (if (use-region-p)
-                      (buffer-substring-no-properties (region-beginning) (region-end))
-                    (buffer-substring-no-properties (point-min) (point-max)))))
-        (with-temp-buffer
-          (insert text)
-          (shell-command-on-region (point-min) (point-max) "pbcopy"))
-        (message "Copied to macOS clipboard")))
-
-    (defun osx/pbpaste ()
-      "Paste from macOS clipboard using pbpaste."
-      (interactive)
-      (insert (shell-command-to-string "pbpaste")))
-
-    ;; === TEXT SCALING (Spacemacs OSX layer) ===
-    (defun osx/scale-font-up ()
-      "Scale font size up."
-      (interactive)
-      (text-scale-increase 1))
-
-    (defun osx/scale-font-down ()
-      "Scale font size down."
-      (interactive)
-      (text-scale-decrease 1))
-
-    (defun osx/reset-font-size ()
-      "Reset font size to default."
-      (interactive)
-      (text-scale-set 0))
-
-    ;; === DICTIONARY INTEGRATION ===
-    (defun osx/define-word-at-point ()
-      "Look up word at point using macOS Dictionary app."
-      (interactive)
-      (let ((word (word-at-point)))
-        (when word
-          (shell-command (format "open dict://%s" word))
-          (message "Looking up '%s' in Dictionary app" word))))
-
-    (defun osx/list-available-dictionaries ()
-      "List available dictionaries on macOS."
-      (interactive)
-      (message "%s" (shell-command-to-string
-                     "defaults read com.apple.HIToolbox AppleEnabledInputSources | grep -E '(KeyboardLayout|InputMode)' | grep -E 'BundleID|InputModeID' | cut -d'\"' -f4 | sort | uniq")))
-
     ;; === ENHANCED KEYBINDINGS (Spacemacs OSX layer style) ===
     ;; Basic macOS shortcuts
     (global-set-key (kbd "H-q") 'save-buffers-kill-terminal) ; Cmd+Q to quit
@@ -868,37 +834,11 @@
     (global-set-key (kbd "H-o") 'find-file)                  ; Cmd+O to open file
     (global-set-key (kbd "H-a") 'mark-whole-buffer)          ; Cmd+A to select all
 
-    ;; Enhanced clipboard with pbcopy/pbpaste integration
-    (global-set-key (kbd "H-c") 'osx/pbcopy)                 ; Cmd+C to copy to system clipboard
-    (global-set-key (kbd "H-v") 'osx/pbpaste)                ; Cmd+V to paste from system clipboard
-    (global-set-key (kbd "H-x") 'kill-region)                ; Cmd+X to cut
-
     ;; Undo/Redo
     (global-set-key (kbd "H-z") 'undo)                       ; Cmd+Z to undo
     (global-set-key (kbd "H-Z") 'undo-redo)                  ; Cmd+Shift+Z to redo
 
-    ;; Text scaling (Spacemacs OSX layer)
-    (global-set-key (kbd "H-=") 'osx/scale-font-up)          ; Cmd+= to increase font size
-    (global-set-key (kbd "H--") 'osx/scale-font-down)        ; Cmd+- to decrease font size
-    (global-set-key (kbd "H-0") 'osx/reset-font-size)        ; Cmd+0 to reset font size
-
-    ;; Dictionary integration
-    (global-set-key (kbd "H-d") 'osx/define-word-at-point)   ; Cmd+D to define word
-
-    ;; Additional useful macOS shortcuts
-    (global-set-key (kbd "H-f") 'consult-line)               ; Cmd+F to search in buffer
-    (global-set-key (kbd "H-g") 'consult-ripgrep)            ; Cmd+G to search in project
-    (global-set-key (kbd "H-r") 'consult-recent-file)        ; Cmd+R to open recent file
-
-    ;; Terminal title (since we don't have frame titles in terminal)
-    (setq terminal-title-format
-          '((:eval (if (buffer-file-name)
-                       (abbreviate-file-name (buffer-file-name))
-                     "%b"))))
-
-    ;; Leader key shortcuts will be added later in the keybinding section
-
-    (emacs-nix-log "Enhanced macOS terminal configuration loaded with clipboard, scaling, and dictionary support"))
+    (emacs-nix-log "Enhanced macOS terminal configuration loaded with universal clipboard (OSC 52), scaling, and dictionary support"))
 #+end_src
 
 * Performance restore and completion optimizations

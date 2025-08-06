@@ -135,6 +135,18 @@ in
       set -ag terminal-overrides ",*256col*:RGB,*256col*:Tc"
       set -ag terminal-overrides ",xterm-kitty:RGB,xterm-kitty:Tc"
 
+      # OSC 52 clipboard support for universal clipboard integration
+      set -g set-clipboard on
+      set -ag terminal-overrides ",xterm-256color:Ms=\\E]52;%p1%s;%p2%s\\007"
+      set -ag terminal-overrides ",xterm-kitty:Ms=\\E]52;%p1%s;%p2%s\\007"
+      set -ag terminal-overrides ",xterm-emacs:Ms=\\E]52;%p1%s;%p2%s\\007"
+      
+      # Allow OSC 52 passthrough for nested tmux sessions (tmux 3.3a+)
+      set -g allow-passthrough on
+      
+      # Update SSH_TTY environment variable on reattach for clipboard after detach/reattach
+      set -ag update-environment "SSH_TTY"
+
       # Enable true color support and other capabilities
       set -sa terminal-features ',alacritty:RGB:usstyle'
       set -sa terminal-features ',xterm-256color:RGB:usstyle'

@@ -115,6 +115,7 @@ let
 
       # Terminal integration
       vterm
+      clipetty  # OSC 52 clipboard support for universal clipboard integration
 
       # Utilities
       expand-region
