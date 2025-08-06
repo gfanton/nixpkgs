@@ -47,7 +47,7 @@ let
     ${term-background}/bin/term-background dark
   '';
 
-  socket = "unix:/tmp/mykitty";
+  socket = "unix:/tmp/mykitty-{kitty_pid}";
 
 in
 {
