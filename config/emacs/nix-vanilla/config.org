@@ -35,7 +35,7 @@
   (when (fboundp 'scroll-bar-mode) (scroll-bar-mode -1))
   (column-number-mode 1)
   (global-display-line-numbers-mode 1)
-  
+
   ;; Enable savehist mode for persistent history
   (savehist-mode 1)
   (setq savehist-file "~/.emacs.d/savehist")
@@ -400,53 +400,50 @@
     (corfu-auto-delay 0.2)           ;; Short delay for auto completion
     (corfu-auto-prefix 2)            ;; Minimum prefix length for auto completion
     (corfu-cycle t)                  ;; Enable cycling for `corfu-next/previous'
-    (corfu-separator ?\s)            ;; Orderless field separator
-    (corfu-quit-at-boundary nil)     ;; Never quit at completion boundary
-    (corfu-quit-no-match nil)        ;; Never quit, even if there is no match
-    (corfu-preview-current nil)      ;; Disable current candidate preview
     (corfu-preselect 'prompt)         ;; Preselect the first candidate
     (corfu-on-exact-match nil)       ;; Configure handling of exact matches
     (corfu-scroll-margin 5)          ;; Use scroll margin
+    ;; Completion styles
+    (completion-styles '(orderless basic))
+    (completion-category-defaults nil)
+    (completion-category-overrides '((file (styles partial-completion))))
     :bind
     (:map corfu-map
-  	("TAB" . corfu-next)
-  	([tab] . corfu-next)
-  	("S-TAB" . corfu-previous)
-  	([backtab] . corfu-previous)
-  	("M-d" . corfu-info-documentation)  ;; Show documentation manually
-  	("M-l" . corfu-info-location)       ;; Show location
-  	("M-p" . corfu-popupinfo-toggle)    ;; Toggle popup info
-  	("M-h" . corfu-popupinfo-documentation) ;; Force show documentation popup
-  	("C-p" . corfu-popupinfo-scroll-down)   ;; Scroll popup down
-  	("C-n" . corfu-popupinfo-scroll-up))    ;; Scroll popup up
+    	("TAB" . corfu-next)
+    	([tab] . corfu-next)
+    	("S-TAB" . corfu-previous)
+    	([backtab] . corfu-previous)
+    	("M-d" . corfu-info-documentation)  ;; Show documentation manually
+    	("M-l" . corfu-info-location)       ;; Show location
+    	("M-p" . corfu-popupinfo-toggle)    ;; Toggle popup info
+    	("M-h" . corfu-popupinfo-documentation) ;; Force show documentation popup
+    	("C-p" . corfu-popupinfo-scroll-down)   ;; Scroll popup down
+    	("C-n" . corfu-popupinfo-scroll-up))    ;; Scroll popup up
 
     :config
     (global-corfu-mode)
-        
+
     (emacs-nix-log "Corfu completion enabled with auto-completion and proper TAB handling"))
 
   ;; Enable corfu extensions
   (with-eval-after-load 'corfu
     ;; Enable corfu-info for manual documentation display
     (require 'corfu-info)
-    
+
     ;; Enable corfu-popupinfo for automatic documentation popup
     (require 'corfu-popupinfo)
     (setq corfu-popupinfo-delay 0.5)     ;; Delay before showing popup
     (setq corfu-popupinfo-max-width 80)  ;; Maximum width of popup
     (setq corfu-popupinfo-max-height 20) ;; Maximum height of popup
-    
-    ;; Ensure corfu-popupinfo works in terminal mode
-    (setq corfu-popupinfo-hide nil)       ;; Don't hide popup automatically
-        
+
     (corfu-popupinfo-mode 1)              ;; Enable automatic popup
-    
+
     ;; Enable corfu-history to remember completions
     (require 'corfu-history)
     (corfu-history-mode 1)
     ;; Persist history across Emacs sessions
     (add-to-list 'savehist-additional-variables 'corfu-history)
-    
+
     (emacs-nix-log "Corfu extensions loaded: info, popupinfo, and history with LSP integration"))
 
   ;; Terminal support for Corfu (Emacs 30 and older)
