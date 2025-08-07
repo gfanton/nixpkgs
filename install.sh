@@ -286,7 +286,15 @@ main() {
     warn "Configuration: $config"
     warn "Target: ${TARGET_HOST:-localhost}"
     echo
-    read -p "Are you sure you want to continue? (yes/no): " -r
+    
+    # Read from /dev/tty to handle piped input (curl | bash)
+    if [[ -t 0 ]]; then
+        # Script run directly, stdin is available
+        read -p "Are you sure you want to continue? (yes/no): " -r REPLY
+    else
+        # Script piped (curl | bash), read from terminal
+        read -p "Are you sure you want to continue? (yes/no): " -r REPLY </dev/tty
+    fi
     echo
     
     if [[ ! $REPLY =~ ^[Yy][Ee][Ss]$ ]]; then
