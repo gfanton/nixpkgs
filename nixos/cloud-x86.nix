@@ -30,6 +30,7 @@
         inputs.self.homeManagerModules.my-kitty
         inputs.self.homeManagerModules.programs-kitty-extras
         inputs.self.homeManagerModules.programs-truecolor
+        inputs.self.homeManagerModules.programs-zsh-oh-my-zsh-extra
         inputs.self.commonModules.colors
         inputs.self.commonModules.my-colors
         
