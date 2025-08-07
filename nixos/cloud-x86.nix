@@ -28,6 +28,7 @@
         ../home/git.nix
         ../home/emacs.nix
         ../home/kitty.nix
+        ../home/colors.nix
         ../modules/home/colors
         
         # Minimal Linux-specific user info
