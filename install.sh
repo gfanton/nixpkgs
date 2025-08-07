@@ -228,10 +228,7 @@ install_nixos() {
     
     # Detect if we're running locally on the target machine
     if [[ -z "${TARGET_HOST:-}" ]] || [[ "${TARGET_HOST}" == "root@localhost" ]] || [[ "${TARGET_HOST}" == "localhost" ]]; then
-        log "Installing directly on this machine"
-        
-        # Use nixos-anywhere with kexec to install from within the target system
-        log "Preparing for in-place NixOS installation using kexec..."
+        log "Installing NixOS on this machine"
         
         # Install nixos-anywhere if not available
         if ! command -v nixos-anywhere &> /dev/null; then
@@ -239,29 +236,27 @@ install_nixos() {
             nix profile install github:nix-community/nixos-anywhere
         fi
         
-        log "This will:"
-        log "  1. Load a NixOS installer into RAM using kexec"
-        log "  2. Partition and format your disk"
-        log "  3. Install NixOS with configuration: $config"
-        log "  4. Automatically reboot into your new system"
+        local ip=$(hostname -I 2>/dev/null | awk '{print $1}' || echo "this-ip")
+        
+        log "Starting NixOS installation process:"
+        log "  1. nixos-anywhere will kexec into installer (connection will drop)"
+        log "  2. Partition and format disks"
+        log "  3. Install NixOS configuration: $config"
+        log "  4. Reboot into new system"
         log ""
-        warn "SSH connection WILL be lost during installation!"
-        warn "The system will be available again in ~10-15 minutes"
+        warn "SSH connection will be lost during kexec!"
+        warn "System will be back online in ~10-15 minutes"
+        log ""
+        log "After installation, reconnect with: ssh gfanton@${ip}"
         log ""
         
-        local ip=$(hostname -I | awk '{print $1}')
-        log "After installation, SSH back with: ssh gfanton@${ip}"
-        log ""
-        log "Starting installation in 5 seconds..."
-        sleep 5
+        # Run nixos-anywhere with root@localhost
+        # This is the standard pattern from nixos-anywhere examples
+        log "Executing: nixos-anywhere --flake ${FLAKE_URL}#${config} root@localhost"
         
-        # Run nixos-anywhere targeting localhost  
-        # nixos-anywhere will handle the kexec process automatically
         nixos-anywhere \
             --flake "${FLAKE_URL}#${config}" \
             root@localhost
-        
-        # Note: The system will automatically reboot after successful installation
     else
         # Remote installation via nixos-anywhere
         local target_host="${TARGET_HOST}"
