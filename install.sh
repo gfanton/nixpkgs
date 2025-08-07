@@ -163,9 +163,6 @@ determine_config() {
     local arch="${1:-$(detect_architecture)}"
     local disk_layout="${2:-$(detect_disk_layout)}"
     
-    log "Detected architecture: $arch"
-    log "Detected disk layout: $disk_layout"
-    
     # Map architecture names
     case "$arch" in
         "x86_64"|"x86"|"amd64")
@@ -188,6 +185,15 @@ determine_config() {
     esac
     
     echo "$config"
+}
+
+# Display detected configuration
+show_detected_config() {
+    local arch="${1:-$(detect_architecture)}"
+    local disk_layout="${2:-$(detect_disk_layout)}"
+    
+    log "Detected architecture: $arch"
+    log "Detected disk layout: $disk_layout"
 }
 
 # Validate flake configuration exists
@@ -267,6 +273,7 @@ main() {
     check_prerequisites
     
     # Determine configuration
+    show_detected_config "$arch" "$disk_layout"
     local config
     config=$(determine_config "$arch" "$disk_layout")
     
