@@ -29,6 +29,7 @@
         inputs.self.homeManagerModules.my-emacs
         inputs.self.homeManagerModules.my-kitty
         inputs.self.homeManagerModules.programs-kitty-extras
+        inputs.self.homeManagerModules.programs-truecolor
         inputs.self.commonModules.colors
         inputs.self.commonModules.my-colors
         
