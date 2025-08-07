@@ -230,49 +230,38 @@ install_nixos() {
     if [[ -z "${TARGET_HOST:-}" ]] || [[ "${TARGET_HOST}" == "root@localhost" ]] || [[ "${TARGET_HOST}" == "localhost" ]]; then
         log "Installing directly on this machine"
         
-        # For local installation, we need to use kexec mode
-        log "Preparing system for in-place installation..."
+        # Use nixos-anywhere with kexec to install from within the target system
+        log "Preparing for in-place NixOS installation using kexec..."
         
-        # Download and run nixos-anywhere in kexec mode
-        log "This will:"
-        log "  1. Download a minimal NixOS installer into RAM"
-        log "  2. Kexec into the installer (system will briefly disconnect)"
-        log "  3. Install NixOS and automatically reboot"
-        log ""
-        warn "SSH connection will be lost during installation!"
-        warn "The system will be available again in ~10-15 minutes at the same IP"
-        log ""
-        log "After installation, SSH back with: ssh gfanton@$(hostname -I | awk '{print $1}')"
-        
-        # Use nixos-anywhere with --vm-test flag for local installation
-        # Or better: use nixos-install directly since we're already in the installer
-        if [[ -f /etc/NIXOS ]]; then
-            # We're already in a NixOS installer environment
-            log "Detected NixOS installer environment"
-            
-            # Mount and prepare disks using disko
-            log "Preparing disks..."
-            nix run github:nix-community/disko -- \
-                --mode mount \
-                --flake "${FLAKE_URL}#${config}"
-            
-            # Install NixOS
-            log "Installing NixOS..."
-            nixos-install \
-                --flake "${FLAKE_URL}#${config}" \
-                --no-root-password \
-                --no-channel-copy
-            
-            success "Installation complete! Rebooting..."
-            reboot
-        else
-            # Not in installer, need to kexec into one
-            error "This system is not a NixOS installer environment"
-            error "Please boot from a NixOS installer ISO or use nixos-anywhere from a remote machine"
-            error "Remote installation command:"
-            error "  nix run github:numtide/nixos-anywhere -- --flake ${FLAKE_URL}#${config} root@$(hostname -I | awk '{print $1}')"
-            exit 1
+        # Install nixos-anywhere if not available
+        if ! command -v nixos-anywhere &> /dev/null; then
+            log "Installing nixos-anywhere..."
+            nix profile install github:nix-community/nixos-anywhere
         fi
+        
+        log "This will:"
+        log "  1. Load a NixOS installer into RAM using kexec"
+        log "  2. Partition and format your disk"
+        log "  3. Install NixOS with configuration: $config"
+        log "  4. Automatically reboot into your new system"
+        log ""
+        warn "SSH connection WILL be lost during installation!"
+        warn "The system will be available again in ~10-15 minutes"
+        log ""
+        
+        local ip=$(hostname -I | awk '{print $1}')
+        log "After installation, SSH back with: ssh gfanton@${ip}"
+        log ""
+        log "Starting installation in 5 seconds..."
+        sleep 5
+        
+        # Run nixos-anywhere targeting localhost  
+        # nixos-anywhere will handle the kexec process automatically
+        nixos-anywhere \
+            --flake "${FLAKE_URL}#${config}" \
+            root@localhost
+        
+        # Note: The system will automatically reboot after successful installation
     else
         # Remote installation via nixos-anywhere
         local target_host="${TARGET_HOST}"
