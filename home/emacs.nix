@@ -8,11 +8,19 @@ let
   inherit (config.home) user-info homeDirectory;
 
   # Modern Emacs with optimizations (primary configuration)
-  emacs-base = pkgs.emacs-pgtk.override {
-    withNativeCompilation = true;
-    withTreeSitter = true;
-    withSQLite3 = true;
-  };
+  # Use terminal version for Linux cloud deployments, GUI for Darwin
+  emacs-base = if pkgs.stdenv.isLinux then
+    pkgs.emacs-nox.override {
+      withNativeCompilation = true;
+      withTreeSitter = true;
+      withSQLite3 = true;
+    }
+  else
+    pkgs.emacs-pgtk.override {
+      withNativeCompilation = true;
+      withTreeSitter = true;
+      withSQLite3 = true;
+    };
 
   # Comprehensive package list following 2024-2025 best practices
   emacsPackages =

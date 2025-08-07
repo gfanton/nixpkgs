@@ -341,12 +341,29 @@
       
       # NixOS cloud configurations (cloud-agnostic)
       nixosConfigurations = {
-        # Cloud configuration for x86_64 (works on all major cloud providers)
+        # Complete x86_64 cloud configuration with home-manager (DEFAULT)
         cloud-x86 = inputs.nixpkgs-unstable.lib.nixosSystem {
           system = "x86_64-linux";
+          specialArgs = { 
+            inherit inputs; 
+            hostname = "nixos-dev"; 
+            username = "gfanton"; 
+          };
           modules = [
             disko.nixosModules.disko
             ./nixos/cloud-x86.nix
+            {
+              nixpkgs = nixpkgsDefaults;
+            }
+          ];
+        };
+
+        # Minimal x86_64 cloud configuration (bootstrap/basic)
+        cloud-bootstrap-x86 = inputs.nixpkgs-unstable.lib.nixosSystem {
+          system = "x86_64-linux";
+          modules = [
+            disko.nixosModules.disko
+            ./nixos/cloud-bootstrap-x86.nix
             {
               nixpkgs = nixpkgsDefaults;
               networking.hostName = "nixos-cloud";
@@ -358,12 +375,29 @@
           ];
         };
 
-        # Cloud configuration for ARM64 (works on all major cloud providers)
+        # Complete ARM64 cloud configuration with home-manager (DEFAULT)
         cloud-arm = inputs.nixpkgs-unstable.lib.nixosSystem {
           system = "aarch64-linux";
+          specialArgs = { 
+            inherit inputs; 
+            hostname = "nixos-dev"; 
+            username = "gfanton"; 
+          };
           modules = [
             disko.nixosModules.disko
             ./nixos/cloud-arm.nix
+            {
+              nixpkgs = nixpkgsDefaults;
+            }
+          ];
+        };
+
+        # Minimal ARM64 cloud configuration (bootstrap/basic)
+        cloud-bootstrap-arm = inputs.nixpkgs-unstable.lib.nixosSystem {
+          system = "aarch64-linux";
+          modules = [
+            disko.nixosModules.disko
+            ./nixos/cloud-bootstrap-arm.nix
             {
               nixpkgs = nixpkgsDefaults;
               networking.hostName = "nixos-cloud";
@@ -410,6 +444,7 @@
             }
           ];
         };
+
 
         # Hetzner Cloud ARM64 VM configuration
         # Based on: https://github.com/LGUG2Z/nixos-hetzner-cloud-starter

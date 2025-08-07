@@ -1,76 +1,52 @@
-# ARM64-specific cloud configuration
-# Optimized for ARM64 cloud instances (Hetzner Cloud ARM, AWS Graviton, etc.)
-{ config, lib, pkgs, ... }:
+# Complete ARM64 cloud configuration with home-manager
+# Single command deployment: nix run github:numtide/nixos-anywhere -- --flake .#cloud-arm root@IP
+{ config, lib, pkgs, inputs, hostname, username, ... }:
 
 {
   imports = [
-    ./cloud.nix
-    ./users.nix
+    ./cloud.nix  # Complete cloud system configuration
+    inputs.home-manager.nixosModules.home-manager  # System-level home-manager
   ];
 
-  # ARM64-specific boot configuration for cloud instances
-  boot = {
-    # ARM64 cloud instances use UEFI boot
-    loader = {
-      systemd-boot.enable = lib.mkForce true;
-      grub.enable = lib.mkForce false;
-      efi.canTouchEfiVariables = true;
-    };
+  # ARM64-specific optimizations
+  powerManagement.cpuFreqGovernor = lib.mkForce "ondemand";  # Better for ARM64
+
+  # ARM64 boot configuration (UEFI preferred for ARM64 cloud instances)
+  boot.loader = {
+    systemd-boot.enable = lib.mkForce true;
+    grub.enable = lib.mkForce false;
+    efi.canTouchEfiVariables = true;
+  };
+
+  # Home-manager integration (user packages and configs from home/ modules)
+  home-manager = {
+    useGlobalPkgs = true;
+    useUserPackages = true;
+    extraSpecialArgs = { inherit inputs; };
     
-    # Override timeout from base config
-    loader.timeout = lib.mkForce 3;
-    
-    # ARM64 kernel optimizations with better console support
-    kernelParams = [
-      "console=tty0"           # VGA console for Hetzner Cloud console
-      "console=ttyS0,115200"   # Serial console
-      "earlyprintk=serial,ttyS0,115200"
-    ];
-  };
-
-  # ARM64-specific network interface naming (override base settings)
-  systemd.network.networks."10-wan" = {
-    matchConfig.Name = lib.mkForce "enp1s0"; # Common ARM64 interface name
-    networkConfig = {
-      DHCP = "ipv4";
-      IPv6AcceptRA = true;
+    users.${username} = {
+      imports = [
+        # Single source of truth: all user config from home/ modules
+        ../home/packages.nix
+        ../home/shells.nix
+        ../home/git.nix
+        ../home/emacs.nix
+        ../home/kitty.nix
+        ../modules/home
+        
+        # Minimal Linux-specific user info
+        ({ config, lib, pkgs, ... }: {
+          home = {
+            username = username;
+            homeDirectory = "/home/${username}";
+            stateVersion = "25.11";
+          };
+          
+          home.user-info = lib.mkIf (config.home ? user-info) {
+            nixConfigDirectory = "/home/${username}/nixpkgs";
+          };
+        })
+      ];
     };
-  };
-
-  # ARM64-optimized packages
-  environment.systemPackages = with pkgs; [
-    # ARM64 performs well with these tools
-    btop      # Better than htop on ARM
-    ripgrep   # Fast grep alternative
-    fd        # Fast find alternative
-    zoxide    # Smart cd command
-  ];
-
-  # ARM64-specific hardware optimizations
-  hardware = {
-    # Enable firmware updates if available
-    enableAllFirmware = true;
-    # CPU microcode updates (if available for ARM)
-    cpu.amd.updateMicrocode = false; # Not applicable for ARM
-    cpu.intel.updateMicrocode = false; # Not applicable for ARM
-  };
-
-  # Performance optimizations for ARM64
-  powerManagement = {
-    enable = true;
-    cpuFreqGovernor = "ondemand"; # Good balance for cloud workloads
-  };
-
-  # Specific to Hetzner Cloud ARM instances
-  # Ampere Altra processors work well with these settings
-  services.thermald.enable = false; # Not needed for cloud instances
-  
-  # ARM64-specific sysctl optimizations (override base cloud settings)
-  boot.kernel.sysctl = {
-    # Enhanced network performance for ARM64 cloud instances
-    "net.core.rmem_max" = lib.mkForce 134217728;
-    "net.core.wmem_max" = lib.mkForce 134217728;
-    "net.ipv4.tcp_rmem" = lib.mkForce "4096 65536 134217728";
-    "net.ipv4.tcp_wmem" = lib.mkForce "4096 65536 134217728";
   };
 }
