@@ -131,7 +131,7 @@ let
       avy
       smartparens
       rainbow-delimiters
-      ws-butler
+      # ws-butler  # Commented out - causing build issues with nongnu repo
       editorconfig
       flycheck
       yasnippet
