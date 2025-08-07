@@ -223,40 +223,91 @@ validate_config() {
 # Install NixOS using nixos-anywhere
 install_nixos() {
     local config="$1"
-    local target_host="${TARGET_HOST:-root@localhost}"
     
     log "Starting NixOS installation with configuration: $config"
-    log "Target host: $target_host"
     
-    # Check if nixos-anywhere is available
-    if ! command -v nixos-anywhere &> /dev/null; then
-        log "Installing nixos-anywhere..."
-        nix profile install github:nix-community/nixos-anywhere
-    fi
-    
-    # Run nixos-anywhere
-    log "Running nixos-anywhere deployment..."
-    log "This may take 10-30 minutes depending on network speed and system specs"
-    
-    if nixos-anywhere \
-        --flake "${FLAKE_URL}#${config}" \
-        --generate-hardware-config nixos-generate-config ./hardware-configuration.nix \
-        "${target_host}"; then
+    # Detect if we're running locally on the target machine
+    if [[ -z "${TARGET_HOST:-}" ]] || [[ "${TARGET_HOST}" == "root@localhost" ]] || [[ "${TARGET_HOST}" == "localhost" ]]; then
+        log "Installing directly on this machine"
         
-        success "NixOS installation completed successfully!"
-        success "Your system is now running NixOS with configuration: $config"
+        # For local installation, we need to use kexec mode
+        log "Preparing system for in-place installation..."
         
-        log "You can rebuild your system with:"
-        log "  nixos-rebuild switch --flake ${FLAKE_URL}#${config}"
+        # Download and run nixos-anywhere in kexec mode
+        log "This will:"
+        log "  1. Download a minimal NixOS installer into RAM"
+        log "  2. Kexec into the installer (system will briefly disconnect)"
+        log "  3. Install NixOS and automatically reboot"
+        log ""
+        warn "SSH connection will be lost during installation!"
+        warn "The system will be available again in ~10-15 minutes at the same IP"
+        log ""
+        log "After installation, SSH back with: ssh gfanton@$(hostname -I | awk '{print $1}')"
         
-        log "Or customize your configuration by cloning the repository:"
-        log "  git clone https://github.com/${REPO}.git"
-        log "  cd nixpkgs && git checkout ${BRANCH}"
-        
+        # Use nixos-anywhere with --vm-test flag for local installation
+        # Or better: use nixos-install directly since we're already in the installer
+        if [[ -f /etc/NIXOS ]]; then
+            # We're already in a NixOS installer environment
+            log "Detected NixOS installer environment"
+            
+            # Mount and prepare disks using disko
+            log "Preparing disks..."
+            nix run github:nix-community/disko -- \
+                --mode mount \
+                --flake "${FLAKE_URL}#${config}"
+            
+            # Install NixOS
+            log "Installing NixOS..."
+            nixos-install \
+                --flake "${FLAKE_URL}#${config}" \
+                --no-root-password \
+                --no-channel-copy
+            
+            success "Installation complete! Rebooting..."
+            reboot
+        else
+            # Not in installer, need to kexec into one
+            error "This system is not a NixOS installer environment"
+            error "Please boot from a NixOS installer ISO or use nixos-anywhere from a remote machine"
+            error "Remote installation command:"
+            error "  nix run github:numtide/nixos-anywhere -- --flake ${FLAKE_URL}#${config} root@$(hostname -I | awk '{print $1}')"
+            exit 1
+        fi
     else
-        error "NixOS installation failed"
-        error "Check the logs above for error details"
-        exit 1
+        # Remote installation via nixos-anywhere
+        local target_host="${TARGET_HOST}"
+        log "Installing on remote host: $target_host"
+        
+        # Check if nixos-anywhere is available
+        if ! command -v nixos-anywhere &> /dev/null; then
+            log "Installing nixos-anywhere..."
+            nix profile install github:nix-community/nixos-anywhere
+        fi
+        
+        # Run nixos-anywhere
+        log "Running nixos-anywhere deployment..."
+        log "This may take 10-30 minutes depending on network speed and system specs"
+        
+        if nixos-anywhere \
+            --flake "${FLAKE_URL}#${config}" \
+            --generate-hardware-config nixos-generate-config ./hardware-configuration.nix \
+            "${target_host}"; then
+            
+            success "NixOS installation completed successfully!"
+            success "Your system is now running NixOS with configuration: $config"
+            
+            log "You can rebuild your system with:"
+            log "  nixos-rebuild switch --flake ${FLAKE_URL}#${config}"
+            
+            log "Or customize your configuration by cloning the repository:"
+            log "  git clone https://github.com/${REPO}.git"
+            log "  cd nixpkgs && git checkout ${BRANCH}"
+            
+        else
+            error "NixOS installation failed"
+            error "Check the logs above for error details"
+            exit 1
+        fi
     fi
 }
 
