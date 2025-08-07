@@ -32,7 +32,6 @@
         ../home/git.nix
         ../home/emacs.nix
         ../home/kitty.nix
-        ../modules/home
         
         # Minimal Linux-specific user info
         ({ config, lib, pkgs, ... }: {
