@@ -28,20 +28,6 @@
     # Common cloud virtio modules
     kernelModules = [ "virtio_pci" "virtio_net" "virtio_blk" "virtio_scsi" ];
 
-    # Enable BBR congestion control
-    kernel.sysctl = {
-      # Network performance optimizations
-      "net.core.rmem_max" = 16777216;
-      "net.core.wmem_max" = 16777216;
-      "net.ipv4.tcp_rmem" = "4096 87380 16777216";
-      "net.ipv4.tcp_wmem" = "4096 16384 16777216";
-      "net.ipv4.tcp_congestion_control" = "bbr";
-
-      # Storage optimizations
-      "vm.dirty_ratio" = 15;
-      "vm.dirty_background_ratio" = 5;
-      "vm.swappiness" = 1;
-    };
 
     # Automatic filesystem resize for cloud volumes
     growPartition = true;
