@@ -40,10 +40,6 @@
             homeDirectory = "/home/${username}";
             stateVersion = "25.11";
           };
-          
-          home.user-info = lib.mkIf (config.home ? user-info) {
-            nixConfigDirectory = "/home/${username}/nixpkgs";
-          };
         })
       ];
     };
