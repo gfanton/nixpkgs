@@ -78,7 +78,27 @@ detect_disk_layout() {
     fi
 }
 
-# Check prerequisites
+# Install Nix if not present
+install_nix() {
+    log "🔧 Installing Nix package manager..."
+    
+    # Use the Determinate Nix Installer (more reliable and includes flakes by default)
+    if ! curl --proto '=https' --tlsv1.2 -sSf -L https://install.determinate.systems/nix | sh -s -- install --no-confirm; then
+        error "Failed to install Nix"
+        exit 1
+    fi
+    
+    # Source the Nix environment
+    if [[ -f /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh ]]; then
+        source /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh
+    elif [[ -f ~/.nix-profile/etc/profile.d/nix.sh ]]; then
+        source ~/.nix-profile/etc/profile.d/nix.sh
+    fi
+    
+    success "✅ Nix installed successfully"
+}
+
+# Check prerequisites and install what's missing
 check_prerequisites() {
     log "Checking prerequisites..."
     
@@ -88,27 +108,54 @@ check_prerequisites() {
         exit 1
     fi
     
-    # Check if Nix is installed
-    if ! command -v nix &> /dev/null; then
-        error "Nix is not installed. Please install Nix first:"
-        error "curl -L https://nixos.org/nix/install | sh"
-        exit 1
-    fi
-    
-    # Check if flakes are enabled
-    if ! nix flake --help &> /dev/null; then
-        error "Nix flakes are not enabled. Please enable experimental features:"
-        error "echo 'experimental-features = nix-command flakes' >> /etc/nix/nix.conf"
-        exit 1
-    fi
-    
-    # Check internet connectivity
+    # Check internet connectivity first
     if ! curl -sf --max-time 10 https://github.com &>/dev/null; then
         error "No internet connectivity or GitHub is unreachable"
         exit 1
     fi
     
-    success "Prerequisites check passed"
+    # Install Nix if not present
+    if ! command -v nix &> /dev/null; then
+        warn "Nix is not installed. Installing automatically..."
+        install_nix
+    else
+        log "✅ Nix is already installed"
+    fi
+    
+    # Verify Nix is working and has flakes
+    if ! command -v nix &> /dev/null; then
+        error "Nix installation failed or not in PATH"
+        exit 1
+    fi
+    
+    # Check if flakes are enabled
+    if ! nix flake --help &> /dev/null 2>&1; then
+        warn "Nix flakes not available. Enabling experimental features..."
+        
+        # Try to enable flakes
+        if [[ -w /etc/nix/nix.conf ]]; then
+            echo 'experimental-features = nix-command flakes' >> /etc/nix/nix.conf
+        else
+            # Create user config if we can't write to system config
+            mkdir -p ~/.config/nix
+            echo 'experimental-features = nix-command flakes' > ~/.config/nix/nix.conf
+        fi
+        
+        # Restart nix daemon if available
+        if systemctl is-active --quiet nix-daemon; then
+            log "Restarting Nix daemon to apply flakes configuration..."
+            sudo systemctl restart nix-daemon || true
+        fi
+        
+        # Verify flakes work now
+        if ! nix flake --help &> /dev/null 2>&1; then
+            error "Failed to enable Nix flakes. Please restart your shell and try again."
+            error "Or manually add 'experimental-features = nix-command flakes' to /etc/nix/nix.conf"
+            exit 1
+        fi
+    fi
+    
+    success "✅ Prerequisites check passed"
 }
 
 # Determine target configuration
