@@ -14,7 +14,7 @@
   # x86_64 typically uses GRUB (already configured in cloud.nix)
   # No boot loader overrides needed
 
-  # Home-manager integration (user packages and configs from home/ modules)
+  # Home-manager integration using homeManagerModules from flake
   home-manager = {
     useGlobalPkgs = true;
     useUserPackages = true;
@@ -22,16 +22,17 @@
     
     users.${username} = {
       imports = [
-        # Single source of truth: all user config from home/ modules
-        ../home/packages.nix
-        ../home/shells.nix
-        ../home/git.nix
-        ../home/emacs.nix
-        ../home/kitty.nix
-        ../home/colors.nix
-        ../modules/home/colors
+        # Use predefined home modules from flake
+        inputs.self.homeManagerModules.my-packages
+        inputs.self.homeManagerModules.my-shells  
+        inputs.self.homeManagerModules.my-git
+        inputs.self.homeManagerModules.my-emacs
+        inputs.self.homeManagerModules.my-kitty
+        inputs.self.homeManagerModules.programs-kitty-extras
+        inputs.self.commonModules.colors
+        inputs.self.commonModules.my-colors
         
-        # Minimal Linux-specific user info
+        # Linux-specific configuration
         ({ config, lib, pkgs, ... }: {
           home = {
             username = username;
