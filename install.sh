@@ -196,10 +196,18 @@ validate_config() {
     
     log "Validating configuration: $config"
     
-    if ! nix flake show "${FLAKE_URL}" --json 2>/dev/null | jq -e ".nixosConfigurations.\"${config}\"" >/dev/null; then
+    # Use nix flake show without jq - just check if the config appears in output
+    local flake_output
+    if ! flake_output=$(nix flake show "${FLAKE_URL}" 2>/dev/null); then
+        error "Failed to fetch flake information from ${FLAKE_URL}"
+        exit 1
+    fi
+    
+    # Check if our configuration exists in the nixosConfigurations section
+    if ! echo "$flake_output" | grep -q "nixosConfigurations" || ! echo "$flake_output" | grep -q "$config"; then
         error "Configuration '$config' not found in flake"
-        error "Available configurations:"
-        nix flake show "${FLAKE_URL}" 2>/dev/null | grep -E "├───|└───" | grep nixosConfigurations || true
+        error "Available NixOS configurations:"
+        echo "$flake_output" | grep -A 20 "nixosConfigurations" | grep -E "├───|└───" || echo "  None found"
         exit 1
     fi
     
