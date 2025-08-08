@@ -322,20 +322,24 @@ main() {
     warn "Target: ${TARGET_HOST:-localhost}"
     echo
     
-    # Read from /dev/tty to handle piped input (curl | bash)
-    if [[ -t 0 ]]; then
-        # Script run directly, stdin is available
-        read -p "Are you sure you want to continue? (yes/no): " -r REPLY
-    else
-        # Script piped (curl | bash), read from terminal
-        read -p "Are you sure you want to continue? (yes/no): " -r REPLY </dev/tty
-    fi
-    echo
+    # Auto-accept installation (commented out for automation)
+    # # Read from /dev/tty to handle piped input (curl | bash)
+    # if [[ -t 0 ]]; then
+    #     # Script run directly, stdin is available
+    #     read -p "Are you sure you want to continue? (yes/no): " -r REPLY
+    # else
+    #     # Script piped (curl | bash), read from terminal
+    #     read -p "Are you sure you want to continue? (yes/no): " -r REPLY </dev/tty
+    # fi
+    # echo
+    # 
+    # if [[ ! $REPLY =~ ^[Yy][Ee][Ss]$ ]]; then
+    #     log "Installation cancelled by user"
+    #     exit 0
+    # fi
     
-    if [[ ! $REPLY =~ ^[Yy][Ee][Ss]$ ]]; then
-        log "Installation cancelled by user"
-        exit 0
-    fi
+    # Auto-proceed with installation
+    REPLY="yes"
     
     # Install NixOS
     install_nixos "$config"
