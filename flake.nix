@@ -430,6 +430,11 @@
         # LVM configuration for ARM64 (advanced storage)
         cloud-lvm-arm = inputs.nixpkgs-unstable.lib.nixosSystem {
           system = "aarch64-linux";
+          specialArgs = { 
+            inherit inputs; 
+            hostname = "nixos-dev"; 
+            username = "gfanton"; 
+          };
           modules = [
             disko.nixosModules.disko
             ./nixos/cloud-arm.nix
