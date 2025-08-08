@@ -259,7 +259,8 @@ install_nixos() {
         echo "root:nixos" | chpasswd
         sed -i 's/#PasswordAuthentication yes/PasswordAuthentication yes/' /etc/ssh/sshd_config
         sed -i 's/#PermitRootLogin yes/PermitRootLogin yes/' /etc/ssh/sshd_config
-        systemctl restart sshd
+        # Try different service names for SSH
+        systemctl restart sshd 2>/dev/null || systemctl restart ssh 2>/dev/null || service ssh restart 2>/dev/null || true
         
         export SSHPASS="nixos"
         nixos-anywhere \
