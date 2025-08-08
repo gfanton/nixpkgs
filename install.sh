@@ -256,7 +256,7 @@ install_nixos() {
         
         # Create a custom installation script that bypasses SSH for local installation
         # This approach downloads the kexec tarball and runs the installation steps manually
-        cat > /tmp/nixos-install.sh << 'EOF'
+        cat > /tmp/nixos-install.sh << EOF
 #!/bin/bash
 set -euo pipefail
 
@@ -315,7 +315,7 @@ nix run github:numtide/nixos-anywhere -- --flake FLAKE_URL#CONFIG root@localhost
 }
 INSTALL_EOF
 
-# Replace placeholders in the install script
+# Replace placeholders in the install script with actual values
 sed -i "s|FLAKE_URL|${FLAKE_URL}|g" /root/kexec-install.sh
 sed -i "s|CONFIG|${config}|g" /root/kexec-install.sh
 chmod +x /root/kexec-install.sh
