@@ -4,15 +4,13 @@
 
 {
   imports = [
-    ./disk-configs/cloud-basic.nix
     ./users.nix
   ];
 
   # Boot loader configuration for cloud instances
   boot = {
     loader.grub = {
-      enable = true;
-      device = "/dev/sda";
+      enable = lib.mkDefault true;
       enableCryptodisk = false;
     };
 
