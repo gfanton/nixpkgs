@@ -254,7 +254,16 @@ install_nixos() {
         # This is the standard pattern from nixos-anywhere examples
         log "Executing: nixos-anywhere --flake ${FLAKE_URL}#${config} root@localhost"
         
+        # For localhost connections in kexec environment, we need to allow password auth temporarily
+        # Since we're already root in kexec, we can set a temporary password and use it
+        echo "root:nixos" | chpasswd
+        sed -i 's/#PasswordAuthentication yes/PasswordAuthentication yes/' /etc/ssh/sshd_config
+        sed -i 's/#PermitRootLogin yes/PermitRootLogin yes/' /etc/ssh/sshd_config
+        systemctl restart sshd
+        
+        export SSHPASS="nixos"
         nixos-anywhere \
+            --env-password \
             --flake "${FLAKE_URL}#${config}" \
             root@localhost
     else
