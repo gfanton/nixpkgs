@@ -254,19 +254,80 @@ install_nixos() {
         # This is the standard pattern from nixos-anywhere examples
         log "Executing: nixos-anywhere --flake ${FLAKE_URL}#${config} root@localhost"
         
-        # For localhost connections in kexec environment, we need to allow password auth temporarily
-        # Since we're already root in kexec, we can set a temporary password and use it
-        echo "root:nixos" | chpasswd
-        sed -i 's/#PasswordAuthentication yes/PasswordAuthentication yes/' /etc/ssh/sshd_config
-        sed -i 's/#PermitRootLogin yes/PermitRootLogin yes/' /etc/ssh/sshd_config
-        # Try different service names for SSH
-        systemctl restart sshd 2>/dev/null || systemctl restart ssh 2>/dev/null || service ssh restart 2>/dev/null || true
+        # Create a custom installation script that bypasses SSH for local installation
+        # This approach downloads the kexec tarball and runs the installation steps manually
+        cat > /tmp/nixos-install.sh << 'EOF'
+#!/bin/bash
+set -euo pipefail
+
+log() {
+    echo -e "\033[0;34m[INFO]\033[0m $*"
+}
+
+error() {
+    echo -e "\033[0;31m[ERROR]\033[0m $*" >&2
+}
+
+# Download and extract kexec tarball
+KEXEC_URL="https://github.com/nix-community/nixos-images/releases/download/nixos-25.05/nixos-kexec-installer-noninteractive-aarch64-linux.tar.gz"
+
+log "Downloading NixOS kexec installer..."
+mkdir -p /root/kexec
+cd /root/kexec
+
+if command -v curl >/dev/null; then
+    curl -L "$KEXEC_URL" | tar -xzf-
+elif command -v wget >/dev/null; then
+    wget -O- "$KEXEC_URL" | tar -xzf-
+else
+    error "Neither curl nor wget found"
+    exit 1
+fi
+
+log "Starting kexec into NixOS installer..."
+
+# Create a script that will continue the installation after kexec
+cat > /root/kexec-install.sh << 'INSTALL_EOF'
+#!/bin/bash
+set -euo pipefail
+
+# Wait for system to stabilize after kexec
+sleep 10
+
+# Now run the actual nixos-anywhere installation from within the installer
+export NIXPKGS_ALLOW_UNFREE=1
+nix run github:numtide/nixos-anywhere -- --flake FLAKE_URL#CONFIG root@localhost || {
+    # If that fails, try manual installation
+    echo "Direct nixos-anywhere failed, attempting manual installation..."
+    
+    # Build the system closure
+    nixos-system=$(nix build --print-out-paths --no-link FLAKE_URL#CONFIG.system.build.toplevel)
+    disko-script=$(nix build --print-out-paths --no-link FLAKE_URL#CONFIG.system.build.diskoScript)
+    
+    # Run disko to partition and format disks
+    $disko-script
+    
+    # Install NixOS
+    nixos-install --no-root-passwd --no-channel-copy --system "$nixos-system"
+    
+    # Reboot
+    reboot
+}
+INSTALL_EOF
+
+# Replace placeholders in the install script
+sed -i "s|FLAKE_URL|${FLAKE_URL}|g" /root/kexec-install.sh
+sed -i "s|CONFIG|${config}|g" /root/kexec-install.sh
+chmod +x /root/kexec-install.sh
+
+# Run kexec and then execute the installation script
+TMPDIR=/root/kexec setsid --wait /root/kexec/kexec/run --kexec-extra-flags "" && /root/kexec-install.sh
+EOF
         
-        export SSHPASS="nixos"
-        nixos-anywhere \
-            --env-password \
-            --flake "${FLAKE_URL}#${config}" \
-            root@localhost
+        chmod +x /tmp/nixos-install.sh
+        
+        # Execute the custom installation script
+        /tmp/nixos-install.sh
     else
         # Remote installation via nixos-anywhere
         local target_host="${TARGET_HOST}"
