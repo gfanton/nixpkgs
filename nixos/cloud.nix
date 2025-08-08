@@ -159,7 +159,7 @@
   users.defaultUserShell = pkgs.zsh;
 
   # System hostname
-  networking.hostName = hostname;
+  networking.hostName = lib.mkDefault hostname;
 
   # Architecture-specific optimizations
   powerManagement = {
