@@ -46,6 +46,23 @@
   (defalias 'yes-or-no-p 'y-or-n-p)
 #+end_src
 
+* Auto-revert configuration
+
+#+begin_src emacs-lisp
+  ;; Disable automatic buffer refreshing when files change on disk
+  (setq global-auto-revert-mode nil)
+  (setq auto-revert-mode nil)
+  (setq auto-revert-interval 5)  ; If you ever enable it manually, check every 5 seconds
+
+  ;; Disable dired auto-revert specifically
+  (setq dired-auto-revert-buffer nil)
+
+  ;; Ensure global mode is disabled
+  (global-auto-revert-mode -1)
+
+  (emacs-nix-log "Auto-revert disabled - buffers will not automatically refresh")
+#+end_src
+
 * Font configuration
 
 #+begin_src emacs-lisp
