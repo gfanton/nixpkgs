@@ -13,12 +13,15 @@ in
   # ssh
   programs.ssh = {
     enable = true;
-    controlMaster = "auto";
-    controlPath = "${config.xdg.cacheHome}/ssh-%u-%r@%h:%p";
-    controlPersist = "1800";
-    forwardAgent = true;
-    serverAliveInterval = 60;
-    hashKnownHosts = true;
+    enableDefaultConfig = false;
+    matchBlocks."*" = {
+      controlMaster = "auto";
+      controlPath = "${config.xdg.cacheHome}/ssh-%u-%r@%h:%p";
+      controlPersist = "1800";
+      forwardAgent = true;
+      serverAliveInterval = 60;
+      hashKnownHosts = true;
+    };
     # on darwin use 1password agent
     extraConfig = lib.mkIf pkgs.stdenv.isDarwin ''
       IdentityAgent "~/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock"
@@ -34,9 +37,11 @@ in
   # Go Env
   programs.go = {
     enable = true;
-    goPath = ".local/share/go";
-    goBin = ".local/bin";
-    package = pkgs.pkgs-master.go_1_23;
+    env = {
+      GOPATH = "${config.home.homeDirectory}/.local/share/go";
+      GOBIN = "${config.home.homeDirectory}/.local/bin";
+    };
+    package = pkgs.pkgs-master.go_1_25;
   };
 
   # rust env
@@ -140,10 +145,10 @@ in
       set -ag terminal-overrides ",xterm-256color:Ms=\\E]52;%p1%s;%p2%s\\007"
       set -ag terminal-overrides ",xterm-kitty:Ms=\\E]52;%p1%s;%p2%s\\007"
       set -ag terminal-overrides ",xterm-emacs:Ms=\\E]52;%p1%s;%p2%s\\007"
-      
+
       # Allow OSC 52 passthrough for nested tmux sessions (tmux 3.3a+)
       set -g allow-passthrough on
-      
+
       # Update SSH_TTY environment variable on reattach for clipboard after detach/reattach
       set -ag update-environment "SSH_TTY"
 
@@ -269,7 +274,6 @@ in
       # my
       my-libvterm
       my-loon
-      my-gnolint
       project # From flake input
 
       # stable

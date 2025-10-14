@@ -96,6 +96,7 @@ let
       # Git integration
       magit
       magit-section
+      git-timemachine
       forge
       git-link
       diff-hl

@@ -41,6 +41,9 @@
   (setq savehist-file "~/.emacs.d/savehist")
   (setq history-length 1000)
   (setq savehist-save-minibuffer-history t)
+
+  ;; Replace yes/no prompts with y/n (no need to press enter)
+  (defalias 'yes-or-no-p 'y-or-n-p)
 #+end_src
 
 * Font configuration
@@ -178,6 +181,8 @@
       "pf" '(projectile-find-file :which-key "find file in project")
       "g" '(:ignore t :which-key "git")
       "gs" '(magit-status :which-key "git status")
+      "gt" '(git-timemachine :which-key "git time machine")
+      "gb" '(magit-blame :which-key "git blame")
       "b" '(:ignore t :which-key "buffer")
       "bb" '(consult-buffer :which-key "switch buffer")
       "bd" '(kill-current-buffer :which-key "kill buffer")
@@ -188,6 +193,7 @@
       "wd" '(delete-window :which-key "delete window")
       "s" '(:ignore t :which-key "search")
       "sp" '(my/consult-ripgrep-project :which-key "search project")
+      "sf" '(my/consult-ripgrep-directory :which-key "search directory")
       "ss" '(consult-line :which-key "search current buffer")
       "si" '(consult-imenu :which-key "search imenu")
       "so" '(consult-outline :which-key "search outline")
@@ -237,11 +243,12 @@
       :keymaps 'lsp-mode-map
       ;; Navigation (like Spacemacs SPC m g)
       "g" '(:ignore t :which-key "goto")
+      "gg" 'lsp-find-definition
+      "gr" 'lsp-find-references
       "gd" 'lsp-find-definition
       "gD" 'lsp-find-declaration
       "gi" 'lsp-find-implementation
       "gt" 'lsp-find-type-definition
-      "gr" 'lsp-find-references
       "gb" 'xref-go-back
 
       ;; Refactoring (like Spacemacs SPC m r)
@@ -308,6 +315,13 @@
                          ;; Final fallback
                          default-directory)))
       (consult-ripgrep project-root initial)))
+
+  ;; Directory search function
+  (defun my/consult-ripgrep-directory (&optional dir initial)
+    "Search in a specific directory with consult-ripgrep."
+    (interactive "DDirectory: ")
+    (let ((search-dir (or dir (read-directory-name "Search directory: " default-directory))))
+      (consult-ripgrep search-dir initial)))
 
   ;; Modern wgrep integration (inspired by junkw/dot.emacs.d)
   (defun my/embark-export-wgrep ()
@@ -726,6 +740,11 @@
     :config
     (define-key magit-hunk-section-map (kbd "RET") 'magit-diff-visit-file-other-window)
     (define-key magit-file-section-map (kbd "RET") 'magit-diff-visit-file-other-window))
+
+  (use-package git-timemachine
+    :after magit
+    :config
+    (emacs-nix-log "Git timemachine configured"))
 
   (use-package forge
     :after magit)

@@ -3,7 +3,7 @@ let
   inherit (super) pkgs lib;
 in
 {
-  my-loon = pkgs.buildGo123Module rec {
+  my-loon = pkgs.buildGoModule rec {
     pname = "loon";
     version = "1.5.0";
     vendorHash = "sha256-GyBD1Wl7HFP1jwjUPh7mC8e6SS2ppSpAyZvo4XRjn/U=";

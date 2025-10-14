@@ -43,7 +43,7 @@
     powerlevel10k.flake = false;
 
     # My project
-    project.url = "github:gfanton/project/v0.16.2";
+    project.url = "github:gfanton/project/v0.16.6";
     project.inputs.nixpkgs.follows = "nixpkgs-unstable";
   };
 
@@ -149,7 +149,6 @@
 
         # My overlays
         my-loon = import ./overlays/loon.nix;
-        my-gnolint = import ./overlays/gnolint.nix;
         my-libvterm = import ./overlays/libvterm.nix;
         my-tmux = import ./overlays/tmux.nix;
       };
