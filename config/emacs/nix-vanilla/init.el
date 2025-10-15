@@ -1,3 +1,5 @@
+;;; init.el --- Nix-Vanilla Emacs initialization -*- lexical-binding: t; -*-
+
 ;; I want this really early on so you don't see the startup message
 ;; flash on the screen before this suppresses it
 (setq inhibit-startup-message t)

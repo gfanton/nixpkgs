@@ -129,6 +129,7 @@ let
       flycheck
       yasnippet
       yasnippet-snippets
+      vundo # Visual undo tree
 
       # Custom modes
       polymode

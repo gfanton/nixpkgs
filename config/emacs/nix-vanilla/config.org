@@ -1,6 +1,7 @@
-#  -*- coding: utf-8 -*-
+# -*- coding: utf-8; lexical-binding: t; -*-
 #+TITLE: Nix-Vanilla Emacs Configuration
 #+AUTHOR: Generated from Spacemacs migration
+#+PROPERTY: header-args:emacs-lisp :lexical t
 
 * Performance optimizations
 
@@ -520,20 +521,20 @@
       "Enable corfu-terminal-mode in terminal frames."
       (unless (display-graphic-p (selected-frame))
         (corfu-terminal-mode 1)))
-    
+
     ;; Enable for current session
     (unless (display-graphic-p)
       (corfu-terminal-mode 1))
-    
+
     ;; Enable for new frames (daemon support)
     (add-hook 'server-after-make-frame-hook #'my/corfu-enable-in-terminal)
     (add-hook 'after-make-frame-functions
               (lambda (frame)
                 (with-selected-frame frame
                   (my/corfu-enable-in-terminal))))
-    
+
     (emacs-nix-log "Corfu terminal support configured"))
-  
+
   ;; === TERMINAL POPUPINFO SUPPORT ===
   ;; Custom extension to enable documentation popups in terminal
   (use-package corfu-terminal-popupinfo
@@ -861,6 +862,14 @@
 
   (use-package yasnippet-snippets
     :after yasnippet)
+
+  ;; === VUNDO: Visual undo tree ===
+  (use-package vundo
+    :bind (("C-x u" . vundo))
+    :config
+    ;; Better default settings for terminal use
+    (setq vundo-glyph-alist vundo-unicode-symbols)
+    (emacs-nix-log "Vundo visual undo tree configured"))
 #+end_src
 
 * Custom modes
