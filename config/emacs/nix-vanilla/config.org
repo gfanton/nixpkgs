@@ -37,6 +37,13 @@
   (column-number-mode 1)
   (global-display-line-numbers-mode 1)
 
+  ;; Enable mouse support in terminal
+  (unless (display-graphic-p)
+    (xterm-mouse-mode 1)
+    (global-set-key (kbd "<mouse-4>") 'scroll-down-line)
+    (global-set-key (kbd "<mouse-5>") 'scroll-up-line)
+    (emacs-nix-log "Mouse scroll support enabled for terminal"))
+
   ;; Enable savehist mode for persistent history
   (savehist-mode 1)
   (setq savehist-file "~/.emacs.d/savehist")
@@ -169,6 +176,13 @@
     :demand t
     :config
     (global-evil-surround-mode 1))
+
+  ;; Unbind comma from evil-repeat-find-char-reverse
+  ;; This prevents "no previous search" errors when using comma as major mode leader
+  (with-eval-after-load 'evil
+    (define-key evil-normal-state-map (kbd ",") nil)
+    (define-key evil-visual-state-map (kbd ",") nil)
+    (emacs-nix-log "Evil comma key unbound to prevent conflicts with major mode leader"))
 #+end_src
 
 * Keybinding framework
@@ -187,6 +201,7 @@
     ;; Major mode leader key (comma) for evil normal state
     (general-create-definer my/major-mode-keys
       :states '(normal visual)
+      :keymaps 'override
       :prefix ","
       :non-normal-prefix "C-,")
 
@@ -258,7 +273,6 @@
   (defun my/lsp-setup-keybindings ()
     "Setup LSP keybindings in major mode style."
     (my/major-mode-keys
-      :keymaps 'lsp-mode-map
       ;; Navigation (like Spacemacs SPC m g)
       "g" '(:ignore t :which-key "goto")
       "gg" 'lsp-find-definition
