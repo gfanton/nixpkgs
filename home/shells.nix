@@ -306,7 +306,7 @@ in
         # core alias
         ".." = "cd ..";
         cat = "${bat}/bin/bat";
-        du = "${du-dust}/bin/dust";
+        du = "${dust}/bin/dust";
         rg = "${ripgrep}/bin/rg --column --line-number --no-heading --color=always --ignore-case";
         ps = "${procs}/bin/procs";
         # npmadd = "${mynodejs}/bin/npm install --global";

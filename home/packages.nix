@@ -87,6 +87,20 @@ in
         '';
       }
       {
+        plugin = tmuxPlugins.resurrect;
+        extraConfig = ''
+          set -g @resurrect-capture-pane-contents 'on'
+          set -g @resurrect-processes ':all:'
+        '';
+      }
+      {
+        plugin = tmuxPlugins.continuum;
+        extraConfig = ''
+          set -g @continuum-restore 'on'
+          set -g @continuum-save-interval '10'
+        '';
+      }
+      {
         plugin = pkgs.tmuxPlugins.mkTmuxPlugin rec {
           pluginName = "tmux-proj";
           version = "0.16.2";
@@ -315,6 +329,10 @@ in
       ))
       pkgs-stable.pipenv
 
+      # direnv + devenv
+      devenv
+      direnv
+
       # go tools
       pkgs-master.gofumpt
       pkgs-master.gopls
@@ -323,8 +341,6 @@ in
       (pkgs-master.gotools.overrideDerivation (oldAttrs: {
         excludedPackages = [ "bundle" ];
       }))
-
-      # gotools
 
       # Useful nix related tools
       nixpkgs-fmt
