@@ -93,6 +93,8 @@ fi
 
 # Ensure nix is sourced on login for all users (SSH/mosh)
 log "Setting up nix profile for login shells..."
+
+# For bash/sh login shells
 cat > /etc/profile.d/nix.sh << 'EOF'
 # Source nix daemon profile if available
 if [ -e /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh ]; then
@@ -100,6 +102,15 @@ if [ -e /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh ]; then
 fi
 EOF
 chmod 644 /etc/profile.d/nix.sh
+
+# For zsh login shells (nix-compiled zsh looks at /etc/zprofile, not /etc/zsh/zshenv)
+cat > /etc/zprofile << 'EOF'
+# Source nix daemon profile if available
+if [ -e /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh ]; then
+    . /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh
+fi
+EOF
+chmod 644 /etc/zprofile
 
 systemctl restart nix-daemon.service || true
 sleep 5

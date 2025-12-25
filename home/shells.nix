@@ -111,6 +111,10 @@ in
   };
 
   home.sessionPath = [
+    # nix profile bin (for non-NixOS/darwin systems like cloud VMs)
+    "${homeDirectory}/.nix-profile/bin"
+    # nix default profile bin
+    "/nix/var/nix/profiles/default/bin"
     # local bin folder
     "${homeDirectory}/.local/bin"
     # npm bin folder
