@@ -41,6 +41,9 @@ jobs:
           # Create /run directory
           echo -e "run\tprivate/var/run" | sudo tee -a /etc/synthetic.conf >/dev/null
           /System/Library/Filesystems/apfs.fs/Contents/Resources/apfs.util -t &>/dev/null || true
+          # Backup existing /etc files that nix-darwin will manage
+          sudo mv /etc/bashrc /etc/bashrc.backup-before-nix-darwin || true
+          sudo mv /etc/zshrc /etc/zshrc.backup-before-nix-darwin || true
           # Prevent conflict between Cachix installed by workflow and the one installed in the config
           nix-env --set-flag priority 1 cachix
           # Build and switch to config
