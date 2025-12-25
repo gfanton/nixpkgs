@@ -281,6 +281,28 @@ in
     "spacemacsclient" = "${xterm-emacsclient}/bin/xemacsclient -nw";
   };
 
+  # === SYSTEMD SERVICE (Linux only) ===
+
+  # Emacs daemon systemd user service for Linux systems
+  systemd.user.services.emacs = lib.mkIf pkgs.stdenv.isLinux {
+    Unit = {
+      Description = "Emacs text editor daemon";
+      Documentation = "info:emacs man:emacs(1)";
+    };
+    Service = {
+      Type = "notify";
+      ExecStart = "${myEmacs}/bin/emacs --fg-daemon";
+      ExecStop = "${myEmacs}/bin/emacsclient --eval \"(kill-emacs)\"";
+      Restart = "on-failure";
+      Environment = [
+        "COLORTERM=truecolor"
+      ];
+    };
+    Install = {
+      WantedBy = [ "default.target" ];
+    };
+  };
+
   # === MODULE EXPORTS ===
 
   # Export modern Emacs for use in other modules

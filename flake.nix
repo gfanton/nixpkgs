@@ -329,6 +329,40 @@
       };
       # }}}
 
+      # NixOS configurations for cloud VMs
+      nixosConfigurations = {
+        cloud-vm = inputs.nixpkgs-unstable.lib.nixosSystem {
+          system = "x86_64-linux";
+          specialArgs = { inherit inputs; };
+          modules = [
+            # NixOS system configuration
+            ./nixos/cloud-vm
+
+            # Home-manager as NixOS module
+            home-manager.nixosModules.home-manager
+            {
+              nixpkgs = nixpkgsDefaults;
+
+              home-manager = {
+                useGlobalPkgs = true;
+                useUserPackages = true;
+                extraSpecialArgs = { inherit inputs; };
+                users.gfanton = {
+                  imports =
+                    attrValues self.homeManagerModules
+                    ++ attrValues self.commonModules;
+
+                  home.user-info = primaryUserInfo // {
+                    nixConfigDirectory = "/home/gfanton/nixpkgs";
+                  };
+                  home.stateVersion = homeStateVersion;
+                };
+              };
+            }
+          ];
+        };
+      };
+
       # Add re-export `nixpkgs` packages with overlays.
       # This is handy in combination with `nix registry add my /Users/gfanton/nixpkgs`
     }
