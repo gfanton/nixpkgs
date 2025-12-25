@@ -81,6 +81,26 @@ mkdir -p /etc/nix
 if ! grep -q "experimental-features" /etc/nix/nix.conf 2>/dev/null; then
     echo "experimental-features = nix-command flakes" >> /etc/nix/nix.conf
 fi
+
+# Configure Cachix substituters for faster builds
+log "Configuring Cachix substituters..."
+if ! grep -q "gfanton.cachix.org" /etc/nix/nix.conf 2>/dev/null; then
+    cat >> /etc/nix/nix.conf << 'EOF'
+substituters = https://gfanton.cachix.org https://nix-community.cachix.org https://cache.nixos.org
+trusted-public-keys = gfanton.cachix.org-1:i8zC+UjhhW5Wx2iRibhexJeBb1jOU/8oRFGG60IaAmI= nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs= cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY=
+EOF
+fi
+
+# Ensure nix is sourced on login for all users (SSH/mosh)
+log "Setting up nix profile for login shells..."
+cat > /etc/profile.d/nix.sh << 'EOF'
+# Source nix daemon profile if available
+if [ -e /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh ]; then
+    . /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh
+fi
+EOF
+chmod 644 /etc/profile.d/nix.sh
+
 systemctl restart nix-daemon.service || true
 sleep 5
 
