@@ -4,75 +4,77 @@ on:
   workflow_dispatch:
   pull_request:
     paths:
-    - '**'
-    - '!*.md'
+      - '**'
+      - '!*.md'
   push:
     branches:
-    - 'master'
+      - 'master'
     paths:
-    - '**'
-    - '!*.md'
+      - '**'
+      - '!*.md'
 
 env:
   CACHIX_USER: gfanton
-  UPDATE_BRANCH: flake-update
 
 jobs:
   build-macos-env:
     name: Build/cache macOS Nix env
     runs-on: macos-15
-
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v3
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
-    - name: Install Nix
-      uses: cachix/install-nix-action@v30
-      with:
-        extra_nix_config: |
-          access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}
+      - name: Install Nix
+        uses: cachix/install-nix-action@v31
+        with:
+          extra_nix_config: |
+            access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}
 
-    - name: Setup Cachix
-      uses: cachix/cachix-action@v15
-      with:
-        name: ${{ env.CACHIX_USER }}
-        authToken: ${{ secrets.CACHIX_AUTH_TOKEN }}
+      - name: Setup Cachix
+        uses: cachix/cachix-action@v16
+        with:
+          name: ${{ env.CACHIX_USER }}
+          authToken: ${{ secrets.CACHIX_AUTH_TOKEN }}
 
-    - name: Build and switch to nix-darwin env
-      run: |
-        # Create /run directory
-        echo -e "run\tprivate/var/run" | sudo tee -a /etc/synthetic.conf >/dev/null
-        /System/Library/Filesystems/apfs.fs/Contents/Resources/apfs.util -t &>/dev/null || true
-        # Prevent conflict between Cachix installed by workflow and the one installed in the config
-        nix-env --set-flag priority 1 cachix
-
-        # Build and Switch to config
-        nix build .#darwinConfigurations.githubCI.system
-        # Build and switch to full config
-        sudo ./result/sw/bin/darwin-rebuild switch --flake .#githubCI
+      - name: Build and switch to nix-darwin env
+        run: |
+          # Create /run directory
+          echo -e "run\tprivate/var/run" | sudo tee -a /etc/synthetic.conf >/dev/null
+          /System/Library/Filesystems/apfs.fs/Contents/Resources/apfs.util -t &>/dev/null || true
+          # Prevent conflict between Cachix installed by workflow and the one installed in the config
+          nix-env --set-flag priority 1 cachix
+          # Build and switch to config
+          nix build .#darwinConfigurations.githubCI.system
+          sudo ./result/sw/bin/darwin-rebuild switch --flake .#githubCI
 
   build-linux-env:
     name: Build/cache Linux Nix env
     runs-on: ubuntu-latest
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v3
+      - name: Free disk space
+        run: |
+          sudo rm -rf /usr/share/dotnet /usr/local/lib/android /opt/ghc
+          df -h
 
-    - name: Install Nix
-      uses: cachix/install-nix-action@v26
-      with:
-        extra_nix_config: |
-          access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
-    - name: Setup Cachix
-      uses: cachix/cachix-action@v12
-      with:
-        name: ${{ env.CACHIX_USER }}
-        authToken: ${{ secrets.CACHIX_AUTH_TOKEN }}
+      - name: Install Nix
+        uses: cachix/install-nix-action@v31
+        with:
+          extra_nix_config: |
+            access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}
 
-    - name: Build and switch to home-manager env
-      run: |
-        # Prevent conflict between Cachix installed by workflow and the one installed in the config
-        nix-env --set-flag priority 1 cachix
-        # Build and switch to home-manager env
-        nix build ".#homeConfigurations.githubCI.activationPackage"; ./result/activate
+      - name: Setup Cachix
+        uses: cachix/cachix-action@v16
+        with:
+          name: ${{ env.CACHIX_USER }}
+          authToken: ${{ secrets.CACHIX_AUTH_TOKEN }}
+
+      - name: Build and switch to home-manager env
+        run: |
+          # Prevent conflict between Cachix installed by workflow and the one installed in the config
+          nix-env --set-flag priority 1 cachix
+          # Build and switch to home-manager env
+          nix build ".#homeConfigurations.githubCI.activationPackage"
+          ./result/activate

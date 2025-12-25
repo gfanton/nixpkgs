@@ -1,139 +1,100 @@
 name: Update flake inputs
 
 on:
-  workflow_dispatch:  # Run manually
-  schedule:  # Run automatically
-    - cron: '0 3 * * 3,6'  # At 03:00 UTC on Wednesday and Saturday
+  workflow_dispatch:
+  schedule:
+    - cron: '0 3 * * 3,6'  # Wednesday and Saturday at 03:00 UTC
 
 env:
-  GITHUB_REVIEWER: gfanton
   CACHIX_USER: gfanton
-  BOT_USER_NAME: gfanton-bot
-  BOT_USER_MAIL: 50772775+gfanton-bot@users.noreply.github.com
-  BOT_FORK: gfanton-bot/nixpkgs
-  BASE_BRANCH: master
-  REF_BRANCH: nix/flake-update-inputs
 
 jobs:
-  update-flake-inputs:
-    name: Update Flake inputs
+  update-flake-lock:
     runs-on: ubuntu-latest
-    env:
-      CONFIG_NAME: githubCI
-
+    outputs:
+      pr-number: ${{ steps.update.outputs.pull-request-number }}
     steps:
-    # Install Nix
-    - name: Install Nix
-      uses: cachix/install-nix-action@v30
-      with:
-        extra_nix_config: |
-          access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
-    # Setup Cachix
-    - name: Setup Cachix
-      uses: cachix/cachix-action@v15
-      with:
-        name: ${{ env.CACHIX_USER }}
-        authToken: ${{ secrets.CACHIX_AUTH_TOKEN }}
+      - name: Install Nix
+        uses: cachix/install-nix-action@v31
+        with:
+          extra_nix_config: |
+            access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}
 
-    # Checkout the base branch
-    - name: Checkout Base Branch
-      uses: actions/checkout@v3
-      with:
-        ref: ${{ env.BASE_BRANCH }}
+      - name: Update flake.lock
+        id: update
+        uses: DeterminateSystems/update-flake-lock@v24
+        with:
+          token: ${{ secrets.BOT_PAT }}
+          pr-title: "nix: update flake inputs"
+          pr-labels: |
+            dependencies
+            automated
+          commit-msg: "nix: update flake.lock"
 
-    # Create base generation
-    - name: Create Base Generation
-      id: base
-      run: |
-        # Prevent conflict between Cachix installed by workflow and the one installed in the config
-        nix-env --set-flag priority 1 cachix
-        # Build and switch to home-manager env
-        nix build ".#homeConfigurations.$CONFIG_NAME.activationPackage"
-        ./result/activate switch --verbose --fallback
+  # Add nvd diff as PR comment after PR is created
+  add-diff-comment:
+    needs: update-flake-lock
+    if: needs.update-flake-lock.outputs.pr-number
+    runs-on: ubuntu-latest
+    steps:
+      - name: Free disk space
+        run: |
+          sudo rm -rf /usr/share/dotnet /usr/local/lib/android /opt/ghc
 
-        # Output the generation to be used in subsequent steps
-        echo "generation=$(readlink -f $HOME/.nix-profile)" >> $GITHUB_OUTPUT
+      - name: Checkout base branch
+        uses: actions/checkout@v4
+        with:
+          ref: master
+          path: base
 
-    - name: Generate New Generation from Update
-      id: update
-      run: |
-        # Update the flake, ignoring warnings, and write the output to a report
-        nix flake update 2>&1 | grep -v 'warning:' | tee /tmp/lock.report.txt
+      - name: Checkout PR branch
+        uses: actions/checkout@v4
+        with:
+          ref: update_flake_lock_action
+          path: updated
 
-        # Update all inputs by recreating the flake and switching to the new home-manager environment
-        nix build ".#homeConfigurations.$CONFIG_NAME.activationPackage"
-        sudo ./result/activate switch --verbose --fallback
+      - name: Install Nix
+        uses: cachix/install-nix-action@v31
+        with:
+          extra_nix_config: |
+            access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}
 
-        # Source bashrc
-        source /etc/bashrc
+      - name: Setup Cachix
+        uses: cachix/cachix-action@v16
+        with:
+          name: ${{ env.CACHIX_USER }}
+          authToken: ${{ secrets.CACHIX_AUTH_TOKEN }}
 
-        # Determine the new and old generations
-        nixos_new_gen=$(readlink -f $HOME/.nix-profile)
-        nixos_old_gen="${{ steps.base.outputs.generation }}"
+      - name: Build and generate diff
+        id: diff
+        run: |
+          cd base
+          nix build ".#homeConfigurations.githubCI.activationPackage" -o /tmp/base-result
+          cd ../updated
+          nix build ".#homeConfigurations.githubCI.activationPackage" -o /tmp/updated-result
 
-        # Log the old and new generations for debugging
-        echo "old generation: $nixos_old_gen"
-        echo "new generation: $nixos_new_gen"
+          # Generate nvd diff
+          DIFF=$(nix-shell -p nvd --run "nvd diff /tmp/base-result /tmp/updated-result" | tail -n +3 || echo "No changes detected")
 
-        # Generate a change report, ignoring the first two lines and write to a report file
-        touch CHANGELOG.md
-        nix-shell -p nvd --run "nvd diff $nixos_old_gen $nixos_new_gen" | tail -n +3 | tee /tmp/new.report.md
+          # Save to file for multiline output
+          echo "$DIFF" > /tmp/nvd-diff.txt
+          echo "diff<<EOF" >> $GITHUB_OUTPUT
+          cat /tmp/nvd-diff.txt >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
 
-        # Get the current date
-        export INPUT_DATE="$(date +%F)"
+      - name: Comment on PR
+        uses: peter-evans/create-or-update-comment@v4
+        with:
+          token: ${{ secrets.BOT_PAT }}
+          issue-number: ${{ needs.update-flake-lock.outputs.pr-number }}
+          body: |
+            ## Package Changes (nvd diff)
+            ```
+            ${{ steps.diff.outputs.diff }}
+            ```
 
-        # Create a report with a list of changes and the flake lock file changes
-        cat <<EOT > /tmp/body.report.md
-        ## Update $INPUT_DATE
-        \`\`\`go
-        $(cat /tmp/new.report.md)
-        \`\`\`
-        ### lock change:
-        \`\`\`
-        $(cat /tmp/lock.report.txt)
-        \`\`\`
-        EOT
-
-        # Prepend the report to the current changelog
-        cat <<EOT > CHANGELOG.md
-        $(cat /tmp/body.report.md)
-        $(cat CHANGELOG.md)
-        EOT
-
-        # Output the date of the inputs update to be used in subsequent steps
-        echo "inputs-date=$INPUT_DATE" >> "$GITHUB_OUTPUT"
-
-    - name: '[hack] config file'
-      run: |
-        # hack to avoid permission denied on config
-        cp -L /home/runner/.config/git/config /tmp/gitconfig
-        rm -f /home/runner/.config/git/config
-        mv /tmp/gitconfig /home/runner/.config/git/config
-
-        # set github action as the user
-        git config --global user.name '${{ env.BOT_USER_NAME }}'
-        git config --global user.email '${{ env.BOT_USER_MAIL }}'
-
-    - name: Create Pull Request
-      id: cpr
-      uses: peter-evans/create-pull-request@v6
-      with:
-        committer: '${{ env.BOT_USER_NAME }} <${{ env.BOT_USER_MAIL }}>'
-        author: '${{ env.BOT_USER_NAME }} <${{ env.BOT_USER_MAIL }}>'
-        push-to-fork: '${{ env.BOT_FORK }}'
-        token: '${{ secrets.BOT_PAT }}'
-        title: "nix: ${{ steps.update.outputs.inputs-date }} inputs update"
-        body-path: '/tmp/body.report.md'
-        commit-message: "nix: update ${{ steps.update.outputs.inputs-date }}"
-        base: ${{ env.BASE_BRANCH }}
-        branch: ${{ env.REF_BRANCH }}
-        add-paths: |
-            CHANGELOG.md
-            flake.lock
-
-    - name: Check outputs
-      if: ${{ steps.cpr.outputs.pull-request-number }}
-      run: |
-        echo "Pull Request Number - ${{ steps.cpr.outputs.pull-request-number }}"
-        echo "Pull Request URL - ${{ steps.cpr.outputs.pull-request-url }}"
+            ---
+            *Generated automatically by CI*

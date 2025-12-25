@@ -6,9 +6,6 @@
   ...
 }:
 
-let
-  rust_home = "${config.xdg.dataHome}/rust";
-in
 {
   # ssh
   programs.ssh = {
@@ -43,22 +40,6 @@ in
     };
     package = pkgs.pkgs-master.go_1_25;
   };
-
-  # rust env
-  # setup cargo home
-  home.sessionVariables.CARGO_HOME = "${rust_home}/cargo";
-  # setup rustup
-  home.sessionVariables.RUSTUP_HOME = "${rust_home}/rustup";
-  home.activation.rustup = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
-    export CARGO_HOME="${rust_home}/cargo"
-    export RUSTUP_HOME="${rust_home}/rustup"
-    ${pkgs.rustup}/bin/rustup toolchain install stable 1>/dev/null
-  '';
-
-  home.sessionPath = [
-    "${rust_home}/cargo/bin"
-    "${rust_home}/rustup/bin"
-  ];
 
   # tmux with catppuccin theme
   programs.tmux = {
@@ -304,9 +285,6 @@ in
       aspellDicts.en
       aspellDicts.en-science
       aspellDicts.en-computers
-
-      # rust
-      rustup
 
       # ruby
       ruby
