@@ -403,5 +403,6 @@ in
       docker
       docker-compose
       colima # Container runtime for Linux
+      util-linux # Provides arch, lscpu, and other utilities (native on Darwin)
     ];
 }

@@ -10,6 +10,9 @@
 
 (defun emacs-nix-log (message)
   "Log MESSAGE to the emacs-nix log file with timestamp."
+  (let ((log-dir (file-name-directory (expand-file-name emacs-nix-log-file))))
+    (unless (file-exists-p log-dir)
+      (make-directory log-dir t)))
   (with-temp-buffer
     (insert (format "[%s] %s\n"
                     (format-time-string "%Y-%m-%d %H:%M:%S")
