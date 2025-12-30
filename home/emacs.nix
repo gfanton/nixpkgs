@@ -214,6 +214,9 @@ in
 {
   # === PRIMARY CONFIGURATION: Nix-Vanilla (Modern Terminal-First Emacs) ===
 
+  # Ensure log directory exists for emacs-nix logging
+  home.file.".local/log/.keep".text = "";
+
   # Install nix-vanilla configuration files
   home.file."emacs/nix-vanilla/init.el" = {
     source = ../config/emacs/nix-vanilla/init.el;
