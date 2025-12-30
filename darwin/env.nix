@@ -34,6 +34,7 @@
   system.keyboard.remapCapsLockToControl = true;
 
   # Custom emacs daemon service
+  # Uses pkgs.myEmacs from overlay (single source of truth)
   services.my-emacs =
     let
       primaryUser = config.users.primaryUser.username;
@@ -46,11 +47,9 @@
     in
     {
       enable = true;
-      # Use the emacs package from home-manager user profile
-      package = pkgs.writeShellScriptBin "emacs" ''
-        exec ${perUserProfile}/bin/emacs "$@"
-      '';
-      # Add user profile paths for tools like ripgrep (following environment.profiles order)
+      # Use emacs from overlay (single source of truth for emacs package)
+      package = pkgs.myEmacs;
+      # Add user profile paths for tools like ripgrep
       additionalPath = [
         "${perUserProfile}/bin"
         "${userNixProfile}/bin"

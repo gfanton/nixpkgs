@@ -1,3 +1,5 @@
+# Home-manager emacs configuration
+# Uses pkgs.myEmacs from overlay (single source of truth)
 {
   config,
   lib,
@@ -7,198 +9,8 @@
 let
   inherit (config.home) user-info homeDirectory;
 
-  # Modern Emacs with optimizations (primary configuration)
-  emacs-base = pkgs.emacs-pgtk.override {
-    withNativeCompilation = true;
-    withTreeSitter = true;
-    withSQLite3 = true;
-  };
-
-  # Comprehensive package list following 2024-2025 best practices
-  emacsPackages =
-    epkgs:
-    with epkgs;
-    let
-      # Custom local packages
-      gno-mode = trivialBuild {
-        pname = "gno-mode";
-        version = "0.1";
-        src = ../config/spacemacs/packages/gno;
-        packageRequires = [
-          go-mode
-          lsp-mode
-          flycheck
-          polymode
-        ];
-      };
-
-      go-template-mode = trivialBuild {
-        pname = "go-template-mode";
-        version = "1.0";
-        src = ../config/spacemacs/packages/gotemplate;
-        packageRequires = [ ];
-      };
-    in
-    [
-      # Core framework
-      use-package
-      diminish
-      bind-key
-
-      # Modern completion framework (Vertico ecosystem)
-      vertico
-      consult
-      embark
-      embark-consult
-      marginalia
-      orderless
-
-      # Completion UI (Ultimate Corfu setup)
-      corfu
-      corfu-terminal # Terminal support for Emacs 30
-      popon # Required dependency for corfu-terminal
-      cape
-      kind-icon # Beautiful completion icons
-      wgrep
-
-      # Evil mode + vim bindings
-      evil
-      evil-collection
-      evil-surround
-      evil-numbers
-      evil-org
-      general
-      which-key
-
-      # LSP integration (Pure Corfu approach - no LSP-UI)
-      lsp-mode
-      consult-lsp
-
-      # Programming languages
-      # Go
-      go-mode
-      # Rust
-      rust-mode
-      # TypeScript/JavaScript
-      typescript-mode
-      js2-mode
-      rjsx-mode
-      # Web
-      web-mode
-      # Nix
-      nix-mode
-      # YAML/JSON
-      yaml-mode
-      json-mode
-      # Markdown
-      markdown-mode
-
-      # Git integration
-      magit
-      magit-section
-      git-timemachine
-      forge
-      git-link
-      diff-hl
-
-      # Project management
-      projectile
-      consult-projectile
-
-      # Org mode
-      org
-      org-cliplink
-
-      # UI enhancements
-      catppuccin-theme
-      doom-modeline
-      all-the-icons
-
-      # Terminal integration
-      vterm
-      clipetty  # OSC 52 clipboard support for universal clipboard integration
-
-      # Utilities
-      expand-region
-      multiple-cursors
-      avy
-      smartparens
-      rainbow-delimiters
-      # ws-butler # Temporarily disabled - SSL cert issue with savannah.gnu.org
-      editorconfig
-      flycheck
-      yasnippet
-      yasnippet-snippets
-      vundo # Visual undo tree
-
-      # Custom modes
-      polymode
-      templ-ts-mode
-
-      # Tree-sitter grammars (selective to avoid broken packages like tree-sitter-razor)
-      (treesit-grammars.with-grammars (grammars: with grammars; [
-        tree-sitter-go
-        tree-sitter-gomod
-        tree-sitter-rust
-        tree-sitter-typescript
-        tree-sitter-tsx
-        tree-sitter-javascript
-        tree-sitter-json
-        tree-sitter-yaml
-        tree-sitter-toml
-        tree-sitter-nix
-        tree-sitter-markdown
-        tree-sitter-html
-        tree-sitter-css
-        tree-sitter-bash
-        tree-sitter-python
-        tree-sitter-c
-        tree-sitter-cpp
-        tree-sitter-dockerfile
-        tree-sitter-make
-        tree-sitter-lua
-      ]))
-
-      # Local custom packages
-      gno-mode
-      go-template-mode
-    ];
-
-  # Package overrides for compatibility
-  packageOverrides = self: super: {
-    # Ensure we use the right org version
-    org = super.elpaPackages.org;
-  };
-
-  # Build final Emacs with all packages
-  myEmacs = ((pkgs.emacsPackagesFor emacs-base).overrideScope packageOverrides).emacsWithPackages emacsPackages;
-
-  # Development tools and LSP servers
-  devPackages = with pkgs; [
-    # LSP servers and tools
-    gopls
-    nodePackages.typescript-language-server
-    nodePackages.eslint
-    nixd
-    nil # Alternative Nix LSP server
-
-    # LSP Performance booster (2-10x faster LSP)
-    emacs-lsp-booster
-
-    # Formatters
-    gofumpt
-    nodePackages.prettier
-
-    # Essential tools
-    ripgrep
-    fd
-    sqlite
-    git
-
-    # Fonts
-    jetbrains-mono
-    nerd-fonts.jetbrains-mono
-  ];
+  # Use emacs from overlay (defined in overlays/emacs.nix)
+  myEmacs = pkgs.myEmacs;
 
   # Legacy xterm wrappers for Spacemacs compatibility
   xterm-emacsclient = pkgs.writeShellScriptBin "xemacsclient" ''
@@ -209,7 +21,6 @@ let
     export TERM=xterm-emacs
     ${pkgs.emacs}/bin/emacs $@
   '';
-
 in
 {
   # === PRIMARY CONFIGURATION: Nix-Vanilla (Modern Terminal-First Emacs) ===
@@ -266,7 +77,8 @@ in
 
   # === PACKAGES ===
 
-  home.packages = devPackages ++ [ myEmacs ];
+  # Emacs and dev packages from overlay
+  home.packages = pkgs.myEmacsDevPackages ++ [ myEmacs ];
 
   # === SHELL ALIASES ===
 
@@ -282,28 +94,6 @@ in
     # Legacy Spacemacs aliases (terminal-only with xterm compatibility)
     "spacemacs" = "${xterm-emacs}/bin/xemacs -nw --with-profile=spacemacs";
     "spacemacsclient" = "${xterm-emacsclient}/bin/xemacsclient -nw";
-  };
-
-  # === SYSTEMD SERVICE (Linux only) ===
-
-  # Emacs daemon systemd user service for Linux systems
-  systemd.user.services.emacs = lib.mkIf pkgs.stdenv.isLinux {
-    Unit = {
-      Description = "Emacs text editor daemon";
-      Documentation = "info:emacs man:emacs(1)";
-    };
-    Service = {
-      Type = "notify";
-      ExecStart = "${myEmacs}/bin/emacs --fg-daemon";
-      ExecStop = "${myEmacs}/bin/emacsclient --eval \"(kill-emacs)\"";
-      Restart = "on-failure";
-      Environment = [
-        "COLORTERM=truecolor"
-      ];
-    };
-    Install = {
-      WantedBy = [ "default.target" ];
-    };
   };
 
   # === MODULE EXPORTS ===

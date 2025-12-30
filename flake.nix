@@ -151,6 +151,7 @@
         my-loon = import ./overlays/loon.nix;
         my-libvterm = import ./overlays/libvterm.nix;
         my-tmux = import ./overlays/tmux.nix;
+        my-emacs = import ./overlays/emacs.nix;
       };
 
       # Non-system outputs --------------------------------------------------------------------- {{{
@@ -176,6 +177,10 @@
         services-colima = import ./modules/darwin/services/colima.nix;
         users-primaryUser = import ./modules/darwin/users.nix;
         programs-nix-index = import ./modules/darwin/programs/nix-index.nix;
+      };
+
+      nixosModules = {
+        emacs = import ./modules/nixos/emacs.nix;
       };
 
       homeManagerModules = {
