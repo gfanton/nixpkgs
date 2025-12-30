@@ -268,6 +268,87 @@
         };
       };
 
+      # NixOS configurations for cloud VMs
+      # Use with: nixos-rebuild switch --flake ~/nixpkgs#cloud-vm
+      nixosConfigurations = {
+        cloud-vm = inputs.nixpkgs-unstable.lib.nixosSystem {
+          system = "x86_64-linux";
+          specialArgs = { inherit inputs; };
+          modules = [
+            # Base system configuration
+            ./nixos/cloud-vm/configuration.nix
+
+            # Apply overlays and allow unfree
+            {
+              nixpkgs.overlays = attrValues self.overlays ++ [ inputs.emacs-overlay.overlays.default ];
+              nixpkgs.config.allowUnfree = true;
+            }
+
+            # Emacs daemon (uses pkgs.myEmacs from overlay)
+            self.nixosModules.emacs
+
+            # Home-manager as NixOS module
+            home-manager.nixosModules.home-manager
+            {
+              home-manager = {
+                useGlobalPkgs = true;
+                useUserPackages = true;
+                extraSpecialArgs = { inherit inputs; };
+                users.gfanton = {
+                  imports =
+                    attrValues self.homeManagerModules
+                    ++ attrValues self.commonModules;
+
+                  home.user-info = primaryUserInfo // {
+                    nixConfigDirectory = "/home/gfanton/nixpkgs";
+                  };
+                  home.stateVersion = homeStateVersion;
+                };
+              };
+            }
+          ];
+        };
+
+        cloud-vm-arm = inputs.nixpkgs-unstable.lib.nixosSystem {
+          system = "aarch64-linux";
+          specialArgs = { inherit inputs; };
+          modules = [
+            # Base system configuration
+            ./nixos/cloud-vm/configuration.nix
+
+            # Apply overlays, allow unfree, override platform
+            {
+              nixpkgs.overlays = attrValues self.overlays ++ [ inputs.emacs-overlay.overlays.default ];
+              nixpkgs.config.allowUnfree = true;
+              nixpkgs.hostPlatform = "aarch64-linux";
+            }
+
+            # Emacs daemon
+            self.nixosModules.emacs
+
+            # Home-manager as NixOS module
+            home-manager.nixosModules.home-manager
+            {
+              home-manager = {
+                useGlobalPkgs = true;
+                useUserPackages = true;
+                extraSpecialArgs = { inherit inputs; };
+                users.gfanton = {
+                  imports =
+                    attrValues self.homeManagerModules
+                    ++ attrValues self.commonModules;
+
+                  home.user-info = primaryUserInfo // {
+                    nixConfigDirectory = "/home/gfanton/nixpkgs";
+                  };
+                  home.stateVersion = homeStateVersion;
+                };
+              };
+            }
+          ];
+        };
+      };
+
       # Config I use with non-NixOS Linux systems (e.g., cloud VMs etc.)
       # Build and activate on new system with:
       # `nix build .#homeConfigurations.cloud.activationPackage && ./result/activate`
