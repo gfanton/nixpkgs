@@ -45,6 +45,10 @@
     # My project
     project.url = "github:gfanton/project/v0.16.6";
     project.inputs.nixpkgs.follows = "nixpkgs-unstable";
+
+    # tmux plugins
+    tmux-yule-log.url = "github:gfanton/tmux-yule-log";
+    tmux-yule-log.inputs.nixpkgs.follows = "nixpkgs-unstable";
   };
 
   outputs =
@@ -74,6 +78,8 @@
         overlays = attrValues self.overlays ++ [
           # Emacs overlay for latest packages and optimizations
           inputs.emacs-overlay.overlays.default
+          # Tmux yule-log plugin
+          inputs.tmux-yule-log.overlays.default
         ];
       };
 
@@ -145,6 +151,8 @@
           project = inputs.project.packages.${final.system}.default.overrideAttrs (oldAttrs: {
             vendorHash = "sha256-B375AvklOVKxpIR60CatnmRgOFpqhlKyKF32isB+ncI=";
           });
+          # Pre-packaged tmux plugin from project flake (properly wrapped with binaries)
+          projectTmuxPlugin = inputs.project.packages.${final.system}.tmux-proj;
         };
 
         # My overlays
