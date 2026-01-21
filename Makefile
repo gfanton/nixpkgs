@@ -17,7 +17,7 @@ EMACS_CHANNELS := emacs-overlay chemacs2
 SPACEMACS_CHANNELS := spacemacs
 DOOM_CHANNELS := doomemacs
 ZSH_CHANNELS := fast-syntax-highlighting powerlevel10k
-MISC_CHANNELS := flake-utils flake-compat project
+MISC_CHANNELS := flake-utils flake-compat project tmux-yule-log
 
 NIX_FILES := $(shell find . -type f -name '*.nix')
 
@@ -82,7 +82,7 @@ fclean:
 
 
 fast-update: update.nix update.zsh update.misc # fast update ignore emacs update
-update: update.nix update.home update.emacs update.spacemacs update.zsh update.misc
+update: update.nix update.home update.emacs update.spacemacs update.doom update.zsh update.misc
 update.nix:; nix flake lock $(addprefix --update-input , $(NIX_CHANNELS))
 update.emacs:; nix flake lock $(addprefix --update-input , $(EMACS_CHANNELS))
 update.spacemacs:; nix flake lock $(addprefix --update-input , $(SPACEMACS_CHANNELS))
