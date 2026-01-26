@@ -20,6 +20,7 @@
 #+begin_src emacs-lisp
   (emacs-nix-log "Setting up use-package")
   (require 'use-package)
+  (require 'subr-x)  ; Provides when-let*, if-let*, etc.
   (setq use-package-always-ensure nil) ; Nix manages packages
   (setq use-package-always-defer t)
   (emacs-nix-log "use-package configured")
@@ -51,7 +52,9 @@
   (setq savehist-save-minibuffer-history t)
 
   ;; Replace yes/no prompts with y/n (no need to press enter)
-  (defalias 'yes-or-no-p 'y-or-n-p)
+  (if (boundp 'use-short-answers)
+      (setq use-short-answers t)
+    (defalias 'yes-or-no-p 'y-or-n-p))
 #+end_src
 
 * Auto-revert configuration
@@ -93,13 +96,11 @@
   (defun my/toggle-theme ()
     "Toggle between light and dark theme."
     (interactive)
-    (if (eq catppuccin-flavor 'macchiato)
-        (progn
-          (setq catppuccin-flavor 'latte)
-          (catppuccin-reload))
-      (progn
-        (setq catppuccin-flavor 'macchiato)
-        (catppuccin-reload))))
+    (setq catppuccin-flavor
+          (pcase catppuccin-flavor
+            ('macchiato 'latte)
+            (_ 'macchiato)))
+    (catppuccin-reload))
 #+end_src
 
 * Doom Modeline
@@ -216,6 +217,7 @@
       "gs" '(magit-status :which-key "git status")
       "gt" '(git-timemachine :which-key "git time machine")
       "gb" '(magit-blame :which-key "git blame")
+      "gl" '(magit-live-diff-mode :which-key "toggle live diff")
       "b" '(:ignore t :which-key "buffer")
       "bb" '(consult-buffer :which-key "switch buffer")
       "bd" '(kill-current-buffer :which-key "kill buffer")
@@ -338,7 +340,7 @@
     (let ((project-root (or
                          ;; Try modern project.el first
                          (and (fboundp 'project-current)
-                              (when-let (project (project-current))
+                              (when-let* ((project (project-current)))
                                 (if (fboundp 'project-root)
                                     (project-root project)
                                   (car (project-roots project)))))
@@ -384,7 +386,7 @@
     :custom
     (completion-styles '(orderless basic))
     (completion-category-defaults nil)
-    (completion-category-overrides 
+    (completion-category-overrides
      '((file (styles partial-completion))
        (eglot (styles orderless))
        (lsp-capf (styles orderless)))))
@@ -403,7 +405,7 @@
     (setq consult-project-function
           (lambda (_may-prompt)
             (and (fboundp 'project-current)
-                 (when-let (project (project-current))
+                 (when-let* ((project (project-current)))
                    (if (fboundp 'project-root)
                        (project-root project)
                      (car (project-roots project)))))))
@@ -454,14 +456,14 @@
     (corfu-preselect 'prompt)        ; Preselect first candidate
     (corfu-on-exact-match nil)       ; Don't auto-accept exact matches
     (corfu-scroll-margin 5)          ; Scroll margin
-    
+
     ;; === APPEARANCE SETTINGS ===
     (corfu-max-width 80)             ; Maximum popup width
     (corfu-min-width 15)             ; Minimum popup width
     (corfu-count 10)                 ; Show up to 10 candidates
     (corfu-preview-current nil)      ; Don't preview (less distracting)
     (corfu-echo-documentation 0.25)  ; Quick doc in echo area
-    
+
     :bind
     (:map corfu-map
           ;; Navigation
@@ -469,24 +471,24 @@
           ([tab] . corfu-next)
           ("S-TAB" . corfu-previous)
           ([backtab] . corfu-previous)
-          
+
           ;; Documentation (manual)
           ("M-d" . corfu-info-documentation)
           ("M-l" . corfu-info-location)
           ("M-p" . corfu-popupinfo-toggle)
-          
+
           ;; Scroll documentation
           ("M-n" . corfu-popupinfo-scroll-up)
           ("M-p" . corfu-popupinfo-scroll-down)
-          
+
           ;; Quick selection (with corfu-indexed)
           ("M-1" . corfu-indexed-complete)
           ("M-2" . corfu-indexed-complete)
           ("M-3" . corfu-indexed-complete)
-          
+
           ;; Control
           ("C-g" . corfu-quit))
-          
+
     :config
     (global-corfu-mode)
     (emacs-nix-log "Corfu completion system activated"))
@@ -498,12 +500,12 @@
     (require 'corfu-popupinfo)  ; Auto documentation popup
     (require 'corfu-history)    ; Remember completions
     (require 'corfu-indexed)    ; Number candidates
-    
+
     ;; === POPUPINFO CONFIGURATION ===
     (setq corfu-popupinfo-delay 0.4)         ; Show after 0.4s
     (setq corfu-popupinfo-hide nil)          ; Don't auto-hide
     (setq corfu-popupinfo-resize t)          ; Resize based on content
-    
+
     ;; Responsive sizing
     (if (display-graphic-p)
         (progn
@@ -512,18 +514,18 @@
       (progn
         (setq corfu-popupinfo-max-width 80)
         (setq corfu-popupinfo-max-height 15)))
-    
+
     ;; Smart positioning
     (setq corfu-popupinfo-direction '(right left top bottom))
-    
+
     ;; Enable extensions
     (corfu-popupinfo-mode 1)
     (corfu-history-mode 1)
     (corfu-indexed-mode 1)
-    
+
     ;; Persist history
     (add-to-list 'savehist-additional-variables 'corfu-history)
-    
+
     (emacs-nix-log "All Corfu extensions loaded and configured"))
 
   ;; === TERMINAL SUPPORT ===
@@ -570,16 +572,16 @@
     (add-to-list 'completion-at-point-functions #'cape-dabbrev)    ; Dynamic abbrev
     (add-to-list 'completion-at-point-functions #'cape-file)      ; File paths
     (add-to-list 'completion-at-point-functions #'cape-elisp-block) ; Elisp blocks
-    
+
     ;; Mode-specific sources
-    (add-hook 'org-mode-hook 
+    (add-hook 'org-mode-hook
               (lambda ()
                 (add-to-list 'completion-at-point-functions #'cape-elisp-block)))
-                
+
     (add-hook 'text-mode-hook
               (lambda ()
                 (add-to-list 'completion-at-point-functions #'cape-dict)))
-                
+
     (emacs-nix-log "Cape completion sources configured"))
 #+end_src
 
@@ -595,7 +597,7 @@
     (lsp-completion-provider :none)          ; Use CAPF (Corfu)
     (lsp-completion-show-detail t)           ; Show details
     (lsp-completion-show-kind t)             ; Show kinds
-    
+
     ;; === PERFORMANCE OPTIMIZATIONS ===
     (lsp-idle-delay 0.5)                    ; Update delay
     (lsp-log-io nil)                        ; No IO logging
@@ -603,10 +605,10 @@
     (lsp-enable-file-watchers nil)          ; Disable watchers
     (lsp-response-timeout 30)               ; Reasonable timeout
     (lsp-keep-workspace-alive nil)          ; Don't keep alive
-    
+
     ;; === LSP-BOOSTER (PERFORMANCE BOOST) ===
     (lsp-use-plists t)                      ; Required for booster
-    
+
     ;; === UI SETTINGS ===
     (lsp-keymap-prefix "C-c l")
     (lsp-enable-which-key-integration t)
@@ -614,7 +616,7 @@
     (lsp-headerline-breadcrumb-enable nil)  ; Clean UI
     (lsp-signature-auto-activate nil)       ; Manual signatures
     (lsp-eldoc-render-all nil)              ; Simple eldoc
-    
+
     :config
     ;; === LSP-BOOSTER INTEGRATION ===
     (defun lsp-booster--advice-json-parse (old-fn &rest args)
@@ -647,9 +649,9 @@
               (message "Using emacs-lsp-booster for %s!" orig-result)
               (cons "emacs-lsp-booster" orig-result))
           orig-result)))
-          
+
     (advice-add 'lsp-resolve-final-command :around #'lsp-booster--advice-final-command)
-    
+
     (emacs-nix-log "LSP-Mode with booster integration configured"))
 
   ;; === LSP COMPLETION SETUP ===
@@ -658,10 +660,10 @@
     ;; Configure orderless for LSP
     (setf (alist-get 'styles (alist-get 'lsp-capf completion-category-defaults))
           '(orderless))
-    
+
     ;; Add flex matching for first word
     (add-hook 'orderless-style-dispatchers #'my/orderless-dispatch-flex-first nil 'local)
-    
+
     ;; Use cape-capf-buster to prevent hangs
     (setq-local completion-at-point-functions
                 (list (cape-capf-buster #'lsp-completion-at-point))))
@@ -689,19 +691,19 @@
            (memq #'lsp-completion-at-point completion-at-point-functions))
       (setq-local corfu-popupinfo-delay 0.2)
       (setq-local corfu-popupinfo-max-height 25))
-     
+
      ;; Go mode - very fast (gopls is quick)
      ((derived-mode-p 'go-mode)
       (setq-local corfu-popupinfo-delay 0.1))
-     
+
      ;; Elisp - standard
      ((derived-mode-p 'emacs-lisp-mode)
       (setq-local corfu-popupinfo-delay 0.3))
-     
+
      ;; Text modes - slower (less useful docs)
      ((derived-mode-p 'text-mode 'org-mode 'markdown-mode)
       (setq-local corfu-popupinfo-delay 0.8))
-     
+
      ;; Default
      (t
       (setq-local corfu-popupinfo-delay 0.5))))
@@ -722,9 +724,13 @@
   ;; Go
   (use-package go-mode
     :mode "\\.go\\'"
-    :hook ((go-mode . lsp-deferred)
-           (before-save . lsp-format-buffer)
-           (before-save . lsp-organize-imports)))
+    :hook (go-mode . lsp-deferred)
+    :config
+    (defun my/go-mode-before-save-hooks ()
+      "Setup before-save hooks for Go mode."
+      (add-hook 'before-save-hook #'lsp-format-buffer nil t)
+      (add-hook 'before-save-hook #'lsp-organize-imports nil t))
+    (add-hook 'go-mode-hook #'my/go-mode-before-save-hooks))
 
   ;; Rust
   (use-package rust-mode
@@ -772,6 +778,10 @@
     :config
     (define-key magit-hunk-section-map (kbd "RET") 'magit-diff-visit-file-other-window)
     (define-key magit-file-section-map (kbd "RET") 'magit-diff-visit-file-other-window))
+
+  ;; Magit live diff - auto-refresh Magit buffers on file changes
+  (load (expand-file-name "magit-live-diff.el"
+                          (file-name-directory (or load-file-name buffer-file-name))))
 
   (use-package git-timemachine
     :after magit
@@ -840,17 +850,6 @@
     :bind (("C-c t" . vterm)))
 #+end_src
 
-* UI enhancements
-
-#+begin_src emacs-lisp
-  (use-package doom-modeline
-    :demand t
-    :config
-    (doom-modeline-mode 1))
-
-  (use-package all-the-icons)
-#+end_src
-
 * Utilities
 
 #+begin_src emacs-lisp
@@ -913,21 +912,18 @@
 * Window movement and keybindings
 
 #+begin_src emacs-lisp
-  ;; Window movement (maintain Spacemacs-like behavior)
-  (global-set-key (kbd "C-h") 'windmove-left)
-  (global-set-key (kbd "C-j") 'windmove-down)
-  (global-set-key (kbd "C-k") 'windmove-up)
-  (global-set-key (kbd "C-l") 'windmove-right)
+  ;; Window movement with M-hjkl (avoids shadowing C-h help and C-k kill-line)
+  (global-set-key (kbd "M-h") 'windmove-left)
+  (global-set-key (kbd "M-j") 'windmove-down)
+  (global-set-key (kbd "M-k") 'windmove-up)
+  (global-set-key (kbd "M-l") 'windmove-right)
 
-  ;; Enable windmove with shift+arrow keys
+  ;; Enable windmove with shift+arrow keys as fallback
   (windmove-default-keybindings 'shift)
 
   ;; Additional keybindings from your Spacemacs config
   (global-set-key (kbd "C-x k") 'kill-current-buffer)
   (global-set-key (kbd "C-c C-t") 'my/toggle-theme)
-
-  ;; Ctrl+K to erase everything after cursor (kill-line)
-  (global-set-key (kbd "C-k") 'kill-line)
 #+end_src
 
 * File management
@@ -955,30 +951,29 @@
 
 #+begin_src emacs-lisp
   ;; Delete trailing whitespace configuration (from your Spacemacs config)
-  (defvar auto-delete-trailing-whitespace t
+  (defvar my/auto-delete-trailing-whitespace t
     "Automatically delete trailing whitespace on save.")
 
-  (defun toggle-auto-delete-trailing-whitespace ()
+  (defun my/toggle-auto-delete-trailing-whitespace ()
     "Toggle the automatic deletion of trailing whitespace."
     (interactive)
-    (setq auto-delete-trailing-whitespace (not auto-delete-trailing-whitespace))
-    (if auto-delete-trailing-whitespace
+    (setq my/auto-delete-trailing-whitespace (not my/auto-delete-trailing-whitespace))
+    (if my/auto-delete-trailing-whitespace
         (message "Auto delete trailing whitespace enabled")
       (message "Auto delete trailing whitespace disabled")))
 
-  (defun maybe-delete-trailing-whitespace ()
-    "Delete trailing whitespace if `auto-delete-trailing-whitespace' is non-nil."
-    (when auto-delete-trailing-whitespace
+  (defun my/maybe-delete-trailing-whitespace ()
+    "Delete trailing whitespace if `my/auto-delete-trailing-whitespace' is non-nil."
+    (when my/auto-delete-trailing-whitespace
       (delete-trailing-whitespace)))
 
-  (add-hook 'before-save-hook 'maybe-delete-trailing-whitespace)
+  (add-hook 'before-save-hook #'my/maybe-delete-trailing-whitespace)
 #+end_src
 
 * Clipeboard Configurations
 
 #+begin_src emacs-lisp
   (use-package clipetty
-    :ensure t
     :hook
     (after-init . global-clipetty-mode)
     :config
