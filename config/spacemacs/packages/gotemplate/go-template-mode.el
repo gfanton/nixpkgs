@@ -1,4 +1,9 @@
-;;; go-template-mode.el --- Major mode for Go template language
+;;; go-template-mode.el --- Major mode for Go template language -*- lexical-binding: t; -*-
+
+;; Author: Guilhem Fanton <guilhem.fanton@gmail.com>
+;; Version: 0.1.0
+;; Package-Requires: ((emacs "24.3"))
+;; Keywords: languages, go, template
 
 ;;; Commentary:
 
@@ -243,8 +248,8 @@ This provides basic syntax highlighting for keyword, built-ins, functions,
 and some types. It does not provide indentation."
 
   ;; Font lock
-  (set (make-local-variable 'font-lock-defaults)
-       '(go-template-mode-font-lock-keywords nil nil nil nil))
+  (setq-local font-lock-defaults
+              '(go-template-mode-font-lock-keywords nil nil nil nil))
 
   ;; Remove stale text properties
   (save-restriction
@@ -253,12 +258,12 @@ and some types. It does not provide indentation."
                             '(go-template-mode-cs nil go-template-mode-nesting nil)))
 
   ;; Reset the syntax mark caches
-  (setq go-template-mode-mark-cs-end      1
-        go-template-mode-mark-nesting-end 1)
+  (setq-local go-template-mode-mark-cs-end 1)
+  (setq-local go-template-mode-mark-nesting-end 1)
   (add-hook 'before-change-functions #'go-template-mode-mark-clear-cache nil t)
 
   ;; Use tabs (Go style)
-  (setq indent-tabs-mode t))
+  (setq-local indent-tabs-mode t))
 
 (add-to-list 'auto-mode-alist '("\\.gotmpl$" . go-template-mode))
 

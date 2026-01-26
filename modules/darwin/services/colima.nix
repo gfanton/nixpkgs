@@ -43,6 +43,7 @@ in
     environment.systemPackages = [ cfg.package ];
 
     launchd.user.agents.colima = mkIf cfg.autoStart {
+      path = [ config.environment.systemPath ];
       serviceConfig = {
         ProgramArguments = [
           "${cfg.package}/bin/colima"

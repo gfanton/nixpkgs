@@ -43,7 +43,7 @@
     powerlevel10k.flake = false;
 
     # My project
-    project.url = "github:gfanton/project/v0.16.6";
+    project.url = "github:gfanton/project/v0.17.0";
     project.inputs.nixpkgs.follows = "nixpkgs-unstable";
 
     # tmux plugins
@@ -111,19 +111,19 @@
         # Overlays to add different versions `nixpkgs` into package set
         pkgs-master = _: prev: {
           pkgs-master = import inputs.nixpkgs-master {
-            inherit (prev.stdenv) system;
+            inherit (prev.stdenv.hostPlatform) system;
             inherit (nixpkgsDefaults) config;
           };
         };
         pkgs-stable = _: prev: {
           pkgs-stable = import inputs.nixpkgs-stable {
-            inherit (prev.stdenv) system;
+            inherit (prev.stdenv.hostPlatform) system;
             inherit (nixpkgsDefaults) config;
           };
         };
         pkgs-unstable = _: prev: {
           pkgs-unstable = import inputs.nixpkgs-unstable {
-            inherit (prev.stdenv) system;
+            inherit (prev.stdenv.hostPlatform) system;
             inherit (nixpkgsDefaults) config;
           };
         };
@@ -131,7 +131,7 @@
         # Overlay useful on Macs with Apple Silicon
         pkgs-silicon =
           _: prev:
-          optionalAttrs (prev.stdenv.system == "aarch64-darwin") {
+          optionalAttrs (prev.stdenv.hostPlatform.system == "aarch64-darwin") {
             # Add access to x86 packages system is running Apple Silicon
             pkgs-x86 = import inputs.nixpkgs-unstable {
               system = "x86_64-darwin";
@@ -147,12 +147,9 @@
           zsh-plugins.fast-syntax-highlighting = inputs.fast-syntax-highlighting;
           zsh-plugins.powerlevel10k = inputs.powerlevel10k;
           # yabai = inputs.yabai;
-          # Use project from flake input with fixed vendorHash
-          project = inputs.project.packages.${final.system}.default.overrideAttrs (oldAttrs: {
-            vendorHash = "sha256-B375AvklOVKxpIR60CatnmRgOFpqhlKyKF32isB+ncI=";
-          });
+          project = inputs.project.packages.${final.stdenv.hostPlatform.system}.default;
           # Pre-packaged tmux plugin from project flake (properly wrapped with binaries)
-          projectTmuxPlugin = inputs.project.packages.${final.system}.tmux-proj;
+          projectTmuxPlugin = inputs.project.packages.${final.stdenv.hostPlatform.system}.tmux-proj;
         };
 
         # My overlays

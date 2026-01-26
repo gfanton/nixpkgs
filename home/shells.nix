@@ -132,6 +132,7 @@ in
   # https://rycee.gitlab.io/home-manager/options.html#opt-programs.direnv.enable
   programs.direnv.enable = true;
   programs.direnv.nix-direnv.enable = true;
+  programs.direnv.silent = true;
 
   # Htop
   # https://rycee.gitlab.io/home-manager/options.html#opt-programs.htop.enable
@@ -326,7 +327,7 @@ in
       }
       // ezaTree
       // ezaTreelist
-      // (lib.optionalAttrs (stdenv.system == "aarch64-darwin") {
+      // (lib.optionalAttrs (pkgs.stdenv.hostPlatform.system == "aarch64-darwin") {
         # switch on rosetta shell
         rosetta-zsh = "${pkgs-x86.zsh}/bin/zsh";
 

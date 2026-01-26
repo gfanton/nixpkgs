@@ -17,8 +17,8 @@
 (require 'lsp-gno)
 (require 'testscripts-mode)
 
-;; Setup lsp-gno
-(lsp-gno-setup)
+;; Users should call (lsp-gno-setup) to configure LSP for GNO
+;; This is typically done in user configuration after loading this package
 
 (provide 'gno)
 

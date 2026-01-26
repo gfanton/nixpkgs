@@ -1,10 +1,10 @@
 ;;; templ-mode.el --- A polymode for Templs -*- lexical-binding: t; -*-
 
-;; Author: Your Name <your.email@example.com>
+;; Author: Guilhem Fanton <guilhem.fanton@gmail.com>
 ;; URL: https://github.com/gfanton/gno-mode
 ;; Version: 0.1.0
 ;; Package-Requires: ((emacs "25.1") (polymode "0.2.2") (lsp-mode "7.0.1"))
-;; Keywords: languages, polymode, templs
+;; Keywords: languages, polymode, templ
 
 ;;; Commentary:
 
@@ -18,10 +18,15 @@
 (require 'polymode)
 (require 'lsp-mode)
 
+(defcustom templ-tab-width 8
+  "Width of a tab for Templ mode."
+  :type 'integer
+  :group 'templ)
+
 ;;;###autoload
 (define-derived-mode templ-host-mode go-mode "Templ"
-  "Major mode for GNO files, an alias for go-mode."
-  (setq-local tab-width gno-tab-width) ;; Use the custom gno-tab-width variable
+  "Major mode for Templ files, based on go-mode."
+  (setq-local tab-width templ-tab-width)
   ;; FIXME: disable lsp for now
   (when (fboundp 'lsp-disconnect) ;; Check if the lsp-disconnect function is available
     (lsp-disconnect)) ;; lsp doesn't work with gno yet
@@ -71,11 +76,16 @@
 (defun templ-format-buffer ()
   "Format the current buffer using templ fmt."
   (when (and (eq major-mode 'templ-host-mode)
-             (string-equal "templ" (file-name-extension (buffer-file-name))))
-    (shell-command-to-string (concat "templ fmt " buffer-file-name))
+             buffer-file-name
+             (string-equal "templ" (file-name-extension buffer-file-name)))
+    (shell-command-to-string (concat "templ fmt " (shell-quote-argument buffer-file-name)))
     (revert-buffer nil t t)))
 
-(add-hook 'after-save-hook #'templ-format-buffer)
+(defun templ-mode--setup-format-on-save ()
+  "Setup format-on-save hook for Templ mode."
+  (add-hook 'after-save-hook #'templ-format-buffer nil t))
+
+(add-hook 'templ-host-mode-hook #'templ-mode--setup-format-on-save)
  
 
 ;;;###autoload

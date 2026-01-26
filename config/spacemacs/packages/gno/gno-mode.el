@@ -16,6 +16,7 @@
 
 (require 'flycheck)
 (require 'go-mode)
+(require 'subr-x)  ; Provides when-let*, if-let*, etc.
 
 (defcustom gno-root-dir ""
   "Root directory for GNO lint."
@@ -78,20 +79,26 @@
 
 (defun gnoimports-on-save ()
   "Run gnoimports on the current file before saving."
-  (when (string-equal (file-name-extension (buffer-file-name)) "gno")
-    (let ((cmd (concat "gno fmt -w " (shell-quote-argument (buffer-file-name))))
+  (when-let* ((file buffer-file-name)
+              (ext (file-name-extension file))
+              (_ (string-equal ext "gno")))
+    (let ((cmd (concat "gno fmt -w " (shell-quote-argument file)))
           (output-buf (get-buffer-create "*Gnoimports Output*")))
       (message "Running: %s" cmd)
-      (with-current-buffer output-buf
-        (erase-buffer))
-      (let ((exit-code (call-process-shell-command cmd nil output-buf)))
-        (if (zerop exit-code)
-            (progn
-              (message "gnoimports succeeded")
-              (revert-buffer t t t)) ;; Revisit buffer to reflect changes
-          (message "gnoimports failed with exit code %d" exit-code)
-          (with-current-buffer output-buf
-            (message "gnoimports output:\n%s" (buffer-string))))))))
+      (unwind-protect
+          (progn
+            (with-current-buffer output-buf
+              (erase-buffer))
+            (let ((exit-code (call-process-shell-command cmd nil output-buf)))
+              (if (zerop exit-code)
+                  (progn
+                    (message "gnoimports succeeded")
+                    (revert-buffer t t t))
+                (message "gnoimports failed with exit code %d" exit-code)
+                (with-current-buffer output-buf
+                  (message "gnoimports output:\n%s" (buffer-string))))))
+        (when (buffer-live-p output-buf)
+          (kill-buffer output-buf))))))
 
 (flycheck-define-checker gno-lint
   "A GNO syntax checker using the gno lint tool."
@@ -107,16 +114,19 @@
 
 ;;;###autoload
 (add-to-list 'flycheck-checkers 'gno-lint)
+
+(defun gno-mode--setup ()
+  "Setup function for gno-mode."
+  ;; enable flycheck by default
+  (flycheck-mode)
+  ;; FIXME: disable company for now
+  (when (featurep 'company)
+    (company-mode -1))
+  (when (fboundp 'lsp-ui-mode)
+    (lsp-ui-mode t)))
+
 ;;;###autoload
-(add-hook 'gno-mode-hook
-          (lambda ()
-            ;; enable flycheck by default
-            (flycheck-mode)
-            ;; FIXME: disable company for now
-            (when (featurep 'company) ; check if company is loaded
-              (company-mode -1)) ; disable company mode for gno-mode
-            (when (fboundp 'lsp-ui-mode)
-              (lsp-ui-mode t))))
+(add-hook 'gno-mode-hook #'gno-mode--setup)
 
 ;;;###autoload
 (define-derived-mode gno-dot-mod-mode go-dot-mod-mode "GNO Mod"

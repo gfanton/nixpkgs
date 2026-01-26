@@ -309,6 +309,7 @@
     ++ lib.optionals stdenv.isDarwin [
       cocoapods
       colima # Container runtime for macOS
+      docker-client # Docker CLI for Colima
     ]
     ++ lib.optionals stdenv.isLinux [
       docker

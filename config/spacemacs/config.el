@@ -640,6 +640,7 @@ before packages are loaded."
 
   ;; load custom gno mode
   (require 'gno)
+  (lsp-gno-setup)
 
   ;; @TODO: find a way to set this
   (unless (file-exists-p "/tmp/.emacs-saves/")
@@ -669,23 +670,24 @@ before packages are loaded."
     (add-hook 'before-save-hook #'lsp-organize-imports t t))
   (add-hook 'go-mode-hook #'lsp-go-install-save-hooks)
 
-  (defvar auto-delete-trailing-whitespace t
+  (defvar dotspacemacs-auto-delete-trailing-whitespace t
     "Automatically delete trailing whitespace on save.")
 
-  (defun toggle-auto-delete-trailing-whitespace ()
+  (defun dotspacemacs-toggle-auto-delete-trailing-whitespace ()
     "Toggle the automatic deletion of trailing whitespace."
     (interactive)
-    (setq auto-delete-trailing-whitespace (not auto-delete-trailing-whitespace))
-    (if auto-delete-trailing-whitespace
+    (setq dotspacemacs-auto-delete-trailing-whitespace
+          (not dotspacemacs-auto-delete-trailing-whitespace))
+    (if dotspacemacs-auto-delete-trailing-whitespace
         (message "Auto delete trailing whitespace enabled")
       (message "Auto delete trailing whitespace disabled")))
 
-  (defun maybe-delete-trailing-whitespace ()
-    "Delete trailing whitespace if `auto-delete-trailing-whitespace' is non-nil."
-    (when auto-delete-trailing-whitespace
+  (defun dotspacemacs-maybe-delete-trailing-whitespace ()
+    "Delete trailing whitespace if `dotspacemacs-auto-delete-trailing-whitespace' is non-nil."
+    (when dotspacemacs-auto-delete-trailing-whitespace
       (delete-trailing-whitespace)))
 
-  (add-hook 'before-save-hook 'maybe-delete-trailing-whitespace)
+  (add-hook 'before-save-hook #'dotspacemacs-maybe-delete-trailing-whitespace)
 
 
   ;; magit
@@ -717,7 +719,7 @@ before packages are loaded."
   ;; ansi-mode
   (require 'ansi-color)
   (define-minor-mode ansi-color-mode
-    "..."
+    "Minor mode to interpret ANSI color codes in buffer."
     :init-value nil
     :global nil
     :group 'ansi-color
@@ -731,10 +733,10 @@ before packages are loaded."
         (save-excursion
           (insert-buffer-substring old-buffer))
         (switch-to-buffer temp-buffer t)
-        (ansi-color-apply-on-region 1 (buffer-size))
+        (ansi-color-apply-on-region (point-min) (point-max))
         (kill-buffer old-buffer)
         (delete-trailing-whitespace)
-        (end-of-buffer))))
+        (goto-char (point-max)))))
   (add-to-list 'auto-mode-alist '("\\.ansi\\'" . ansi-color-mode))
 
   ;; Once you have selected your project, the top-level directory
@@ -873,6 +875,6 @@ before packages are loaded."
    '(vr/engine (quote pcre2el)))
 
   ;; Private File
-  (if (boundp 'dotspacemacs-private-file)
-      (load-file dotspacemacs-private-file))
+  (when (boundp 'dotspacemacs-private-file)
+    (load-file dotspacemacs-private-file))
   )

@@ -1,10 +1,10 @@
-;;; testscripts-mode.el --- A polymode for Testscriptss -*- lexical-binding: t; -*-
+;;; testscripts-mode.el --- A polymode for Testscripts -*- lexical-binding: t; -*-
 
-;; Author: Your Name <8671905+gfanton@users.noreply.github.com>
+;; Author: Guilhem Fanton <guilhem.fanton@gmail.com>
 ;; URL: https://github.com/gfanton/gno-mode
 ;; Version: 0.1.0
 ;; Package-Requires: ((emacs "25.1") (polymode "0.2.2"))
-;; Keywords: languages, polymode, testscriptss
+;; Keywords: languages, polymode, testscripts
 
 ;;; Commentary:
 

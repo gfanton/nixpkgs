@@ -10,14 +10,14 @@
     # XXX: master need to be used to avoid sigkill on git
     package = pkgs.pkgs-master.git;
 
-    userEmail = config.home.user-info.email;
-    userName = config.home.user-info.username;
-
-    extraConfig = {
+    settings = {
+      user.email = config.home.user-info.email;
+      user.name = config.home.user-info.username;
       core.editor = "em";
       core.whitespace = "trailing-space,space-before-tab";
       diff.colorMoved = "default";
       pull.rebase = true;
+      alias.lg = "log --graph --abbrev-commit --decorate --format=format:'%C(blue)%h%C(reset) - %C(green)(%ar)%C(reset) %s %C(italic)- %an%C(reset)%C(magenta bold)%d%C(reset)' --all";
     };
 
     ignores = [
@@ -31,15 +31,14 @@
       "CLAUDE.md"
     ];
 
-    # Enhanced diffs
-    delta.enable = true;
-
     # large file
     lfs.enable = true;
+  };
 
-    aliases = {
-      lg = "log --graph --abbrev-commit --decorate --format=format:'%C(blue)%h%C(reset) - %C(green)(%ar)%C(reset) %s %C(italic)- %an%C(reset)%C(magenta bold)%d%C(reset)' --all";
-    };
+  # Enhanced diffs
+  programs.delta = {
+    enable = true;
+    enableGitIntegration = true;
   };
 
   # GitHub CLI
