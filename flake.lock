@@ -1,22 +1,5 @@
 {
   "nodes": {
-    "chemacs2": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1674216959,
-        "narHash": "sha256-/WtacZPr45lurS0hv+W8UGzsXY3RujkU5oGGGqjqG0Q=",
-        "owner": "plexus",
-        "repo": "chemacs2",
-        "rev": "c2d700b784c793cc82131ef86323801b8d6e67bb",
-        "type": "github"
-      },
-      "original": {
-        "owner": "plexus",
-        "ref": "main",
-        "repo": "chemacs2",
-        "type": "github"
-      }
-    },
     "darwin": {
       "inputs": {
         "nixpkgs": [
@@ -35,23 +18,6 @@
         "owner": "LnL7",
         "ref": "master",
         "repo": "nix-darwin",
-        "type": "github"
-      }
-    },
-    "doomemacs": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1768723979,
-        "narHash": "sha256-0TeBjChS9AbcO7pHp/sSoIncNnJ7LJlZUqvHXVTRmjE=",
-        "owner": "doomemacs",
-        "repo": "doomemacs",
-        "rev": "d9711a90941c0063ab68747fd7b18c70ae6c10ae",
-        "type": "github"
-      },
-      "original": {
-        "owner": "doomemacs",
-        "ref": "master",
-        "repo": "doomemacs",
         "type": "github"
       }
     },
@@ -315,9 +281,7 @@
     },
     "root": {
       "inputs": {
-        "chemacs2": "chemacs2",
         "darwin": "darwin",
-        "doomemacs": "doomemacs",
         "emacs-overlay": "emacs-overlay",
         "fast-syntax-highlighting": "fast-syntax-highlighting",
         "flake-compat": "flake-compat",
@@ -328,25 +292,7 @@
         "nixpkgs-unstable": "nixpkgs-unstable",
         "powerlevel10k": "powerlevel10k",
         "project": "project",
-        "spacemacs": "spacemacs",
         "tmux-yule-log": "tmux-yule-log"
-      }
-    },
-    "spacemacs": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1768512276,
-        "narHash": "sha256-QG3Xqwr49n0p9B8t5fIOid3JfCb1tDg3XpfHfi1XZLM=",
-        "owner": "syl20bnr",
-        "repo": "spacemacs",
-        "rev": "e5b6fbb74618716dbaa24c1ac6b6cd2061058a24",
-        "type": "github"
-      },
-      "original": {
-        "owner": "syl20bnr",
-        "ref": "develop",
-        "repo": "spacemacs",
-        "type": "github"
       }
     },
     "systems": {

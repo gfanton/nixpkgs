@@ -4,6 +4,7 @@
 ;; Version: 1.1.0
 ;; Package-Requires: ((emacs "27.1") (magit "3.0"))
 ;; Keywords: git, tools
+;; URL: https://github.com/gfanton/nixpkgs
 
 ;;; Commentary:
 
@@ -14,6 +15,11 @@
 
 (require 'filenotify)
 (require 'subr-x)  ; Provides when-let*, if-let*, etc.
+(require 'cl-lib)  ; For cl-loop
+
+;; Silence native-comp warnings for magit functions
+(declare-function magit-toplevel "magit-git" ())
+(declare-function magit-refresh "magit-mode" ())
 
 ;; ---- Customization
 
@@ -51,13 +57,16 @@
 (defvar magit-live-diff--refreshing nil
   "Non-nil when we are currently refreshing (to ignore self-triggered events).")
 
+(defvar magit-live-diff--sub-timers nil
+  "List of active sub-timers created during refresh operations.")
+
 (defvar-local magit-live-diff--buffer-repo nil
   "Cached repo root for this buffer.")
 
 ;; ---- Helper Functions
 
 (defun magit-live-diff--log (format-string &rest args)
-  "Log a message if debug enabled."
+  "Log FORMAT-STRING with ARGS if debug enabled."
   (when magit-live-diff-debug
     (apply #'message (concat "[magit-live-diff] " format-string) args)))
 
@@ -81,20 +90,18 @@
 
 (defun magit-live-diff--find-status-buffer (repo)
   "Find the magit-status buffer for REPO (fast, no git calls)."
-  (let ((normalized-repo (magit-live-diff--normalize-path repo))
-        (result nil))
-    (dolist (buf (buffer-list))
-      (when (and (buffer-live-p buf) (not result))
-        (with-current-buffer buf
-          (when (and (eq major-mode 'magit-status-mode)
-                     magit-live-diff--buffer-repo
-                     (string= magit-live-diff--buffer-repo normalized-repo))
-            (setq result buf)))))
-    ;; Fallback: search by buffer name pattern
-    (unless result
-      (let ((name (format "magit: %s" (file-name-nondirectory normalized-repo))))
-        (setq result (get-buffer name))))
-    result))
+  (let ((normalized-repo (magit-live-diff--normalize-path repo)))
+    (or
+     ;; Primary search: find buffer by repo path
+     (cl-loop for buf in (buffer-list)
+              when (and (buffer-live-p buf)
+                        (with-current-buffer buf
+                          (and (eq major-mode 'magit-status-mode)
+                               magit-live-diff--buffer-repo
+                               (string= magit-live-diff--buffer-repo normalized-repo))))
+              return buf)
+     ;; Fallback: search by buffer name pattern
+     (get-buffer (format "magit: %s" (file-name-nondirectory normalized-repo))))))
 
 (defun magit-live-diff--refresh ()
   "Refresh Magit status buffer for pending repos."
@@ -114,15 +121,20 @@
                 (with-current-buffer buf
                   (when (fboundp 'magit-refresh)
                     ;; Use run-with-idle-timer to not block
-                    (run-with-idle-timer
-                     0.01 nil
-                     (lambda (b)
-                       (when (buffer-live-p b)
-                         (with-current-buffer b
-                           (magit-refresh))))
-                     buf))))))
+                    (let ((timer (run-with-idle-timer
+                                  0.01 nil
+                                  (lambda (b)
+                                    (when (buffer-live-p b)
+                                      (with-current-buffer b
+                                        (magit-refresh))))
+                                  buf)))
+                      (push timer magit-live-diff--sub-timers)))))))
         ;; Clear flag after a short delay (let git operations finish)
-        (run-with-timer 1.0 nil (lambda () (setq magit-live-diff--refreshing nil)))))))
+        (let ((timer (run-with-timer
+                      1.0 nil
+                      (lambda ()
+                        (setq magit-live-diff--refreshing nil)))))
+          (push timer magit-live-diff--sub-timers))))))
 
 (defun magit-live-diff--schedule-refresh (repo)
   "Schedule a debounced refresh for REPO."
@@ -211,9 +223,15 @@
 (defun magit-live-diff--disable ()
   "Disable magit-live-diff-mode."
   (magit-live-diff--stop-watching)
+  ;; Cancel the main debounce timer
   (when magit-live-diff--timer
     (cancel-timer magit-live-diff--timer)
     (setq magit-live-diff--timer nil))
+  ;; Cancel any pending sub-timers (refresh timers, flag-clearing timers)
+  (dolist (timer magit-live-diff--sub-timers)
+    (when (timerp timer)
+      (cancel-timer timer)))
+  (setq magit-live-diff--sub-timers nil)
   (setq magit-live-diff--pending-repos nil)
   (setq magit-live-diff--refreshing nil)
   (remove-hook 'magit-status-mode-hook #'magit-live-diff--magit-status-hook)

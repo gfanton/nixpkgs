@@ -26,7 +26,7 @@ let
       gno-mode = trivialBuild {
         pname = "gno-mode";
         version = "0.1";
-        src = ../config/spacemacs/packages/gno;
+        src = ../config/emacs/packages/gno;
         packageRequires = [
           go-mode
           lsp-mode
@@ -38,8 +38,15 @@ let
       go-template-mode = trivialBuild {
         pname = "go-template-mode";
         version = "1.0";
-        src = ../config/spacemacs/packages/gotemplate;
+        src = ../config/emacs/packages/gotemplate;
         packageRequires = [ ];
+      };
+
+      magit-live-diff = trivialBuild {
+        pname = "magit-live-diff";
+        version = "1.1.0";
+        src = ../config/emacs/packages/magit-live-diff;
+        packageRequires = [ magit ];
       };
     in
     [
@@ -131,32 +138,35 @@ let
       templ-ts-mode
 
       # Tree-sitter grammars
-      (treesit-grammars.with-grammars (grammars: with grammars; [
-        tree-sitter-go
-        tree-sitter-gomod
-        tree-sitter-rust
-        tree-sitter-typescript
-        tree-sitter-tsx
-        tree-sitter-javascript
-        tree-sitter-json
-        tree-sitter-yaml
-        tree-sitter-toml
-        tree-sitter-nix
-        tree-sitter-markdown
-        tree-sitter-html
-        tree-sitter-css
-        tree-sitter-bash
-        tree-sitter-python
-        tree-sitter-c
-        tree-sitter-cpp
-        tree-sitter-dockerfile
-        tree-sitter-make
-        tree-sitter-lua
-      ]))
+      (treesit-grammars.with-grammars (
+        grammars: with grammars; [
+          tree-sitter-go
+          tree-sitter-gomod
+          tree-sitter-rust
+          tree-sitter-typescript
+          tree-sitter-tsx
+          tree-sitter-javascript
+          tree-sitter-json
+          tree-sitter-yaml
+          tree-sitter-toml
+          tree-sitter-nix
+          tree-sitter-markdown
+          tree-sitter-html
+          tree-sitter-css
+          tree-sitter-bash
+          tree-sitter-python
+          tree-sitter-c
+          tree-sitter-cpp
+          tree-sitter-dockerfile
+          tree-sitter-make
+          tree-sitter-lua
+        ]
+      ))
 
       # Local custom packages
       gno-mode
       go-template-mode
+      magit-live-diff
     ];
 in
 {

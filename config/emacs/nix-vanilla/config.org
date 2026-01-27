@@ -779,9 +779,10 @@
     (define-key magit-hunk-section-map (kbd "RET") 'magit-diff-visit-file-other-window)
     (define-key magit-file-section-map (kbd "RET") 'magit-diff-visit-file-other-window))
 
-  ;; Magit live diff - auto-refresh Magit buffers on file changes
-  (load (expand-file-name "magit-live-diff.el"
-                          (file-name-directory (or load-file-name buffer-file-name))))
+  (use-package magit-live-diff
+    :after magit
+    :config
+    (magit-live-diff-mode 1))
 
   (use-package git-timemachine
     :after magit

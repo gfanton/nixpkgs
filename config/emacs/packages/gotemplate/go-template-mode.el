@@ -4,6 +4,7 @@
 ;; Version: 0.1.0
 ;; Package-Requires: ((emacs "24.3"))
 ;; Keywords: languages, go, template
+;; URL: https://github.com/gfanton/go-template-mode
 
 ;;; Commentary:
 
@@ -18,6 +19,8 @@
 
 ;; 1) Highlights all strings in the source file, including HTML attributes,
 ;;    and does not properly highlight template actions inside these strings.
+
+;;; Code:
 
 (defvar go-template-mode-syntax-table
   (let ((st (make-syntax-table)))
@@ -80,20 +83,19 @@
 ;; Parser
 ;;
 
-(defvar go-template-mode-mark-cs-end 1
-  "The point at which the comment/string cache ends.  The buffer
-will be marked from the beginning up to this point (that is, up
+(defvar-local go-template-mode-mark-cs-end 1
+  "The point at which the comment/string cache ends.
+The buffer will be marked from the beginning up to this point (that is, up
 to and including character (1- go-template-mode-mark-cs-end)).")
-(make-variable-buffer-local 'go-template-mode-mark-cs-end)
 
-(defvar go-template-mode-mark-nesting-end 1
-  "The point at which the nesting cache ends.  The buffer will be
-marked from the beginning up to this point.")
-(make-variable-buffer-local 'go-template-mode-mark-nesting-end)
+(defvar-local go-template-mode-mark-nesting-end 1
+  "The point at which the nesting cache ends.
+The buffer will be marked from the beginning up to this point.")
 
 (defun go-template-mode-mark-clear-cache (b e)
-  "A before-change-function that clears the comment/string and
-nesting caches from the modified point on."
+  "Clear comment/string and nesting caches from B onward.
+This is a `before-change-functions' hook.  E is unused but required."
+  (ignore e)
 
   (save-restriction
     (widen)
@@ -198,10 +200,10 @@ directly; use `go-template-mode-cs'."
 
 
 (defun go-template-mode-font-lock-cs (limit comment)
-  "Helper function for highlighting comment/strings.  If COMMENT is t,
-set match data to the next comment after point, and advance point
-after it.  If COMMENT is nil, use the next string.  Returns nil
-if no further tokens of the type exist."
+  "Search for comment or string up to LIMIT for font-lock.
+If COMMENT is non-nil, match comments; otherwise match strings.
+Set match data and advance point past the match.
+Return nil if no further tokens of that type exist."
   ;; Ensures that `next-single-property-change' below will work properly.
   (go-template-mode-cs limit)
   (let (cs next (result 'scan))
@@ -265,7 +267,7 @@ and some types. It does not provide indentation."
   ;; Use tabs (Go style)
   (setq-local indent-tabs-mode t))
 
-(add-to-list 'auto-mode-alist '("\\.gotmpl$" . go-template-mode))
+(add-to-list 'auto-mode-alist '("\\.gotmpl\\'" . go-template-mode))
 
 (provide 'go-template-mode)
 

@@ -18,6 +18,11 @@
 (require 'go-mode)
 (require 'subr-x)  ; Provides when-let*, if-let*, etc.
 
+(defgroup gno nil
+  "Support for the GNO programming language."
+  :group 'languages
+  :prefix "gno-")
+
 (defcustom gno-root-dir ""
   "Root directory for GNO lint."
   :type 'directory
@@ -39,11 +44,6 @@
 
 ;;;###autoload
 (add-to-list 'auto-mode-alist '("\\.gno\\'" . gno-mode))
-
-(defun gno-mode-setup ()
-  "Hook for setting up gno-mode."
-  (add-hook 'before-save-hook 'gno-format-buffer nil t)
-  (add-hook 'after-save-hook 'gnoimports-on-save nil t))
 
 (defun gno-format-buffer ()
   "Format the current buffer using gofumpt. This is an adapted version from go-mode gofmt."
@@ -117,21 +117,23 @@
 
 (defun gno-mode--setup ()
   "Setup function for gno-mode."
-  ;; enable flycheck by default
+  ;; Enable flycheck by default
   (flycheck-mode)
   ;; FIXME: disable company for now
   (when (featurep 'company)
     (company-mode -1))
   (when (fboundp 'lsp-ui-mode)
-    (lsp-ui-mode t)))
+    (lsp-ui-mode t))
+  ;; Setup formatting hooks
+  (add-hook 'before-save-hook #'gno-format-buffer nil t)
+  (add-hook 'after-save-hook #'gnoimports-on-save nil t))
 
 ;;;###autoload
 (add-hook 'gno-mode-hook #'gno-mode--setup)
 
 ;;;###autoload
 (define-derived-mode gno-dot-mod-mode go-dot-mod-mode "GNO Mod"
-  "Major mode for GNO mod files, an alias for go-dot-mod-mode."
-  )
+  "Major mode for GNO mod files, derived from `go-dot-mod-mode'.")
 
 ;;;###autoload
 (add-to-list 'auto-mode-alist '("gno\\.mod\\'" . gno-dot-mod-mode))

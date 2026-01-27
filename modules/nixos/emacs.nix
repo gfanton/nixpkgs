@@ -1,6 +1,11 @@
 # NixOS Emacs daemon module
 # Uses pkgs.myEmacs from overlay for single source of truth
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 {
   services.emacs = {

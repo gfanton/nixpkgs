@@ -73,7 +73,7 @@ Prompt the user for an address in the form addr:port or :port and store it for t
                                     "--logfile" "auto"
                                     "--remote.logfile" "auto"))
                     base-command)))
-    (message "Starting gnopls with command: %s" (mapconcat 'identity command " "))
+    (message "Starting gnopls with command: %s" (mapconcat #'identity command " "))
     command))
 
 (lsp-register-custom-settings
@@ -100,4 +100,5 @@ Prompt the user for an address in the form addr:port or :port and store it for t
   (add-to-list 'lsp-language-id-configuration '(go-dot-mod-mode . "gnomod")))
 
 (provide 'lsp-gno)
+
 ;;; lsp-gno.el ends here

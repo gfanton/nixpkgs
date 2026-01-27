@@ -21,16 +21,6 @@
 
     # Other sources
 
-    # emacs
-    spacemacs.url = "github:syl20bnr/spacemacs/develop";
-    spacemacs.flake = false;
-
-    doomemacs.url = "github:doomemacs/doomemacs/master";
-    doomemacs.flake = false;
-
-    chemacs2.url = "github:plexus/chemacs2/main";
-    chemacs2.flake = false;
-
     # yabai
     # yabai.url = "github:koekeishiya/yabai";
     # yabai.flake = false;
@@ -141,9 +131,6 @@
 
         # non flake inputs
         my-inputs = final: prev: {
-          spacemacs = inputs.spacemacs;
-          doomemacs = inputs.doomemacs;
-          chemacs2 = inputs.chemacs2;
           zsh-plugins.fast-syntax-highlighting = inputs.fast-syntax-highlighting;
           zsh-plugins.powerlevel10k = inputs.powerlevel10k;
           # yabai = inputs.yabai;
