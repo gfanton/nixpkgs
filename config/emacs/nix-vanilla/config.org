@@ -780,9 +780,11 @@
     (define-key magit-file-section-map (kbd "RET") 'magit-diff-visit-file-other-window))
 
   (use-package magit-live-diff
-    :after magit
-    :config
-    (magit-live-diff-mode 1))
+    :commands (magit-live-diff-mode)
+    :init
+    ;; Enable automatically when magit loads
+    (with-eval-after-load 'magit
+      (magit-live-diff-mode 1)))
 
   (use-package git-timemachine
     :after magit

@@ -37,12 +37,6 @@ in
         description = "The Emacs package to use.";
       };
 
-      profile = mkOption {
-        type = types.str;
-        default = "nix-vanilla";
-        description = "Emacs profile to use with chemacs2.";
-      };
-
       additionalPath = mkOption {
         type = types.listOf types.str;
         default = [ ];
@@ -76,7 +70,7 @@ in
         export LANG=en_US.UTF-8
 
         # Launch Emacs daemon
-        exec ${cfg.package}/bin/emacs --with-profile=${cfg.profile} --fg-daemon
+        exec ${cfg.package}/bin/emacs --fg-daemon
       '';
     in
     mkIf cfg.enable {

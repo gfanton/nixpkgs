@@ -101,9 +101,6 @@
           set -g @yule-log-show-ticker "on"
           set -g @yule-log-lock-enabled "on"
           set -g @yule-log-lock-socket-protect "on"
-
-          # Start idle watcher when client attaches (ensures tmux server is ready)
-          set-hook -ga client-attached 'run-shell -b "${tmuxPlugins.tmux-yule-log}/share/tmux-plugins/tmux-yule-log/yule-log.tmux start"'
         '';
       }
     ];
