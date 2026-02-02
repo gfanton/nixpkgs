@@ -30,6 +30,7 @@
 (autoload 'magit-comment-staged-delete "magit-comment" nil t)
 (autoload 'magit-comment-staged-clear "magit-comment" nil t)
 (autoload 'magit-comment-clear "magit-comment" nil t)
+(autoload 'magit-comment-clear-all "magit-comment" nil t)
 
 ;; File buffer command
 (autoload 'magit-comment-file-add "magit-comment-file" nil t)
@@ -43,19 +44,19 @@
    ("a" "Add comment" magit-comment-add)
    ("e" "Edit comment" magit-comment-edit)
    ("k" "Delete comment" magit-comment-delete)
-   ("r" "Toggle resolved" magit-comment-toggle-resolved)
-   ("C" "Clear all commit comments" magit-comment-clear)]
+   ("r" "Toggle resolved" magit-comment-toggle-resolved)]
   ["Staged Comments"
    ("A" "Add staged comment" magit-comment-staged-add)
    ("E" "Edit staged comment" magit-comment-staged-edit)
-   ("K" "Delete staged comment" magit-comment-staged-delete)
-   ("S" "Clear all staged" magit-comment-staged-clear)]
+   ("K" "Delete staged comment" magit-comment-staged-delete)]
   ["Export"
    ("x" "Export staged (primary)" magit-comment-export-staged)
    ("X" "Export all (staged + commits)" magit-comment-export-all)
    ("c" "Export commit at point" magit-comment-export-commit-at-point)]
   ["File Buffer"
    ("f" "Add comment at line" magit-comment-file-add)]
+  ["Clear"
+   ("D" "Clear ALL comments" magit-comment-clear-all)]
   ["View"
    ("l" "List all comments" magit-comment-list)]
   ["Mode"

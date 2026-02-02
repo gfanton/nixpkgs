@@ -393,6 +393,27 @@ Opens a multi-line editing buffer. Use C-c C-c to save, C-c C-k to cancel."
         (magit-refresh)
         (message "Commit comments cleared")))))
 
+;;;###autoload
+(defun magit-comment-clear-all ()
+  "Clear all comments (both staged and commit) in this repository."
+  (interactive)
+  (magit-comment--ensure-repo)
+  (require 'magit-comment-db)
+  (let ((commit-comments (magit-comment-db-load))
+        (staged-comments (magit-comment-staged-db-load)))
+    (if (and (not commit-comments) (not staged-comments))
+        (message "No comments to clear")
+      (when (yes-or-no-p (format "Clear all comments (%d commit, %d staged)? "
+                                 (length commit-comments)
+                                 (length staged-comments)))
+        (when commit-comments
+          (magit-comment-db-save nil)
+          (magit-comment-db-invalidate-cache))
+        (when staged-comments
+          (magit-comment-staged-db-save nil))
+        (magit-refresh)
+        (message "All comments cleared")))))
+
 ;; ---- Section Support
 
 (defun magit-comment-at-point ()
@@ -408,8 +429,8 @@ Opens a multi-line editing buffer. Use C-c C-c to save, C-c C-k to cancel."
 (defvar magit-comment-mode-map
   (let ((map (make-sparse-keymap)))
     ;; Global keybinding for file buffer commenting
-    ;; C-c C-; adds comment at current line in any file buffer
-    (define-key map (kbd "C-c C-;") #'magit-comment-file-add)
+    ;; C-c a adds comment at current line in any file buffer
+    (define-key map (kbd "C-c a") #'magit-comment-file-add)
     map)
   "Keymap for `magit-comment-mode'.
 This keymap is active globally when `magit-comment-mode' is enabled.")
@@ -440,7 +461,7 @@ This keymap is active globally when `magit-comment-mode' is enabled.")
 (define-minor-mode magit-comment-mode
   "Toggle local commit commenting for Magit.
 When enabled, provides keybindings for adding comments to code:
-- \\[magit-comment-file-add] (`C-c C-;') adds comment at current line."
+- \\[magit-comment-file-add] (`C-c a') adds comment at current line."
   :global t
   :lighter " MComment"
   :keymap magit-comment-mode-map
