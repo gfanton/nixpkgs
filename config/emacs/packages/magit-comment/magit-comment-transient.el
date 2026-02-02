@@ -1,7 +1,10 @@
 ;;; magit-comment-transient.el --- Transient menus for magit-comment -*- lexical-binding: t; -*-
 
 ;; Author: gfanton
+;; Version: 0.1.0
 ;; Package-Requires: ((emacs "27.1") (magit "3.0") (transient "0.4"))
+;; Keywords: git, tools, review
+;; URL: https://github.com/gfanton/nixpkgs
 
 ;;; Commentary:
 
@@ -28,6 +31,9 @@
 (autoload 'magit-comment-staged-clear "magit-comment" nil t)
 (autoload 'magit-comment-clear "magit-comment" nil t)
 
+;; File buffer command
+(autoload 'magit-comment-file-add "magit-comment-file" nil t)
+
 ;; ---- Transient Menu
 
 ;;;###autoload (autoload 'magit-comment-transient "magit-comment-transient" nil t)
@@ -48,6 +54,8 @@
    ("x" "Export staged (primary)" magit-comment-export-staged)
    ("X" "Export all (staged + commits)" magit-comment-export-all)
    ("c" "Export commit at point" magit-comment-export-commit-at-point)]
+  ["File Buffer"
+   ("f" "Add comment at line" magit-comment-file-add)]
   ["View"
    ("l" "List all comments" magit-comment-list)]
   ["Mode"

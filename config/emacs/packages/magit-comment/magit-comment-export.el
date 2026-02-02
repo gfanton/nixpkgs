@@ -1,7 +1,10 @@
 ;;; magit-comment-export.el --- Export comments to markdown -*- lexical-binding: t; -*-
 
 ;; Author: gfanton
+;; Version: 0.1.0
 ;; Package-Requires: ((emacs "27.1") (magit "3.0"))
+;; Keywords: git, tools, review
+;; URL: https://github.com/gfanton/nixpkgs
 
 ;;; Commentary:
 

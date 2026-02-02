@@ -1,11 +1,20 @@
 ;;; magit-comment-ui.el --- Magit UI integration for comments -*- lexical-binding: t; -*-
 
 ;; Author: gfanton
+;; Version: 0.1.0
 ;; Package-Requires: ((emacs "27.1") (magit "3.0"))
+;; Keywords: git, tools, review
+;; URL: https://github.com/gfanton/nixpkgs
 
 ;;; Commentary:
 
 ;; Magit section integration for displaying comments.
+;;
+;; This module provides:
+;; - Section rendering for comments in magit-status and magit-revision buffers
+;; - Keymaps for interacting with comment sections
+;; - Faces for comment display
+;; - Integration with magit-dispatch transient
 
 ;;; Code:
 
@@ -31,6 +40,7 @@
 (autoload 'magit-comment-staged-edit "magit-comment" nil t)
 (autoload 'magit-comment-staged-delete "magit-comment" nil t)
 (autoload 'magit-comment-staged-clear "magit-comment" nil t)
+(autoload 'magit-comment-file-add "magit-comment-file" nil t)
 
 ;; Variable declaration for magit-comment-mode (defined in magit-comment.el)
 (defvar magit-comment-mode)
@@ -228,17 +238,22 @@
                             #'magit-comment-ui--insert-staged-comments-section
                             'magit-insert-staged-changes
                             t))
-  ;; Add transient suffix to magit-dispatch (only if not already present)
-  ;; Using "#" since "C" is taken by Clone
+  ;; Add transient suffix to magit-dispatch
+  ;; Using "'" since "#" conflicts with evil-search-word-backward
   (with-eval-after-load 'magit
     (require 'magit-comment-transient)
-    ;; transient-get-suffix signals error if suffix doesn't exist, hence ignore-errors
-    (unless (ignore-errors (transient-get-suffix 'magit-dispatch "#"))
+    ;; Check if suffix already exists before adding
+    (unless (condition-case nil
+                (transient-get-suffix 'magit-dispatch "'")
+              (error nil))
       (transient-append-suffix 'magit-dispatch "!"
-        '("#" "Comments" magit-comment-transient)))
-    ;; Also bind directly in magit-status-mode for quick access
-    (define-key magit-status-mode-map (kbd "#") #'magit-comment-transient)
-    (define-key magit-revision-mode-map (kbd "#") #'magit-comment-transient))
+        '("'" "Comments" magit-comment-transient)))
+    ;; Bind C-c C-; for quick access (doesn't conflict with evil)
+    (define-key magit-status-mode-map (kbd "C-c C-;") #'magit-comment-transient)
+    (define-key magit-revision-mode-map (kbd "C-c C-;") #'magit-comment-transient)
+    ;; Also bind C-c ; directly to add comment (most common action)
+    (define-key magit-status-mode-map (kbd "C-c ;") #'magit-comment-add)
+    (define-key magit-revision-mode-map (kbd "C-c ;") #'magit-comment-add))
   (magit-comment--log "UI hooks installed"))
 
 (defun magit-comment-ui-teardown ()
@@ -250,13 +265,15 @@
   (remove-hook 'magit-revision-sections-hook
                #'magit-comment-ui--insert-commit-comments)
   ;; Remove transient suffix from magit-dispatch
-  ;; ignore-errors handles case where suffix was never added or already removed
-  (ignore-errors
-    (transient-remove-suffix 'magit-dispatch "#"))
+  (condition-case nil
+      (transient-remove-suffix 'magit-dispatch "'")
+    (error nil))
   ;; Remove direct keybindings (only if magit was loaded)
   (when (featurep 'magit)
-    (define-key magit-status-mode-map (kbd "#") nil)
-    (define-key magit-revision-mode-map (kbd "#") nil))
+    (define-key magit-status-mode-map (kbd "C-c C-;") nil)
+    (define-key magit-revision-mode-map (kbd "C-c C-;") nil)
+    (define-key magit-status-mode-map (kbd "C-c ;") nil)
+    (define-key magit-revision-mode-map (kbd "C-c ;") nil))
   (magit-comment--log "UI hooks removed"))
 
 (provide 'magit-comment-ui)

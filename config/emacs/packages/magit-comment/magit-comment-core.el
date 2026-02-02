@@ -1,7 +1,10 @@
 ;;; magit-comment-core.el --- Core data structures for magit-comment -*- lexical-binding: t; -*-
 
 ;; Author: gfanton
+;; Version: 0.1.0
 ;; Package-Requires: ((emacs "27.1"))
+;; Keywords: git, tools, review
+;; URL: https://github.com/gfanton/nixpkgs
 
 ;;; Commentary:
 

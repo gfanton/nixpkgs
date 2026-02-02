@@ -67,13 +67,21 @@
 
 (autoload 'magit-comment-transient "magit-comment-transient" nil t)
 
+;; File buffer commands
+(autoload 'magit-comment-file-add "magit-comment-file" nil t)
+
+;; Multi-line editing
+(autoload 'magit-comment-edit-read "magit-comment-edit-buffer")
+
 ;; ---- Interactive Commands
 
 ;;;###autoload
 (defun magit-comment-add ()
-  "Add a comment to the current commit/file/line or selected region."
+  "Add a comment to the current commit/file/line or selected region.
+Opens a multi-line editing buffer. Use C-c C-c to save, C-c C-k to cancel."
   (interactive)
   (magit-comment--ensure-repo)
+  (require 'magit-comment-edit-buffer)
   (let* ((has-region (use-region-p))
          (region-text (when has-region
                         (buffer-substring-no-properties (region-beginning) (region-end))))
@@ -88,55 +96,76 @@
                        ;; If at beginning of line, we selected up to (not including) this line
                        (when (and (bolp) (> (point) (region-beginning)))
                          (forward-line -1))
-                       (line-number-at-pos))))
-         (body (read-string "Comment: ")))
+                       (line-number-at-pos)))))
     ;; Deactivate region after capturing
     (when has-region (deactivate-mark))
     (when (string-empty-p commit)
       (user-error "No commit specified"))
-    (when (string-empty-p body)
-      (user-error "Comment cannot be empty"))
     (let ((full-sha (magit-rev-parse commit)))
       (unless full-sha
         (user-error "Invalid commit: %s" commit))
-      (require 'magit-comment-db)
-      (magit-comment-db-add
-       (magit-comment-entry-create
-        :id (magit-comment--generate-id)
-        :commit full-sha
-        :file file
-        :line line
-        :line-end (when (and line-end (not (= line line-end))) line-end)
-        :author (magit-comment--get-author)
-        :created-at (magit-comment--timestamp)
-        :updated-at (magit-comment--timestamp)
-        :body body
-        :context region-text
-        :tags nil
-        :resolved nil))
-      (magit-refresh)
-      (message "Comment added to %s%s"
-               (substring full-sha 0 8)
-               (cond
-                ((and file line-end) (format " (%s:%s-%s)" file line line-end))
-                (file (format " (%s:%s)" file line))
-                (t ""))))))
+      ;; Build context string for header
+      (let ((context (format "Comment: %s%s"
+                             (substring full-sha 0 8)
+                             (cond
+                              ((and file line-end) (format " %s:%s-%s" file line line-end))
+                              ((and file line) (format " %s:%s" file line))
+                              (t "")))))
+        ;; Open multi-line edit buffer
+        (magit-comment-edit-read
+         context
+         (lambda (body)
+           (when (string-empty-p body)
+             (user-error "Comment cannot be empty"))
+           (require 'magit-comment-db)
+           (magit-comment-db-add
+            (magit-comment-entry-create
+             :id (magit-comment--generate-id)
+             :commit full-sha
+             :file file
+             :line line
+             :line-end (when (and line-end (not (= line line-end))) line-end)
+             :author (magit-comment--get-author)
+             :created-at (magit-comment--timestamp)
+             :updated-at (magit-comment--timestamp)
+             :body body
+             :context region-text
+             :tags nil
+             :resolved nil))
+           (magit-refresh)
+           (message "Comment added to %s%s"
+                    (substring full-sha 0 8)
+                    (cond
+                     ((and file line-end) (format " (%s:%s-%s)" file line line-end))
+                     (file (format " (%s:%s)" file line))
+                     (t "")))))))))
 
 ;;;###autoload
 (defun magit-comment-edit ()
-  "Edit the comment at point."
+  "Edit the comment at point.
+Opens a multi-line editing buffer. Use C-c C-c to save, C-c C-k to cancel."
   (interactive)
   (magit-comment--ensure-repo)
+  (require 'magit-comment-edit-buffer)
   (if-let* ((comment (magit-comment-at-point)))
-      (let ((new-body (read-string "Comment: " (magit-comment-entry-body comment))))
-        (when (string-empty-p new-body)
-          (user-error "Comment cannot be empty"))
-        (setf (magit-comment-entry-body comment) new-body)
-        (setf (magit-comment-entry-updated-at comment) (magit-comment--timestamp))
-        (require 'magit-comment-db)
-        (magit-comment-db-update comment)
-        (magit-refresh)
-        (message "Comment updated"))
+      (let* ((file (magit-comment-entry-file comment))
+             (line (magit-comment-entry-line comment))
+             (commit (magit-comment-entry-commit comment))
+             (context (format "Edit comment: %s%s"
+                              (substring commit 0 8)
+                              (if file (format " %s:%s" file line) ""))))
+        (magit-comment-edit-read
+         context
+         (lambda (new-body)
+           (when (string-empty-p new-body)
+             (user-error "Comment cannot be empty"))
+           (setf (magit-comment-entry-body comment) new-body)
+           (setf (magit-comment-entry-updated-at comment) (magit-comment--timestamp))
+           (require 'magit-comment-db)
+           (magit-comment-db-update comment)
+           (magit-refresh)
+           (message "Comment updated"))
+         (magit-comment-entry-body comment)))
     (user-error "No comment at point")))
 
 ;;;###autoload
@@ -248,9 +277,11 @@ This is the primary export command for the typical workflow."
 
 ;;;###autoload
 (defun magit-comment-staged-add ()
-  "Add a comment to staged changes at point."
+  "Add a comment to staged changes at point.
+Opens a multi-line editing buffer. Use C-c C-c to save, C-c C-k to cancel."
   (interactive)
   (magit-comment--ensure-repo)
+  (require 'magit-comment-edit-buffer)
   (unless (magit-comment--in-staged-section-p)
     (user-error "Point is not in staged changes section"))
   (let* ((has-region (use-region-p))
@@ -264,45 +295,60 @@ This is the primary export command for the typical workflow."
                        (goto-char (region-end))
                        (when (and (bolp) (> (point) (region-beginning)))
                          (forward-line -1))
-                       (line-number-at-pos))))
-         (body (read-string "Comment: ")))
+                       (line-number-at-pos)))))
     (when has-region (deactivate-mark))
     (require 'magit-comment-db)
     (let ((file-hash (magit-comment-staged--file-hash file)))
       (unless file-hash
         (user-error "File %s has no staged changes" file))
-      (when (string-empty-p body)
-        (user-error "Comment cannot be empty"))
-      (magit-comment-staged-db-add
-       (magit-comment-staged-entry-create
-        :id (magit-comment--generate-id)
-        :file file
-        :line line
-        :line-end (when (and line-end (not (= line line-end))) line-end)
-        :hunk-hash file-hash
-        :author (magit-comment--get-author)
-        :created-at (magit-comment--timestamp)
-        :updated-at (magit-comment--timestamp)
-        :body body
-        :context region-text))
-      (magit-refresh)
-      (message "Staged comment added to %s:%s" file line))))
+      ;; Open multi-line edit buffer
+      (magit-comment-edit-read
+       (format "Staged comment: %s:%s" file line)
+       (lambda (body)
+         (when (string-empty-p body)
+           (user-error "Comment cannot be empty"))
+         ;; Re-check hash is still valid
+         (let ((current-hash (magit-comment-staged--file-hash file)))
+           (unless (and current-hash (string= current-hash file-hash))
+             (user-error "File %s staged content changed, please try again" file)))
+         (magit-comment-staged-db-add
+          (magit-comment-staged-entry-create
+           :id (magit-comment--generate-id)
+           :file file
+           :line line
+           :line-end (when (and line-end (not (= line line-end))) line-end)
+           :hunk-hash file-hash
+           :author (magit-comment--get-author)
+           :created-at (magit-comment--timestamp)
+           :updated-at (magit-comment--timestamp)
+           :body body
+           :context region-text))
+         (magit-refresh)
+         (message "Staged comment added to %s:%s" file line))))))
 
 ;;;###autoload
 (defun magit-comment-staged-edit ()
-  "Edit the staged comment at point."
+  "Edit the staged comment at point.
+Opens a multi-line editing buffer. Use C-c C-c to save, C-c C-k to cancel."
   (interactive)
   (magit-comment--ensure-repo)
+  (require 'magit-comment-edit-buffer)
   (if-let* ((comment (magit-comment-staged-at-point)))
-      (let ((new-body (read-string "Comment: " (magit-comment-staged-entry-body comment))))
-        (when (string-empty-p new-body)
-          (user-error "Comment cannot be empty"))
-        (setf (magit-comment-staged-entry-body comment) new-body)
-        (setf (magit-comment-staged-entry-updated-at comment) (magit-comment--timestamp))
-        (require 'magit-comment-db)
-        (magit-comment-staged-db-update comment)
-        (magit-refresh)
-        (message "Staged comment updated"))
+      (let* ((file (magit-comment-staged-entry-file comment))
+             (line (magit-comment-staged-entry-line comment))
+             (context (format "Edit staged comment: %s:%s" file line)))
+        (magit-comment-edit-read
+         context
+         (lambda (new-body)
+           (when (string-empty-p new-body)
+             (user-error "Comment cannot be empty"))
+           (setf (magit-comment-staged-entry-body comment) new-body)
+           (setf (magit-comment-staged-entry-updated-at comment) (magit-comment--timestamp))
+           (require 'magit-comment-db)
+           (magit-comment-staged-db-update comment)
+           (magit-refresh)
+           (message "Staged comment updated"))
+         (magit-comment-staged-entry-body comment)))
     (user-error "No staged comment at point")))
 
 ;;;###autoload
@@ -359,6 +405,15 @@ This is the primary export command for the typical workflow."
 
 ;; ---- Minor Mode
 
+(defvar magit-comment-mode-map
+  (let ((map (make-sparse-keymap)))
+    ;; Global keybinding for file buffer commenting
+    ;; C-c C-; adds comment at current line in any file buffer
+    (define-key map (kbd "C-c C-;") #'magit-comment-file-add)
+    map)
+  "Keymap for `magit-comment-mode'.
+This keymap is active globally when `magit-comment-mode' is enabled.")
+
 (defun magit-comment--enable ()
   "Enable magit-comment-mode."
   (require 'magit nil t)
@@ -383,9 +438,12 @@ This is the primary export command for the typical workflow."
 
 ;;;###autoload
 (define-minor-mode magit-comment-mode
-  "Toggle local commit commenting for Magit."
+  "Toggle local commit commenting for Magit.
+When enabled, provides keybindings for adding comments to code:
+- \\[magit-comment-file-add] (`C-c C-;') adds comment at current line."
   :global t
   :lighter " MComment"
+  :keymap magit-comment-mode-map
   :group 'magit-comment
   (if magit-comment-mode
       (magit-comment--enable)
