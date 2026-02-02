@@ -218,6 +218,7 @@
       "gt" '(git-timemachine :which-key "git time machine")
       "gb" '(magit-blame :which-key "git blame")
       "gl" '(magit-live-diff-mode :which-key "toggle live diff")
+      "gc" '(magit-comment-transient :which-key "comments")
       "b" '(:ignore t :which-key "buffer")
       "bb" '(consult-buffer :which-key "switch buffer")
       "bd" '(kill-current-buffer :which-key "kill buffer")
@@ -785,6 +786,15 @@
     ;; Enable automatically when magit loads
     (with-eval-after-load 'magit
       (magit-live-diff-mode 1)))
+
+  (use-package magit-comment
+    :commands (magit-comment-mode magit-comment-transient)
+    :init
+    ;; Enable automatically when magit loads
+    (with-eval-after-load 'magit
+      (magit-comment-mode 1)
+      ;; Require transient to register with magit-dispatch
+      (require 'magit-comment-transient)))
 
   (use-package git-timemachine
     :after magit

@@ -48,6 +48,13 @@ let
         src = ../config/emacs/packages/magit-live-diff;
         packageRequires = [ magit ];
       };
+
+      magit-comment = trivialBuild {
+        pname = "magit-comment";
+        version = "0.1.0";
+        src = ../config/emacs/packages/magit-comment;
+        packageRequires = [ magit transient ];
+      };
     in
     [
       # Core framework
@@ -167,6 +174,7 @@ let
       gno-mode
       go-template-mode
       magit-live-diff
+      magit-comment
     ];
 in
 {
