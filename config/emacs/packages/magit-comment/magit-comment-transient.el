@@ -17,50 +17,47 @@
 
 ;; Autoload commands from magit-comment
 (autoload 'magit-comment-add "magit-comment" nil t)
-(autoload 'magit-comment-edit "magit-comment" nil t)
-(autoload 'magit-comment-delete "magit-comment" nil t)
-(autoload 'magit-comment-toggle-resolved "magit-comment" nil t)
-(autoload 'magit-comment-export-staged "magit-comment" nil t)
-(autoload 'magit-comment-export-all "magit-comment" nil t)
-(autoload 'magit-comment-export-commit-at-point "magit-comment" nil t)
 (autoload 'magit-comment-list "magit-comment" nil t)
 (autoload 'magit-comment-mode "magit-comment" nil t)
-(autoload 'magit-comment-staged-add "magit-comment" nil t)
-(autoload 'magit-comment-staged-edit "magit-comment" nil t)
-(autoload 'magit-comment-staged-delete "magit-comment" nil t)
-(autoload 'magit-comment-staged-clear "magit-comment" nil t)
-(autoload 'magit-comment-clear "magit-comment" nil t)
 (autoload 'magit-comment-clear-all "magit-comment" nil t)
+
+;; DWIM commands
+(autoload 'magit-comment-add-dwim "magit-comment" nil t)
+(autoload 'magit-comment-edit-dwim "magit-comment" nil t)
+(autoload 'magit-comment-delete-dwim "magit-comment" nil t)
+(autoload 'magit-comment-toggle-resolved-dwim "magit-comment" nil t)
 
 ;; File buffer command
 (autoload 'magit-comment-file-add "magit-comment-file" nil t)
+
+;; Export commands
+(autoload 'magit-comment-export-quick "magit-comment-export" nil t)
+(autoload 'magit-comment-export-transient "magit-comment-export" nil t)
+(autoload 'magit-comment-exports-list "magit-comment-export" nil t)
+(autoload 'magit-comment-exports-transient "magit-comment-export" nil t)
 
 ;; ---- Transient Menu
 
 ;;;###autoload (autoload 'magit-comment-transient "magit-comment-transient" nil t)
 (transient-define-prefix magit-comment-transient ()
-  "Commands for managing commit comments."
-  ["Commit Comments"
-   ("a" "Add comment" magit-comment-add)
-   ("e" "Edit comment" magit-comment-edit)
-   ("k" "Delete comment" magit-comment-delete)
-   ("r" "Toggle resolved" magit-comment-toggle-resolved)]
-  ["Staged Comments"
-   ("A" "Add staged comment" magit-comment-staged-add)
-   ("E" "Edit staged comment" magit-comment-staged-edit)
-   ("K" "Delete staged comment" magit-comment-staged-delete)]
+  "Commands for managing comments."
+  ["Comments"
+   ("a" "Add comment" magit-comment-add-dwim)
+   ("A" "Add commit comment" magit-comment-add)
+   ("e" "Edit comment" magit-comment-edit-dwim)
+   ("k" "Delete comment" magit-comment-delete-dwim)
+   ("r" "Toggle resolved" magit-comment-toggle-resolved-dwim)]
   ["Export"
-   ("x" "Export staged (primary)" magit-comment-export-staged)
-   ("X" "Export all (staged + commits)" magit-comment-export-all)
-   ("c" "Export commit at point" magit-comment-export-commit-at-point)]
+   ("x" "Quick export (all, copy, flush)..." magit-comment-export-quick)
+   ("X" "Export with options..." magit-comment-export-transient)]
   ["File Buffer"
-   ("f" "Add comment at line" magit-comment-file-add)]
-  ["Clear"
+   ("f" "Add at line" magit-comment-file-add)]
+  ["Manage"
+   ("l" "List comments" magit-comment-list)
+   ("L" "List exports" magit-comment-exports-list)
    ("D" "Clear ALL comments" magit-comment-clear-all)]
-  ["View"
-   ("l" "List all comments" magit-comment-list)]
   ["Mode"
-   ("m" "Toggle magit-comment-mode" magit-comment-mode)])
+   ("m" "Toggle mode" magit-comment-mode)])
 
 (provide 'magit-comment-transient)
 ;;; magit-comment-transient.el ends here

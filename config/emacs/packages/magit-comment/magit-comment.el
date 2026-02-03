@@ -424,13 +424,64 @@ Opens a multi-line editing buffer. Use C-c C-c to save, C-c C-k to cancel."
   "Return the staged comment at point, if any."
   (magit-section-value-if 'magit-comment-staged))
 
+;; ---- DWIM (Do What I Mean) Commands
+
+;;;###autoload
+(defun magit-comment-add-dwim ()
+  "Add a comment based on context.
+- If in git staged section or on staged comment: add staged comment
+- If on commit or commit comment: add commit comment
+- Otherwise: error"
+  (interactive)
+  (cond
+   ;; Staged context: staged section or staged comment
+   ((or (magit-comment--in-staged-section-p)
+        (magit-comment-staged-at-point))
+    (magit-comment-staged-add))
+   ;; Commit context: commit comment or commit itself
+   ((or (magit-comment-at-point)
+        (magit-commit-at-point))
+    (magit-comment-add))
+   (t
+    (user-error "No context for adding comment"))))
+
+;;;###autoload
+(defun magit-comment-edit-dwim ()
+  "Edit comment at point (works for both staged and commit)."
+  (interactive)
+  (cond
+   ((magit-comment-staged-at-point) (magit-comment-staged-edit))
+   ((magit-comment-at-point) (magit-comment-edit))
+   (t (user-error "No comment at point"))))
+
+;;;###autoload
+(defun magit-comment-delete-dwim ()
+  "Delete comment at point (works for both staged and commit)."
+  (interactive)
+  (cond
+   ((magit-comment-staged-at-point) (magit-comment-staged-delete))
+   ((magit-comment-at-point) (magit-comment-delete))
+   (t (user-error "No comment at point"))))
+
+;;;###autoload
+(defun magit-comment-toggle-resolved-dwim ()
+  "Toggle resolved status. Only works for commit comments."
+  (interactive)
+  (cond
+   ((magit-comment-staged-at-point)
+    (user-error "Staged comments cannot be marked resolved"))
+   ((magit-comment-at-point)
+    (magit-comment-toggle-resolved))
+   (t
+    (user-error "No comment at point"))))
+
 ;; ---- Minor Mode
 
 (defvar magit-comment-mode-map
   (let ((map (make-sparse-keymap)))
     ;; Global keybinding for file buffer commenting
-    ;; C-c a adds comment at current line in any file buffer
-    (define-key map (kbd "C-c a") #'magit-comment-file-add)
+    ;; C-c C-a adds comment at current line in any file buffer
+    (define-key map (kbd "C-c C-a") #'magit-comment-file-add)
     map)
   "Keymap for `magit-comment-mode'.
 This keymap is active globally when `magit-comment-mode' is enabled.")
@@ -461,7 +512,7 @@ This keymap is active globally when `magit-comment-mode' is enabled.")
 (define-minor-mode magit-comment-mode
   "Toggle local commit commenting for Magit.
 When enabled, provides keybindings for adding comments to code:
-- \\[magit-comment-file-add] (`C-c a') adds comment at current line."
+- \\[magit-comment-file-add] adds comment at current line."
   :global t
   :lighter " MComment"
   :keymap magit-comment-mode-map

@@ -53,7 +53,10 @@ let
         pname = "magit-comment";
         version = "0.1.0";
         src = ../config/emacs/packages/magit-comment;
-        packageRequires = [ magit transient ];
+        packageRequires = [
+          magit
+          transient
+        ];
       };
     in
     [

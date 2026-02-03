@@ -21,7 +21,6 @@
 (require 'cl-lib)
 (require 'subr-x)
 (require 'seq)
-(require 'pcase)
 (require 'magit-git)
 (require 'magit-comment-core)
 
@@ -36,23 +35,25 @@
 
 ;; ---- Git Blame Integration
 
-(defun magit-comment-file--blame-line (file line)
+(defun magit-comment-file--blame-line (file line repo-root)
   "Get commit SHA for LINE in FILE using git blame.
+FILE should be relative to REPO-ROOT.
 Return nil if line has no commit (new file not yet committed)."
-  (when-let* ((output (magit-git-string
-                       "blame" "-L" (format "%d,%d" line line)
-                       "-l" "--" file))
-              ((not (string-empty-p output)))
-              (sha (car (split-string output)))
-              ((not (string-empty-p sha)))
-              ;; Filter out uncommitted lines (^0000000...)
-              ((not (string-prefix-p "^0000" sha)))
-              ;; Also filter lines from the initial commit marker
-              ((not (string-prefix-p "0000000" sha))))
-    ;; Remove leading ^ if present (for boundary commits)
-    (if (string-prefix-p "^" sha)
-        (substring sha 1)
-      sha)))
+  (let ((default-directory repo-root))
+    (when-let* ((output (magit-git-string
+                         "blame" "-L" (format "%d,%d" line line)
+                         "-l" "--" file))
+                ((not (string-empty-p output)))
+                (sha (car (split-string output)))
+                ((not (string-empty-p sha)))
+                ;; Filter out uncommitted lines (^0000000...)
+                ((not (string-prefix-p "^0000" sha)))
+                ;; Also filter lines from the initial commit marker
+                ((not (string-prefix-p "0000000" sha))))
+      ;; Remove leading ^ if present (for boundary commits)
+      (if (string-prefix-p "^" sha)
+          (substring sha 1)
+        sha))))
 
 ;; ---- Modified Line Detection
 
@@ -81,26 +82,31 @@ Only includes ranges where lines exist in the new file (count > 0)."
                    (<= (car range) line (cdr range)))
                  hunks)))
 
-(defun magit-comment-file--file-tracked-p (file)
-  "Return non-nil if FILE is tracked by git."
-  (magit-git-string "ls-files" "--" file))
+(defun magit-comment-file--file-tracked-p (file repo-root)
+  "Return non-nil if FILE is tracked by git.
+FILE should be relative to REPO-ROOT."
+  (let ((default-directory repo-root))
+    (magit-git-string "ls-files" "--" file)))
 
-(defun magit-comment-file--get-hunks (file &optional cached)
+(defun magit-comment-file--get-hunks (file repo-root &optional cached)
   "Get diff hunk ranges for FILE.
+FILE should be relative to REPO-ROOT.
 If CACHED is non-nil, check staged changes; otherwise unstaged."
-  (let ((diff-output (with-temp-buffer
-                       (if cached
-                           (magit-git-insert "diff" "--cached" "-U0" "--" file)
-                         (magit-git-insert "diff" "-U0" "--" file))
-                       (buffer-string))))
+  (let* ((default-directory repo-root)
+         (diff-output (with-temp-buffer
+                        (if cached
+                            (magit-git-insert "diff" "--cached" "-U0" "--" file)
+                          (magit-git-insert "diff" "-U0" "--" file))
+                        (buffer-string))))
     (unless (string-empty-p diff-output)
       (magit-comment-file--parse-diff-hunks diff-output))))
 
-(defun magit-comment-file--line-status (file line)
+(defun magit-comment-file--line-status (file line repo-root)
   "Return status of LINE in FILE: `staged', `unstaged', or `clean'.
+FILE should be relative to REPO-ROOT.
 Single function to avoid multiple git subprocess calls."
-  (let ((unstaged-hunks (magit-comment-file--get-hunks file nil))
-        (staged-hunks (magit-comment-file--get-hunks file t)))
+  (let ((unstaged-hunks (magit-comment-file--get-hunks file repo-root nil))
+        (staged-hunks (magit-comment-file--get-hunks file repo-root t)))
     (cond
      ((magit-comment-file--line-in-hunks-p unstaged-hunks line) 'unstaged)
      ((magit-comment-file--line-in-hunks-p staged-hunks line) 'staged)
@@ -143,10 +149,10 @@ Opens a multi-line editing buffer. Use C-c C-c to save, C-c C-k to cancel."
     ;; Deactivate region early
     (when has-region (deactivate-mark))
     ;; Check if file is tracked
-    (unless (magit-comment-file--file-tracked-p file)
+    (unless (magit-comment-file--file-tracked-p file repo-root)
       (user-error "File is not tracked by git"))
     ;; Get line status (single combined check for efficiency)
-    (pcase (magit-comment-file--line-status file line)
+    (pcase (magit-comment-file--line-status file line repo-root)
       (`unstaged
        (user-error "Line has unstaged changes - stage or stash first"))
       (`staged
@@ -179,7 +185,7 @@ Opens a multi-line editing buffer. Use C-c C-c to save, C-c C-k to cancel."
             (message "Staged comment added to %s:%d" file line)))))
       (`clean
        ;; Clean line - get commit via blame, create regular comment
-       (let ((commit (magit-comment-file--blame-line file line)))
+       (let ((commit (magit-comment-file--blame-line file line repo-root)))
          (unless commit
            (user-error "Line %d has no commit history" line))
          ;; Open multi-line edit buffer
