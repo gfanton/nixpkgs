@@ -73,6 +73,10 @@
 ;; Multi-line editing
 (autoload 'magit-comment-edit-read "magit-comment-edit-buffer")
 
+;; Indicators
+(autoload 'magit-comment-indicators-mode "magit-comment-indicators" nil t)
+(autoload 'global-magit-comment-indicators-mode "magit-comment-indicators" nil t)
+
 ;; ---- Interactive Commands
 
 ;;;###autoload
@@ -491,6 +495,8 @@ This keymap is active globally when `magit-comment-mode' is enabled.")
   (require 'magit nil t)
   (require 'magit-comment-ui)
   (magit-comment-ui-setup)
+  ;; Enable global indicators in file buffers
+  (global-magit-comment-indicators-mode 1)
   ;; Refresh existing buffers
   (dolist (buf (buffer-list))
     (when (buffer-live-p buf)
@@ -503,6 +509,8 @@ This keymap is active globally when `magit-comment-mode' is enabled.")
   "Disable magit-comment-mode."
   (require 'magit-comment-ui)
   (magit-comment-ui-teardown)
+  ;; Disable global indicators
+  (global-magit-comment-indicators-mode -1)
   ;; Invalidate cache on disable
   (require 'magit-comment-db)
   (magit-comment-db-invalidate-cache)

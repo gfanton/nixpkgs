@@ -21,6 +21,7 @@
 ;; declare-function for byte-compile arg checking
 (require 'magit-git)
 (declare-function magit-toplevel "magit-git" ())
+(declare-function magit-git-dir "magit-git" (&optional path))
 (declare-function magit-get "magit-git" (&rest args))
 
 ;; ---- Customization
@@ -31,7 +32,9 @@
   :prefix "magit-comment-")
 
 (defcustom magit-comment-storage-dir "magit-comment"
-  "Directory name within .git for storing comments."
+  "Directory name within git directory for storing comments.
+The git directory is determined by `magit-git-dir', which correctly
+handles worktrees and other non-standard git configurations."
   :type 'string
   :group 'magit-comment)
 
@@ -117,9 +120,10 @@ If nil, uses git config user.name."
   (magit-toplevel))
 
 (defun magit-comment--storage-path ()
-  "Get the full path to the storage directory."
-  (when-let* ((root (magit-comment--repo-root)))
-    (expand-file-name (concat ".git/" magit-comment-storage-dir) root)))
+  "Get the full path to the storage directory.
+Uses `magit-git-dir' to correctly handle worktrees."
+  (when-let* ((git-dir (magit-git-dir)))
+    (expand-file-name magit-comment-storage-dir git-dir)))
 
 (defun magit-comment--generate-id ()
   "Generate a unique ID for a comment."

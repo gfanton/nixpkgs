@@ -34,6 +34,12 @@
 (defconst magit-comment-staged-db--filename "staged-comments.json"
   "Filename for the staged comments database.")
 
+;; ---- Hooks
+
+(defvar magit-comment-db-after-save-hook nil
+  "Hook run after comments are saved to disk.
+Functions receive no arguments. Used by indicators module to refresh.")
+
 ;; ---- Cache
 
 (defvar magit-comment-db--cache (make-hash-table :test 'equal)
@@ -193,7 +199,9 @@ Uses cache when valid, otherwise loads from disk."
           (rename-file temp-file file t)
           ;; Update cache after successful save
           (magit-comment-db--cache-set comments)
-          (magit-comment--log "Saved %d comments" (length comments)))
+          (magit-comment--log "Saved %d comments" (length comments))
+          ;; Notify listeners
+          (run-hooks 'magit-comment-db-after-save-hook))
       ;; Cleanup temp file if rename failed
       (when (file-exists-p temp-file)
         (delete-file temp-file)))))
@@ -324,7 +332,9 @@ Return nil if file doesn't exist or is corrupt."
               (insert "\n")))
           ;; Atomic rename
           (rename-file temp-file file t)
-          (magit-comment--log "Saved %d staged comments" (length comments)))
+          (magit-comment--log "Saved %d staged comments" (length comments))
+          ;; Notify listeners
+          (run-hooks 'magit-comment-db-after-save-hook))
       ;; Cleanup temp file if rename failed
       (when (file-exists-p temp-file)
         (delete-file temp-file)))))
