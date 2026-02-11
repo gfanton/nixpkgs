@@ -778,7 +778,10 @@
     :bind (("C-x g" . magit-status))
     :config
     (define-key magit-hunk-section-map (kbd "RET") 'magit-diff-visit-file-other-window)
-    (define-key magit-file-section-map (kbd "RET") 'magit-diff-visit-file-other-window))
+    (define-key magit-file-section-map (kbd "RET") 'magit-diff-visit-file-other-window)
+    ;; Add SSH commit signing toggle to the commit transient
+    (transient-append-suffix 'magit-commit "-C"
+      '("-S" "Sign commit" "--gpg-sign")))
 
   (use-package magit-live-diff
     :commands (magit-live-diff-mode)

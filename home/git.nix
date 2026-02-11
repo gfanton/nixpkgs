@@ -10,9 +10,16 @@
     # XXX: master need to be used to avoid sigkill on git
     package = pkgs.pkgs-master.git;
 
+    signing = {
+      key = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIAkCFGpoXMDC2mrBKPB7kx+DL49LeCbhWulOsbUnp7a6";
+      signByDefault = false;
+    };
+
     settings = {
       user.email = config.home.user-info.email;
       user.name = config.home.user-info.username;
+      gpg.format = "ssh";
+      gpg.ssh.program = "/Applications/1Password.app/Contents/MacOS/op-ssh-sign";
       core.editor = "em";
       core.whitespace = "trailing-space,space-before-tab";
       diff.colorMoved = "default";

@@ -136,17 +136,20 @@ Opens a multi-line editing buffer. Use C-c C-c to save, C-c C-k to cancel."
   (let* ((repo-root (or (magit-toplevel)
                         (user-error "Not in a git repository")))
          (file (file-relative-name buffer-file-name repo-root))
-         (line (line-number-at-pos))
          (has-region (use-region-p))
          (region-text (when has-region
                         (buffer-substring-no-properties
                          (region-beginning) (region-end))))
-         (line-end (when has-region
-                     (save-excursion
-                       (goto-char (region-end))
-                       (when (and (bolp) (> (point) (region-beginning)))
-                         (forward-line -1))
-                       (line-number-at-pos)))))
+         (raw-line (line-number-at-pos))
+         (raw-line-end (when has-region
+                         (save-excursion
+                           (goto-char (region-end))
+                           (when (and (bolp) (> (point) (region-beginning)))
+                             (forward-line -1))
+                           (line-number-at-pos))))
+         ;; Normalize: line is always the lowest, line-end the highest
+         (line (if raw-line-end (min raw-line raw-line-end) raw-line))
+         (line-end (when raw-line-end (max raw-line raw-line-end))))
     ;; Deactivate region early
     (when has-region (deactivate-mark))
     ;; Check if file is tracked
