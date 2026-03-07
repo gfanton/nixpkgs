@@ -18,7 +18,7 @@ in
 {
   imports = [
     (modulesPath + "/profiles/qemu-guest.nix")
-  ];
+  ] ++ lib.optional (builtins.pathExists /etc/nixos/local.nix) /etc/nixos/local.nix;
 
   system.stateVersion = "24.11";
 
@@ -48,7 +48,7 @@ in
 
   # Networking
   networking = {
-    hostName = "gfanton-dev";
+    hostName = lib.mkDefault "nixos-vm";
     useDHCP = true;
     firewall = {
       enable = true;
