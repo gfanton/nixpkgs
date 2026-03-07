@@ -274,7 +274,7 @@
 
             # Apply overlays and allow unfree
             {
-              nixpkgs.overlays = attrValues self.overlays ++ [ inputs.emacs-overlay.overlays.default ];
+              nixpkgs.overlays = attrValues self.overlays ++ [ inputs.emacs-overlay.overlays.default inputs.tmux-yule-log.overlays.default ];
               nixpkgs.config.allowUnfree = true;
             }
 
@@ -312,7 +312,7 @@
 
             # Apply overlays, allow unfree, override platform
             {
-              nixpkgs.overlays = attrValues self.overlays ++ [ inputs.emacs-overlay.overlays.default ];
+              nixpkgs.overlays = attrValues self.overlays ++ [ inputs.emacs-overlay.overlays.default inputs.tmux-yule-log.overlays.default ];
               nixpkgs.config.allowUnfree = true;
               nixpkgs.hostPlatform = "aarch64-linux";
             }
