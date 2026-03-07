@@ -126,6 +126,7 @@ in
     wget
     htop
     tmux
+    ghostty.terminfo
   ];
 
   # Hardware platform
