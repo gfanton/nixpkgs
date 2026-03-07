@@ -195,17 +195,11 @@ in
     # enable completion
     enableCompletion = true;
     autosuggestion.enable = true;
+    syntaxHighlighting.enable = true;
     oh-my-zsh = {
       enable = true;
       custom = "${config.xdg.configHome}/oh-my-zsh";
-      extras = {
-        plugins = [
-          {
-            name = "fast-syntax-highlighting";
-            source = pkgs.zsh-plugins.fast-syntax-highlighting;
-          }
-        ];
-      };
+      extras = { };
       theme = "";
       plugins = [
         "sudo"
@@ -285,9 +279,6 @@ in
         # emacs defined in emacs.nix
         ec = "${ec-script}/bin/ec";
         eg = "${eg-script}/bin/eg";
-
-        # kitty alias
-        ssh = "${pkgs.pkgs-stable.kitty}/bin/kitten ssh";
 
         # core alias
         ".." = "cd ..";
