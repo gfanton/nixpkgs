@@ -143,6 +143,7 @@ in
     wget
     htop
     tmux
+    gnumake
     ghostty.terminfo
   ];
 
