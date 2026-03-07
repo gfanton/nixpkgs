@@ -11,6 +11,8 @@
       scan_timeout = 2;
 
       format = builtins.concatStringsSep "" [
+        "$username"
+        "$hostname"
         "$directory"
         "$git_branch"
         "$git_status"
@@ -48,6 +50,18 @@
       env_var.DEVENV_ROOT = {
         format = "[devenv]($style) ";
         style = "bold cyan";
+      };
+
+      username = {
+        show_always = false;
+        format = "[$user]($style)@";
+        style_user = "bold green";
+      };
+
+      hostname = {
+        ssh_only = true;
+        format = "[$hostname]($style) ";
+        style = "bold red";
       };
 
       cmd_duration = {
