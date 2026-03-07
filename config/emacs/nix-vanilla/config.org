@@ -92,15 +92,23 @@
     (setq catppuccin-flavor 'macchiato)
     (load-theme 'catppuccin t))
 
+  ;; Set appearance for external callers (tmux hooks, scripts)
+  (defun my/set-appearance (mode)
+    "Set appearance to MODE (`dark' or `light', as symbol or string)."
+    (let ((flavor (pcase (if (stringp mode) (intern mode) mode)
+                    (`dark 'macchiato)
+                    (`light 'latte)
+                    (_ (user-error "Unknown mode: %s" mode)))))
+      (unless (eq catppuccin-flavor flavor)
+        (setq catppuccin-flavor flavor)
+        (catppuccin-reload))))
+
   ;; Theme toggle function
   (defun my/toggle-theme ()
-    "Toggle between light and dark theme."
+    "Toggle between light and dark catppuccin theme flavors."
     (interactive)
-    (setq catppuccin-flavor
-          (pcase catppuccin-flavor
-            ('macchiato 'latte)
-            (_ 'macchiato)))
-    (catppuccin-reload))
+    (my/set-appearance
+     (if (eq catppuccin-flavor 'macchiato) 'light 'dark)))
 #+end_src
 
 * Doom Modeline
