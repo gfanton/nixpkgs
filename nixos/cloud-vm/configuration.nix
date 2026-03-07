@@ -18,7 +18,7 @@ in
 {
   imports = [
     (modulesPath + "/profiles/qemu-guest.nix")
-  ] ++ lib.optional (builtins.pathExists /etc/nixos/local.nix) /etc/nixos/local.nix;
+  ];
 
   system.stateVersion = "24.11";
 
@@ -72,6 +72,23 @@ in
 
   # Mosh server for mobile shell connections
   programs.mosh.enable = true;
+
+  # Per-VM hostname override: cloud-init writes /etc/nixos/hostname
+  # This runs at boot and sets hostname without requiring --impure rebuild
+  systemd.services.set-local-hostname = {
+    description = "Set hostname from /etc/nixos/hostname";
+    wantedBy = [ "multi-user.target" ];
+    before = [ "network.target" ];
+    serviceConfig = {
+      Type = "oneshot";
+      RemainAfterExit = true;
+    };
+    script = ''
+      if [ -f /etc/nixos/hostname ]; then
+        ${pkgs.systemd}/bin/hostnamectl set-hostname "$(cat /etc/nixos/hostname)"
+      fi
+    '';
+  };
 
   # Nix configuration with Cachix
   nix = {
