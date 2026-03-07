@@ -76,6 +76,9 @@ in
   # Mosh server for mobile shell connections
   programs.mosh.enable = true;
 
+  # Tailscale VPN for MagicDNS and remote access
+  services.tailscale.enable = true;
+
   # Per-VM hostname override: cloud-init writes /etc/nixos/hostname
   # This runs at boot and sets hostname without requiring --impure rebuild
   systemd.services.set-local-hostname = {
