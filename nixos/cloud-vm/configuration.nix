@@ -88,7 +88,7 @@ in
     };
     script = ''
       if [ -f /etc/nixos/hostname ]; then
-        ${pkgs.systemd}/bin/hostnamectl set-hostname "$(cat /etc/nixos/hostname)"
+        ${pkgs.inetutils}/bin/hostname "$(cat /etc/nixos/hostname)"
       fi
     '';
   };
