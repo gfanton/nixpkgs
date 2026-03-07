@@ -57,6 +57,9 @@ in
     };
   };
 
+  # dhcpcd manages networking, not systemd-networkd — skip wait
+  systemd.services.systemd-networkd-wait-online.enable = false;
+
   # Timezone and locale
   time.timeZone = "UTC";
   i18n.defaultLocale = "en_US.UTF-8";
