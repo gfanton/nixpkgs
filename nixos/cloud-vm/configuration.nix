@@ -104,7 +104,7 @@ in
   # User configuration
   users.users.gfanton = {
     isNormalUser = true;
-    description = "Guillaume Fanton";
+    description = "gfanton";
     extraGroups = [
       "wheel"
       "networkmanager"
