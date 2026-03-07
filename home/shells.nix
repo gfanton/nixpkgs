@@ -192,15 +192,6 @@ in
   programs.zsh = {
     enable = true;
     dotDir = "${config.xdg.configHome}/zsh";
-    plugins = [
-      {
-        # add powerline10 custom config
-        name = "p10k-config";
-        src = lib.cleanSource ../config/zsh/p10k;
-        file = "config.zsh";
-      }
-    ];
-
     # enable completion
     enableCompletion = true;
     autosuggestion.enable = true;
@@ -208,12 +199,6 @@ in
       enable = true;
       custom = "${config.xdg.configHome}/oh-my-zsh";
       extras = {
-        themes = [
-          {
-            name = "powerlevel10k";
-            source = pkgs.zsh-plugins.powerlevel10k;
-          }
-        ];
         plugins = [
           {
             name = "fast-syntax-highlighting";
@@ -221,7 +206,7 @@ in
           }
         ];
       };
-      theme = "powerlevel10k/powerlevel10k";
+      theme = "";
       plugins = [
         "sudo"
         "git"
@@ -238,17 +223,14 @@ in
     };
 
     initContent = lib.mkMerge [
-      (lib.mkBefore ''
-        # Powerlevel10k instant prompt will be enabled by the theme
-      '')
       (lib.mkAfter ''
         # Shell environment configuration
         export ZSH_TAB_TITLE_ONLY_FOLDER=true
         export ZSH_TAB_TITLE_ADDITIONAL_TERMS=iterm
 
-        # Set autosuggestion style after plugins are loaded
-        # Using color8 (surface2 from catppuccin-macchiato: #5b6078) for better visibility
-        ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=8'
+        # Autosuggestion style: italic distinguishes suggestions from typed text
+        # even when fast-syntax-highlighting overrides the fg color
+        ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=8,italic'
 
         # Additional completion configuration
         zstyle ':completion:*:descriptions' format '[%d]'

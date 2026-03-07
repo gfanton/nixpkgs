@@ -132,7 +132,6 @@
         # non flake inputs
         my-inputs = final: prev: {
           zsh-plugins.fast-syntax-highlighting = inputs.fast-syntax-highlighting;
-          zsh-plugins.powerlevel10k = inputs.powerlevel10k;
           # yabai = inputs.yabai;
           project = inputs.project.packages.${final.stdenv.hostPlatform.system}.default;
           # Pre-packaged tmux plugin from project flake (properly wrapped with binaries)
@@ -142,6 +141,7 @@
         # My overlays
         my-loon = import ./overlays/loon.nix;
         my-libvterm = import ./overlays/libvterm.nix;
+        my-rtk = import ./overlays/rtk.nix;
         my-tmux = import ./overlays/tmux.nix;
         my-emacs = import ./overlays/emacs.nix;
       };
@@ -186,6 +186,8 @@
         my-emacs = import ./home/emacs.nix;
         my-config = import ./home/config.nix;
         my-colima = import ./home/colima.nix;
+        my-starship = import ./home/starship.nix;
+        my-ghostty = import ./home/ghostty.nix;
 
         # local modules
         programs-truecolor = import ./modules/home/programs/truecolor;

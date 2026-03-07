@@ -6,6 +6,81 @@
   ...
 }:
 
+let
+  theme-switch = pkgs.writeShellScriptBin "theme-switch" ''
+    set -o nounset
+    set -o pipefail
+
+    readonly THEME_STATE_FILE="''${XDG_STATE_HOME:-''${HOME}/.local/state}/theme"
+    readonly CATPPUCCIN_DIR="${pkgs.tmuxPlugins.catppuccin}/share/tmux-plugins/catppuccin"
+
+    switch_tmux() {
+      local flavor="$1"
+
+      if [[ -z "''${TMUX:-}" ]] && ! tmux list-sessions &>/dev/null; then
+        return 0
+      fi
+
+      # Unset all catppuccin-managed options so re-sourcing applies fresh values.
+      # The plugin uses set -ogq, so stale vars block updates.
+      local tmux_opts
+      tmux_opts="$(tmux show-options -g 2>/dev/null || true)"
+
+      local var
+      while IFS= read -r var; do
+        [[ -n "''${var}" ]] || continue
+        tmux set -Ugq "''${var}"
+      done < <(echo "''${tmux_opts}" | grep -oE '@(thm_\w+|catppuccin_status_\w+|_ctp_\w+)' | sort -u)
+
+      tmux set -gq @catppuccin_flavor "''${flavor}"
+      tmux run "''${CATPPUCCIN_DIR}/catppuccin.tmux"
+    }
+
+    switch_emacs() {
+      local mode="$1"
+      if ! command -v emacsclient &>/dev/null; then
+        return 0
+      fi
+      emacsclient -e "(my/set-appearance \"''${mode}\")" 2>/dev/null || true
+    }
+
+    main() {
+      local mode
+      case "''${1:-toggle}" in
+        dark)  mode="dark" ;;
+        light) mode="light" ;;
+        toggle)
+          local current
+          current="$(cat "''${THEME_STATE_FILE}" 2>/dev/null || echo "dark")"
+          if [[ "''${current}" == "dark" ]]; then
+            mode="light"
+          else
+            mode="dark"
+          fi
+          ;;
+        *)
+          echo "Usage: theme-switch <dark|light|toggle>" >&2
+          exit 1
+          ;;
+      esac
+
+      local flavor
+      if [[ "''${mode}" == "dark" ]]; then
+        flavor="macchiato"
+      else
+        flavor="latte"
+      fi
+
+      mkdir -p "$(dirname "''${THEME_STATE_FILE}")"
+      echo "''${mode}" > "''${THEME_STATE_FILE}"
+
+      switch_tmux "''${flavor}"
+      switch_emacs "''${mode}"
+    }
+
+    main "$@"
+  '';
+in
 {
   # ssh
   programs.ssh = {
@@ -111,11 +186,13 @@
       set -ag terminal-overrides ",xterm-256color:RGB,xterm-256color:Tc"
       set -ag terminal-overrides ",*256col*:RGB,*256col*:Tc"
       set -ag terminal-overrides ",xterm-kitty:RGB,xterm-kitty:Tc"
+      set -ag terminal-overrides ",xterm-ghostty:RGB,xterm-ghostty:Tc"
 
       # OSC 52 clipboard support for universal clipboard integration
       set -g set-clipboard on
       set -ag terminal-overrides ",xterm-256color:Ms=\\E]52;%p1%s;%p2%s\\007"
       set -ag terminal-overrides ",xterm-kitty:Ms=\\E]52;%p1%s;%p2%s\\007"
+      set -ag terminal-overrides ",xterm-ghostty:Ms=\\E]52;%p1%s;%p2%s\\007"
       set -ag terminal-overrides ",xterm-emacs:Ms=\\E]52;%p1%s;%p2%s\\007"
 
       # Allow OSC 52 passthrough for nested tmux sessions (tmux 3.3a+)
@@ -128,6 +205,7 @@
       set -sa terminal-features ',alacritty:RGB:usstyle'
       set -sa terminal-features ',xterm-256color:RGB:usstyle'
       set -sa terminal-features ',xterm-kitty:RGB:usstyle'
+      set -sa terminal-features ',xterm-ghostty:RGB:usstyle'
 
       # General settings
       setw -g mode-keys emacs
@@ -191,6 +269,14 @@
 
       # Create new session with prompted name
       bind-key S command-prompt -p "New session name:" "new-session -s '%%'"
+
+      # ---- Theme Switching
+      # Hooks for automatic switching via terminal mode 2031 (tmux 3.6+)
+      set-hook -g client-dark-theme  "run-shell '${theme-switch}/bin/theme-switch dark'"
+      set-hook -g client-light-theme "run-shell '${theme-switch}/bin/theme-switch light'"
+
+      # Manual toggle keybind (works over SSH)
+      bind-key T run-shell '${theme-switch}/bin/theme-switch toggle'
     '';
   };
 
@@ -246,7 +332,9 @@
       # my
       my-libvterm
       my-loon
+      my-rtk
       project # From flake input
+      theme-switch
 
       # stable
       procs # fancy version of `ps`
