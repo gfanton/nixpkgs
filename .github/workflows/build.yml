@@ -47,7 +47,7 @@ jobs:
           # Prevent conflict between Cachix installed by workflow and the one installed in the config
           nix-env --set-flag priority 1 cachix
           # Build and switch to config
-          nix build .#darwinConfigurations.githubCI.system
+          nix build .#darwinConfigurations.githubCI.system --override-input claude-config path:./stubs/claude-config
           sudo ./result/sw/bin/darwin-rebuild switch --flake .#githubCI
 
   build-linux-env:
@@ -79,5 +79,5 @@ jobs:
           # Prevent conflict between Cachix installed by workflow and the one installed in the config
           nix-env --set-flag priority 1 cachix
           # Build and switch to home-manager env
-          nix build ".#homeConfigurations.githubCI.activationPackage"
+          nix build ".#homeConfigurations.githubCI.activationPackage" --override-input claude-config path:./stubs/claude-config
           ./result/activate

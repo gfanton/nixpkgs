@@ -376,9 +376,7 @@ in
       devenv
       direnv
 
-      # go tools
-      pkgs-master.gofumpt
-      pkgs-master.gopls
+      # go tools (gopls + gofumpt provided by myEmacsDevPackages)
       delve
       # exclude bundle
       (pkgs-master.gotools.overrideDerivation (oldAttrs: {

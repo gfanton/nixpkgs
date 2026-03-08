@@ -1,0 +1,3 @@
+[submodule "config/claude-code"]
+	path = config/claude-code
+	url = git@github.com:gfanton/claude-config.git

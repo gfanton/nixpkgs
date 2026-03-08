@@ -39,6 +39,10 @@
     # tmux plugins
     tmux-yule-log.url = "github:gfanton/tmux-yule-log";
     tmux-yule-log.inputs.nixpkgs.follows = "nixpkgs-unstable";
+
+    # Claude Code config (private)
+    claude-config.url = "git+ssh://git@github.com/gfanton/claude-config.git";
+    claude-config.flake = false;
   };
 
   outputs =
@@ -188,6 +192,7 @@
         my-colima = import ./home/colima.nix;
         my-starship = import ./home/starship.nix;
         my-ghostty = import ./home/ghostty.nix;
+        my-claude-code = import ./home/claude-code.nix inputs.claude-config;
 
         # local modules
         programs-truecolor = import ./modules/home/programs/truecolor;
@@ -274,7 +279,10 @@
 
             # Apply overlays and allow unfree
             {
-              nixpkgs.overlays = attrValues self.overlays ++ [ inputs.emacs-overlay.overlays.default inputs.tmux-yule-log.overlays.default ];
+              nixpkgs.overlays = attrValues self.overlays ++ [
+                inputs.emacs-overlay.overlays.default
+                inputs.tmux-yule-log.overlays.default
+              ];
               nixpkgs.config.allowUnfree = true;
             }
 
@@ -289,9 +297,7 @@
                 useUserPackages = true;
                 extraSpecialArgs = { inherit inputs; };
                 users.gfanton = {
-                  imports =
-                    attrValues self.homeManagerModules
-                    ++ attrValues self.commonModules;
+                  imports = attrValues self.homeManagerModules ++ attrValues self.commonModules;
 
                   home.user-info = primaryUserInfo // {
                     nixConfigDirectory = "/home/gfanton/nixpkgs";
@@ -312,7 +318,10 @@
 
             # Apply overlays, allow unfree, override platform
             {
-              nixpkgs.overlays = attrValues self.overlays ++ [ inputs.emacs-overlay.overlays.default inputs.tmux-yule-log.overlays.default ];
+              nixpkgs.overlays = attrValues self.overlays ++ [
+                inputs.emacs-overlay.overlays.default
+                inputs.tmux-yule-log.overlays.default
+              ];
               nixpkgs.config.allowUnfree = true;
               nixpkgs.hostPlatform = "aarch64-linux";
             }
@@ -328,9 +337,7 @@
                 useUserPackages = true;
                 extraSpecialArgs = { inherit inputs; };
                 users.gfanton = {
-                  imports =
-                    attrValues self.homeManagerModules
-                    ++ attrValues self.commonModules;
+                  imports = attrValues self.homeManagerModules ++ attrValues self.commonModules;
 
                   home.user-info = primaryUserInfo // {
                     nixConfigDirectory = "/home/gfanton/nixpkgs";
