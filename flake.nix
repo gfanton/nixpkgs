@@ -148,6 +148,7 @@
         my-rtk = import ./overlays/rtk.nix;
         my-tmux = import ./overlays/tmux.nix;
         my-emacs = import ./overlays/emacs.nix;
+        my-mosh = import ./overlays/mosh.nix;
       };
 
       # Non-system outputs --------------------------------------------------------------------- {{{
