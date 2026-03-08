@@ -48,12 +48,18 @@ in
 
   # Networking
   networking = {
-    hostName = lib.mkDefault "nixos-vm";
+    # Empty hostname delegates to cloud-init (NixOS skips /etc/hostname management)
+    hostName = lib.mkOverride 1337 "";
     useDHCP = true;
     firewall = {
       enable = true;
       allowedTCPPorts = [ 22 ];
-      allowedUDPPortRanges = [{ from = 60000; to = 61000; }];
+      allowedUDPPortRanges = [
+        {
+          from = 60000;
+          to = 61000;
+        }
+      ];
     };
   };
 
@@ -78,23 +84,6 @@ in
 
   # Tailscale VPN for MagicDNS and remote access
   services.tailscale.enable = true;
-
-  # Per-VM hostname override: cloud-init writes /etc/nixos/hostname
-  # This runs at boot and sets hostname without requiring --impure rebuild
-  systemd.services.set-local-hostname = {
-    description = "Set hostname from /etc/nixos/hostname";
-    wantedBy = [ "multi-user.target" ];
-    before = [ "network.target" ];
-    serviceConfig = {
-      Type = "oneshot";
-      RemainAfterExit = true;
-    };
-    script = ''
-      if [ -f /etc/nixos/hostname ]; then
-        ${pkgs.inetutils}/bin/hostname "$(cat /etc/nixos/hostname)"
-      fi
-    '';
-  };
 
   # Nix configuration with Cachix
   nix = {
