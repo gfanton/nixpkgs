@@ -40,6 +40,10 @@
     tmux-yule-log.url = "github:gfanton/tmux-yule-log";
     tmux-yule-log.inputs.nixpkgs.follows = "nixpkgs-unstable";
 
+    # devenv (flake output bundles patched nix that fixes Boehm GC crash on aarch64-darwin)
+    devenv.url = "github:cachix/devenv";
+    devenv.inputs.nixpkgs.follows = "nixpkgs-unstable";
+
     # Claude Code config (private)
     claude-config.url = "git+ssh://git@github.com/gfanton/claude-config.git";
     claude-config.flake = false;
@@ -140,6 +144,8 @@
           project = inputs.project.packages.${final.stdenv.hostPlatform.system}.default;
           # Pre-packaged tmux plugin from project flake (properly wrapped with binaries)
           projectTmuxPlugin = inputs.project.packages.${final.stdenv.hostPlatform.system}.tmux-proj;
+          # devenv from flake (bundles patched nix with Boehm GC fix for aarch64-darwin)
+          devenv = inputs.devenv.packages.${final.stdenv.hostPlatform.system}.devenv;
         };
 
         # My overlays

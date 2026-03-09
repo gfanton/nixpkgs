@@ -90,9 +90,10 @@ in
   programs.truecolor.enable = true;
   programs.truecolor.useterm = "xterm-ghostty";
   programs.truecolor.terminfo =
-    if pkgs.stdenv.isDarwin
-    then "${pkgs.ghostty-bin}/Applications/Ghostty.app/Contents/Resources/terminfo"
-    else "${pkgs.ghostty}/share/terminfo";
+    if pkgs.stdenv.isDarwin then
+      "${pkgs.ghostty-bin}/Applications/Ghostty.app/Contents/Resources/terminfo"
+    else
+      "${pkgs.ghostty}/share/terminfo";
 
   programs.kitty.keybindings = {
     # open new tab with cmd+t
