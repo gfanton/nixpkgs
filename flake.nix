@@ -174,6 +174,7 @@
         my-jankyborders = import ./darwin/jankyborders.nix;
         my-skhd = import ./darwin/skhd.nix;
         my-colima = import ./darwin/colima.nix;
+        my-openssh = import ./darwin/openssh.nix;
 
         # local modules
         services-my-emacs = import ./modules/darwin/services/my-emacs.nix;
@@ -269,6 +270,7 @@
             homebrew.enable = mkForce false;
             services.yabai.enable = mkForce false;
             services.skhd.enable = mkForce false;
+            services.openssh.enable = mkForce false;
             ids.gids.nixbld = 350; # [hack]
           };
         };

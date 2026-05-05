@@ -16,6 +16,9 @@
   # https://github.com/nix-community/home-manager/issues/423
   environment.variables = {
     # TERMINFO_DIRS = "${pkgs.kitty.terminfo.outPath}/share/terminfo";
+    # mosh-server aborts without a UTF-8 locale.
+    LANG = "en_US.UTF-8";
+    LC_ALL = "en_US.UTF-8";
   };
   programs.nix-index.enable = true;
 

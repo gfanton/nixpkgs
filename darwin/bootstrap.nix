@@ -60,9 +60,10 @@
   system = {
     stateVersion = 4;
     activationScripts.postActivation.text = ''
-      # Stop iTunes from responding to the keyboard media keys
-      # Disable monitor wake up
-      sudo pmset powernap 0
+      # Disable PowerNap and idle sleep on AC.
+      # Idle sleep stays default on battery; manual sleep (lid, menu, sleepnow) preserved.
+      pmset -a powernap 0
+      pmset -c sleep 0
     '';
   };
 }
