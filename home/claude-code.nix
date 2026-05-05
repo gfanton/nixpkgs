@@ -39,7 +39,7 @@ lib.mkIf hasConfig {
           "Bash(ls:*)"
         ];
         deny = [ ];
-        defaultMode = "dontAsk";
+        defaultMode = "bypassPermissions";
       };
       enabledPlugins = {
         "frontend-design@claude-code-plugins" = true;
