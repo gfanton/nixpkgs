@@ -356,7 +356,7 @@ in
 
       # js (stable)
       nodejs
-      nodePackages.pnpm
+      pnpm
       yarn
 
       # python (stable)

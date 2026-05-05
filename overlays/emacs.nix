@@ -187,13 +187,13 @@ in
   # Also export dev packages for convenience
   myEmacsDevPackages = with prev; [
     gopls
-    nodePackages.typescript-language-server
-    nodePackages.eslint
+    typescript-language-server
+    eslint
     nixd
     nil
     emacs-lsp-booster
     gofumpt
-    nodePackages.prettier
+    prettier
     ripgrep
     fd
     sqlite
