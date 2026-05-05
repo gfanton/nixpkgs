@@ -15,7 +15,7 @@
       theme = "light:Catppuccin Latte,dark:Catppuccin Macchiato";
 
       background-opacity = 0.85;
-      macos-titlebar-style = "hidden";
+      macos-titlebar-style = "tabs";
       macos-option-as-alt = true;
       auto-update = "off";
       quit-after-last-window-closed = true;
