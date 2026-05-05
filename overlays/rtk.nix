@@ -24,6 +24,8 @@ in
       install -Dm755 $src/hooks/rtk-rewrite.sh $out/libexec/rtk/hooks/rtk-rewrite.sh
       wrapProgram $out/libexec/rtk/hooks/rtk-rewrite.sh \
         --prefix PATH : ${lib.makeBinPath [ pkgs.jq ]}:$out/bin
+
+      install -Dm644 $src/hooks/rtk-awareness.md $out/share/rtk/RTK.md
     '';
 
     meta = with lib; {

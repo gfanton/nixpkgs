@@ -47,6 +47,13 @@
     # Claude Code config (private)
     claude-config.url = "git+ssh://git@github.com/gfanton/claude-config.git";
     claude-config.flake = false;
+
+    # Claude Code plugins
+    claude-plugin-superpowers.url = "github:obra/superpowers/v5.0.7";
+    claude-plugin-superpowers.flake = false;
+
+    claude-plugins-official.url = "github:anthropics/claude-plugins-official";
+    claude-plugins-official.flake = false;
   };
 
   outputs =
@@ -146,6 +153,9 @@
           projectTmuxPlugin = inputs.project.packages.${final.stdenv.hostPlatform.system}.tmux-proj;
           # devenv from flake (bundles patched nix with Boehm GC fix for aarch64-darwin)
           devenv = inputs.devenv.packages.${final.stdenv.hostPlatform.system}.devenv;
+          # Claude Code plugin sources (non-flake inputs for easy nix flake update)
+          claude-plugin-superpowers = inputs.claude-plugin-superpowers;
+          claude-plugins-official-src = inputs.claude-plugins-official;
         };
 
         # My overlays
@@ -155,6 +165,7 @@
         my-tmux = import ./overlays/tmux.nix;
         my-emacs = import ./overlays/emacs.nix;
         my-mosh = import ./overlays/mosh.nix;
+        my-claude-plugins = import ./overlays/claude-plugins.nix;
       };
 
       # Non-system outputs --------------------------------------------------------------------- {{{

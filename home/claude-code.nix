@@ -1,6 +1,7 @@
 claude-config:
 
 {
+  config,
   lib,
   pkgs,
   ...
@@ -8,8 +9,53 @@ claude-config:
 
 let
   inherit (pkgs) stdenv;
+  inherit (config.home) homeDirectory;
 
   hasConfig = builtins.pathExists "${claude-config}/CLAUDE.md";
+
+  # Shim that exec's the auto-updated native binary at ~/.local/bin/claude
+  # with --plugin-dir flags. Lives at ~/.local/share/claude-shim/ and is
+  # prepended to PATH so it wins over /etc/profiles/per-user/.../bin/claude
+  # AND ~/.local/bin/claude. The native install path is hardcoded by upstream
+  # (no env var to relocate it), so a PATH-precedence shim is the only
+  # mechanism that survives auto-updates.
+  claudeShimDir = "${homeDirectory}/.local/share/claude-shim";
+  claudePluginDirs = with pkgs.claude-plugins; [
+    superpowers
+    frontend-design
+    skill-creator
+  ];
+
+  jq = "${pkgs.jq}/bin/jq";
+
+  # Shared notification payload parsing (jq with full Nix store paths)
+  notifyPreamble = ''
+    set -euo pipefail
+
+    payload=$(cat)
+
+    event=$(echo "$payload" | ${jq} -r '.hook_event_name // ""')
+    cwd=$(echo "$payload" | ${jq} -r '.cwd // ""')
+    project=$(basename "$cwd")
+    title="Claude Code''${project:+ — $project}"
+    body=""
+
+    case "$event" in
+      Stop)
+        stop_active=$(echo "$payload" | ${jq} -r '.stop_hook_active // false')
+        [ "$stop_active" = "true" ] && exit 0
+        body="Task complete" ;;
+      Notification)
+        body=$(echo "$payload" | ${jq} -r '.message // "Notification"') ;;
+      PreToolUse)
+        tool=$(echo "$payload" | ${jq} -r '.tool_name // ""')
+        [ "$tool" != "AskUserQuestion" ] && exit 0
+        body=$(echo "$payload" | ${jq} -r '.tool_input.questions[0].question // "Has a question"' | head -c 100) ;;
+      *) exit 0 ;;
+    esac
+
+    [ -z "$body" ] && exit 0
+  '';
 
   notifyHook =
     if stdenv.isDarwin then "~/.claude/hooks/notify.sh" else "~/.claude/hooks/notify-linux.sh";
@@ -18,11 +64,20 @@ lib.mkIf hasConfig {
   programs.claude-code = {
     enable = true;
 
-    # Global instructions
-    memory.source = "${claude-config}/CLAUDE.md";
-
     # Agent definitions
     agentsDir = "${claude-config}/agents";
+
+    # Skill definitions
+    skillsDir = "${claude-config}/skills";
+
+    # LSP servers
+    lspServers.go = {
+      command = "gopls";
+      args = [ "serve" ];
+      extensionToLanguage = {
+        ".go" = "go";
+      };
+    };
 
     # Settings (declarative, read-only nix store symlink)
     settings = {
@@ -41,22 +96,20 @@ lib.mkIf hasConfig {
         deny = [ ];
         defaultMode = "bypassPermissions";
       };
-      enabledPlugins = {
-        "frontend-design@claude-code-plugins" = true;
-        "frontend-design@claude-plugins-official" = true;
-      };
       alwaysThinkingEnabled = true;
       skipDangerousModePermissionPrompt = true;
       effortLevel = "high";
       includeCoAuthoredBy = false;
       hooks = {
+        # Stop hook is flaky from settings.json (anthropics/claude-code#26770).
+        # Notification hook is the reliable path for alerts.
         Stop = [
           {
             matcher = "";
             hooks = [
               {
                 type = "command";
-                command = notifyHook;
+                command = "bash ${notifyHook}";
                 timeout = 10;
               }
             ];
@@ -64,11 +117,10 @@ lib.mkIf hasConfig {
         ];
         Notification = [
           {
-            matcher = "permission_prompt";
             hooks = [
               {
                 type = "command";
-                command = notifyHook;
+                command = "bash ${notifyHook}";
                 timeout = 10;
               }
             ];
@@ -76,11 +128,20 @@ lib.mkIf hasConfig {
         ];
         PreToolUse = [
           {
+            matcher = "Bash";
+            hooks = [
+              {
+                type = "command";
+                command = "bash ~/.claude/hooks/rtk-rewrite.sh";
+              }
+            ];
+          }
+          {
             matcher = "AskUserQuestion";
             hooks = [
               {
                 type = "command";
-                command = notifyHook;
+                command = "bash ${notifyHook}";
                 timeout = 10;
               }
             ];
@@ -96,24 +157,74 @@ lib.mkIf hasConfig {
     };
   };
 
+  # ---- Native binary shim (PATH-prepended so it wins over ~/.local/bin/claude)
+  home.sessionPath = lib.mkBefore [ claudeShimDir ];
+
+  home.file.".local/share/claude-shim/claude" = {
+    executable = true;
+    text = ''
+      #!${pkgs.bash}/bin/bash
+      exec "$HOME/.local/bin/claude" \
+        ${lib.concatMapStringsSep " \\\n        " (p: ''--plugin-dir ${p}'') claudePluginDirs} \
+        "$@"
+    '';
+  };
+
+  # ---- Global Memory (CLAUDE.md)
+  # Copied as a real file instead of a store symlink so relative `@imports`
+  # inside CLAUDE.md resolve to paths under $HOME. Claude Code treats paths
+  # outside $HOME as external includes and silently drops them without an
+  # approval prompt when the CLAUDE.md itself is a symlink into /nix/store.
+  home.activation.claudeCodeMemory = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
+    run rm -f $HOME/.claude/CLAUDE.md
+    run install -Dm644 ${claude-config}/CLAUDE.md $HOME/.claude/CLAUDE.md
+  '';
+
   # ---- Hook and Statusline Scripts
   # Managed via home.file for executable bit (upstream hooksDir doesn't set it)
 
-  home.file.".claude/hooks/notify.sh" = lib.mkIf stdenv.isDarwin {
-    source = "${claude-config}/hooks/notify.sh";
+  home.file.".claude/hooks/rtk-rewrite.sh" = {
+    source = "${pkgs.my-rtk}/libexec/rtk/hooks/rtk-rewrite.sh";
     executable = true;
   };
 
-  home.file.".claude/hooks/notify-linux.sh" = lib.mkIf stdenv.isLinux {
-    source = "${claude-config}/hooks/notify-linux.sh";
+  home.file.".claude/RTK.md".source = "${pkgs.my-rtk}/share/rtk/RTK.md";
+
+  home.file.".claude/hooks/notify.sh" = lib.mkIf stdenv.isDarwin {
     executable = true;
+    text = ''
+      #!/usr/bin/env bash
+      ${notifyPreamble}
+
+      # Detect terminal bundle ID for click-to-activate
+      terminal_bid=""
+      for bid in com.mitchellh.ghostty com.googlecode.iterm2 com.apple.Terminal dev.warp.Warp-Stable net.kovidgoyal.kitty org.alacritty com.github.wez.wezterm; do
+        if [ -n "$(lsappinfo find bundleid="$bid" 2>/dev/null)" ]; then
+          terminal_bid="$bid"
+          break
+        fi
+      done
+
+      args=(-title "$title" -message "$body" -sound Glass)
+      if [ -n "$terminal_bid" ]; then
+        args+=(-activate "$terminal_bid" -sender "$terminal_bid")
+      fi
+
+      ${pkgs.terminal-notifier}/bin/terminal-notifier "''${args[@]}" 2>/dev/null || true
+    '';
+  };
+
+  home.file.".claude/hooks/notify-linux.sh" = lib.mkIf stdenv.isLinux {
+    executable = true;
+    text = ''
+      #!/usr/bin/env bash
+      ${notifyPreamble}
+      ${pkgs.libnotify}/bin/notify-send "$title" "$body" --icon=dialog-information 2>/dev/null || true
+    '';
   };
 
   home.file.".claude/statusline.sh" = lib.mkIf stdenv.isDarwin {
     source = "${claude-config}/statusline.sh";
     executable = true;
   };
-
-  # Linux: ensure libnotify is available for notify-send
-  home.packages = lib.optionals stdenv.isLinux [ pkgs.libnotify ];
 }
