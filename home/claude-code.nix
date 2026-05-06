@@ -13,12 +13,15 @@ let
 
   hasConfig = builtins.pathExists "${claude-config}/CLAUDE.md";
 
-  # Shim that exec's the auto-updated native binary at ~/.local/bin/claude
-  # with --plugin-dir flags. Lives at ~/.local/share/claude-shim/ and is
-  # prepended to PATH so it wins over /etc/profiles/per-user/.../bin/claude
-  # AND ~/.local/bin/claude. The native install path is hardcoded by upstream
-  # (no env var to relocate it), so a PATH-precedence shim is the only
-  # mechanism that survives auto-updates.
+  # Shim that exec's claude with --plugin-dir flags. Prefers the upstream
+  # auto-updating binary at ~/.local/bin/claude when present, otherwise
+  # falls back to the nix-packaged claude-code from
+  # programs.claude-code.package. Lives at ~/.local/share/claude-shim/
+  # and is prepended to PATH so it wins over both
+  # /etc/profiles/per-user/.../bin/claude AND ~/.local/bin/claude. The
+  # upstream install path is hardcoded (no env var to relocate it), so
+  # PATH-precedence is the only way to inject plugin flags into a binary
+  # that auto-updates itself.
   claudeShimDir = "${homeDirectory}/.local/share/claude-shim";
   claudePluginDirs = with pkgs.claude-plugins; [
     superpowers
@@ -164,7 +167,12 @@ lib.mkIf hasConfig {
     executable = true;
     text = ''
       #!${pkgs.bash}/bin/bash
-      exec "$HOME/.local/bin/claude" \
+      if [ -x "$HOME/.local/bin/claude" ]; then
+        bin="$HOME/.local/bin/claude"
+      else
+        bin="${config.programs.claude-code.package}/bin/claude"
+      fi
+      exec "$bin" \
         ${lib.concatMapStringsSep " \\\n        " (p: ''--plugin-dir ${p}'') claudePluginDirs} \
         "$@"
     '';
