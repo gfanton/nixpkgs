@@ -17,9 +17,6 @@ in
   homebrew.global.brewfile = true;
 
   homebrew.taps = [
-    "homebrew/cask-fonts"
-    "homebrew/cask-versions"
-    "homebrew/services"
     "nrlquaker/createzap"
     "koekeishiya/formulae"
     "FelixKratz/formulae"
@@ -33,8 +30,6 @@ in
   # https://github.com/malob/nixpkgs/issues/9
   homebrew.masApps = {
     DaisyDisk = 411643860;
-    Numbers = 409203825;
-    Pages = 409201541;
     Xcode = 497799835;
   };
 
