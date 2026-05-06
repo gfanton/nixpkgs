@@ -270,6 +270,34 @@
           }
         );
 
+        tzatziki = makeOverridable self.lib.mkDarwinSystem (
+          primaryUserInfo
+          // {
+            system = "aarch64-darwin";
+            modules =
+              (attrValues self.darwinModules)
+              ++ (attrValues self.commonModules)
+              ++ singleton {
+                nixpkgs = nixpkgsDefaults;
+                networking.computerName = "tzatziki";
+                networking.hostName = "tzatziki";
+                networking.knownNetworkServices = [
+                  "Wi-Fi"
+                  "USB 10/100/1000 LAN"
+                ];
+                nix.registry.my.flake = inputs.self;
+              };
+
+            inherit homeStateVersion;
+            homeModules =
+              (attrValues self.homeManagerModules)
+              ++ (attrValues self.commonModules)
+              ++ [
+
+              ];
+          }
+        );
+
         # Config with small modifications needed/desired for CI with GitHub workflow
         githubCI = self.darwinConfigurations.macbook.override {
           system = "aarch64-darwin";

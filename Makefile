@@ -32,6 +32,9 @@ all:
 build.macbook:
 	nix build ${impure} ${fallback} --verbose .#darwinConfigurations.macbook.system
 
+build.tzatziki:
+	nix build ${impure} ${fallback} --verbose .#darwinConfigurations.tzatziki.system
+
 build.cloud:
 	nix build ${impure} ${fallback} --verbose .#homeConfigurations.$(CLOUD_TARGET).activationPackage
 
@@ -42,6 +45,8 @@ switch.bootstrap: result/sw/bin/darwin-rebuild
 	./result/sw/bin/darwin-rebuild switch ${impure} ${fallback} --verbose --flake ".#$(BOOTSTRAP)"
 switch.macbook: result/sw/bin/darwin-rebuild
 	TERM=xterm sudo ./result/sw/bin/darwin-rebuild switch ${impure} ${fallback} --verbose --flake .#macbook
+switch.tzatziki: result/sw/bin/darwin-rebuild
+	TERM=xterm sudo ./result/sw/bin/darwin-rebuild switch ${impure} ${fallback} --verbose --flake .#tzatziki
 
 result/sw/bin/darwin-rebuild:
 	nix --experimental-features 'flakes nix-command' build ".#darwinConfigurations.$(BOOTSTRAP).system"
