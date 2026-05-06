@@ -58,7 +58,7 @@
   # Used for backwards compatibility, please read the changelog before changing.
   # $ darwin-rebuild changelog
   system = {
-    stateVersion = 4;
+    stateVersion = 6;
     activationScripts.postActivation.text = ''
       # Disable PowerNap and idle sleep on AC.
       # Idle sleep stays default on battery; manual sleep (lid, menu, sleepnow) preserved.
