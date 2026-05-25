@@ -6,6 +6,9 @@
     AppleMetricUnits = 1;
     AppleShowScrollBars = "Automatic";
     AppleTemperatureUnit = "Celsius";
+    # Disable native macOS tab merging — AeroSpace tracks each tab as a
+    # separate window, which breaks tile layout (see AeroSpace #68).
+    AppleWindowTabbingMode = "manual";
     InitialKeyRepeat = 15;
     KeyRepeat = 1;
     NSAutomaticCapitalizationEnabled = false;

@@ -71,7 +71,7 @@ lib.mkIf hasConfig {
     agentsDir = "${claude-config}/agents";
 
     # Skill definitions
-    skillsDir = "${claude-config}/skills";
+    skills = "${claude-config}/skills";
 
     # LSP servers
     lspServers.go = {

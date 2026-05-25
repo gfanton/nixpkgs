@@ -143,20 +143,6 @@ in
         '';
       }
       {
-        plugin = tmuxPlugins.resurrect;
-        extraConfig = ''
-          set -g @resurrect-capture-pane-contents 'on'
-          set -g @resurrect-processes ':all:'
-        '';
-      }
-      {
-        plugin = tmuxPlugins.continuum;
-        extraConfig = ''
-          set -g @continuum-restore 'on'
-          set -g @continuum-save-interval '10'
-        '';
-      }
-      {
         # Use pre-packaged tmux plugin from project flake (properly wrapped with binaries)
         plugin = projectTmuxPlugin;
         extraConfig = ''
@@ -380,7 +366,7 @@ in
       delve
       # exclude bundle
       (pkgs-master.gotools.overrideDerivation (oldAttrs: {
-        excludedPackages = [ "bundle" ];
+        excludedPackages = [ "bundle" "modernize" ];
       }))
 
       # Useful nix related tools

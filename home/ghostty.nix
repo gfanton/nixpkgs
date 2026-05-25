@@ -15,7 +15,7 @@
       theme = "light:Catppuccin Latte,dark:Catppuccin Macchiato";
 
       background-opacity = 0.85;
-      macos-titlebar-style = "tabs";
+      macos-titlebar-style = "native";
       macos-option-as-alt = true;
       auto-update = "off";
       quit-after-last-window-closed = true;
@@ -24,6 +24,7 @@
       clipboard-write = "allow";
       mouse-hide-while-typing = true;
       cursor-style-blink = false;
+      grapheme-width-method = "legacy";
 
       window-padding-x = 5;
       window-padding-y = 5;
@@ -46,20 +47,10 @@
       ];
 
       keybind = [
-        # Tab management
-        "cmd+t=new_tab"
+        # Window management (native tabs disabled system-wide; use AeroSpace
+        # workspaces and Ghostty splits instead of tabs).
+        "cmd+t=new_window"
         "cmd+enter=new_window"
-
-        # Tab navigation
-        "cmd+one=goto_tab:1"
-        "cmd+two=goto_tab:2"
-        "cmd+three=goto_tab:3"
-        "cmd+four=goto_tab:4"
-        "cmd+five=goto_tab:5"
-        "cmd+six=goto_tab:6"
-        "cmd+seven=goto_tab:7"
-        "cmd+eight=goto_tab:8"
-        "cmd+nine=goto_tab:9"
 
         # Split navigation (vim-style)
         "ctrl+alt+h=goto_split:left"
