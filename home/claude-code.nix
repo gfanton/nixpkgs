@@ -27,6 +27,7 @@ let
     superpowers
     frontend-design
     skill-creator
+    pocock-skills
   ];
 
   jq = "${pkgs.jq}/bin/jq";

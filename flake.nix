@@ -54,6 +54,13 @@
 
     claude-plugins-official.url = "github:anthropics/claude-plugins-official";
     claude-plugins-official.flake = false;
+
+    # Backlog.md — task tracker (upstream flake)
+    backlog-md.url = "github:MrLesk/Backlog.md/v1.45.1";
+
+    # Matt Pocock's Claude Code skills (no release tags — pinned by SHA)
+    pocock-skills.url = "github:mattpocock/skills/b8be62ffacb0118fa3eaa29a0923c87c8c11985c";
+    pocock-skills.flake = false;
   };
 
   outputs =
@@ -156,6 +163,8 @@
           # Claude Code plugin sources (non-flake inputs for easy nix flake update)
           claude-plugin-superpowers = inputs.claude-plugin-superpowers;
           claude-plugins-official-src = inputs.claude-plugins-official;
+          pocock-skills-src = inputs.pocock-skills;
+          backlog-md = inputs.backlog-md.packages.${final.stdenv.hostPlatform.system}.default;
         };
 
         # My overlays
@@ -212,6 +221,7 @@
         my-starship = import ./home/starship.nix;
         my-ghostty = import ./home/ghostty.nix;
         my-claude-code = import ./home/claude-code.nix inputs.claude-config;
+        my-backlog-workflow = import "${inputs.claude-config}/backlog-workflow";
 
         # local modules
         programs-truecolor = import ./modules/home/programs/truecolor;

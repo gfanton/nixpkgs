@@ -345,6 +345,9 @@ in
       pnpm
       yarn
 
+      # python tool runner (needed for the `specify` wrapper in backlog-workflow)
+      uv
+
       # python (stable)
       (python3.withPackages (
         p: with p; [

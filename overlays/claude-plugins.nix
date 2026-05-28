@@ -21,5 +21,15 @@ in
     # Sub-plugins extracted from anthropics/claude-plugins-official
     frontend-design = mkOfficialPlugin "frontend-design";
     skill-creator = mkOfficialPlugin "skill-creator";
+
+    # Matt Pocock's skills — single plugin (the whole repo is the plugin,
+    # `.claude-plugin/plugin.json` at root enumerates all skills by path)
+    pocock-skills = prev.stdenvNoCC.mkDerivation {
+      pname = "claude-plugin-pocock-skills";
+      version = "unstable";
+      src = final.pocock-skills-src;
+      dontBuild = true;
+      installPhase = "cp -r . $out";
+    };
   };
 }
