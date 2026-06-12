@@ -63,6 +63,91 @@ let
 
   notifyHook =
     if stdenv.isDarwin then "~/.claude/hooks/notify.sh" else "~/.claude/hooks/notify-linux.sh";
+
+  # Declarative settings.json content. Rendered to a real file (not a store
+  # symlink) via the activation script below so Claude Code's interactive
+  # commands (/effort, /config, theme, ...) can write back to it at runtime.
+  # nix remains source of truth: a rebuild overwrites interactive changes.
+  claudeSettings = {
+    "$schema" = "https://json.schemastore.org/claude-code-settings.json";
+    env.CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS = "1";
+    permissions = {
+      allow = [
+        "Bash(go mod init:*)"
+        "Bash(go:*)"
+        "Bash(mkdir:*)"
+        "WebFetch(domain:docs.anthropic.com)"
+        "Bash(./test-claude)"
+        "Bash(./simple-test)"
+        "Bash(make:*)"
+        "Bash(ls:*)"
+      ];
+      deny = [ ];
+      defaultMode = "bypassPermissions";
+    };
+    alwaysThinkingEnabled = true;
+    skipDangerousModePermissionPrompt = true;
+    effortLevel = "high";
+    includeCoAuthoredBy = false;
+    hooks = {
+      # Stop hook is flaky from settings.json (anthropics/claude-code#26770).
+      # Notification hook is the reliable path for alerts.
+      Stop = [
+        {
+          matcher = "";
+          hooks = [
+            {
+              type = "command";
+              command = "bash ${notifyHook}";
+              timeout = 10;
+            }
+          ];
+        }
+      ];
+      Notification = [
+        {
+          hooks = [
+            {
+              type = "command";
+              command = "bash ${notifyHook}";
+              timeout = 10;
+            }
+          ];
+        }
+      ];
+      PreToolUse = [
+        {
+          matcher = "Bash";
+          hooks = [
+            {
+              type = "command";
+              command = "bash ~/.claude/hooks/rtk-rewrite.sh";
+            }
+          ];
+        }
+        {
+          matcher = "AskUserQuestion";
+          hooks = [
+            {
+              type = "command";
+              command = "bash ${notifyHook}";
+              timeout = 10;
+            }
+          ];
+        }
+      ];
+    };
+  }
+  // lib.optionalAttrs stdenv.isDarwin {
+    statusLine = {
+      type = "command";
+      command = "~/.claude/statusline.sh";
+      # Re-run every 30s so rate-limit countdowns tick while the session idles.
+      refreshInterval = 30;
+    };
+  };
+
+  settingsFile = (pkgs.formats.json { }).generate "claude-code-settings.json" claudeSettings;
 in
 lib.mkIf hasConfig {
   programs.claude-code = {
@@ -83,82 +168,10 @@ lib.mkIf hasConfig {
       };
     };
 
-    # Settings (declarative, read-only nix store symlink)
-    settings = {
-      env.CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS = "1";
-      permissions = {
-        allow = [
-          "Bash(go mod init:*)"
-          "Bash(go:*)"
-          "Bash(mkdir:*)"
-          "WebFetch(domain:docs.anthropic.com)"
-          "Bash(./test-claude)"
-          "Bash(./simple-test)"
-          "Bash(make:*)"
-          "Bash(ls:*)"
-        ];
-        deny = [ ];
-        defaultMode = "bypassPermissions";
-      };
-      alwaysThinkingEnabled = true;
-      skipDangerousModePermissionPrompt = true;
-      effortLevel = "high";
-      includeCoAuthoredBy = false;
-      hooks = {
-        # Stop hook is flaky from settings.json (anthropics/claude-code#26770).
-        # Notification hook is the reliable path for alerts.
-        Stop = [
-          {
-            matcher = "";
-            hooks = [
-              {
-                type = "command";
-                command = "bash ${notifyHook}";
-                timeout = 10;
-              }
-            ];
-          }
-        ];
-        Notification = [
-          {
-            hooks = [
-              {
-                type = "command";
-                command = "bash ${notifyHook}";
-                timeout = 10;
-              }
-            ];
-          }
-        ];
-        PreToolUse = [
-          {
-            matcher = "Bash";
-            hooks = [
-              {
-                type = "command";
-                command = "bash ~/.claude/hooks/rtk-rewrite.sh";
-              }
-            ];
-          }
-          {
-            matcher = "AskUserQuestion";
-            hooks = [
-              {
-                type = "command";
-                command = "bash ${notifyHook}";
-                timeout = 10;
-              }
-            ];
-          }
-        ];
-      };
-    }
-    // lib.optionalAttrs stdenv.isDarwin {
-      statusLine = {
-        type = "command";
-        command = "~/.claude/statusline.sh";
-      };
-    };
+    # settings.json is rendered as a real, writable file via the activation
+    # script below (see claudeSettings) rather than through this option, which
+    # would emit a read-only /nix/store symlink that interactive commands
+    # cannot write to.
   };
 
   # ---- Native binary shim (PATH-prepended so it wins over ~/.local/bin/claude)
@@ -179,6 +192,18 @@ lib.mkIf hasConfig {
     '';
   };
 
+  # Second account: same shim (plugins, upstream-binary fallback), isolated
+  # config dir. On macOS the OAuth Keychain entry is namespaced per config
+  # dir, so this is a fully separate login from ~/.claude.
+  home.file.".local/share/claude-shim/claude-work" = {
+    executable = true;
+    text = ''
+      #!${pkgs.bash}/bin/bash
+      export CLAUDE_CONFIG_DIR="$HOME/.claude-work"
+      exec "${claudeShimDir}/claude" "$@"
+    '';
+  };
+
   # ---- Global Memory (CLAUDE.md)
   # Copied as a real file instead of a store symlink so relative `@imports`
   # inside CLAUDE.md resolve to paths under $HOME. Claude Code treats paths
@@ -187,6 +212,18 @@ lib.mkIf hasConfig {
   home.activation.claudeCodeMemory = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
     run rm -f $HOME/.claude/CLAUDE.md
     run install -Dm644 ${claude-config}/CLAUDE.md $HOME/.claude/CLAUDE.md
+  '';
+
+  # ---- Settings (settings.json)
+  # Copied as a real writable file instead of a store symlink so Claude Code's
+  # interactive commands (/effort, /config, theme) can persist changes. A
+  # rebuild re-applies the declarative content, so nix stays source of truth.
+  # The work profile (~/.claude-work) gets the same baseline; work-specific
+  # content stays machine-local.
+  home.activation.claudeCodeSettings = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
+    run rm -f $HOME/.claude/settings.json $HOME/.claude-work/settings.json
+    run install -Dm644 ${settingsFile} $HOME/.claude/settings.json
+    run install -Dm644 ${settingsFile} $HOME/.claude-work/settings.json
   '';
 
   # ---- Hook and Statusline Scripts
