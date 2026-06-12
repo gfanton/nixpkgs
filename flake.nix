@@ -140,17 +140,6 @@
           };
         };
 
-        # Overlay useful on Macs with Apple Silicon
-        pkgs-silicon =
-          _: prev:
-          optionalAttrs (prev.stdenv.hostPlatform.system == "aarch64-darwin") {
-            # Add access to x86 packages system is running Apple Silicon
-            pkgs-x86 = import inputs.nixpkgs-unstable {
-              system = "x86_64-darwin";
-              inherit (nixpkgsDefaults) config;
-            };
-          };
-
         # non flake inputs
         my-inputs = final: prev: {
           zsh-plugins.fast-syntax-highlighting = inputs.fast-syntax-highlighting;
@@ -241,15 +230,14 @@
 
       # My `nix-darwin` configs
       darwinConfigurations = rec {
-        # Mininal configurations to bootstrap systems
-        bootstrap-x86 = makeOverridable darwin.lib.darwinSystem {
-          system = "x86_64-darwin";
+        # Minimal configuration to bootstrap aarch64-darwin systems
+        bootstrap = makeOverridable darwin.lib.darwinSystem {
+          system = "aarch64-darwin";
           modules = [
             ./darwin/bootstrap.nix
             { nixpkgs = nixpkgsDefaults; }
           ];
         };
-        bootstrap-arm = bootstrap-x86.override { system = "aarch64-darwin"; };
 
         # My Apple Silicon macOS laptop config
         macbook = makeOverridable self.lib.mkDarwinSystem (
