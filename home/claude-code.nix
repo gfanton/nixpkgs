@@ -251,12 +251,31 @@ lib.mkIf hasConfig {
         fi
       done
 
-      args=(-title "$title" -message "$body" -sound Glass)
-      if [ -n "$terminal_bid" ]; then
-        args+=(-activate "$terminal_bid" -sender "$terminal_bid")
+      args=(--title "$title" --message "$body" --sound default)
+      [ -n "$terminal_bid" ] && args+=(--activate "$terminal_bid")
+
+      # Inside tmux: clicking the notification jumps to the originating pane.
+      # The hook inherits $TMUX/$TMUX_PANE from Claude's pane. Resolve the target
+      # and the client viewing it now, then switch to it on click via --exec.
+      if [ -n "''${TMUX:-}" ] && [ -n "''${TMUX_PANE:-}" ]; then
+        tmux_bin=$(command -v tmux || true)
+        if [ -n "$tmux_bin" ]; then
+          socket="''${TMUX%%,*}"
+          target=$("$tmux_bin" display-message -p -t "$TMUX_PANE" '#S:#I.#P' 2>/dev/null || true)
+          client_tty=$("$tmux_bin" -S "$socket" list-clients -F '#{pane_id} #{client_tty}' 2>/dev/null \
+            | awk -v p="$TMUX_PANE" '$1==p{print $2; exit}')
+          if [ -n "$target" ]; then
+            jump="\"$tmux_bin\" -S \"$socket\" switch-client"
+            [ -n "$client_tty" ] && jump="$jump -c \"$client_tty\""
+            jump="$jump -t \"$target\" 2>/dev/null"
+            jump="$jump; \"$tmux_bin\" -S \"$socket\" select-window -t \"$target\" 2>/dev/null"
+            jump="$jump; \"$tmux_bin\" -S \"$socket\" select-pane -t \"$target\" 2>/dev/null"
+            args+=(--exec "$jump")
+          fi
+        fi
       fi
 
-      ${pkgs.terminal-notifier}/bin/terminal-notifier "''${args[@]}" 2>/dev/null || true
+      ${pkgs.gnotify}/bin/gnotify "''${args[@]}" 2>/dev/null || true
     '';
   };
 

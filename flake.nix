@@ -164,6 +164,7 @@
         my-emacs = import ./overlays/emacs.nix;
         my-mosh = import ./overlays/mosh.nix;
         my-claude-plugins = import ./overlays/claude-plugins.nix;
+        my-gnotify = import ./overlays/gnotify.nix;
       };
 
       # Non-system outputs --------------------------------------------------------------------- {{{

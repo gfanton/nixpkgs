@@ -9,7 +9,7 @@
   # Issue: https://github.com/nix-community/home-manager/issues/1341
   environment.systemPackages = with pkgs; [
     kitty
-    terminal-notifier
+    gnotify
     pam-reattach
   ];
 
