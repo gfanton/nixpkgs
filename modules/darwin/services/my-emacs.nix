@@ -51,6 +51,8 @@ in
       logDir = "${homeDir}/.local/state/emacs";
       logFile = "${logDir}/daemon.log";
 
+      label = "org.gnu.emacs.daemon";
+
       # Terminfo directories using standard Nix profile patterns and system variables
       terminfoPath = concatStringsSep ":" [
         "${homeDir}/.terminfo" # User custom terminfo
@@ -77,7 +79,7 @@ in
       launchd.user.agents.my-emacs = {
         path = cfg.additionalPath ++ [ environmentSystemPath ];
         serviceConfig = {
-          Label = "org.gnu.emacs.daemon";
+          Label = label;
           ProgramArguments = [
             "${pkgs.zsh}/bin/zsh"
             "${emacs-daemon}/bin/emacs-daemon"
@@ -89,11 +91,20 @@ in
         };
       };
 
-      # Create log directory
-      system.activationScripts.my-emacs.text = ''
-        echo "Creating Emacs daemon log directory..."
+      # postActivation runs after userLaunchd, so the agent has been (re)loaded
+      # by the time this runs. nix-darwin only reloads the agent when the plist
+      # changes, and its legacy `launchctl load -w` unreliably honors RunAtLoad
+      # in the GUI session — which can leave the daemon dead after a rebuild
+      # that touched it. `kickstart` (no -k) guarantees the daemon is running
+      # without restarting a healthy one, so open buffers survive unrelated
+      # rebuilds. A custom activationScripts.<name> key would be silently
+      # dropped: only the predefined phases are run.
+      system.activationScripts.postActivation.text = ''
+        echo "Ensuring Emacs daemon log directory and service..." >&2
         mkdir -p ${logDir}
         chown ${primaryUser}:staff ${logDir}
+        uid=$(id -u ${primaryUser})
+        launchctl kickstart "gui/$uid/${label}" || true
       '';
     };
 }

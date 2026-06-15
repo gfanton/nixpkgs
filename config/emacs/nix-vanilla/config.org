@@ -59,19 +59,77 @@
 
 * Auto-revert configuration
 
+Keep visible buffers in sync with on-disk changes without watching every
+buffer. Modeled on Doom's =doom-auto-revert-mode=: no file watchers and no
+global polling — both scale badly on a daemon with hundreds of buffers, and
+on macOS the kqueue backend uses one file descriptor per watch (~200 ceiling
+near the default =ulimit=). Instead, reverts are driven by UI events: visible
+buffers refresh on focus and save, and a buried buffer refreshes the instant
+it is shown.
+
 #+begin_src emacs-lisp
-  ;; Disable automatic buffer refreshing when files change on disk
-  (setq global-auto-revert-mode nil)
-  (setq auto-revert-mode nil)
-  (setq auto-revert-interval 5)  ; If you ever enable it manually, check every 5 seconds
+  (require 'autorevert)
 
-  ;; Disable dired auto-revert specifically
-  (setq dired-auto-revert-buffer nil)
-
-  ;; Ensure global mode is disabled
+  ;; No file watchers, no global polling. Reverts are driven from UI events.
+  (setq global-auto-revert-mode nil
+        auto-revert-use-notify nil
+        auto-revert-stop-on-user-input nil
+        auto-revert-verbose nil
+        ;; Revert saved buffers without prompting; modified buffers still ask
+        ;; (and are never clobbered by auto-revert).
+        revert-without-query (list "."))
   (global-auto-revert-mode -1)
 
-  (emacs-nix-log "Auto-revert disabled - buffers will not automatically refresh")
+  ;; Revert dired on revisit, but only when the directory actually changed.
+  (setq dired-auto-revert-buffer #'dired-buffer-stale-p)
+
+  (defun my/auto-revert-buffer ()
+    "Revert the current buffer if it is stale.
+  Reuses Emacs' own revert logic without enabling the auto-revert timer.
+  Skips buffers already auto-reverting, the minibuffer, and remote files."
+    (unless (or auto-revert-mode
+                (active-minibuffer-window)
+                (and buffer-file-name
+                     (file-remote-p buffer-file-name nil t)))
+      (let ((auto-revert-mode t))
+        (auto-revert-handler))))
+
+  (defun my/auto-revert-selected-window (&rest _)
+    "Revert the buffer shown in the selected window."
+    (with-current-buffer (window-buffer (selected-window))
+      (my/auto-revert-buffer)))
+
+  (defun my/auto-revert-visible-buffers (&rest _)
+    "Revert every buffer currently visible in a window."
+    (dolist (buf (delete-dups (mapcar #'window-buffer (window-list))))
+      (with-current-buffer buf
+        (my/auto-revert-buffer))))
+
+  (defun my/auto-revert-on-focus (&rest _)
+    "Revert visible buffers when Emacs regains focus."
+    (when (frame-focus-state)
+      (my/auto-revert-visible-buffers)))
+
+  ;; A buried buffer is reverted when it is switched to / shown in the selected
+  ;; window. window-buffer-change-functions does not fire for files opened via
+  ;; emacsclient, so server-switch-hook covers the daemon case.
+  (add-hook 'window-buffer-change-functions #'my/auto-revert-selected-window)
+  (add-hook 'window-selection-change-functions #'my/auto-revert-selected-window)
+  (add-hook 'server-switch-hook #'my/auto-revert-selected-window)
+  ;; Saving or refocusing refreshes all visible buffers at once (e.g. a visible
+  ;; dired listing updates after a file is written elsewhere).
+  (add-hook 'after-save-hook #'my/auto-revert-visible-buffers)
+  (add-function :after after-focus-change-function #'my/auto-revert-on-focus)
+
+  ;; Magit ships a global auto-revert that mass-reverts every file buffer after
+  ;; git operations (the source of the revert storms). Disable it and refresh
+  ;; only the visible buffers after a magit refresh instead.
+  (with-eval-after-load 'magit-autorevert
+    (magit-auto-revert-mode -1))
+  (with-eval-after-load 'magit
+    (add-hook 'magit-post-refresh-hook #'my/auto-revert-visible-buffers))
+
+  (emacs-nix-log "Auto-revert: lazy visible-buffer reverts on focus/switch/save")
 #+end_src
 
 * Font configuration
