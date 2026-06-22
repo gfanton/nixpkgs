@@ -17,7 +17,7 @@ let
     disk: 60
 
     # size of the memory in GiB to be allocated to the virtual machine.
-    memory: 4
+    memory: 8
 
     # the runtime to be used for the virtual machine (docker, containerd).
     runtime: docker
@@ -42,6 +42,13 @@ let
     # NOTE: some keys may not be supported on macOS.
     containerd: {}
 
+    # file system mounts for the virtual machine. Declared explicitly because
+    # colima serializes an absent key as `mounts: null` in the instance config,
+    # which suppresses the default $HOME mount and leaves bind mounts empty.
+    mounts:
+      - location: "~"
+        writable: true
+
     # virtual machine configuration
     vm:
       # autoStart configures the virtual machine to automatically start on login.
@@ -58,10 +65,11 @@ in
     source = colima-config;
   };
 
-  # Set environment variables for Colima
+  # COLIMA_HOME is the only directory variable colima honors (it keeps config
+  # and VM data together, with no config/data split). Without it, colima
+  # prefers legacy ~/.colima whenever that directory exists.
   home.sessionVariables = {
-    COLIMA_CONFIG_DIR = "${config.xdg.configHome}/colima";
-    COLIMA_DATA_DIR = "${config.xdg.dataHome}/colima";
+    COLIMA_HOME = "${config.xdg.configHome}/colima";
   };
 
   # Create systemd user service for Colima on Linux
@@ -79,10 +87,8 @@ in
       ExecStop = "${pkgs.colima}/bin/colima stop";
       Restart = "on-failure";
       RestartSec = 5;
-      # Ensure XDG directories are available
       Environment = [
-        "COLIMA_CONFIG_DIR=${config.xdg.configHome}/colima"
-        "COLIMA_DATA_DIR=${config.xdg.dataHome}/colima"
+        "COLIMA_HOME=${config.xdg.configHome}/colima"
       ];
     };
 

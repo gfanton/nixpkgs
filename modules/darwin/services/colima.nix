@@ -9,6 +9,7 @@ with lib;
 
 let
   cfg = config.services.colima;
+  homeDir = config.users.users.${config.users.primaryUser.username}.home;
 in
 {
   options = {
@@ -43,7 +44,13 @@ in
     environment.systemPackages = [ cfg.package ];
 
     launchd.user.agents.colima = mkIf cfg.autoStart {
-      path = [ config.environment.systemPath ];
+      # docker-client lives only in the per-user profile, whose systemPath entry
+      # is `/etc/profiles/per-user/$USER/bin` — launchd never expands $USER, so
+      # colima's docker dependency check fails. Pin the absolute store path.
+      path = [
+        pkgs.docker-client
+        config.environment.systemPath
+      ];
       serviceConfig = {
         ProgramArguments = [
           "${cfg.package}/bin/colima"
@@ -58,10 +65,11 @@ in
         };
         StandardErrorPath = "/tmp/colima.log";
         StandardOutPath = "/tmp/colima.log";
-        # Set environment variables for XDG compliance
+        # launchd agents inherit no shell environment and plist values are
+        # literal strings, so COLIMA_HOME must be an absolute path. Without
+        # it colima falls back to ~/.colima on macOS.
         EnvironmentVariables = {
-          COLIMA_CONFIG_DIR = "%HOME%/.config/colima";
-          COLIMA_DATA_DIR = "%HOME%/.local/share/colima";
+          COLIMA_HOME = "${homeDir}/.config/colima";
         };
       };
     };
