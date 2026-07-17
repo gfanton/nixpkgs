@@ -2,8 +2,11 @@
 # Used by: home-manager, NixOS modules, Darwin modules
 final: prev:
 let
-  # Modern Emacs with optimizations
-  emacs-base = prev.emacs-pgtk.override {
+  # Emacs 31 (emacs-unstable) from emacs-overlay, for native terminal child
+  # frames (corfu/vertico popups without the corfu-terminal overlay hack).
+  # Requires the emacs-overlay input pinned to >= 2026-06-05, when emacs-unstable
+  # began tracking the 31.0.90 pretest tag; older pins build a pre-31 Emacs.
+  emacs-base = final.emacs-unstable-pgtk.override {
     withNativeCompilation = true;
     withTreeSitter = true;
     withSQLite3 = true;
@@ -113,6 +116,12 @@ let
       forge
       git-link
       diff-hl
+
+      # GitHub PR review (forge does not implement review; magit/forge#75)
+      pr-review
+      consult-gh
+      consult-gh-embark
+      consult-gh-with-pr-review
 
       # Project management
       projectile

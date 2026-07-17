@@ -447,6 +447,27 @@ it is shown.
     :config
     (vertico-mode))
 
+  ;; File-path editing in the minibuffer: DEL deletes a whole path component,
+  ;; RET descends into a directory instead of opening it.
+  (use-package vertico-directory
+    :after vertico
+    :bind (:map vertico-map
+                ("RET"   . vertico-directory-enter)
+                ("DEL"   . vertico-directory-delete-char)
+                ("M-DEL" . vertico-directory-delete-word))
+    :hook (rfn-eshadow-update-overlay . vertico-directory-tidy))
+
+  ;; === MINIBUFFER BEHAVIOUR (needed by the Vertico + Embark workflow) ===
+  ;; Embark actions frequently prompt again, which requires recursive minibuffers.
+  (setq enable-recursive-minibuffers t)
+  (minibuffer-depth-indicate-mode 1)
+  ;; Keep point out of the read-only prompt text (matters in evil normal state).
+  (setq minibuffer-prompt-properties
+        '(read-only t cursor-intangible t face minibuffer-prompt))
+  (add-hook 'minibuffer-setup-hook #'cursor-intangible-mode)
+  ;; Hide commands in M-x that do not apply to the current major mode.
+  (setq read-extended-command-predicate #'command-completion-default-include-p)
+
   ;; === ORDERLESS: Flexible matching ===
   (use-package orderless
     :demand t
@@ -476,13 +497,17 @@ it is shown.
                    (if (fboundp 'project-root)
                        (project-root project)
                      (car (project-roots project)))))))
+    ;; Route xref (and thus lsp go-to-definition / find-references) through the
+    ;; consult UI with preview instead of the plain *xref* buffer.
+    (setq xref-show-xrefs-function #'consult-xref
+          xref-show-definitions-function #'consult-xref)
     :config
     (consult-customize
      consult-theme :preview-key '(:debounce 0.2 any)
      consult-ripgrep consult-git-grep consult-grep
      consult-bookmark consult-recent-file consult-xref
-     consult--source-bookmark consult--source-recent-file
-     consult--source-project-recent-file
+     consult-source-bookmark consult-source-recent-file
+     consult-source-project-recent-file
      :preview-key '(:debounce 0.4 any))
 
     ;; Disable automatic follow in ripgrep, use M-. for manual follow
@@ -501,9 +526,9 @@ it is shown.
                    nil
                    (window-parameters (mode-line-format . none)))))
 
+  ;; Preview in Embark collect buffers is automatic on modern consult.
   (use-package embark-consult
-    :hook
-    (embark-collect-mode . consult-preview-at-point-mode))
+    :after (embark consult))
 
   ;; wgrep for editing grep results (modern approach)
   (use-package wgrep
@@ -520,7 +545,7 @@ it is shown.
     (corfu-auto-delay 0.2)           ; Quick response time
     (corfu-auto-prefix 2)            ; Start after 2 characters
     (corfu-cycle t)                  ; Enable cycling
-    (corfu-preselect 'prompt)        ; Preselect first candidate
+    (corfu-preselect 'prompt)        ; Preselect the prompt input (TAB-and-go; RET stays a newline)
     (corfu-on-exact-match nil)       ; Don't auto-accept exact matches
     (corfu-scroll-margin 5)          ; Scroll margin
 
@@ -529,7 +554,6 @@ it is shown.
     (corfu-min-width 15)             ; Minimum popup width
     (corfu-count 10)                 ; Show up to 10 candidates
     (corfu-preview-current nil)      ; Don't preview (less distracting)
-    (corfu-echo-documentation 0.25)  ; Quick doc in echo area
 
     :bind
     (:map corfu-map
@@ -542,7 +566,7 @@ it is shown.
           ;; Documentation (manual)
           ("M-d" . corfu-info-documentation)
           ("M-l" . corfu-info-location)
-          ("M-p" . corfu-popupinfo-toggle)
+          ("M-t" . corfu-popupinfo-toggle)
 
           ;; Scroll documentation
           ("M-n" . corfu-popupinfo-scroll-up)
@@ -596,7 +620,11 @@ it is shown.
     (emacs-nix-log "All Corfu extensions loaded and configured"))
 
   ;; === TERMINAL SUPPORT ===
+  ;; Emacs 31 draws child frames natively on the terminal, so corfu shows its
+  ;; popup (and popupinfo) directly. The corfu-terminal/popon overlay fallback
+  ;; below loads only on builds without that feature (e.g. Emacs 30).
   (use-package corfu-terminal
+    :if (not (featurep 'tty-child-frames))
     :demand t
     :config
     ;; Smart terminal detection
@@ -621,6 +649,7 @@ it is shown.
   ;; === TERMINAL POPUPINFO SUPPORT ===
   ;; Custom extension to enable documentation popups in terminal
   (use-package corfu-terminal-popupinfo
+    :if (not (featurep 'tty-child-frames))
     :load-path "~/nixpkgs/config/emacs/packages/corfu-terminal-popupinfo"
     :after (corfu-terminal corfu-popupinfo)
     :config
@@ -628,26 +657,23 @@ it is shown.
       (corfu-terminal-popupinfo-mode 1)
       (emacs-nix-log "Corfu terminal popupinfo support enabled")))
 
-  ;; Ensure popon is available for terminal mode
-  (use-package popon)
+  ;; Ensure popon is available for the overlay fallback (corfu-terminal dep)
+  (use-package popon
+    :if (not (featurep 'tty-child-frames)))
 
   ;; === CAPE: Completion sources ===
   (use-package cape
     :demand t
     :config
-    ;; Add useful completion sources
+    ;; Global completion fallbacks (cape-elisp-block covers org/markdown source blocks)
     (add-to-list 'completion-at-point-functions #'cape-dabbrev)    ; Dynamic abbrev
     (add-to-list 'completion-at-point-functions #'cape-file)      ; File paths
     (add-to-list 'completion-at-point-functions #'cape-elisp-block) ; Elisp blocks
 
-    ;; Mode-specific sources
-    (add-hook 'org-mode-hook
-              (lambda ()
-                (add-to-list 'completion-at-point-functions #'cape-elisp-block)))
-
+    ;; Dictionary completion, buffer-local to text modes so it does not leak globally
     (add-hook 'text-mode-hook
               (lambda ()
-                (add-to-list 'completion-at-point-functions #'cape-dict)))
+                (add-hook 'completion-at-point-functions #'cape-dict nil t)))
 
     (emacs-nix-log "Cape completion sources configured"))
 #+end_src
@@ -781,8 +807,7 @@ it is shown.
   ;; Terminal-specific optimizations
   (unless (display-graphic-p)
     (with-eval-after-load 'corfu
-      (setq corfu-popupinfo-delay 0.6)        ; Longer delay in terminal
-      (setq corfu-echo-documentation nil)))   ; Disable echo in terminal
+      (setq corfu-popupinfo-delay 0.6)))      ; Longer delay in terminal
 #+end_src
 
 * Programming languages
@@ -872,6 +897,30 @@ it is shown.
 
   (use-package forge
     :after magit)
+
+  ;; === GITHUB PR REVIEW ===
+  ;; forge deliberately does not implement PR review (magit/forge#75), so pair
+  ;; pr-review (review threads, submit, resolve; evil-aware) with consult-gh to
+  ;; discover and open PRs/issues/repos from the minibuffer. Both work in a
+  ;; terminal frame.
+  (use-package pr-review
+    :commands (pr-review pr-review-open pr-review-open-url))
+
+  (use-package consult-gh
+    :after consult
+    :bind (("C-c g r" . consult-gh-search-repos)
+           ("C-c g p" . consult-gh-search-prs)
+           ("C-c g i" . consult-gh-search-issues))
+    :config
+    ;; Embark actions on consult-gh candidates, when the file is available
+    (require 'consult-gh-embark nil t))
+
+  ;; Open a selected PR in pr-review instead of the plain consult-gh viewer
+  (use-package consult-gh-with-pr-review
+    :after (consult-gh pr-review)
+    :demand t
+    :config
+    (consult-gh-with-pr-review-mode 1))
 
   (use-package diff-hl
     :demand t
