@@ -300,9 +300,6 @@ in
       // ezaTree
       // ezaTreelist
       // (lib.optionalAttrs (pkgs.stdenv.hostPlatform.system == "aarch64-darwin") {
-        # switch on rosetta shell
-        rosetta-zsh = "${pkgs-x86.zsh}/bin/zsh";
-
         # yabai & skhd
         restart-yabai = "${restart-service}/bin/restart-service org.nixos.yabai.plist";
         restart-skhd = "${restart-service}/bin/restart-service org.nixos.skhd.plist";

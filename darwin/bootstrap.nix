@@ -33,11 +33,6 @@
 
     keep-outputs = true;
     keep-derivations = true;
-
-    extra-platforms = lib.mkIf (pkgs.stdenv.hostPlatform.system == "aarch64-darwin") [
-      "x86_64-darwin"
-      "aarch64-darwin"
-    ];
   };
 
   # Auto upgrade nix package and the daemon service.

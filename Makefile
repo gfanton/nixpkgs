@@ -2,13 +2,8 @@ IMPURE ?= false
 FALLBACK ?= true
 
 UNAME := $(shell uname)
-UNAME_P := $(shell uname -p)
 
-ifeq ($(UNAME_P),arm)
-BOOTSTRAP := bootstrap-arm
-else
-BOOTSTRAP := bootstrap-x86
-endif
+BOOTSTRAP := bootstrap
 
 # Channels (matching flake.nix inputs)
 NIX_CHANNELS := nixpkgs-master nixpkgs-stable nixpkgs-unstable
