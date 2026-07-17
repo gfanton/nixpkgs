@@ -88,6 +88,9 @@ in
           KeepAlive = true;
           StandardErrorPath = logFile;
           StandardOutPath = logFile;
+          # launchd's default soft limit is 256 FDs; kqueue file-notify costs
+          # one FD per watched directory, so magit/lsp watchers exhaust it.
+          SoftResourceLimits.NumberOfFiles = 4096;
         };
       };
 
