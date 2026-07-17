@@ -86,19 +86,23 @@ in
   programs.ssh = {
     enable = true;
     enableDefaultConfig = false;
-    matchBlocks."*" = {
-      controlMaster = "auto";
-      controlPath = "${config.xdg.cacheHome}/ssh-%u-%r@%h:%p";
-      controlPersist = "1800";
-      forwardAgent = true;
-      serverAliveInterval = 60;
-      hashKnownHosts = true;
+    settings."*" = {
+      ControlMaster = "auto";
+      ControlPath = "${config.xdg.cacheHome}/ssh-%u-%r@%h:%p";
+      ControlPersist = "1800";
+      ForwardAgent = true;
+      ServerAliveInterval = 60;
+      HashKnownHosts = true;
     };
     # on darwin use 1password agent
     extraConfig = lib.mkIf pkgs.stdenv.isDarwin ''
       IdentityAgent "~/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock"
     '';
   };
+
+  # home-manager tracks master alongside nixpkgs-unstable in flake.nix; the
+  # release-version cross-check is informational and not actionable here.
+  home.enableNixpkgsReleaseCheck = false;
 
   # disable manual
   # Some weird bug
