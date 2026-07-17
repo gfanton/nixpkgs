@@ -6,8 +6,8 @@
     AppleMetricUnits = 1;
     AppleShowScrollBars = "Automatic";
     AppleTemperatureUnit = "Celsius";
-    # Disable native macOS tab merging — AeroSpace tracks each tab as a
-    # separate window, which breaks tile layout (see AeroSpace #68).
+    # Disable automatic macOS window→tab merging so yabai tiles each window
+    # predictably. Apps can still create tabs explicitly (e.g. Ghostty new_tab).
     AppleWindowTabbingMode = "manual";
     InitialKeyRepeat = 15;
     KeyRepeat = 1;

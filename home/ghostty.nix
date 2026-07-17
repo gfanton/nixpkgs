@@ -22,6 +22,12 @@
       copy-on-select = "clipboard";
       clipboard-read = "allow";
       clipboard-write = "allow";
+
+      # Install Ghostty's terminfo on remote hosts over SSH and fall back to
+      # TERM=xterm-256color when it can't, so remote TUIs work without a manual
+      # `TERM=xterm`. Merges onto the default feature set (cursor,title,path).
+      shell-integration-features = "ssh-env,ssh-terminfo";
+
       mouse-hide-while-typing = true;
       cursor-style-blink = false;
       grapheme-width-method = "legacy";
@@ -47,9 +53,10 @@
       ];
 
       keybind = [
-        # Window management (native tabs disabled system-wide; use AeroSpace
-        # workspaces and Ghostty splits instead of tabs).
-        "cmd+t=new_window"
+        # Window management. cmd+t opens a Ghostty tab (internal to one macOS
+        # window, so yabai still tiles it as a single window); cmd+enter opens
+        # a separate window.
+        "cmd+t=new_tab"
         "cmd+enter=new_window"
 
         # Split navigation (vim-style)
