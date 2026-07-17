@@ -379,7 +379,7 @@ in
       niv # easy dependency management for nix projects
       nix-prefetch
       nix-prefetch-git
-      nixfmt-rfc-style
+      nixfmt
     ]
     ++ lib.optionals stdenv.isDarwin [
       cocoapods

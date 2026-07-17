@@ -69,7 +69,7 @@ switch.cloud:
 endif # end linux
 
 fmt:
-	nix-shell -p nixfmt-rfc-style --command "nixfmt  $(NIX_FILES)"
+	nix-shell -p nixfmt --command "nixfmt  $(NIX_FILES)"
 
 clean:
 	./result/sw/bin/nix-collect-garbage
