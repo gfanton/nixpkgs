@@ -3,6 +3,16 @@
 #+AUTHOR: Generated from Spacemacs migration
 #+PROPERTY: header-args:emacs-lisp :lexical t
 
+* Lexical binding
+
+Org does not add a ~lexical-binding~ cookie to the tangled =config.el= from the
+~:lexical t~ header, and Emacs 31 warns when it is missing. This block tangles
+first, so its comment becomes line 1 of the generated file.
+
+#+begin_src emacs-lisp
+  ;;; config.el --- tangled from config.org -*- lexical-binding: t; -*-
+#+end_src
+
 * Performance optimizations
 
 #+begin_src emacs-lisp
