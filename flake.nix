@@ -5,6 +5,11 @@
     nixpkgs-stable.url = "github:NixOS/nixpkgs/release-25.05";
     nixpkgs-unstable.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
 
+    # herdr landed in nixpkgs after the nixpkgs-unstable pin, so it gets its own
+    # rev rather than dragging every other package forward to reach one binary.
+    # Drop this input and take herdr from nixpkgs-unstable once that pin moves.
+    nixpkgs-herdr.url = "github:NixOS/nixpkgs/f8e81fc7eb063db454f563cdd596fb96a5ad1497";
+
     # Environment/system management
     darwin.url = "github:LnL7/nix-darwin/master";
     darwin.inputs.nixpkgs.follows = "nixpkgs-unstable";
@@ -139,6 +144,12 @@
             inherit (nixpkgsDefaults) config;
           };
         };
+        pkgs-herdr = _: prev: {
+          pkgs-herdr = import inputs.nixpkgs-herdr {
+            inherit (prev.stdenv.hostPlatform) system;
+            inherit (nixpkgsDefaults) config;
+          };
+        };
 
         # non flake inputs
         my-inputs = final: prev: {
@@ -210,6 +221,7 @@
         my-colima = import ./home/colima.nix;
         my-starship = import ./home/starship.nix;
         my-ghostty = import ./home/ghostty.nix;
+        my-herdr = import ./home/herdr.nix;
         my-claude-code = import ./home/claude-code.nix inputs.claude-config;
         my-backlog-workflow = import "${inputs.claude-config}/backlog-workflow";
 
