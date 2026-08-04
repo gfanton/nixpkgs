@@ -38,7 +38,7 @@
     powerlevel10k.flake = false;
 
     # My project
-    project.url = "github:gfanton/project/v0.18.0";
+    project.url = "github:gfanton/project/v0.19.0";
     project.inputs.nixpkgs.follows = "nixpkgs-unstable";
 
     # tmux plugins

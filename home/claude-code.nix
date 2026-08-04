@@ -32,6 +32,11 @@ let
 
   jq = "${pkgs.jq}/bin/jq";
 
+  # Notification click-to-jump and the agent-session integration both shell out
+  # to herdr. Taken from the package rather than PATH because the click handler
+  # runs under gnotify, which does not inherit the login shell's PATH.
+  herdr = pkgs.pkgs-herdr.herdr;
+
   # Skill-library convention hooks. Both the hook scripts and the references they
   # read live in the claude-config tree and run straight from the read-only store.
   # SKILL_LIB_REFS points the hooks at the references; the prepended PATH supplies
@@ -320,6 +325,20 @@ lib.mkIf hasConfig (lib.mkMerge [
     done
   '';
 
+  # ---- herdr agent integration
+  # A SessionStart hook reporting Claude's session id and transcript path to the
+  # enclosing herdr pane, which is what lets herdr resume an agent into its own
+  # conversation after a server restart. herdr versions both the hook script and
+  # its settings.json entry, so this runs herdr's installer instead of vendoring
+  # a copy that would go stale on upgrade. It must follow claudeCodeSettings,
+  # which rewrites settings.json wholesale and would otherwise drop the entry on
+  # every rebuild.
+  home.activation.herdrClaudeIntegration = lib.hm.dag.entryAfter [ "claudeCodeSettings" ] ''
+    for dir in ${lib.concatMapStringsSep " " (d: "\"$HOME/${d}\"") configDirs}; do
+      run env CLAUDE_CONFIG_DIR="$dir" ${lib.getExe herdr} integration install claude
+    done
+  '';
+
   # ---- MCP servers (mcpServers in .claude.json)
   # All MCP logic lives in claude-config (mcp/default.nix); this only
   # schedules its activation snippet. Darwin-only because the github wrapper
@@ -354,10 +373,21 @@ lib.mkIf hasConfig (lib.mkMerge [
       args=(--title "$title" --message "$body" --sound default)
       [ -n "$terminal_bid" ] && args+=(--activate "$terminal_bid")
 
+      # Inside herdr: clicking the notification jumps to the originating
+      # workspace and tab. herdr exports these into every pane the way tmux
+      # exports $TMUX_PANE, so the ids need no lookup. Pane-level focus is
+      # socket-API only — the CLI exposes just directional moves — so a split
+      # tab lands on the tab rather than on Claude's own pane.
+      if [ "''${HERDR_ENV:-}" = "1" ] && [ -n "''${HERDR_WORKSPACE_ID:-}" ]; then
+        herdr_bin="${lib.getExe herdr}"
+        jump="\"$herdr_bin\" workspace focus \"$HERDR_WORKSPACE_ID\" >/dev/null 2>&1"
+        [ -n "''${HERDR_TAB_ID:-}" ] && jump="$jump; \"$herdr_bin\" tab focus \"$HERDR_TAB_ID\" >/dev/null 2>&1"
+        args+=(--exec "$jump")
+
       # Inside tmux: clicking the notification jumps to the originating pane.
       # The hook inherits $TMUX/$TMUX_PANE from Claude's pane. Resolve the target
       # and the client viewing it now, then switch to it on click via --exec.
-      if [ -n "''${TMUX:-}" ] && [ -n "''${TMUX_PANE:-}" ]; then
+      elif [ -n "''${TMUX:-}" ] && [ -n "''${TMUX_PANE:-}" ]; then
         tmux_bin=$(command -v tmux || true)
         if [ -n "$tmux_bin" ]; then
           socket="''${TMUX%%,*}"

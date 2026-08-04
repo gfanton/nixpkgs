@@ -12,6 +12,7 @@ let
   # Project picker, from the project flake rather than PATH so the binding
   # cannot resolve to a stale build left in the profile.
   projPicker = "${lib.getExe pkgs.proj-herdr} workspace pick";
+  projAgentSort = "${lib.getExe pkgs.proj-herdr} agent sort";
 
   # Built-in themes: catppuccin, catppuccin-latte, terminal, tokyo-night,
   # tokyo-night-day, dracula, nord, gruvbox, gruvbox-light, one-dark, one-light,
@@ -30,7 +31,27 @@ let
 
     ui = {
       show_agent_labels_on_pane_borders = true;
-      toast.delivery = "system";
+
+      # Order the agents panel as an attention queue rather than grouping it by
+      # workspace: blocked first, then finished-but-not-yet-looked-at, then
+      # working, then acknowledged. With several agents running at once that
+      # puts the ones wanting something from you at the top. prefix+shift+a
+      # cycles through two further orderings the config cannot express.
+      agent_panel_sort = "priority";
+
+      # Claude Code notifies through its own Stop/Notification hook
+      # (~/.claude/hooks/notify.sh, see home/claude-code.nix), which carries a
+      # project-scoped title, a body, a signed app icon and a click that jumps
+      # back to the originating workspace. herdr's "system" delivery has none of
+      # that: with no terminal-notifier on PATH it falls back to `osascript
+      # display notification`, which renders unattributed and does nothing on
+      # click. Demoting it to an in-app toast keeps a signal for the agents the
+      # hook does not cover while taking the system banner away from it.
+      toast.delivery = "herdr";
+
+      # The hook already plays a sound for claude, so muting claude alone here
+      # avoids a double chime while leaving every other agent audible.
+      sound.agents.claude = "off";
     };
 
     # ---- tmux parity
@@ -105,6 +126,16 @@ let
           description = "open project workspace";
           width = "80%";
           height = 20;
+        }
+
+        # Agents-panel ordering. herdr holds a custom ordering in the running
+        # server with no way to persist or read it back, so this is a keypress
+        # rather than a setting: one lap returns to agent_panel_sort above.
+        {
+          key = "prefix+shift+a";
+          type = "shell";
+          command = projAgentSort;
+          description = "cycle agent panel ordering";
         }
       ];
     };
