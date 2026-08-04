@@ -38,7 +38,7 @@
     powerlevel10k.flake = false;
 
     # My project
-    project.url = "github:gfanton/project/v0.17.0";
+    project.url = "github:gfanton/project/v0.18.0";
     project.inputs.nixpkgs.follows = "nixpkgs-unstable";
 
     # tmux plugins
@@ -158,6 +158,7 @@
           project = inputs.project.packages.${final.stdenv.hostPlatform.system}.default;
           # Pre-packaged tmux plugin from project flake (properly wrapped with binaries)
           projectTmuxPlugin = inputs.project.packages.${final.stdenv.hostPlatform.system}.tmux-proj;
+          proj-herdr = inputs.project.packages.${final.stdenv.hostPlatform.system}.proj-herdr;
           # devenv from flake (bundles patched nix with Boehm GC fix for aarch64-darwin)
           devenv = inputs.devenv.packages.${final.stdenv.hostPlatform.system}.devenv;
           # Claude Code plugin sources (non-flake inputs for easy nix flake update)

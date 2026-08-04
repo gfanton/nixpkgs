@@ -9,6 +9,10 @@ let
   herdr = pkgs.pkgs-herdr.herdr;
   tomlFormat = pkgs.formats.toml { };
 
+  # Project picker, from the project flake rather than PATH so the binding
+  # cannot resolve to a stale build left in the profile.
+  projPicker = "${lib.getExe pkgs.proj-herdr} workspace pick";
+
   # Built-in themes: catppuccin, catppuccin-latte, terminal, tokyo-night,
   # tokyo-night-day, dracula, nord, gruvbox, gruvbox-light, one-dark, one-light,
   # solarized, solarized-light, kanagawa, kanagawa-lotus, rose-pine,
@@ -93,13 +97,11 @@ let
           description = "toggle light/dark theme";
         }
 
-        # Project picker, replacing tmux's @proj_popup_key. Resolved from PATH:
-        # proj-herdr ships from the project flake once packaged, and until then
-        # the binary has to be linked into the profile by hand.
+        # Project picker, replacing tmux's @proj_popup_key.
         {
           key = "prefix+f";
           type = "popup";
-          command = "proj-herdr workspace pick";
+          command = projPicker;
           description = "open project workspace";
           width = "80%";
           height = 20;
@@ -109,7 +111,10 @@ let
   };
 in
 {
-  home.packages = [ herdr ];
+  home.packages = [
+    herdr
+    pkgs.proj-herdr
+  ];
 
   # Generated into the store, so herdr's own settings-UI writes (theme, sound,
   # toast delivery, agent labels, panel sort, onboarding — src/app/config_io.rs)

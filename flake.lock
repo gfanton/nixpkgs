@@ -699,16 +699,16 @@
         ]
       },
       "locked": {
-        "lastModified": 1769012621,
-        "narHash": "sha256-x3UvCOL//tpCoEOUMtOIvnmQr4n5GuCSxtk62QxUQe0=",
+        "lastModified": 1785837031,
+        "narHash": "sha256-NnI6p+aVQZUsyKE0UAVZXo9hDxsQ1qJKkxy3LvL80RM=",
         "owner": "gfanton",
         "repo": "project",
-        "rev": "91e2b26c516bb7ac3493bbaa127d4ce4e01a6b84",
+        "rev": "3ea90cef957ed52b7a317dcb092e22cdb78ef968",
         "type": "github"
       },
       "original": {
         "owner": "gfanton",
-        "ref": "v0.17.0",
+        "ref": "v0.18.0",
         "repo": "project",
         "type": "github"
       }
