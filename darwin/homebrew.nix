@@ -20,7 +20,6 @@ in
     "nrlquaker/createzap"
     "koekeishiya/formulae"
     "FelixKratz/formulae"
-    "withgraphite/tap"
     "nikitabobko/tap"
   ];
 
@@ -61,7 +60,6 @@ in
   # installed in `../home/default.nix` whenever possible.
   homebrew.brews = [
     { name = "ical-buddy"; }
-    "graphite"
 
     # {
     #   name = "koekeishiya/formulae/yabai";
