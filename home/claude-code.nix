@@ -32,6 +32,44 @@ let
 
   jq = "${pkgs.jq}/bin/jq";
 
+  # Skill-library convention hooks. Both the hook scripts and the references they
+  # read live in the claude-config tree and run straight from the read-only store.
+  # SKILL_LIB_REFS points the hooks at the references; the prepended PATH supplies
+  # jq/git/awk/sed/coreutils because Claude Code invokes hooks with a thin PATH
+  # that may not include the nix profile.
+  #
+  # Subagent delivery: the UserPromptSubmit/SessionStart injections reach the main
+  # loop only — subagents get no hook context and no $CLAUDE_PLUGIN_ROOT (the
+  # library is not a plugin here). They resolve the references ambiently instead:
+  # settings env exports SKILL_LIB_REFS session-wide (inherited by every Bash call,
+  # subagents included), and a stable symlink at <config-dir>/skill-library/
+  # references backs the literal path documented in SKILL-LIBRARY.md.
+  conventionRefs = "${claude-config}/skill-library/references";
+  conventionHooks = "${claude-config}/playground/hooks";
+  conventionHookEnv =
+    "PATH=${lib.makeBinPath [ pkgs.jq pkgs.git pkgs.gawk pkgs.gnused pkgs.coreutils ]}:$PATH "
+    + "SKILL_LIB_REFS=${conventionRefs}";
+
+  # The repo-root skills and the skill-library's own skills, merged into one tree
+  # so every subdir lands in ~/.claude/skills.
+  claudeSkills = pkgs.symlinkJoin {
+    name = "claude-skills";
+    paths = [
+      "${claude-config}/skills"
+      "${claude-config}/skill-library/skills"
+    ];
+  };
+
+  # Both Claude config profiles: the default account and the isolated work
+  # account (its shim sets CLAUDE_CONFIG_DIR=~/.claude-work). Shared config —
+  # CLAUDE.md, settings, skills, agents — deploys identically to each.
+  configDirs = [ ".claude" ".claude-work" ];
+
+  # MCP servers: definitions and merge logic live in claude-config
+  # (mcp/default.nix); only the machine-specific wrapper directory is
+  # injected from here.
+  claudeMcp = import "${claude-config}/mcp" { inherit pkgs claudeShimDir; };
+
   # Shared notification payload parsing (jq with full Nix store paths)
   notifyPreamble = ''
     set -euo pipefail
@@ -70,7 +108,10 @@ let
   # nix remains source of truth: a rebuild overwrites interactive changes.
   claudeSettings = {
     "$schema" = "https://json.schemastore.org/claude-code-settings.json";
-    env.CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS = "1";
+    env = {
+      CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS = "1";
+      SKILL_LIB_REFS = conventionRefs;
+    };
     permissions = {
       allow = [
         "Bash(go mod init:*)"
@@ -135,6 +176,36 @@ let
             }
           ];
         }
+        # NOTE: the Edit|Write convention gate (gate-conventions.sh) is intentionally
+        # un-wired — we're testing the lighter "preferences framing + FULL/CORE load
+        # classes" approach first. The script stays in the tree as the escalation
+        # fallback if the experiment shows framing alone isn't enough.
+      ];
+      # Force-load house code conventions: per-prompt push to the mandatory
+      # core (remind-conventions.sh) + session-start awareness map (session-start.sh).
+      UserPromptSubmit = [
+        {
+          matcher = "";
+          hooks = [
+            {
+              type = "command";
+              command = "${conventionHookEnv} bash ${conventionHooks}/remind-conventions.sh";
+              timeout = 20;
+            }
+          ];
+        }
+      ];
+      SessionStart = [
+        {
+          matcher = "";
+          hooks = [
+            {
+              type = "command";
+              command = "${conventionHookEnv} bash ${conventionHooks}/session-start.sh";
+              timeout = 10;
+            }
+          ];
+        }
       ];
     };
   }
@@ -149,15 +220,13 @@ let
 
   settingsFile = (pkgs.formats.json { }).generate "claude-code-settings.json" claudeSettings;
 in
-lib.mkIf hasConfig {
+lib.mkIf hasConfig (lib.mkMerge [
+  {
   programs.claude-code = {
     enable = true;
 
-    # Agent definitions
-    agentsDir = "${claude-config}/agents";
-
-    # Skill definitions
-    skills = "${claude-config}/skills";
+    # Skills and agents deploy to both profiles via home.file below, not through
+    # the module (which targets ~/.claude only).
 
     # LSP servers
     lspServers.go = {
@@ -204,14 +273,38 @@ lib.mkIf hasConfig {
     '';
   };
 
+  # GitHub MCP launcher: resolves the PAT from a local secret file and passes
+  # it to the containerized github-mcp-server as a per-process env var.
+  # Referenced by mcpServers.github (see claudeCodeMcp activation below).
+  home.file.".local/share/claude-shim/github-mcp" = lib.mkIf stdenv.isDarwin {
+    executable = true;
+    text = ''
+      #!${pkgs.bash}/bin/bash
+      set -euo pipefail
+      pat_file="$HOME/.config/claude/github-pat"
+      if [ ! -r "$pat_file" ]; then
+        echo "github-mcp: $pat_file is missing or unreadable." >&2
+        echo "Seed it: install -m600 /dev/null \"$pat_file\" && printf %s '<token>' > \"$pat_file\"" >&2
+        exit 1
+      fi
+      # $(<...) strips any trailing newline so the token is passed verbatim.
+      token="$(cat "$pat_file")"
+      exec docker run -i --rm \
+        -e GITHUB_PERSONAL_ACCESS_TOKEN="$token" \
+        ghcr.io/github/github-mcp-server
+    '';
+  };
+
   # ---- Global Memory (CLAUDE.md)
   # Copied as a real file instead of a store symlink so relative `@imports`
   # inside CLAUDE.md resolve to paths under $HOME. Claude Code treats paths
   # outside $HOME as external includes and silently drops them without an
   # approval prompt when the CLAUDE.md itself is a symlink into /nix/store.
   home.activation.claudeCodeMemory = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
-    run rm -f $HOME/.claude/CLAUDE.md
-    run install -Dm644 ${claude-config}/CLAUDE.md $HOME/.claude/CLAUDE.md
+    for dir in ${lib.concatMapStringsSep " " (d: "\"$HOME/${d}\"") configDirs}; do
+      run rm -f "$dir/CLAUDE.md"
+      run install -Dm644 ${claude-config}/CLAUDE.md "$dir/CLAUDE.md"
+    done
   '';
 
   # ---- Settings (settings.json)
@@ -221,10 +314,19 @@ lib.mkIf hasConfig {
   # The work profile (~/.claude-work) gets the same baseline; work-specific
   # content stays machine-local.
   home.activation.claudeCodeSettings = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
-    run rm -f $HOME/.claude/settings.json $HOME/.claude-work/settings.json
-    run install -Dm644 ${settingsFile} $HOME/.claude/settings.json
-    run install -Dm644 ${settingsFile} $HOME/.claude-work/settings.json
+    for dir in ${lib.concatMapStringsSep " " (d: "\"$HOME/${d}\"") configDirs}; do
+      run rm -f "$dir/settings.json"
+      run install -Dm644 ${settingsFile} "$dir/settings.json"
+    done
   '';
+
+  # ---- MCP servers (mcpServers in .claude.json)
+  # All MCP logic lives in claude-config (mcp/default.nix); this only
+  # schedules its activation snippet. Darwin-only because the github wrapper
+  # runs the containerized server via docker.
+  home.activation.claudeCodeMcp = lib.mkIf stdenv.isDarwin (
+    lib.hm.dag.entryAfter [ "writeBoundary" ] claudeMcp.activationScript
+  );
 
   # ---- Hook and Statusline Scripts
   # Managed via home.file for executable bit (upstream hooksDir doesn't set it)
@@ -233,8 +335,6 @@ lib.mkIf hasConfig {
     source = "${pkgs.my-rtk}/libexec/rtk/hooks/rtk-rewrite.sh";
     executable = true;
   };
-
-  home.file.".claude/RTK.md".source = "${pkgs.my-rtk}/share/rtk/RTK.md";
 
   home.file.".claude/hooks/notify.sh" = lib.mkIf stdenv.isDarwin {
     executable = true;
@@ -292,4 +392,27 @@ lib.mkIf hasConfig {
     source = "${claude-config}/statusline.sh";
     executable = true;
   };
-}
+  }
+
+  # Config shared identically across both profiles. RTK.md + SKILL-LIBRARY.md are
+  # @imported by CLAUDE.md and resolve beside it; skills/agents are read from
+  # CLAUDE_CONFIG_DIR. recursive lets externally-managed entries (e.g. the gno
+  # skill) coexist in the same directory.
+  {
+    home.file = lib.mkMerge (
+      map (dir: {
+        "${dir}/RTK.md".source = "${pkgs.my-rtk}/share/rtk/RTK.md";
+        "${dir}/SKILL-LIBRARY.md".source = "${claude-config}/SKILL-LIBRARY.md";
+        "${dir}/skill-library/references".source = conventionRefs;
+        "${dir}/skills" = {
+          source = claudeSkills;
+          recursive = true;
+        };
+        "${dir}/agents" = {
+          source = "${claude-config}/agents";
+          recursive = true;
+        };
+      }) configDirs
+    );
+  }
+])
