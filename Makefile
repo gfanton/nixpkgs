@@ -12,7 +12,7 @@ EMACS_CHANNELS := emacs-overlay chemacs2
 SPACEMACS_CHANNELS := spacemacs
 DOOM_CHANNELS := doomemacs
 ZSH_CHANNELS := fast-syntax-highlighting powerlevel10k
-MISC_CHANNELS := flake-utils flake-compat project tmux-yule-log devenv
+MISC_CHANNELS := flake-utils flake-compat project devenv
 
 NIX_FILES := $(shell find . -type f -name '*.nix')
 

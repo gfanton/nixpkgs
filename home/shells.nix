@@ -149,21 +149,21 @@ in
     enable = true;
     enableZshIntegration = true;
     defaultCommand = "fd --type f --hidden --follow --exclude .git";
-    changeDirWidgetCommand = "fd --type d --hidden --follow --exclude .git";
-    historyWidgetOptions = [
+    changeDirWidget.command = "fd --type d --hidden --follow --exclude .git";
+    historyWidget.options = [
       "--preview 'echo {}'"
       "--preview-window down:3:wrap"
       "--bind 'ctrl-y:execute-silent(echo {2..} | pbcopy)'"
       "--header 'CTRL-Y: copy command to clipboard'"
       "--exact"
     ];
-    fileWidgetOptions = [
+    fileWidget.options = [
       "--preview 'bat --color=always --style=numbers --line-range=:500 {}'"
       "--preview-window=right:60%:wrap"
       "--bind 'ctrl-y:execute-silent(echo {} | pbcopy)'"
       "--header 'CTRL-Y: copy path to clipboard'"
     ];
-    changeDirWidgetOptions = [
+    changeDirWidget.options = [
       "--preview 'eza --tree --level=2 --color=always {}'"
       "--preview-window=right:60%:wrap"
     ];

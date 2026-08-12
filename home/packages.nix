@@ -158,16 +158,6 @@ in
           set -g @proj_window_format '#{branch}'
         '';
       }
-      {
-        plugin = tmuxPlugins.tmux-yule-log;
-        extraConfig = ''
-          set -g @yule-log-idle-time "300"
-          set -g @yule-log-mode "fire"
-          set -g @yule-log-show-ticker "on"
-          set -g @yule-log-lock-enabled "on"
-          set -g @yule-log-lock-socket-protect "on"
-        '';
-      }
     ];
     extraConfig = ''
       # Terminal and color support

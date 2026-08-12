@@ -5,11 +5,6 @@
     nixpkgs-stable.url = "github:NixOS/nixpkgs/release-25.05";
     nixpkgs-unstable.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
 
-    # herdr landed in nixpkgs after the nixpkgs-unstable pin, so it gets its own
-    # rev rather than dragging every other package forward to reach one binary.
-    # Drop this input and take herdr from nixpkgs-unstable once that pin moves.
-    nixpkgs-herdr.url = "github:NixOS/nixpkgs/f8e81fc7eb063db454f563cdd596fb96a5ad1497";
-
     # Environment/system management
     darwin.url = "github:LnL7/nix-darwin/master";
     darwin.inputs.nixpkgs.follows = "nixpkgs-unstable";
@@ -40,10 +35,6 @@
     # My project
     project.url = "github:gfanton/project/v0.19.0";
     project.inputs.nixpkgs.follows = "nixpkgs-unstable";
-
-    # tmux plugins
-    tmux-yule-log.url = "github:gfanton/tmux-yule-log";
-    tmux-yule-log.inputs.nixpkgs.follows = "nixpkgs-unstable";
 
     # devenv (flake output bundles patched nix that fixes Boehm GC crash on aarch64-darwin)
     devenv.url = "github:cachix/devenv";
@@ -95,8 +86,6 @@
         overlays = attrValues self.overlays ++ [
           # Emacs overlay for latest packages and optimizations
           inputs.emacs-overlay.overlays.default
-          # Tmux yule-log plugin
-          inputs.tmux-yule-log.overlays.default
         ];
       };
 
@@ -140,12 +129,6 @@
         };
         pkgs-unstable = _: prev: {
           pkgs-unstable = import inputs.nixpkgs-unstable {
-            inherit (prev.stdenv.hostPlatform) system;
-            inherit (nixpkgsDefaults) config;
-          };
-        };
-        pkgs-herdr = _: prev: {
-          pkgs-herdr = import inputs.nixpkgs-herdr {
             inherit (prev.stdenv.hostPlatform) system;
             inherit (nixpkgsDefaults) config;
           };
@@ -341,7 +324,6 @@
             {
               nixpkgs.overlays = attrValues self.overlays ++ [
                 inputs.emacs-overlay.overlays.default
-                inputs.tmux-yule-log.overlays.default
               ];
               nixpkgs.config.allowUnfree = true;
             }
@@ -380,7 +362,6 @@
             {
               nixpkgs.overlays = attrValues self.overlays ++ [
                 inputs.emacs-overlay.overlays.default
-                inputs.tmux-yule-log.overlays.default
               ];
               nixpkgs.config.allowUnfree = true;
               nixpkgs.hostPlatform = "aarch64-linux";

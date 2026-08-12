@@ -206,7 +206,6 @@ in
     ripgrep
     fd
     sqlite
-    git
     jetbrains-mono
     nerd-fonts.jetbrains-mono
   ];
