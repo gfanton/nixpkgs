@@ -1,7 +1,6 @@
 {
   lib,
   pkgs,
-  config,
   ...
 }:
 
@@ -14,13 +13,6 @@ in
   home.file."/.config/btop" = {
     source = "${lib.cleanSource ../config/btop}";
     recursive = true;
-  };
-
-  # npmrc
-  home.file.".npmrc" = with pkgs; {
-    source = writeText "npmrc" ''
-      prefix=${config.xdg.dataHome}/node_modules
-    '';
   };
 
   # sketchybar

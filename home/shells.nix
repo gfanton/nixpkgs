@@ -123,6 +123,8 @@ in
 
   home.sessionVariables = {
     LC_ALL = "en_US.UTF-8";
+    # keep ~/.npmrc writable so `npm login` can store its auth token
+    NPM_CONFIG_PREFIX = "${config.xdg.dataHome}/node_modules";
     # XXX: move this elsewhere
     TREE_SITTER_LANG = treeSitterLangRenamed;
   };
