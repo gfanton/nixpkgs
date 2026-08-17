@@ -45,14 +45,14 @@
     claude-config.flake = false;
 
     # Claude Code plugins
-    claude-plugin-superpowers.url = "github:obra/superpowers/v5.0.7";
+    claude-plugin-superpowers.url = "github:obra/superpowers/v6.3.0";
     claude-plugin-superpowers.flake = false;
 
     claude-plugins-official.url = "github:anthropics/claude-plugins-official";
     claude-plugins-official.flake = false;
 
     # Backlog.md — task tracker (upstream flake)
-    backlog-md.url = "github:MrLesk/Backlog.md/v1.45.1";
+    backlog-md.url = "github:MrLesk/Backlog.md/v1.50.1";
 
     # Matt Pocock's Claude Code skills (no release tags — pinned by SHA)
     pocock-skills.url = "github:mattpocock/skills/b8be62ffacb0118fa3eaa29a0923c87c8c11985c";
