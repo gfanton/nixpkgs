@@ -35,7 +35,7 @@ let
   # Notification click-to-jump and the agent-session integration both shell out
   # to herdr. Taken from the package rather than PATH because the click handler
   # runs under gnotify, which does not inherit the login shell's PATH.
-  inherit (pkgs) herdr;
+  herdr = pkgs.pkgs-herdr.herdr;
 
   # Skill-library convention hooks. Both the hook scripts and the references they
   # read live in the claude-config tree and run straight from the read-only store.
@@ -62,6 +62,17 @@ let
     paths = [
       "${claude-config}/skills"
       "${claude-config}/skill-library/skills"
+    ];
+  };
+
+  # Same merge for agents. skill-library/agents holds the generic code-reviewer,
+  # which the library's architecture treats as the review path for every language;
+  # without this it ships in the repo and reaches no session.
+  claudeAgents = pkgs.symlinkJoin {
+    name = "claude-agents";
+    paths = [
+      "${claude-config}/agents"
+      "${claude-config}/skill-library/agents"
     ];
   };
 
@@ -439,7 +450,7 @@ lib.mkIf hasConfig (lib.mkMerge [
           recursive = true;
         };
         "${dir}/agents" = {
-          source = "${claude-config}/agents";
+          source = claudeAgents;
           recursive = true;
         };
       }) configDirs
