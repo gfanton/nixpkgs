@@ -5,6 +5,12 @@
     nixpkgs-stable.url = "github:NixOS/nixpkgs/release-25.05";
     nixpkgs-unstable.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
 
+    # herdr 0.8.2 is in nixpkgs master but not in the unstable channel yet, so it
+    # gets its own rev rather than dragging every other package forward to reach
+    # one binary. Drop this input and take herdr from nixpkgs-unstable once that
+    # pin carries 0.8.2.
+    nixpkgs-herdr.url = "github:NixOS/nixpkgs/916377a8f81a1cf4834e110f8fbe2666938dbc4b";
+
     # Environment/system management
     darwin.url = "github:LnL7/nix-darwin/master";
     darwin.inputs.nixpkgs.follows = "nixpkgs-unstable";
@@ -40,8 +46,9 @@
     devenv.url = "github:cachix/devenv";
     devenv.inputs.nixpkgs.follows = "nixpkgs-unstable";
 
-    # Claude Code config (private)
-    claude-config.url = "git+ssh://git@github.com/gfanton/claude-config.git";
+    # Claude Code config (private). Pinned to the writing-conventions branch while
+    # the writing topic is on trial; drop the ref to track master again.
+    claude-config.url = "git+ssh://git@github.com/gfanton/claude-config.git?ref=writing-conventions";
     claude-config.flake = false;
 
     # Claude Code plugins
@@ -129,6 +136,12 @@
         };
         pkgs-unstable = _: prev: {
           pkgs-unstable = import inputs.nixpkgs-unstable {
+            inherit (prev.stdenv.hostPlatform) system;
+            inherit (nixpkgsDefaults) config;
+          };
+        };
+        pkgs-herdr = _: prev: {
+          pkgs-herdr = import inputs.nixpkgs-herdr {
             inherit (prev.stdenv.hostPlatform) system;
             inherit (nixpkgsDefaults) config;
           };

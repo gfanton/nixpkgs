@@ -79,15 +79,16 @@
     "claude-config": {
       "flake": false,
       "locked": {
-        "lastModified": 1787060893,
-        "narHash": "sha256-QFyEXKHNieMK3P/XY2gEVSED+HB6QsO4tM/AD/vGTKE=",
-        "ref": "refs/heads/master",
-        "rev": "e15c8606e3b6e08027e25be9717f57c0d4e6013c",
-        "revCount": 41,
+        "lastModified": 1787657964,
+        "narHash": "sha256-t/0Fhzs4pKkQrEz1ysB8c0VRlpgXPHdxkcdVMTSbm8s=",
+        "ref": "writing-conventions",
+        "rev": "b71f452db03f15f4f2660edd3593c557f7b554db",
+        "revCount": 55,
         "type": "git",
         "url": "ssh://git@github.com/gfanton/claude-config.git"
       },
       "original": {
+        "ref": "writing-conventions",
         "type": "git",
         "url": "ssh://git@github.com/gfanton/claude-config.git"
       }
@@ -498,6 +499,22 @@
         "type": "github"
       }
     },
+    "nixpkgs-herdr": {
+      "locked": {
+        "lastModified": 1787255634,
+        "narHash": "sha256-WA5QzaVhiM5p9Epq81jRyS6axrz785PJLZL4fdsgLWU=",
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "rev": "916377a8f81a1cf4834e110f8fbe2666938dbc4b",
+        "type": "github"
+      },
+      "original": {
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "rev": "916377a8f81a1cf4834e110f8fbe2666938dbc4b",
+        "type": "github"
+      }
+    },
     "nixpkgs-master": {
       "locked": {
         "lastModified": 1786547400,
@@ -678,6 +695,7 @@
         "flake-compat": "flake-compat_2",
         "flake-utils": "flake-utils_2",
         "home-manager": "home-manager",
+        "nixpkgs-herdr": "nixpkgs-herdr",
         "nixpkgs-master": "nixpkgs-master",
         "nixpkgs-stable": "nixpkgs-stable_2",
         "nixpkgs-unstable": "nixpkgs-unstable",
