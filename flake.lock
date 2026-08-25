@@ -79,11 +79,11 @@
     "claude-config": {
       "flake": false,
       "locked": {
-        "lastModified": 1787663069,
-        "narHash": "sha256-JD122rk0NcI5bTZsI2OLsjUZIgJPvgRhg1+EtlNmUSs=",
+        "lastModified": 1787663210,
+        "narHash": "sha256-4I0nD2os9n/BIckDfZbPr7xJvEDQkIquT0zQSd3trDI=",
         "ref": "writing-conventions",
-        "rev": "fe31ae8d6c63eb7e5bf65517c1b8fa8da4b05f3e",
-        "revCount": 62,
+        "rev": "2eb41435fddce0c62b30666bcec38b0e4636821f",
+        "revCount": 63,
         "type": "git",
         "url": "ssh://git@github.com/gfanton/claude-config.git"
       },
