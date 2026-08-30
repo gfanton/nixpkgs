@@ -6,3 +6,7 @@ private.nix
 private.nix
 
 result
+
+# Superpowers plans and specs describe work in the private claude-config
+# submodule, which this public repo must not carry.
+docs/superpowers/
