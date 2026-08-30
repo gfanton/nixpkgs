@@ -18,6 +18,7 @@ struct Options {
     var sound: String?
     var activateBundleID: String?
     var execCommand: String?
+    var imagePath: String?
     var timeout: Double = 30
 }
 
@@ -35,6 +36,7 @@ func parseArgs(_ args: [String]) -> Options {
         case "--sound": opts.sound = value()
         case "--activate": opts.activateBundleID = value()
         case "--exec": opts.execCommand = value()
+        case "--image": opts.imagePath = value()
         case "--timeout": if let v = value(), let d = Double(v) { opts.timeout = d }
         default: break // ignore unknown args (e.g. LaunchServices' -psn_…)
         }
@@ -45,6 +47,36 @@ func parseArgs(_ args: [String]) -> Options {
 
 func warn(_ message: String) {
     FileHandle.standardError.write(Data("gnotify: \(message)\n".utf8))
+}
+
+// ---- Attachment
+
+/// Build the banner's trailing image.
+///
+/// This is the thumbnail beside the text, not the icon on the leading edge —
+/// that one comes from the app bundle and no public API overrides it per
+/// notification. Letting the caller supply the image keeps gnotify generic:
+/// each tool passes its own artwork rather than gnotify baking one in.
+///
+/// UNNotificationAttachment *moves* the file it is handed into the notification
+/// data store, so a read-only source — a /nix/store path, say — cannot be
+/// attached directly. Copy to a temporary file and surrender that instead. On
+/// success the copy is consumed by the move; only a failure leaves one to clear.
+func makeAttachment(path: String) -> UNNotificationAttachment? {
+    let source = URL(fileURLWithPath: path)
+    let temp = FileManager.default.temporaryDirectory
+        .appendingPathComponent("gnotify-\(UUID().uuidString)")
+        .appendingPathExtension(source.pathExtension)
+
+    do {
+        try FileManager.default.copyItem(at: source, to: temp)
+        return try UNNotificationAttachment(identifier: "image", url: temp, options: nil)
+    } catch {
+        // A missing or unreadable image must not cost the notification itself.
+        warn("image \(path): \(error.localizedDescription)")
+        try? FileManager.default.removeItem(at: temp)
+        return nil
+    }
 }
 
 // ---- Delegate
@@ -78,6 +110,9 @@ final class Delegate: NSObject, NSApplicationDelegate, UNUserNotificationCenterD
             content.sound = sound.lowercased() == "default"
                 ? .default
                 : UNNotificationSound(named: UNNotificationSoundName(sound))
+        }
+        if let path = opts.imagePath, let attachment = makeAttachment(path: path) {
+            content.attachments = [attachment]
         }
         var info: [String: String] = [:]
         if let id = opts.activateBundleID { info["activate"] = id }
