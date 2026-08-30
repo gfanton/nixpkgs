@@ -125,7 +125,9 @@ let
   claudeSettings = {
     "$schema" = "https://json.schemastore.org/claude-code-settings.json";
     env = {
-      CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS = "1";
+      # CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS stays unset: it makes the Agent
+      # tool's `name` route spawns onto the teammate mailbox, where the agent's
+      # final report is discarded (anthropics/claude-code#71723).
       SKILL_LIB_REFS = conventionRefs;
     };
     permissions = {
