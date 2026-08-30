@@ -298,6 +298,7 @@ in
       socat
       lazydocker # The lazier way to manage everything docker
       lazygit # The lazier way to manage everything git
+      graphite-cli # stacked-PR workflow (gt)
       less
       tree # list contents of directories in a tree-like format.
       coreutils
