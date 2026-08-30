@@ -16,12 +16,10 @@ in
   homebrew.onActivation.cleanup = "zap";
   homebrew.global.brewfile = true;
 
-  homebrew.taps = [
-    "nrlquaker/createzap"
-    "koekeishiya/formulae"
-    "FelixKratz/formulae"
-    "nikitabobko/tap"
-  ];
+  # No taps: everything below comes from homebrew/core and homebrew/cask, which
+  # are trusted implicitly. A non-official tap needs `trusted = true` or Homebrew
+  # refuses to load from it (HOMEBREW_REQUIRE_TAP_TRUST, on by default since 6.0.0).
+  homebrew.taps = [ ];
 
   # Prefer installing application from the Mac App Store
   #
@@ -48,6 +46,7 @@ in
     "keycastr"
     "numi"
     "amethyst"
+    "tailscale-app"
   ];
 
   # Configuration related to casks
@@ -55,6 +54,10 @@ in
   # setup 1password ssh agent
   # https://developer.1password.com/docs/ssh/get-started/#step-4-configure-your-ssh-or-git-client
   environment.variables.SSH_AUTH_SOCK = mkIfCaskPresent "1password-cli" "/Users/${config.users.primaryUser.username}/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock";
+
+  # Tailscale runs tailscaled inside the app sandbox with no /var/run socket, so
+  # only the bundled binary can reach the daemon.
+  environment.shellAliases.tailscale = mkIfCaskPresent "tailscale-app" "/Applications/Tailscale.app/Contents/MacOS/Tailscale";
 
   # For cli packages that aren't currently available for macOS in `nixpkgs`.Packages should be
   # installed in `../home/default.nix` whenever possible.
