@@ -11,13 +11,15 @@ let
     # See: https://github.com/abiosoft/colima/blob/main/docs/FAQ.md#how-can-i-customize-colima-configuration
 
     # number of CPUs to be allocated to the virtual machine.
-    cpu: 4
+    cpu: 12
 
     # size of the disk in GiB to be allocated to the virtual machine.
-    disk: 60
+    # Sparse-allocated, so it only consumes what the VM actually writes.
+    # Colima can grow this on restart but never shrink it.
+    disk: 200
 
     # size of the memory in GiB to be allocated to the virtual machine.
-    memory: 8
+    memory: 16
 
     # the runtime to be used for the virtual machine (docker, containerd).
     runtime: docker
