@@ -18,6 +18,9 @@
     settings = {
       user.email = config.home.user-info.email;
       user.name = config.home.user-info.username;
+      # ghub (forge, pr-review) reads this to build its auth-source lookup key,
+      # `<github.user>^<auth-name>', and errors out when it is unset.
+      github.user = "gfanton";
       gpg.format = "ssh";
       gpg.ssh.program = "/Applications/1Password.app/Contents/MacOS/op-ssh-sign";
       core.editor = "em";
@@ -36,6 +39,7 @@
       ".mynote"
       ".claude"
       "CLAUDE.md"
+      ".worktreeinclude"
     ];
 
     # large file
