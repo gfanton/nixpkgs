@@ -908,13 +908,27 @@ it is shown.
   (use-package forge
     :after magit)
 
+  ;; === GITHUB AUTH ===
+  ;; ghub backs both forge and pr-review, and resolves credentials through
+  ;; auth-source keyed by `<github.user>^<auth-name>' at api.github.com. The
+  ;; keychain avoids needing a GPG key and a pinentry prompt inside a -nw frame,
+  ;; which the daemon cannot answer. Linux keeps the netrc default.
+  (setq auth-sources
+        (if (eq system-type 'darwin)
+            '(macos-keychain-internet "~/.authinfo.gpg")
+          '("~/.authinfo.gpg")))
+
   ;; === GITHUB PR REVIEW ===
   ;; forge deliberately does not implement PR review (magit/forge#75), so pair
   ;; pr-review (review threads, submit, resolve; evil-aware) with consult-gh to
   ;; discover and open PRs/issues/repos from the minibuffer. Both work in a
   ;; terminal frame.
   (use-package pr-review
-    :commands (pr-review pr-review-open pr-review-open-url))
+    :commands (pr-review pr-review-open pr-review-open-url)
+    :config
+    ;; Share forge's keychain entry instead of storing a second copy of the same
+    ;; token under `gfanton^emacs-pr-review'.
+    (setq pr-review-ghub-auth-name 'forge))
 
   (use-package consult-gh
     :after consult
