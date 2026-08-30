@@ -6,7 +6,7 @@
 }:
 
 let
-  inherit (pkgs) herdr;
+  herdr = pkgs.pkgs-herdr.herdr;
   tomlFormat = pkgs.formats.toml { };
 
   # Project picker, from the project flake rather than PATH so the binding
