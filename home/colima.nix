@@ -24,6 +24,18 @@ let
     # the runtime to be used for the virtual machine (docker, containerd).
     runtime: docker
 
+    # Resolved by colima rather than defaulted by it, so declaring them keeps
+    # every start agreeing with the instance that already exists.
+    vmType: vz
+    mountType: virtiofs
+
+    # `disk` above is a separate lima volume; this is lima's own root disk.
+    # Colima resolves it to 20 internally but only writes lima's `disk:` when it
+    # is declared, otherwise emitting `0GiB`. Lima then reads 0 as a request to
+    # shrink the existing 20GiB and refuses to start: "disk shrinking is not
+    # supported". That breaks every restart while leaving creation intact.
+    rootDisk: 20
+
     # architecture of the virtual machine (x86_64, aarch64).  
     # Default is the architecture of the host machine.
     # arch: aarch64
@@ -55,6 +67,34 @@ let
     vm:
       # autoStart configures the virtual machine to automatically start on login.
       autoStart: true
+
+    # The guest image is Ubuntu 24.04, whose GA kernel is 6.8. The HWE stack
+    # backports 26.04's GA kernel to noble, which is both the newest kernel
+    # 24.04 accepts and the only one above 6.8 still served by noble-updates:
+    # the interim 6.11 and 6.14 HWE windows have already closed.
+    #
+    # Colima re-runs this on every start, hence the guard. The kernel it
+    # installs boots on the NEXT start, so a freshly created VM reports the old
+    # `uname -r` until it is restarted once.
+    #
+    # after-boot, not system: lima runs system scripts during boot, before DNS
+    # resolves, so apt cannot reach ports.ubuntu.com and the install finds no
+    # package. Lima logs that as a warning and carries on, so the start still
+    # reports success. after-boot runs once the VM is up, and as the login user
+    # rather than root, hence sudo.
+    provision:
+      - mode: after-boot
+        script: |
+          # Colima pipes after-boot scripts into `sh`, which is dash here, so a
+          # shebang is ignored and `-o pipefail` is a syntax error on line 2.
+          # POSIX only.
+          set -eux
+          if dpkg -s linux-image-virtual-hwe-24.04 >/dev/null 2>&1; then
+            exit 0
+          fi
+          export DEBIAN_FRONTEND=noninteractive
+          sudo -E apt-get update
+          sudo -E apt-get install -y linux-image-virtual-hwe-24.04
   '';
 
 in
@@ -62,10 +102,17 @@ in
   # Colima configuration for both macOS and Linux
   home.packages = [ pkgs.colima ];
 
-  # Add Colima configuration file to XDG config directory
-  home.file."${config.xdg.configHome}/colima/default/colima.yaml" = {
-    source = colima-config;
-  };
+  # Copied as a real writable file instead of a store symlink, because `colima
+  # start` persists its resolved configuration by overwriting this path and a
+  # failed write aborts the start. A rebuild re-applies the declarative content,
+  # so nix stays source of truth.
+  #
+  # `colima delete` removes the whole profile directory including this file, so
+  # a rebuild has to come between a delete and the next start.
+  home.activation.colimaConfig = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
+    run install -Dm644 ${colima-config} \
+      "${config.xdg.configHome}/colima/default/colima.yaml"
+  '';
 
   # COLIMA_HOME is the only directory variable colima honors (it keeps config
   # and VM data together, with no config/data split). Without it, colima
