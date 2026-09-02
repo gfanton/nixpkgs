@@ -46,9 +46,10 @@
     devenv.url = "github:cachix/devenv";
     devenv.inputs.nixpkgs.follows = "nixpkgs-unstable";
 
-    # Claude Code config (private). Pinned to the writing-conventions branch while
-    # the writing topic is on trial; drop the ref to track master again.
-    claude-config.url = "git+ssh://git@github.com/gfanton/claude-config.git?ref=writing-conventions";
+    # Claude Code config (private). The submodule at config/claude-config is the
+    # working copy; this input is what home/claude-code.nix actually builds from,
+    # so an edit reaches the system only once it is pushed and relocked.
+    claude-config.url = "git+ssh://git@github.com/gfanton/claude-config.git";
     claude-config.flake = false;
 
     # Claude Code plugins

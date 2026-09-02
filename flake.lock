@@ -81,14 +81,13 @@
       "locked": {
         "lastModified": 1788106950,
         "narHash": "sha256-taWJnmSUnHH2JkJB8/4ylCaI8ZOZgG9Dqv/T3adlE+Y=",
-        "ref": "writing-conventions",
+        "ref": "refs/heads/master",
         "rev": "943263c623748b2ddbe58d17094031e0f7e7e142",
         "revCount": 70,
         "type": "git",
         "url": "ssh://git@github.com/gfanton/claude-config.git"
       },
       "original": {
-        "ref": "writing-conventions",
         "type": "git",
         "url": "ssh://git@github.com/gfanton/claude-config.git"
       }
