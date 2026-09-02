@@ -1,6 +1,6 @@
 ;;; lsp-gno.el --- LSP client for the Gno Programming Language -*- lexical-binding: t -*-
 
-;; Author: Guilhem Fanton <guilhem.fanton@gmail.com>
+;; Author: Guilhem Fanton <8671905+gfanton@users.noreply.github.com>
 ;; Version: 0.1
 ;; Package-Requires: ((emacs "25.1") (lsp-mode "6.3.2"))
 ;; Keywords: languages, gno, lsp

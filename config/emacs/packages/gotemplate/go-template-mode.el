@@ -1,6 +1,6 @@
 ;;; go-template-mode.el --- Major mode for Go template language -*- lexical-binding: t; -*-
 
-;; Author: Guilhem Fanton <guilhem.fanton@gmail.com>
+;; Author: Guilhem Fanton <8671905+gfanton@users.noreply.github.com>
 ;; Version: 0.1.0
 ;; Package-Requires: ((emacs "24.3"))
 ;; Keywords: languages, go, template

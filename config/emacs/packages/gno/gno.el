@@ -1,6 +1,6 @@
 ;;; gno.el --- Main entry point for GNO package -*- lexical-binding: t -*-
 
-;; Author: Guilhem Fanton <guilhem.fanton@gmail.com>
+;; Author: Guilhem Fanton <8671905+gfanton@users.noreply.github.com>
 ;; Version: 0.1
 ;; Package-Requires: ((emacs "24.3") (go-mode "1.5.0") (lsp-mode "6.3.2"))
 ;; Keywords: languages, gno
