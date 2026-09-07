@@ -296,6 +296,7 @@ in
       most
       parallel # runs commands in parallel
       socat
+      lima-full # lima plus the foreign-arch guest agents an x86_64 VM needs
       lazydocker # The lazier way to manage everything docker
       lazygit # The lazier way to manage everything git
       graphite-cli # stacked-PR workflow (gt)
