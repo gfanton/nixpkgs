@@ -345,10 +345,12 @@ lib.mkIf hasConfig (lib.mkMerge [
   # its settings.json entry, so this runs herdr's installer instead of vendoring
   # a copy that would go stale on upgrade. It must follow claudeCodeSettings,
   # which rewrites settings.json wholesale and would otherwise drop the entry on
-  # every rebuild.
+  # every rebuild. A failure warns rather than aborting the switch: activation
+  # runs under `set -e`, and a missing hook only costs herdr its resume.
   home.activation.herdrClaudeIntegration = lib.hm.dag.entryAfter [ "claudeCodeSettings" ] ''
     for dir in ${lib.concatMapStringsSep " " (d: "\"$HOME/${d}\"") configDirs}; do
-      run env CLAUDE_CONFIG_DIR="$dir" ${lib.getExe herdr} integration install claude
+      run env CLAUDE_CONFIG_DIR="$dir" ${lib.getExe herdr} integration install claude \
+        || warnEcho "herdr integration install failed for $dir; herdr cannot resume agents there" >&2
     done
   '';
 
