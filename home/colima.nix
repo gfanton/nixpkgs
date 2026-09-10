@@ -23,12 +23,17 @@ let
 
     # the runtime to be used for the virtual machine (docker, containerd).
     runtime: docker
+    ${
+      # colima rejects `mountType: virtiofs` off macOS, and `vmType: vz` is
+      # Apple's Virtualization.framework, so both are written on darwin only.
+      lib.optionalString pkgs.stdenv.isDarwin ''
 
-    # Resolved by colima rather than defaulted by it, so declaring them keeps
-    # every start agreeing with the instance that already exists.
-    vmType: vz
-    mountType: virtiofs
-
+        # Resolved by colima rather than defaulted by it, so declaring them keeps
+        # every start agreeing with the instance that already exists.
+        vmType: vz
+        mountType: virtiofs
+      ''
+    }
     # `disk` above is a separate lima volume; this is lima's own root disk.
     # Colima resolves it to 20 internally but only writes lima's `disk:` when it
     # is declared, otherwise emitting `0GiB`. Lima then reads 0 as a request to
