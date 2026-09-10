@@ -123,11 +123,18 @@ in
 
   home.sessionVariables = {
     LC_ALL = "en_US.UTF-8";
-    # keep ~/.npmrc writable so `npm login` can store its auth token
-    NPM_CONFIG_PREFIX = "${config.xdg.dataHome}/node_modules";
     # XXX: move this elsewhere
     TREE_SITTER_LANG = treeSitterLangRenamed;
   };
+
+  # The npm prefix lives in ~/.npmrc, which stays a plain writable file so
+  # `npm login` can save its token there. An environment variable reaches only
+  # processes started from a shell, so a GUI or launchd npm would install into
+  # the read-only nodejs store path.
+  home.activation.npmPrefix = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
+    run ${lib.getExe' pkgs.nodejs "npm"} config set --location=user \
+      prefix "${config.xdg.dataHome}/node_modules"
+  '';
 
   # Direnv, load and unload environment variables depending on the current directory.
   # https://direnv.net
