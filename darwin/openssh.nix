@@ -1,4 +1,4 @@
-{ lib, ... }:
+{ lib, pkgs, ... }:
 
 {
   # ---- SSH server
@@ -15,7 +15,8 @@
     '';
   };
 
-  # ---- pf rules: scope sshd (22) and mosh (60000-61000) to Tailscale only.
+  # ---- pf rules: scope sshd (22), Screen Sharing (5900) and mosh (60000-61000)
+  # to Tailscale only.
   # Tailscale IPv4 CGNAT: 100.64.0.0/10. Tailscale IPv6 ULA: fd7a:115c:a1e0::/48.
   environment.etc."pf.user.conf".text = ''
     # Preserve macOS default anchors (other system services keep working).
@@ -32,14 +33,17 @@
 
     # Tailscale IPv4 (CGNAT).
     pass in quick proto tcp from 100.64.0.0/10 to any port 22
+    pass in quick proto tcp from 100.64.0.0/10 to any port 5900
     pass in quick proto udp from 100.64.0.0/10 to any port 60000:61000
 
     # Tailscale IPv6 (ULA).
     pass in quick inet6 proto tcp from fd7a:115c:a1e0::/48 to any port 22
+    pass in quick inet6 proto tcp from fd7a:115c:a1e0::/48 to any port 5900
     pass in quick inet6 proto udp from fd7a:115c:a1e0::/48 to any port 60000:61000
 
     # Drop everything else hitting these ports.
     block return in quick proto tcp to any port 22
+    block return in quick proto tcp to any port 5900
     block return in quick proto udp to any port 60000:61000
 
     # Default policy: preserve normal connectivity for all other traffic.
@@ -65,7 +69,23 @@
   };
 
   # Re-apply pf rules on darwin-rebuild switch so changes take effect without reboot.
+  #
+  # The application firewall drops inbound UDP to mosh-server: a Nix build is
+  # only ad-hoc signed, which allowSigned does not cover. The allowance follows
+  # the binary's signing identity rather than its path, so one --add outlives
+  # later rebuilds, and the recheck catches an --add that exits 0 without
+  # taking effect. A block warns rather than aborting activation.
   system.activationScripts.postActivation.text = lib.mkAfter ''
     /sbin/pfctl -E -f /etc/pf.user.conf || true
+
+    socketfilterfw=/usr/libexec/ApplicationFirewall/socketfilterfw
+    moshServer=${lib.getExe' pkgs.mosh "mosh-server"}
+    if [[ $("$socketfilterfw" --getappblocked "$moshServer") != *"is permitted"* ]]; then
+      "$socketfilterfw" --add "$moshServer" >/dev/null || true
+      "$socketfilterfw" --unblockapp "$moshServer" >/dev/null || true
+    fi
+    if [[ $("$socketfilterfw" --getappblocked "$moshServer") != *"is permitted"* ]]; then
+      echo "warning: the application firewall blocks $moshServer, so mosh cannot connect" >&2
+    fi
   '';
 }

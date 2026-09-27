@@ -110,6 +110,34 @@
         email = "github-actions@github.com";
         nixConfigDirectory = "/Users/runner/work/nixpkgs/nixpkgs";
       };
+
+      # A Mac of mine: every shared darwin and home module, plus the host's own
+      # names and modules.
+      mkMacHost =
+        {
+          hostName,
+          computerName ? hostName,
+          knownNetworkServices ? [ ],
+          hostModules ? [ ],
+        }:
+        makeOverridable self.lib.mkDarwinSystem (
+          primaryUserInfo
+          // {
+            system = "aarch64-darwin";
+            modules =
+              (attrValues self.darwinModules)
+              ++ (attrValues self.commonModules)
+              ++ hostModules
+              ++ singleton {
+                nixpkgs = nixpkgsDefaults;
+                networking = { inherit computerName hostName knownNetworkServices; };
+                nix.registry.my.flake = inputs.self;
+              };
+
+            inherit homeStateVersion;
+            homeModules = (attrValues self.homeManagerModules) ++ (attrValues self.commonModules);
+          }
+        );
     in
     {
 
@@ -251,33 +279,20 @@
         };
 
         # My Apple Silicon macOS laptop config
-        tzatziki = makeOverridable self.lib.mkDarwinSystem (
-          primaryUserInfo
-          // {
-            system = "aarch64-darwin";
-            modules =
-              (attrValues self.darwinModules)
-              ++ (attrValues self.commonModules)
-              ++ singleton {
-                nixpkgs = nixpkgsDefaults;
-                networking.computerName = "tzatziki";
-                networking.hostName = "tzatziki";
-                networking.knownNetworkServices = [
-                  "Wi-Fi"
-                  "USB 10/100/1000 LAN"
-                ];
-                nix.registry.my.flake = inputs.self;
-              };
+        tzatziki = mkMacHost {
+          hostName = "tzatziki";
+          knownNetworkServices = [
+            "Wi-Fi"
+            "USB 10/100/1000 LAN"
+          ];
+        };
 
-            inherit homeStateVersion;
-            homeModules =
-              (attrValues self.homeManagerModules)
-              ++ (attrValues self.commonModules)
-              ++ [
-
-              ];
-          }
-        );
+        # Mac mini with no display attached: a remote workstation reached over
+        # mosh and Screen Sharing, through Tailscale only
+        kalamata = mkMacHost {
+          hostName = "kalamata";
+          hostModules = [ ./darwin/kalamata.nix ];
+        };
 
         # Config with small modifications needed/desired for CI with GitHub workflow
         githubCI = self.darwinConfigurations.tzatziki.override {
