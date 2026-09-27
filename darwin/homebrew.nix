@@ -27,6 +27,7 @@ in
   # https://github.com/malob/nixpkgs/issues/9
   homebrew.masApps = {
     DaisyDisk = 411643860;
+    WireGuard = 1451685025;
     Xcode = 497799835;
   };
 
