@@ -5,6 +5,10 @@ UNAME := $(shell uname)
 
 BOOTSTRAP := bootstrap
 
+# The Macs in flake.nix. A switch sets the host name along with everything
+# else, so switch.<host> run on another of them turns that Mac into <host>.
+DARWIN_HOSTS := tzatziki kalamata
+
 # Channels (matching flake.nix inputs)
 NIX_CHANNELS := nixpkgs-master nixpkgs-stable nixpkgs-unstable
 HOME_CHANNELS := home-manager darwin
@@ -22,7 +26,7 @@ fallback := $(if $(filter $(FALLBACK),true),--fallback,)
 ifeq ($(UNAME), Darwin) # darwin rules
 all:
 	@echo "switch.bootstrap"
-	@echo "switch.tzatziki"
+	@printf 'switch.%s\n' $(DARWIN_HOSTS)
 
 build.tzatziki:
 	nix build ${impure} ${fallback} --verbose .#darwinConfigurations.tzatziki.system
@@ -38,10 +42,18 @@ check:
 
 switch.bootstrap: result/sw/bin/darwin-rebuild
 	./result/sw/bin/darwin-rebuild switch ${impure} ${fallback} --verbose --flake ".#$(BOOTSTRAP)"
-switch.tzatziki: result/sw/bin/darwin-rebuild
-	TERM=xterm sudo ./result/sw/bin/darwin-rebuild switch ${impure} ${fallback} --verbose --flake .#tzatziki
-switch.kalamata: result/sw/bin/darwin-rebuild
-	TERM=xterm sudo ./result/sw/bin/darwin-rebuild switch ${impure} ${fallback} --verbose --flake .#kalamata
+.PHONY: $(addprefix switch.,$(DARWIN_HOSTS)) $(addprefix check-host.,$(DARWIN_HOSTS))
+
+# Passes on <host> itself, and on a Mac that is none of DARWIN_HOSTS yet, such
+# as a new machine still under its factory name.
+$(addprefix check-host.,$(DARWIN_HOSTS)): check-host.%:
+	current="$$(scutil --get LocalHostName)" && \
+	case " $(DARWIN_HOSTS) " in \
+	*" $$current "*) test "$$current" = "$*" || { echo "error: this Mac is $$current, not $*" >&2; exit 1; } ;; \
+	esac
+
+$(addprefix switch.,$(DARWIN_HOSTS)): switch.%: check-host.% result/sw/bin/darwin-rebuild
+	TERM=xterm sudo ./result/sw/bin/darwin-rebuild switch ${impure} ${fallback} --verbose --flake .#$*
 
 result/sw/bin/darwin-rebuild:
 	nix --experimental-features 'flakes nix-command' build ".#darwinConfigurations.$(BOOTSTRAP).system"
