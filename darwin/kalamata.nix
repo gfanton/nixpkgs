@@ -8,6 +8,10 @@
   # which on this host means unreachable until someone is at the console.
   launchd.daemons.tailscaled.serviceConfig.KeepAlive = true;
 
+  # SSH keys stay in 1Password on the laptop, which forwards its agent here
+  # (home/ssh-agent-forwarding.nix).
+  users.primaryUser.sshAgent = "forwarded";
+
   # Nobody is around to press the power button.
   power.restartAfterPowerFailure = true;
   power.restartAfterFreeze = true;

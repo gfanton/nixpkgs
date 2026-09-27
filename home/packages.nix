@@ -94,8 +94,10 @@ in
       ServerAliveInterval = 60;
       HashKnownHosts = true;
     };
-    # on darwin use 1password agent
-    extraConfig = lib.mkIf pkgs.stdenv.isDarwin ''
+    # on darwin use 1password agent, unless the agent is forwarded in
+    # (home/ssh-agent-forwarding.nix): IdentityAgent would override the
+    # SSH_AUTH_SOCK that points at it
+    extraConfig = lib.mkIf (pkgs.stdenv.isDarwin && config.home.user-info.sshAgent == "1password") ''
       IdentityAgent "~/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock"
     '';
   };

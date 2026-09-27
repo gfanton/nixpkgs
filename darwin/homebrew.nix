@@ -54,7 +54,9 @@ in
 
   # setup 1password ssh agent
   # https://developer.1password.com/docs/ssh/get-started/#step-4-configure-your-ssh-or-git-client
-  environment.variables.SSH_AUTH_SOCK = mkIfCaskPresent "1password-cli" "/Users/${config.users.primaryUser.username}/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock";
+  environment.variables.SSH_AUTH_SOCK = mkIf (config.users.primaryUser.sshAgent == "1password") (
+    mkIfCaskPresent "1password-cli" "/Users/${config.users.primaryUser.username}/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock"
+  );
 
   # Tailscale runs tailscaled inside the app sandbox with no /var/run socket, so
   # only the bundled binary can reach the daemon.

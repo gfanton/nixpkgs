@@ -1,4 +1,9 @@
-{ lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 {
   # ---- SSH server
@@ -12,6 +17,11 @@
       PermitRootLogin no
       KbdInteractiveAuthentication no
       AuthenticationMethods publickey
+    ''
+    # A forwarded agent socket left by a dropped connection would otherwise
+    # block the next connection's forward to the same path.
+    + lib.optionalString (config.users.primaryUser.sshAgent == "forwarded") ''
+      StreamLocalBindUnlink yes
     '';
   };
 

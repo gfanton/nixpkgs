@@ -248,6 +248,7 @@
         my-starship = import ./home/starship.nix;
         my-ghostty = import ./home/ghostty.nix;
         my-herdr = import ./home/herdr.nix;
+        my-ssh-agent-forwarding = import ./home/ssh-agent-forwarding.nix;
         my-claude-code = import ./home/claude-code.nix inputs.claude-config;
         my-backlog-workflow = import "${inputs.claude-config}/backlog-workflow";
 
@@ -285,6 +286,7 @@
             "Wi-Fi"
             "USB 10/100/1000 LAN"
           ];
+          hostModules = [ { users.primaryUser.forwardAgentTo = [ "kalamata" ]; } ];
         };
 
         # Mac mini with no display attached: a remote workstation reached over
@@ -306,6 +308,7 @@
             services.yabai.enable = mkForce false;
             services.skhd.enable = mkForce false;
             services.openssh.enable = mkForce false;
+            users.primaryUser.forwardAgentTo = mkForce [ ];
             ids.gids.nixbld = 350; # [hack]
           };
         };

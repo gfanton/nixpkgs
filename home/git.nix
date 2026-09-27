@@ -1,4 +1,9 @@
-{ config, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 {
   # Git
@@ -22,7 +27,11 @@
       # `<github.user>^<auth-name>', and errors out when it is unset.
       github.user = "gfanton";
       gpg.format = "ssh";
-      gpg.ssh.program = "/Applications/1Password.app/Contents/MacOS/op-ssh-sign";
+      # With a forwarded agent, git's default ssh-keygen signs through it and
+      # 1Password on the forwarding machine approves.
+      gpg.ssh.program = lib.mkIf (
+        config.home.user-info.sshAgent == "1password"
+      ) "/Applications/1Password.app/Contents/MacOS/op-ssh-sign";
       core.editor = "em";
       core.whitespace = "trailing-space,space-before-tab";
       diff.colorMoved = "default";
