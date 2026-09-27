@@ -251,34 +251,6 @@
         };
 
         # My Apple Silicon macOS laptop config
-        macbook = makeOverridable self.lib.mkDarwinSystem (
-          primaryUserInfo
-          // {
-            system = "aarch64-darwin";
-            modules =
-              (attrValues self.darwinModules)
-              ++ (attrValues self.commonModules)
-              ++ singleton {
-                nixpkgs = nixpkgsDefaults;
-                networking.computerName = "guicp";
-                networking.hostName = "ghost";
-                networking.knownNetworkServices = [
-                  "Wi-Fi"
-                  "USB 10/100/1000 LAN"
-                ];
-                nix.registry.my.flake = inputs.self;
-              };
-
-            inherit homeStateVersion;
-            homeModules =
-              (attrValues self.homeManagerModules)
-              ++ (attrValues self.commonModules)
-              ++ [
-
-              ];
-          }
-        );
-
         tzatziki = makeOverridable self.lib.mkDarwinSystem (
           primaryUserInfo
           // {
@@ -308,7 +280,7 @@
         );
 
         # Config with small modifications needed/desired for CI with GitHub workflow
-        githubCI = self.darwinConfigurations.macbook.override {
+        githubCI = self.darwinConfigurations.tzatziki.override {
           system = "aarch64-darwin";
           username = "runner";
           nixConfigDirectory = "/Users/runner/work/nixpkgs/nixpkgs";

@@ -22,10 +22,7 @@ fallback := $(if $(filter $(FALLBACK),true),--fallback,)
 ifeq ($(UNAME), Darwin) # darwin rules
 all:
 	@echo "switch.bootstrap"
-	@echo "switch.macbook"
-
-build.macbook:
-	nix build ${impure} ${fallback} --verbose .#darwinConfigurations.macbook.system
+	@echo "switch.tzatziki"
 
 build.tzatziki:
 	nix build ${impure} ${fallback} --verbose .#darwinConfigurations.tzatziki.system
@@ -38,8 +35,6 @@ check:
 
 switch.bootstrap: result/sw/bin/darwin-rebuild
 	./result/sw/bin/darwin-rebuild switch ${impure} ${fallback} --verbose --flake ".#$(BOOTSTRAP)"
-switch.macbook: result/sw/bin/darwin-rebuild
-	TERM=xterm sudo ./result/sw/bin/darwin-rebuild switch ${impure} ${fallback} --verbose --flake .#macbook
 switch.tzatziki: result/sw/bin/darwin-rebuild
 	TERM=xterm sudo ./result/sw/bin/darwin-rebuild switch ${impure} ${fallback} --verbose --flake .#tzatziki
 
