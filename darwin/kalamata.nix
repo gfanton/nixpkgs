@@ -1,14 +1,16 @@
 { config, ... }:
 
+let
+  sshKeys = import ../lib/ssh-keys.nix;
+in
 {
   services.tailscale.enable = true;
   launchd.daemons.tailscaled.serviceConfig.KeepAlive = true;
 
   users.primaryUser.sshAgent = "forwarded";
+  users.primaryUser.sshKey = sshKeys.kalamata;
 
-  users.users.${config.users.primaryUser.username}.openssh.authorizedKeys.keys = [
-    "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIAIBARS+EkcOvC6Kw7kLq/Ui+Mz1HUMgjAIV8AaTR7Nm tzatziki"
-  ];
+  users.users.${config.users.primaryUser.username}.openssh.authorizedKeys.keys = [ sshKeys.tzatziki ];
 
   power.restartAfterPowerFailure = true;
   power.restartAfterFreeze = true;

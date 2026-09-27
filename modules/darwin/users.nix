@@ -34,6 +34,14 @@ in
         forwardAgentTo.
       '';
     };
+    sshKey = mkOption {
+      type = with types; nullOr str;
+      default = null;
+      description = ''
+        Public key of this host's own SSH key, held by the SSH agent. ssh
+        offers only this key to GitHub and to the hosts in forwardAgentTo.
+      '';
+    };
     forwardAgentTo = mkOption {
       type = with types; listOf str;
       default = [ ];

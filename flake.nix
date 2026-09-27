@@ -111,6 +111,8 @@
         nixConfigDirectory = "/Users/runner/work/nixpkgs/nixpkgs";
       };
 
+      sshKeys = import ./lib/ssh-keys.nix;
+
       mkMacHost =
         {
           hostName,
@@ -247,6 +249,7 @@
         my-ghostty = import ./home/ghostty.nix;
         my-herdr = import ./home/herdr.nix;
         my-ssh-agent-forwarding = import ./home/ssh-agent-forwarding.nix;
+        my-ssh-key = import ./home/ssh-key.nix;
         my-claude-code = import ./home/claude-code.nix inputs.claude-config;
         my-backlog-workflow = import "${inputs.claude-config}/backlog-workflow";
 
@@ -284,7 +287,14 @@
             "Wi-Fi"
             "USB 10/100/1000 LAN"
           ];
-          hostModules = [ { users.primaryUser.forwardAgentTo = [ "kalamata" ]; } ];
+          hostModules = [
+            {
+              users.primaryUser = {
+                forwardAgentTo = [ "kalamata" ];
+                sshKey = sshKeys.tzatziki;
+              };
+            }
+          ];
         };
 
         kalamata = mkMacHost {
