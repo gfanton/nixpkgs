@@ -1,3 +1,5 @@
+{ config, ... }:
+
 {
   # Tailscale is the only way in (darwin/openssh.nix), so it runs as a launchd
   # daemon that starts at boot, with no user session needed. Enabling it also
@@ -11,6 +13,10 @@
   # SSH keys stay in 1Password on the laptop, which forwards its agent here
   # (home/ssh-agent-forwarding.nix).
   users.primaryUser.sshAgent = "forwarded";
+
+  users.users.${config.users.primaryUser.username}.openssh.authorizedKeys.keys = [
+    "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIAIBARS+EkcOvC6Kw7kLq/Ui+Mz1HUMgjAIV8AaTR7Nm tzatziki"
+  ];
 
   # Nobody is around to press the power button.
   power.restartAfterPowerFailure = true;
