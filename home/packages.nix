@@ -86,6 +86,9 @@ in
   programs.ssh = {
     enable = true;
     enableDefaultConfig = false;
+    # Machine-local host settings live outside this public repo; ssh keeps the
+    # first value it reads, so they win over the generated blocks below.
+    includes = [ "config.local" ];
     settings."*" = {
       ControlMaster = "auto";
       ControlPath = "${config.xdg.cacheHome}/ssh-%u-%r@%h:%p";
