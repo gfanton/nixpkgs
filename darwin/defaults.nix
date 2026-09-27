@@ -1,3 +1,5 @@
+{ config, lib, ... }:
+
 {
   system.defaults.NSGlobalDomain = {
     "com.apple.trackpad.scaling" = 3.0;
@@ -71,4 +73,55 @@
     AppleShowAllExtensions = true;
     QuitMenuItem = true;
   };
+
+  # Keyboard shortcuts (System Settings > Keyboard > Keyboard Shortcuts)
+  #
+  # The dictionary is written whole and replaces the stored one, so an ID left
+  # out falls back to its macOS default. A shortcut is a character, a keycode
+  # and a modifier mask, 65535 meaning none. Modifier bits: shift 131072, ctrl
+  # 262144, option 524288, command 1048576, and 8388608 on arrow keys.
+  system.defaults.CustomUserPreferences."com.apple.symbolichotkeys".AppleSymbolicHotKeys =
+    let
+      shortcut = enabled: character: keycode: modifiers: {
+        inherit enabled;
+        value = {
+          parameters = [
+            character
+            keycode
+            modifiers
+          ];
+          type = "standard";
+        };
+      };
+    in
+    {
+      "32" = shortcut false 65535 126 8650752; # Mission Control, ctrl-up
+      "33" = shortcut false 65535 125 8650752; # Application windows, ctrl-down
+      "60" = shortcut false 32 49 262144; # Select the previous input source, ctrl-space
+      "61" = shortcut false 32 49 786432; # Select the next input source, ctrl-option-space
+      "64" = shortcut false 32 49 1048576; # Show Spotlight search, cmd-space
+      "79" = shortcut false 65535 123 8650752; # Move left a space, ctrl-left
+      "80" = shortcut true 65535 123 8781824; # stored with 79, ctrl-shift-left
+      "81" = shortcut false 65535 124 8650752; # Move right a space, ctrl-right
+      "82" = shortcut true 65535 124 8781824; # stored with 81, ctrl-shift-right
+
+      # Unidentified, with no key bound; declared so they stay off.
+      "164" = shortcut false 65535 65535 0;
+      "176" = {
+        enabled = false;
+        value.type = "SAE1.0";
+      };
+    };
+
+  # The hotkey server reads these only at login; activateSettings applies them
+  # to the running session. A failure warns rather than aborting activation.
+  system.activationScripts.postActivation.text =
+    let
+      user = lib.escapeShellArg config.system.primaryUser;
+    in
+    lib.mkAfter ''
+      launchctl asuser "$(id -u -- ${user})" sudo --user=${user} -- \
+        /System/Library/PrivateFrameworks/SystemAdministration.framework/Resources/activateSettings -u \
+        || echo "warning: keyboard shortcuts apply at the next login" >&2
+    '';
 }
