@@ -35,9 +35,7 @@
   # Keyboard
   system.keyboard.enableKeyMapping = true;
   system.keyboard.remapCapsLockToControl = true;
-  # The Globe (fn) key does nothing, as with Modifier Keys > Globe > No Action.
-  # These are the two source usages System Settings maps for that choice, sent
-  # to usage 0; hidutil applies them to every keyboard, not one.
+  # Globe (fn) key: no action
   system.keyboard.userKeyMapping = [
     {
       HIDKeyboardModifierMappingSrc = 1095216660483;

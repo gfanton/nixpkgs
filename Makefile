@@ -5,8 +5,6 @@ UNAME := $(shell uname)
 
 BOOTSTRAP := bootstrap
 
-# The Macs in flake.nix. A switch sets the host name along with everything
-# else, so switch.<host> run on another of them turns that Mac into <host>.
 DARWIN_HOSTS := tzatziki kalamata
 
 # Channels (matching flake.nix inputs)
@@ -44,8 +42,6 @@ switch.bootstrap: result/sw/bin/darwin-rebuild
 	./result/sw/bin/darwin-rebuild switch ${impure} ${fallback} --verbose --flake ".#$(BOOTSTRAP)"
 .PHONY: $(addprefix switch.,$(DARWIN_HOSTS)) $(addprefix check-host.,$(DARWIN_HOSTS))
 
-# Passes on <host> itself, and on a Mac that is none of DARWIN_HOSTS yet, such
-# as a new machine still under its factory name.
 $(addprefix check-host.,$(DARWIN_HOSTS)): check-host.%:
 	current="$$(scutil --get LocalHostName)" && \
 	case " $(DARWIN_HOSTS) " in \

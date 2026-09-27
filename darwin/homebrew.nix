@@ -48,7 +48,6 @@ in
     "numi"
     "amethyst"
   ]
-  # The app and services.tailscale are two Tailscale clients; a host runs one.
   ++ lib.optional (!config.services.tailscale.enable) "tailscale-app";
 
   # Configuration related to casks

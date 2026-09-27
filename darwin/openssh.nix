@@ -18,8 +18,6 @@
       KbdInteractiveAuthentication no
       AuthenticationMethods publickey
     ''
-    # A forwarded agent socket left by a dropped connection would otherwise
-    # block the next connection's forward to the same path.
     + lib.optionalString (config.users.primaryUser.sshAgent == "forwarded") ''
       StreamLocalBindUnlink yes
     '';
@@ -79,12 +77,8 @@
   };
 
   # Re-apply pf rules on darwin-rebuild switch so changes take effect without reboot.
-  #
-  # The application firewall drops inbound UDP to mosh-server: a Nix build is
-  # only ad-hoc signed, which allowSigned does not cover. The allowance follows
-  # the binary's signing identity rather than its path, so one --add outlives
-  # later rebuilds, and the recheck catches an --add that exits 0 without
-  # taking effect. A block warns rather than aborting activation.
+  # Nix builds are ad-hoc signed, so allowSigned does not cover mosh-server;
+  # the allowance follows its signing identity, not its store path.
   system.activationScripts.postActivation.text = lib.mkAfter ''
     /sbin/pfctl -E -f /etc/pf.user.conf || true
 

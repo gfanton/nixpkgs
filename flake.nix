@@ -111,8 +111,6 @@
         nixConfigDirectory = "/Users/runner/work/nixpkgs/nixpkgs";
       };
 
-      # A Mac of mine: every shared darwin and home module, plus the host's own
-      # names and modules.
       mkMacHost =
         {
           hostName,
@@ -289,8 +287,6 @@
           hostModules = [ { users.primaryUser.forwardAgentTo = [ "kalamata" ]; } ];
         };
 
-        # Mac mini with no display attached: a remote workstation reached over
-        # mosh and Screen Sharing, through Tailscale only
         kalamata = mkMacHost {
           hostName = "kalamata";
           hostModules = [ ./darwin/kalamata.nix ];

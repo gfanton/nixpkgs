@@ -74,8 +74,6 @@
     QuitMenuItem = true;
   };
 
-  # Keyboard shortcuts (System Settings > Keyboard > Keyboard Shortcuts)
-  #
   # The dictionary is written whole and replaces the stored one, so an ID left
   # out falls back to its macOS default. A shortcut is a character, a keycode
   # and a modifier mask, 65535 meaning none. Modifier bits: shift 131072, ctrl
@@ -105,7 +103,6 @@
       "81" = shortcut false 65535 124 8650752; # Move right a space, ctrl-right
       "82" = shortcut true 65535 124 8781824; # stored with 81, ctrl-shift-right
 
-      # Unidentified, with no key bound; declared so they stay off.
       "164" = shortcut false 65535 65535 0;
       "176" = {
         enabled = false;
@@ -114,7 +111,7 @@
     };
 
   # The hotkey server reads these only at login; activateSettings applies them
-  # to the running session. A failure warns rather than aborting activation.
+  # to the running session.
   system.activationScripts.postActivation.text =
     let
       user = lib.escapeShellArg config.system.primaryUser;
