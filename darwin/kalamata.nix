@@ -7,6 +7,11 @@ in
   services.tailscale.enable = true;
   launchd.daemons.tailscaled.serviceConfig.KeepAlive = true;
 
+  services.openssh.routedPrivateAccess = {
+    enable = true;
+    interface = "en0";
+  };
+
   users.primaryUser.sshAgent = "forwarded";
   users.primaryUser.sshKey = sshKeys.kalamata;
 
