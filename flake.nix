@@ -250,6 +250,7 @@
         my-herdr = import ./home/herdr.nix;
         my-ssh-agent-forwarding = import ./home/ssh-agent-forwarding.nix;
         my-ssh-key = import ./home/ssh-key.nix;
+        my-agent-browser = import ./home/agent-browser.nix;
         my-claude-code = import ./home/claude-code.nix inputs.claude-config;
         my-backlog-workflow = import "${inputs.claude-config}/backlog-workflow";
 
