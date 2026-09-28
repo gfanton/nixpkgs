@@ -35,7 +35,7 @@ let
   # Notification click-to-jump and the agent-session integration both shell out
   # to herdr. Taken from the package rather than PATH because the click handler
   # runs under gnotify, which does not inherit the login shell's PATH.
-  herdr = pkgs.pkgs-herdr.herdr;
+  inherit (pkgs) herdr;
 
   # Skill-library convention hooks. Both the hook scripts and the references they
   # read live in the claude-config tree and run straight from the read-only store.

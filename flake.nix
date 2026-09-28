@@ -5,12 +5,6 @@
     nixpkgs-stable.url = "github:NixOS/nixpkgs/release-25.05";
     nixpkgs-unstable.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
 
-    # herdr 0.8.2 is in nixpkgs master but not in the unstable channel yet, so it
-    # gets its own rev rather than dragging every other package forward to reach
-    # one binary. Drop this input and take herdr from nixpkgs-unstable once that
-    # pin carries 0.8.2.
-    nixpkgs-herdr.url = "github:NixOS/nixpkgs/916377a8f81a1cf4834e110f8fbe2666938dbc4b";
-
     # Environment/system management
     darwin.url = "github:LnL7/nix-darwin/master";
     darwin.inputs.nixpkgs.follows = "nixpkgs-unstable";
@@ -53,14 +47,14 @@
     claude-config.flake = false;
 
     # Claude Code plugins
-    claude-plugin-superpowers.url = "github:obra/superpowers/v6.3.0";
+    claude-plugin-superpowers.url = "github:obra/superpowers/v6.4.2";
     claude-plugin-superpowers.flake = false;
 
     claude-plugins-official.url = "github:anthropics/claude-plugins-official";
     claude-plugins-official.flake = false;
 
     # Backlog.md — task tracker (upstream flake)
-    backlog-md.url = "github:MrLesk/Backlog.md/v1.50.1";
+    backlog-md.url = "github:MrLesk/Backlog.md/v1.53.0";
 
     # Matt Pocock's Claude Code skills (no release tags — pinned by SHA)
     pocock-skills.url = "github:mattpocock/skills/b8be62ffacb0118fa3eaa29a0923c87c8c11985c";
@@ -169,13 +163,6 @@
             inherit (nixpkgsDefaults) config;
           };
         };
-        pkgs-herdr = _: prev: {
-          pkgs-herdr = import inputs.nixpkgs-herdr {
-            inherit (prev.stdenv.hostPlatform) system;
-            inherit (nixpkgsDefaults) config;
-          };
-        };
-
         # non flake inputs
         my-inputs = final: prev: {
           zsh-plugins.fast-syntax-highlighting = inputs.fast-syntax-highlighting;

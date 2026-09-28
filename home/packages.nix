@@ -120,7 +120,7 @@ in
       GOPATH = "${config.home.homeDirectory}/.local/share/go";
       GOBIN = "${config.home.homeDirectory}/.local/bin";
     };
-    package = pkgs.pkgs-master.go_1_25;
+    package = pkgs.pkgs-master.go_1_27;
   };
 
   # tmux with catppuccin theme
@@ -294,7 +294,6 @@ in
       unrar # extract RAR archives
       eza # fancy version of `ls`
       btop # fancy version of `top`
-      tmate # instant terminal sharing
       fd # fancy version of `find`
       most
       parallel # runs commands in parallel
