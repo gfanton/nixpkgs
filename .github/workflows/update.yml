@@ -23,10 +23,16 @@ jobs:
           extra_nix_config: |
             access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}
 
+      # claude-config is a private SSH input the runner has no key for.
+      - name: List inputs to update
+        id: inputs
+        run: echo "names=$(jq -r '.nodes.root.inputs | keys - ["claude-config"] | join(" ")' flake.lock)" >> "$GITHUB_OUTPUT"
+
       - name: Update flake.lock
         id: update
         uses: DeterminateSystems/update-flake-lock@v24
         with:
+          inputs: ${{ steps.inputs.outputs.names }}
           token: ${{ secrets.BOT_PAT }}
           pr-title: "nix: update flake inputs"
           pr-labels: |
@@ -72,9 +78,9 @@ jobs:
         id: diff
         run: |
           cd base
-          nix build ".#homeConfigurations.githubCI.activationPackage" -o /tmp/base-result
+          nix build ".#homeConfigurations.githubCI.activationPackage" --override-input claude-config path:./stubs/claude-config -o /tmp/base-result
           cd ../updated
-          nix build ".#homeConfigurations.githubCI.activationPackage" -o /tmp/updated-result
+          nix build ".#homeConfigurations.githubCI.activationPackage" --override-input claude-config path:./stubs/claude-config -o /tmp/updated-result
 
           # Generate nvd diff
           DIFF=$(nix-shell -p nvd --run "nvd diff /tmp/base-result /tmp/updated-result" | tail -n +3 || echo "No changes detected")
