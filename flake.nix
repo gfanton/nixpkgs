@@ -239,7 +239,11 @@
         my-ssh-key = import ./home/ssh-key.nix;
         my-agent-browser = import ./home/agent-browser.nix;
         my-claude-code = import ./home/claude-code.nix inputs.claude-config;
-        my-backlog-workflow = import "${inputs.claude-config}/backlog-workflow";
+        my-backlog-workflow =
+          let
+            module = "${inputs.claude-config}/backlog-workflow";
+          in
+          if builtins.pathExists module then import module else { };
 
         # local modules
         programs-truecolor = import ./modules/home/programs/truecolor;
