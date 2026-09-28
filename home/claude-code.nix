@@ -268,6 +268,8 @@ lib.mkIf hasConfig (lib.mkMerge [
     executable = true;
     text = ''
       #!${pkgs.bash}/bin/bash
+      # claude-work exports its own config before it execs this shim.
+      export AGENT_BROWSER_CONFIG="''${AGENT_BROWSER_CONFIG:-${config.xdg.configHome}/agent-browser/perso.json}"
       if [ -x "$HOME/.local/bin/claude" ]; then
         bin="$HOME/.local/bin/claude"
       else
@@ -287,6 +289,7 @@ lib.mkIf hasConfig (lib.mkMerge [
     text = ''
       #!${pkgs.bash}/bin/bash
       export CLAUDE_CONFIG_DIR="$HOME/.claude-work"
+      export AGENT_BROWSER_CONFIG="${config.xdg.configHome}/agent-browser/work.json"
       exec "${claudeShimDir}/claude" "$@"
     '';
   };
