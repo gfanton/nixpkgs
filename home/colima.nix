@@ -6,6 +6,7 @@
 }:
 
 let
+  inherit (pkgs.stdenv.hostPlatform) isDarwin isLinux;
   colima-config = pkgs.writeText "colima.yaml" ''
     # Colima configuration
     # See: https://github.com/abiosoft/colima/blob/main/docs/FAQ.md#how-can-i-customize-colima-configuration
@@ -26,7 +27,7 @@ let
     ${
       # colima rejects `mountType: virtiofs` off macOS, and `vmType: vz` is
       # Apple's Virtualization.framework, so both are written on darwin only.
-      lib.optionalString pkgs.stdenv.isDarwin ''
+      lib.optionalString isDarwin ''
 
         # Resolved by colima rather than defaulted by it, so declaring them keeps
         # every start agreeing with the instance that already exists.
@@ -127,7 +128,7 @@ in
   };
 
   # Create systemd user service for Colima on Linux
-  systemd.user.services.colima = lib.mkIf pkgs.stdenv.isLinux {
+  systemd.user.services.colima = lib.mkIf isLinux {
     Unit = {
       Description = "Colima container runtime";
       After = [ "graphical-session.target" ];
@@ -152,5 +153,5 @@ in
   };
 
   # Enable the service on Linux
-  systemd.user.startServices = lib.mkIf pkgs.stdenv.isLinux true;
+  systemd.user.startServices = lib.mkIf isLinux true;
 }

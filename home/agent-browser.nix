@@ -6,6 +6,7 @@
 }:
 
 let
+  inherit (pkgs.stdenv.hostPlatform) isDarwin;
   # CDP port per Claude identity; the Claude shims pick the identity.
   identities = {
     work = 9222;
@@ -15,7 +16,7 @@ let
   chrome = "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome";
   profileDir = name: "${config.home.homeDirectory}/Library/Application Support/agent-chrome/${name}";
 in
-lib.mkIf pkgs.stdenv.isDarwin {
+lib.mkIf isDarwin {
   home.packages = [ pkgs.agent-browser ];
 
   launchd.agents = lib.mapAttrs' (

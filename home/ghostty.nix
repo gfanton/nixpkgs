@@ -1,10 +1,13 @@
 { pkgs, ... }:
 
+let
+  inherit (pkgs.stdenv.hostPlatform) isDarwin;
+in
 {
   programs.ghostty = {
     enable = true;
 
-    package = if pkgs.stdenv.isDarwin then pkgs.ghostty-bin else pkgs.ghostty;
+    package = if isDarwin then pkgs.ghostty-bin else pkgs.ghostty;
 
     enableZshIntegration = true;
 

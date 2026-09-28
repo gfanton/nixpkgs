@@ -6,6 +6,7 @@
 }:
 
 let
+  inherit (pkgs.stdenv.hostPlatform) isDarwin isLinux;
   inherit (config.home) user-info homeDirectory;
   configDir = ".config";
   cacheDir = ".cache";
@@ -218,11 +219,11 @@ in
         "cp"
       ]
       # ++ [ "fzf-tab" "fast-syntax-highlighting" ] # extra plugins list
-      ++ lib.optionals pkgs.stdenv.isDarwin [
+      ++ lib.optionals isDarwin [
         "brew"
         "macos"
       ]
-      ++ lib.optionals pkgs.stdenv.isLinux [ ];
+      ++ lib.optionals isLinux [ ];
     };
 
     initContent = lib.mkMerge [

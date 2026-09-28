@@ -8,7 +8,7 @@ claude-config:
 }:
 
 let
-  inherit (pkgs) stdenv;
+  inherit (pkgs.stdenv.hostPlatform) isDarwin isLinux;
   inherit (config.home) homeDirectory;
 
   hasConfig = builtins.pathExists "${claude-config}/CLAUDE.md";
@@ -116,7 +116,7 @@ let
   '';
 
   notifyHook =
-    if stdenv.isDarwin then "~/.claude/hooks/notify.sh" else "~/.claude/hooks/notify-linux.sh";
+    if isDarwin then "~/.claude/hooks/notify.sh" else "~/.claude/hooks/notify-linux.sh";
 
   # Declarative settings.json content. Rendered to a real file (not a store
   # symlink) via the activation script below so Claude Code's interactive
@@ -227,7 +227,7 @@ let
       ];
     };
   }
-  // lib.optionalAttrs stdenv.isDarwin {
+  // lib.optionalAttrs isDarwin {
     statusLine = {
       type = "command";
       command = "~/.claude/statusline.sh";
@@ -297,7 +297,7 @@ lib.mkIf hasConfig (lib.mkMerge [
   # GitHub MCP launcher: resolves the PAT from a local secret file and passes
   # it to the containerized github-mcp-server as a per-process env var.
   # Referenced by mcpServers.github (see claudeCodeMcp activation below).
-  home.file.".local/share/claude-shim/github-mcp" = lib.mkIf stdenv.isDarwin {
+  home.file.".local/share/claude-shim/github-mcp" = lib.mkIf isDarwin {
     executable = true;
     text = ''
       #!${pkgs.bash}/bin/bash
@@ -361,7 +361,7 @@ lib.mkIf hasConfig (lib.mkMerge [
   # All MCP logic lives in claude-config (mcp/default.nix); this only
   # schedules its activation snippet. Darwin-only because the github wrapper
   # runs the containerized server via docker.
-  home.activation.claudeCodeMcp = lib.mkIf stdenv.isDarwin (
+  home.activation.claudeCodeMcp = lib.mkIf isDarwin (
     lib.hm.dag.entryAfter [ "writeBoundary" ] claudeMcp.activationScript
   );
 
@@ -373,7 +373,7 @@ lib.mkIf hasConfig (lib.mkMerge [
     executable = true;
   };
 
-  home.file.".claude/hooks/notify.sh" = lib.mkIf stdenv.isDarwin {
+  home.file.".claude/hooks/notify.sh" = lib.mkIf isDarwin {
     executable = true;
     text = ''
       #!/usr/bin/env bash
@@ -427,7 +427,7 @@ lib.mkIf hasConfig (lib.mkMerge [
     '';
   };
 
-  home.file.".claude/hooks/notify-linux.sh" = lib.mkIf stdenv.isLinux {
+  home.file.".claude/hooks/notify-linux.sh" = lib.mkIf isLinux {
     executable = true;
     text = ''
       #!/usr/bin/env bash
@@ -436,7 +436,7 @@ lib.mkIf hasConfig (lib.mkMerge [
     '';
   };
 
-  home.file.".claude/statusline.sh" = lib.mkIf stdenv.isDarwin {
+  home.file.".claude/statusline.sh" = lib.mkIf isDarwin {
     source = "${claude-config}/statusline.sh";
     executable = true;
   };

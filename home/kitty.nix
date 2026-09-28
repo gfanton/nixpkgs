@@ -7,6 +7,7 @@
 }:
 
 let
+  inherit (pkgs.stdenv.hostPlatform) isDarwin;
   stdin-emacsclient = pkgs.writeShellScriptBin "semacs" ''
     TMP="$(mktemp /tmp/stdin-XXXX)"
     cat > $TMP.ansi
@@ -90,7 +91,7 @@ in
   programs.truecolor.enable = true;
   programs.truecolor.useterm = "xterm-ghostty";
   programs.truecolor.terminfo =
-    if pkgs.stdenv.isDarwin then
+    if isDarwin then
       "${pkgs.ghostty-bin}/Applications/Ghostty.app/Contents/Resources/terminfo"
     else
       "${pkgs.ghostty}/share/terminfo";

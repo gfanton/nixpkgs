@@ -1,6 +1,7 @@
 { pkgs, config, ... }:
 
 let
+  inherit (pkgs.stdenv.hostPlatform) isDarwin;
   asdf-config = pkgs.writeText "asdfrc" ''
     # See the docs for explanations: https://asdf-vm.com/manage/configuration.html
 
@@ -8,7 +9,7 @@ let
     use_release_candidates = no
     always_keep_download = no
     disable_plugin_short_name_repository = no
-    ${if pkgs.stdenv.isDarwin then "java_macos_integration_enable = yes" else ""}
+    ${if isDarwin then "java_macos_integration_enable = yes" else ""}
   '';
 
 in

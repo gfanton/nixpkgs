@@ -7,6 +7,7 @@
 }:
 
 let
+  inherit (pkgs.stdenv.hostPlatform) isDarwin isLinux;
   theme-switch = pkgs.writeShellScriptBin "theme-switch" ''
     set -o nounset
     set -o pipefail
@@ -98,7 +99,7 @@ in
       HashKnownHosts = true;
     };
     # on darwin use 1password agent
-    extraConfig = lib.mkIf (pkgs.stdenv.isDarwin && config.home.user-info.sshAgent == "1password") ''
+    extraConfig = lib.mkIf (isDarwin && config.home.user-info.sshAgent == "1password") ''
       IdentityAgent "~/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock"
     '';
   };
@@ -379,12 +380,12 @@ in
       nix-prefetch-git
       nixfmt
     ]
-    ++ lib.optionals stdenv.isDarwin [
+    ++ lib.optionals isDarwin [
       cocoapods
       colima # Container runtime for macOS
       docker-client # Docker CLI for Colima
     ]
-    ++ lib.optionals stdenv.isLinux [
+    ++ lib.optionals isLinux [
       docker
       docker-compose
       colima # Container runtime for Linux

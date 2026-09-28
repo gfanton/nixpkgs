@@ -6,6 +6,7 @@
 }:
 
 let
+  inherit (pkgs.stdenv.hostPlatform) isDarwin;
   inherit (lib)
     generators
     concatStringsSep
@@ -185,7 +186,7 @@ in
           + " ${cfg.useSymbolsFromNerdFont}";
       };
 
-    programs.kitty.darwinLaunchOptions = mkIf pkgs.stdenv.isDarwin [ "--listen-on ${socket}" ];
+    programs.kitty.darwinLaunchOptions = mkIf isDarwin [ "--listen-on ${socket}" ];
 
   };
 

@@ -6,6 +6,7 @@
 }:
 
 let
+  inherit (pkgs.stdenv.hostPlatform) isDarwin;
   inherit (config.home.user-info) sshAgent forwardAgentTo;
 
   # The same path on both ends: every Mac has the same user name.
@@ -17,7 +18,7 @@ lib.mkMerge [
     home.sessionVariables.SSH_AUTH_SOCK = forwardedSocket;
   })
 
-  (lib.mkIf (pkgs.stdenv.isDarwin && forwardAgentTo != [ ]) {
+  (lib.mkIf (isDarwin && forwardAgentTo != [ ]) {
     programs.ssh.settings = lib.listToAttrs (
       map (host: {
         name = "${host}-agent";
