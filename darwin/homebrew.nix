@@ -40,6 +40,8 @@ in
     "font-sauce-code-pro-nerd-font"
     "orbstack"
     "arc"
+    # Dropping it zaps ~/Library/Application Support/Google/Chrome with it.
+    "google-chrome"
     "raycast"
     "1password"
     "1password-cli"
