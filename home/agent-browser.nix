@@ -7,45 +7,28 @@
 
 let
   inherit (pkgs.stdenv.hostPlatform) isDarwin;
-  # CDP port per Claude identity; the Claude shims pick the identity.
-  identities = {
-    work = 9222;
-    perso = 9223;
+  # A profile of the regular Chrome per identity. agent-browser resolves a name,
+  # not a path, and runs every session on its own copy of that profile.
+  templates = {
+    work = "agent-work";
+    perso = "agent-perso";
   };
 
   chrome = "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome";
-  profileDir = name: "${config.home.homeDirectory}/Library/Application Support/agent-chrome/${name}";
 in
 lib.mkIf isDarwin {
   home.packages = [ pkgs.agent-browser ];
 
-  launchd.agents = lib.mapAttrs' (
-    name: port:
-    lib.nameValuePair "agent-chrome-${name}" {
-      enable = true;
-      config = {
-        ProgramArguments = [
-          chrome
-          "--user-data-dir=${profileDir name}"
-          "--remote-debugging-port=${toString port}"
-          "--no-first-run"
-          "--no-default-browser-check"
-        ];
-        RunAtLoad = true;
-        # A deliberate quit exits 0 and stays quit; a crash restarts.
-        KeepAlive.SuccessfulExit = false;
-        StandardErrorPath = "${config.home.homeDirectory}/Library/Logs/agent-chrome-${name}.log";
-      };
-    }
-  ) identities;
+  home.sessionVariables.AGENT_BROWSER_SOCKET_DIR = "${config.xdg.stateHome}/agent-browser";
 
   xdg.configFile = lib.mapAttrs' (
-    name: port:
+    name: profile:
     lib.nameValuePair "agent-browser/${name}.json" {
       text = builtins.toJSON {
-        cdp = toString port;
-        pinTab = true;
+        executablePath = chrome;
+        inherit profile;
+        screenshotDir = "${config.xdg.cacheHome}/agent-browser/screenshots";
       };
     }
-  ) identities;
+  ) templates;
 }
