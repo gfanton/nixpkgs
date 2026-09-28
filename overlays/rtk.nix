@@ -5,16 +5,16 @@ in
 {
   my-rtk = pkgs.rustPlatform.buildRustPackage rec {
     pname = "rtk";
-    version = "0.45.0";
+    version = "0.50.0";
 
     src = pkgs.fetchFromGitHub {
       owner = "rtk-ai";
       repo = "rtk";
       rev = "v${version}";
-      hash = "sha256-weAyHM0nWLrM8JRbbXIfjUsHtAep3DOFyTO+M3BZ/iU=";
+      hash = "sha256-cQq+iJ6L7YTc9oinNw1X+qt8PkDhYM/mi7tXMJf7fp8=";
     };
 
-    cargoHash = "sha256-tgW6il/xLxt/xwhUBJ4MNVnk0JSZ7iFjJaEobj5+H4o=";
+    cargoHash = "sha256-COpR8TZJgim/WxRG//bEKc4tAEWy0GfkGcFK/dnpRlQ=";
 
     nativeBuildInputs = [ pkgs.makeWrapper ];
 
@@ -25,7 +25,7 @@ in
       wrapProgram $out/libexec/rtk/hooks/rtk-rewrite.sh \
         --prefix PATH : ${lib.makeBinPath [ pkgs.jq ]}:$out/bin
 
-      install -Dm644 $src/hooks/claude/rtk-awareness.md $out/share/rtk/RTK.md
+      install -Dm644 $src/hooks/rtk-awareness-high.md $out/share/rtk/RTK.md
     '';
 
     meta = with lib; {
