@@ -82,11 +82,11 @@
     "claude-config": {
       "flake": false,
       "locked": {
-        "lastModified": 1790627533,
-        "narHash": "sha256-Rl+N1xrnRbLtpWbX0tg7vBKzDdofuFjnBMffQacZE9g=",
+        "lastModified": 1791456456,
+        "narHash": "sha256-14U1MDFr+LsSq+Rp7mxlVbiCPcjl/U16NXP8LQIFrM0=",
         "ref": "refs/heads/master",
-        "rev": "fe48f9c188225fe43309cd7bc34b5d1f3eb2b214",
-        "revCount": 77,
+        "rev": "bdb79db38a78fa857a30f9ad56d5d042bcba1393",
+        "revCount": 98,
         "type": "git",
         "url": "ssh://git@github.com/gfanton/claude-config.git"
       },
