@@ -13,7 +13,7 @@ in
   documentation.enable = false;
 
   homebrew.enable = true;
-  homebrew.onActivation.cleanup = "zap";
+  homebrew.onActivation.cleanup = "none";
   homebrew.global.brewfile = true;
 
   # No taps: everything below comes from homebrew/core and homebrew/cask, which
