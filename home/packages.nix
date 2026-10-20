@@ -328,13 +328,9 @@ in
       (aspellWithDicts (d: [
         d.en
         d.fr
-        d.en-computers
-        d.en-science
       ])) # interactive spell checker
       aspellDicts.fr
       aspellDicts.en
-      aspellDicts.en-science
-      aspellDicts.en-computers
 
       # ruby
       ruby

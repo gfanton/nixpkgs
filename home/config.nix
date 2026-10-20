@@ -37,7 +37,7 @@ in
     source = writeText "aspell.conf" ''
       dict-dir ""
       master en_US
-      extra-dicts en en-computers.rws en-science.rws fr.rws
+      extra-dicts en fr.rws
     '';
   };
 
