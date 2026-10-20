@@ -85,16 +85,12 @@ in
       pass in all
     '';
 
-    # Load pf rules at boot.
+    # Load pf rules at boot. /etc/pf.user.conf links into /nix/store, whose volume
+    # mounts after launchd starts this job; `command` waits for /nix/store first.
     launchd.daemons.pf-tailscale-only = {
+      command = "/sbin/pfctl -E -f /etc/pf.user.conf";
       serviceConfig = {
         Label = "user.pf.tailscale-only";
-        ProgramArguments = [
-          "/sbin/pfctl"
-          "-E"
-          "-f"
-          "/etc/pf.user.conf"
-        ];
         RunAtLoad = true;
         KeepAlive = false;
         StandardOutPath = "/var/log/pf-tailscale-only.log";
