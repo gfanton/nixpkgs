@@ -83,7 +83,6 @@
     # if this isn't set darwin will fall back to NOPASSWD for wheel group
     auth       optional       ${pkgs.pam-reattach}/lib/pam/pam_reattach.so
     auth       sufficient     pam_tid.so
-    auth       required       pam_opendirectory.so
     account    required       pam_permit.so
     password   required       pam_deny.so
     session    required       pam_permit.so
