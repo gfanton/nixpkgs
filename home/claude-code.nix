@@ -25,7 +25,6 @@ let
   claudeShimDir = "${homeDirectory}/.local/share/claude-shim";
   claudePluginDirs = with pkgs.claude-plugins; [
     superpowers
-    frontend-design
     skill-creator
     pocock-skills
   ];
@@ -173,6 +172,35 @@ let
     skipDangerousModePermissionPrompt = true;
     effortLevel = "high";
     includeCoAuthoredBy = false;
+
+    # ---- impeccable (design conventions + detector hooks)
+    # Installed from its marketplace instead of --plugin-dir above, so the skill
+    # follows upstream releases without a pin here. `claude plugin marketplace
+    # add` writes these same two keys into settings.json, which the
+    # claudeCodeSettings activation below overwrites on every rebuild — so the
+    # declaration has to live here to survive a switch.
+    #
+    # sparsePaths is load-bearing: a full clone is ~745MB of Rust workspace and
+    # bundled browser assets against a 120s clone timeout, where the catalog and
+    # the plugin tree together are 4MB.
+    #
+    # The detector binary is not vendored. ${CLAUDE_PLUGIN_ROOT} is a per-version
+    # cache directory, leaving nowhere in the store to put it, so the plugin's
+    # launcher fetches it to ~/.impeccable on first use and checks it against the
+    # release's sha256 sidecar.
+    extraKnownMarketplaces.impeccable = {
+      source = {
+        source = "github";
+        repo = "pbakaus/impeccable";
+        sparsePaths = [
+          ".claude-plugin"
+          "plugin"
+        ];
+      };
+      autoUpdate = true;
+    };
+    enabledPlugins."impeccable@impeccable" = true;
+
     hooks = {
       # Stop hook is flaky from settings.json (anthropics/claude-code#26770).
       # Notification hook is the reliable path for alerts.
