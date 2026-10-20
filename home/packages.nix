@@ -313,6 +313,7 @@ in
       entr
       cmake
       gnupg
+      gitleaks # required by .githooks/
 
       # my
       my-libvterm

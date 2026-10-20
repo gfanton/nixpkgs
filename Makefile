@@ -79,6 +79,10 @@ endif # end linux
 fmt:
 	nix-shell -p nixfmt --command "nixfmt  $(NIX_FILES)"
 
+hooks:
+	git config core.hooksPath .githooks
+.PHONY: hooks
+
 clean:
 	./result/sw/bin/nix-collect-garbage
 

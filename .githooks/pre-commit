@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+set -o errexit
+set -o nounset
+set -o pipefail
+
+exec gitleaks git --pre-commit --staged --redact --no-banner --verbose --log-level warn

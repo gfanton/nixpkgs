@@ -48,3 +48,10 @@ Generic values are fine: RFC1918 ranges, default ports, public SSH keys, and
 the host names this flake already defines. Machine-specific values go in
 untracked files (such as `~/.ssh/config.local`) or in a private repository. Any
 hit blocks the commit, and the check is never weakened to make it pass.
+
+`make hooks` turns on the hooks in `.githooks/`, which run gitleaks on each
+staged diff and commit message. Gitleaks finds credentials, email addresses, MAC
+addresses and tailnet names. It cannot know host, network or service names, so
+the read above still applies. Remove a finding from the change. Never bypass it
+with `--no-verify`, a `gitleaks:allow` comment or a `.gitleaksignore` entry
+unless the user approves.

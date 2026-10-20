@@ -1,0 +1,25 @@
+name: Scan for leaks
+
+on:
+  workflow_dispatch:
+  pull_request:
+  push:
+
+jobs:
+  gitleaks:
+    name: Scan git history with gitleaks
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Install Nix
+        uses: cachix/install-nix-action@v31
+        with:
+          extra_nix_config: |
+            access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}
+
+      - name: Scan every branch
+        run: nix run .#gitleaks --override-input claude-config path:./stubs/claude-config -- git --redact --no-banner --verbose

@@ -1,0 +1,29 @@
+title = "nixpkgs"
+
+[extend]
+useDefault = true
+
+[[rules]]
+id = "email-address"
+description = "Email address other than a public identity"
+regex = '''(?i)[a-z0-9._%+-]+@[a-z0-9-]+(?:\.[a-z0-9-]+)*\.[a-z]{2,}'''
+keywords = ["@"]
+
+[[rules.allowlists]]
+regexes = [
+  '''(?i)@users\.noreply\.github\.com$''',
+  '''(?i)^(?:noreply@anthropic\.com|github-actions@github\.com|git@github\.com)$''',
+  '''(?i)@example\.(?:com|org|net)$''',
+]
+
+[[rules]]
+id = "mac-address"
+description = "Hardware MAC address"
+regex = '''(?im)(?:^|[^0-9a-f:])([0-9a-f]{2}(?::[0-9a-f]{2}){5})(?:[^0-9a-f:]|$)'''
+secretGroup = 1
+
+[[rules]]
+id = "tailnet-hostname"
+description = "Tailscale MagicDNS name, which carries the tailnet name"
+regex = '''(?i)[a-z0-9-]+\.ts\.net'''
+keywords = ["ts.net"]
