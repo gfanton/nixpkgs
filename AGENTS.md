@@ -29,3 +29,22 @@ only the wiring.
 - `darwin/` — macOS system configuration
 - `overlays/`, `pkgs/` — package overrides and locally packaged software
 - `config/` — configuration trees, including the submodule above
+
+## Before every commit and push
+
+This repository is public. Before each commit and each push, read the staged
+diff and the commit message as a stranger on GitHub would, and remove anything
+that exposes the user or the user's network:
+
+- Credentials: API keys, tokens, private keys, passwords, cookies, session
+  links.
+- Network details: public IPs, specific private IPs, MAC addresses, network,
+  VLAN, VPN and tailnet names, private service domains, and host names other
+  than the machines this flake defines.
+- Personal details: email addresses other than the commit identity, account
+  names, employer, other accounts, location.
+
+Generic values are fine: RFC1918 ranges, default ports, public SSH keys, and
+the host names this flake already defines. Machine-specific values go in
+untracked files (such as `~/.ssh/config.local`) or in a private repository. Any
+hit blocks the commit, and the check is never weakened to make it pass.
