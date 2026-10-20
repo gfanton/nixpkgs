@@ -76,6 +76,31 @@ let
     ];
   };
 
+  # Codex reads the same SKILL.md format from ~/.agents/skills. worktree drives
+  # Claude Code's own worktree creation and deep-review runs only as a Workflow
+  # script, so neither ships to Codex.
+  codexSkills = lib.mergeAttrsList (
+    map (
+      root:
+      lib.mapAttrs' (name: _: lib.nameValuePair ".agents/skills/${name}" { source = "${root}/${name}"; }) (
+        lib.filterAttrs (
+          name: type: type == "directory" && !lib.elem name [ "worktree" "deep-review" ]
+        ) (builtins.readDir root)
+      )
+    ) [
+      "${claude-config}/skills"
+      "${claude-config}/skill-library/skills"
+    ]
+  );
+
+  # Codex documents no @import in AGENTS.md, so SKILL-LIBRARY.md is inlined
+  # where CLAUDE.md imports it.
+  codexAgentsMd =
+    builtins.replaceStrings
+      [ "@SKILL-LIBRARY.md" ]
+      [ (builtins.readFile "${claude-config}/SKILL-LIBRARY.md") ]
+      (builtins.readFile "${claude-config}/CLAUDE.md");
+
   # Both Claude config profiles: the default account and the isolated work
   # account (its shim sets CLAUDE_CONFIG_DIR=~/.claude-work). Shared config —
   # CLAUDE.md, settings, skills, agents — deploys identically to each.
@@ -426,7 +451,15 @@ lib.mkIf hasConfig (lib.mkMerge [
     source = "${claude-config}/statusline.sh";
     executable = true;
   };
+
+  # ---- Codex
+  # Skills resolve the reference library through SKILL_LIB_REFS when
+  # $CLAUDE_PLUGIN_ROOT is unset, which outside Claude Code it always is.
+  home.sessionVariables.SKILL_LIB_REFS = conventionRefs;
+  home.file.".codex/AGENTS.md".text = codexAgentsMd;
   }
+
+  { home.file = codexSkills; }
 
   # Config shared identically across both profiles. SKILL-LIBRARY.md is
   # @imported by CLAUDE.md and resolve beside it; skills/agents are read from
