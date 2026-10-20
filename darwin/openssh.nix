@@ -10,7 +10,7 @@ let
 in
 {
   options.services.openssh.routedPrivateAccess = {
-    enable = lib.mkEnableOption "sshd and mosh for routed private networks, with the gateway's firewall choosing which sources reach them";
+    enable = lib.mkEnableOption "sshd, Screen Sharing and mosh for routed private networks, with the gateway's firewall choosing which sources reach them";
     interface = lib.mkOption {
       type = lib.types.str;
       example = "en0";
@@ -36,9 +36,8 @@ in
       '';
     };
 
-    # ---- pf rules: sshd (22) and mosh (60000-61000) accept Tailscale, plus routed
-    # private networks where routedPrivateAccess is on. Screen Sharing (5900) accepts
-    # Tailscale only.
+    # ---- pf rules: sshd (22), Screen Sharing (5900) and mosh (60000-61000) accept
+    # Tailscale, plus routed private networks where routedPrivateAccess is on.
     # Tailscale IPv4 CGNAT: 100.64.0.0/10. Tailscale IPv6 ULA: fd7a:115c:a1e0::/48.
     environment.etc."pf.user.conf".text = ''
       # Preserve macOS default anchors (other system services keep working).
@@ -71,6 +70,7 @@ in
 
       # Routed private networks: the gateway's firewall decides which reach these ports.
       pass in quick proto tcp from { 10.0.0.0/8 172.16.0.0/12 192.168.0.0/16 } to any port 22
+      pass in quick proto tcp from { 10.0.0.0/8 172.16.0.0/12 192.168.0.0/16 } to any port 5900
       pass in quick proto udp from { 10.0.0.0/8 172.16.0.0/12 192.168.0.0/16 } to any port 60000:61000
     ''
     + ''
