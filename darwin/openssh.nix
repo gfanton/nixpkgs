@@ -102,7 +102,12 @@ in
     # Nix builds are ad-hoc signed, so allowSigned does not cover mosh-server;
     # the allowance follows its signing identity, not its store path.
     system.activationScripts.postActivation.text = lib.mkAfter ''
-      /sbin/pfctl -E -f /etc/pf.user.conf || true
+      # -E would take a new enable reference on every switch; enable only when pf is off.
+      # macOS prints the -f flush warning even with -q, so drop it and keep real errors.
+      [[ $(/sbin/pfctl -s info 2>/dev/null) == *"Status: Enabled"* ]] || /sbin/pfctl -q -e || true
+      /sbin/pfctl -q -f /etc/pf.user.conf 2>&1 \
+        | grep -v -e '^pfctl: Use of -f option' -e '^present in the main ruleset' \
+          -e '^See /etc/pf.conf' -e '^$' || true
 
       socketfilterfw=/usr/libexec/ApplicationFirewall/socketfilterfw
       moshServer=${lib.getExe' pkgs.mosh "mosh-server"}
