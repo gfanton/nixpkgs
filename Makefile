@@ -1,104 +1,67 @@
-IMPURE ?= false
-FALLBACK ?= true
+SHELL := /bin/sh
+.DEFAULT_GOAL := help
+
+NIX := nix --extra-experimental-features 'nix-command flakes'
+NIX_FLAGS ?= --fallback
+# Inputs to update; empty updates every input.
+INPUTS ?=
 
 UNAME := $(shell uname)
-
-BOOTSTRAP := bootstrap
-
 DARWIN_HOSTS := tzatziki kalamata
 
-# Channels (matching flake.nix inputs)
-NIX_CHANNELS := nixpkgs-master nixpkgs-stable nixpkgs-unstable
-HOME_CHANNELS := home-manager darwin
-EMACS_CHANNELS := emacs-overlay chemacs2
-SPACEMACS_CHANNELS := spacemacs
-DOOM_CHANNELS := doomemacs
-ZSH_CHANNELS := fast-syntax-highlighting powerlevel10k
-MISC_CHANNELS := flake-utils flake-compat project devenv
+.PHONY: help update check fmt hooks clean gc
 
-NIX_FILES := $(shell find . -type f -name '*.nix')
+help: ## List the targets
+	@awk -F '## ' '/^[^#\t].*:.*## / { n = split($$1, f, ":"); t = n > 2 ? f[2] : f[1]; \
+		gsub(/ /, "", t); sub(/%/, "<host>", t); printf "  %-20s %s\n", t, $$2 }' $(MAKEFILE_LIST)
 
-impure := $(if $(filter $(IMPURE),true),--impure,)
-fallback := $(if $(filter $(FALLBACK),true),--fallback,)
+update: ## Update flake inputs (all, or INPUTS="a b")
+	$(NIX) flake update $(INPUTS)
 
-ifeq ($(UNAME), Darwin) # darwin rules
-all:
-	@echo "switch.bootstrap"
-	@printf 'switch.%s\n' $(DARWIN_HOSTS)
+check: ## Evaluate and check the flake
+	$(NIX) flake check $(NIX_FLAGS)
 
-build.tzatziki:
-	nix build ${impure} ${fallback} --verbose .#darwinConfigurations.tzatziki.system
+fmt: ## Format the tracked Nix files
+	$(NIX) run --inputs-from . nixpkgs-unstable#nixfmt -- $$(git ls-files '*.nix')
 
-build.kalamata:
-	nix build ${impure} ${fallback} --verbose .#darwinConfigurations.kalamata.system
+hooks: ## Run gitleaks on each commit
+	git config core.hooksPath .githooks
 
-build.cloud:
-	nix build ${impure} ${fallback} --verbose .#homeConfigurations.$(CLOUD_TARGET).activationPackage
+clean: ## Remove the result link
+	rm -f result
 
-check:
-	nix flake check
+gc: ## Delete old generations and collect garbage
+	sudo nix-collect-garbage -d
+	nix-collect-garbage -d
 
-switch.bootstrap: result/sw/bin/darwin-rebuild
-	./result/sw/bin/darwin-rebuild switch ${impure} ${fallback} --verbose --flake ".#$(BOOTSTRAP)"
-.PHONY: $(addprefix switch.,$(DARWIN_HOSTS)) $(addprefix check-host.,$(DARWIN_HOSTS))
+ifeq ($(UNAME),Darwin)
+.PHONY: bootstrap $(addprefix build.,$(DARWIN_HOSTS)) $(addprefix switch.,$(DARWIN_HOSTS)) $(addprefix check-host.,$(DARWIN_HOSTS))
+
+bootstrap: ## Install nix-darwin on a new Mac
+	$(NIX) build $(NIX_FLAGS) .#darwinConfigurations.bootstrap.system
+	sudo ./result/sw/bin/darwin-rebuild switch $(NIX_FLAGS) --flake .#bootstrap
+
+$(addprefix build.,$(DARWIN_HOSTS)): build.%: ## Build a Mac configuration
+	darwin-rebuild build $(NIX_FLAGS) --flake .#$*
+
+$(addprefix switch.,$(DARWIN_HOSTS)): switch.%: check-host.% ## Build and activate a Mac configuration
+	sudo /run/current-system/sw/bin/darwin-rebuild switch $(NIX_FLAGS) --flake .#$*
 
 $(addprefix check-host.,$(DARWIN_HOSTS)): check-host.%:
 	current="$$(scutil --get LocalHostName)" && \
 	case " $(DARWIN_HOSTS) " in \
 	*" $$current "*) test "$$current" = "$*" || { echo "error: this Mac is $$current, not $*" >&2; exit 1; } ;; \
 	esac
-
-$(addprefix switch.,$(DARWIN_HOSTS)): switch.%: check-host.% result/sw/bin/darwin-rebuild
-	TERM=xterm sudo ./result/sw/bin/darwin-rebuild switch ${impure} ${fallback} --verbose --flake .#$*
-
-result/sw/bin/darwin-rebuild:
-	nix --experimental-features 'flakes nix-command' build ".#darwinConfigurations.$(BOOTSTRAP).system"
-
-endif # end osx
-
-
-ifeq ($(UNAME), Linux) # linux rules
-
-# Detect architecture for Linux
-LINUX_ARCH := $(shell uname -m)
-ifeq ($(LINUX_ARCH),aarch64)
-CLOUD_TARGET := cloud-arm
-else
-CLOUD_TARGET := cloud-x86
 endif
 
-all:
-	@echo "switch.cloud"
+ifeq ($(UNAME),Linux)
+.PHONY: build.cloud switch.cloud
 
-switch.cloud:
-	nix build --extra-experimental-features nix-command --extra-experimental-features flakes .#homeConfigurations.$(CLOUD_TARGET).activationPackage
-	./result/activate
+CLOUD_TARGET := $(if $(filter aarch64,$(shell uname -m)),cloud-arm,cloud-x86)
 
-endif # end linux
+build.cloud: ## Build the home-manager configuration
+	$(NIX) run --inputs-from . home-manager -- build $(NIX_FLAGS) --flake .#$(CLOUD_TARGET)
 
-fmt:
-	nix-shell -p nixfmt --command "nixfmt  $(NIX_FILES)"
-
-hooks:
-	git config core.hooksPath .githooks
-.PHONY: hooks
-
-clean:
-	./result/sw/bin/nix-collect-garbage
-
-fclean:
-	@echo "/!\ require to be root"
-	sudo ./result/sw/bin/nix-env -p /nix/var/nix/profiles/system --delete-generations old
-	./result/sw/bin/nix-collect-garbage -d
-# Remove entries from /boot/loader/entries:
-
-
-fast-update: update.nix update.zsh update.misc # fast update ignore emacs update
-update: update.nix update.home update.emacs update.spacemacs update.doom update.zsh update.misc
-update.nix:; nix flake lock $(addprefix --update-input , $(NIX_CHANNELS))
-update.emacs:; nix flake lock $(addprefix --update-input , $(EMACS_CHANNELS))
-update.spacemacs:; nix flake lock $(addprefix --update-input , $(SPACEMACS_CHANNELS))
-update.doom:; nix flake lock $(addprefix --update-input , $(DOOM_CHANNELS))
-update.zsh:; nix flake lock $(addprefix --update-input ,$(ZSH_CHANNELS))
-update.misc:; nix flake lock $(addprefix --update-input ,$(MISC_CHANNELS))
-update.home:; nix flake lock $(addprefix --update-input , $(HOME_CHANNELS))
+switch.cloud: ## Build and activate the home-manager configuration
+	$(NIX) run --inputs-from . home-manager -- switch $(NIX_FLAGS) --flake .#$(CLOUD_TARGET)
+endif
