@@ -318,7 +318,6 @@ in
       # my
       my-libvterm
       my-loon
-      my-rtk
       project # From flake input
       theme-switch
 

@@ -176,15 +176,6 @@ let
       ];
       PreToolUse = [
         {
-          matcher = "Bash";
-          hooks = [
-            {
-              type = "command";
-              command = "bash ~/.claude/hooks/rtk-rewrite.sh";
-            }
-          ];
-        }
-        {
           matcher = "AskUserQuestion";
           hooks = [
             {
@@ -368,11 +359,6 @@ lib.mkIf hasConfig (lib.mkMerge [
   # ---- Hook and Statusline Scripts
   # Managed via home.file for executable bit (upstream hooksDir doesn't set it)
 
-  home.file.".claude/hooks/rtk-rewrite.sh" = {
-    source = "${pkgs.my-rtk}/libexec/rtk/hooks/rtk-rewrite.sh";
-    executable = true;
-  };
-
   home.file.".claude/hooks/notify.sh" = lib.mkIf isDarwin {
     executable = true;
     text = ''
@@ -442,14 +428,13 @@ lib.mkIf hasConfig (lib.mkMerge [
   };
   }
 
-  # Config shared identically across both profiles. RTK.md + SKILL-LIBRARY.md are
+  # Config shared identically across both profiles. SKILL-LIBRARY.md is
   # @imported by CLAUDE.md and resolve beside it; skills/agents are read from
   # CLAUDE_CONFIG_DIR. recursive lets externally-managed entries (e.g. the gno
   # skill) coexist in the same directory.
   {
     home.file = lib.mkMerge (
       map (dir: {
-        "${dir}/RTK.md".source = "${pkgs.my-rtk}/share/rtk/RTK.md";
         "${dir}/SKILL-LIBRARY.md".source = "${claude-config}/SKILL-LIBRARY.md";
         "${dir}/skill-library/references".source = conventionRefs;
         "${dir}/skills" = {
