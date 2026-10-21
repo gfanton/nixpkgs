@@ -54,7 +54,7 @@
     claude-plugins-official.flake = false;
 
     # Backlog.md — task tracker (upstream flake)
-    backlog-md.url = "github:MrLesk/Backlog.md/v1.53.0";
+    backlog-md.url = "github:MrLesk/Backlog.md/v1.55.0";
 
     # Matt Pocock's Claude Code skills (no release tags — pinned by SHA)
     pocock-skills.url = "github:mattpocock/skills/b8be62ffacb0118fa3eaa29a0923c87c8c11985c";
